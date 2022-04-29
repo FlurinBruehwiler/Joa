@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using AppWithPlugin;
-using PluginBase;
+using Interfaces;
 
 namespace JoaUI
 {

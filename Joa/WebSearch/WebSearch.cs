@@ -1,4 +1,5 @@
-﻿using PluginBase;
+﻿using Interfaces;
+using Interfaces.Settings;
 using Newtonsoft.Json;
 
 namespace HelloPlugin
@@ -47,7 +48,7 @@ namespace HelloPlugin
 
                     List<string> suggestions = response[1].ToObject<List<string>>();
                     
-                    searchResults.AddRange(suggestions.Select(x => new SearchResult(x, $"Search on Google for \"{searchString}\"", ""))
+                    searchResults.AddRange(suggestions.Select(suggestion => new SearchResult(suggestion, $"Search on Google for \"{suggestion}\"", ""))
                         .ToList());
                 }
                 catch (Exception e)
@@ -62,6 +63,27 @@ namespace HelloPlugin
         public void Execute(ISearchResult searchResult)
         {
             throw new NotImplementedException();
+        }
+
+        public List<Setting> GetSettings()
+        {
+            return new List<Setting>
+            {
+                new SettingList("WebSearchEngines", 
+                    new List<Setting>
+                    {
+                        new SettingText("Name", ""),
+                        new SettingText("Prefix", ""),
+                        new SettingText("URL", ""),
+                        new SettingText("Suggestion URL", ""),
+                        new SettingSelection<IconType>("Icon type", IconType.SVG),
+                        new SettingText("Icon", ""),
+                        new SettingText("Priority", ""),
+                        new SettingToggle("Fallback", false),
+                        new SettingToggle("Encode search term", true)
+                    }, 
+                    "Add new websearch engine")
+            };
         }
     }
 }

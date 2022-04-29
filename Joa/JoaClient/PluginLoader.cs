@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
+using Interfaces;
+using Interfaces.Settings;
 using Microsoft.Extensions.DependencyInjection;
-using PluginBase;
 
 namespace AppWithPlugin;
 

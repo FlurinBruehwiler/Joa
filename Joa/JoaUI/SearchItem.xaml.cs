@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls;
-using PluginBase;
+using Interfaces;
 
 namespace JoaUI;
 

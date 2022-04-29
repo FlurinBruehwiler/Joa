@@ -1,4 +1,4 @@
-﻿using PluginBase;
+﻿using Interfaces;
 
 namespace AppWithPlugin;
 

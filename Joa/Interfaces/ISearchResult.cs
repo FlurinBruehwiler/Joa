@@ -1,4 +1,4 @@
-﻿namespace PluginBase;
+﻿namespace Interfaces;
 
 public interface ISearchResult
 {

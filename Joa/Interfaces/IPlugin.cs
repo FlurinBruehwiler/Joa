@@ -1,4 +1,6 @@
-﻿namespace PluginBase;
+﻿using Interfaces.Settings;
+
+namespace Interfaces;
 
 public interface IPlugin
 {
@@ -23,5 +25,6 @@ public interface IPlugin
     
     IEnumerable<ISearchResult> GetResults(string searchString);
 
-    void Execute(ISearchResult searchResult);
+    public void Execute(ISearchResult searchResult);
+    public List<Setting> GetSettings();
 }
