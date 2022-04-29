@@ -29,7 +29,7 @@ public class PluginLoader
 
     private IEnumerable<string> GetPluginDllPaths()
     {
-        var pluginFolder = Path.GetFullPath(Path.Combine(typeof(Program).Assembly.Location, @"..\..\..\..\..\Plugins"));
+        var pluginFolder = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, @"..\..\..\..\..\Plugins"));
         
         Console.WriteLine($"Searching for Plugins in {pluginFolder}");
         
@@ -54,7 +54,7 @@ public class PluginLoader
 
     private Assembly LoadAssembly(string relativePluginPath)
     {
-        var root = Path.Combine(typeof(Program).Assembly.Location, @"..\..\..\..\..\");
+        var root = Path.Combine(typeof(PluginLoader).Assembly.Location, @"..\..\..\..\..\");
 
         var pluginLocation = Path.GetFullPath(Path.Combine(root, relativePluginPath.Replace('\\', Path.DirectorySeparatorChar)));
         var loadContext = new PluginLoadContext(pluginLocation);
