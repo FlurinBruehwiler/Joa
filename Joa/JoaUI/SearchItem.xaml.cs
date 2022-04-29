@@ -12,3 +12,8 @@ public partial class SearchItem : UserControl
         DescLabel.Content = result.Description;
     }
 }
+
+public static class ResultTranslator
+{
+    public static SearchItem Visualize(this ISearchResult searchResult) => new SearchItem(searchResult);
+}

@@ -14,7 +14,7 @@ namespace JoaUI
     {
         private readonly Search _search;
         private readonly PluginLoader _loader;
-
+        
         private delegate void NewInputDelegate(string searchString);
         private event NewInputDelegate NewInput;
         
@@ -26,17 +26,20 @@ namespace JoaUI
             InitializeComponent();
         }
 
-        private void UpdateList(List<ISearchResult> result)
+        private void UpdateList(List<ISearchResult> results)
         {
             ResultList.Items.Clear();
-            ResultList.Items.Add(result);
+            foreach (var searchResult in results)
+            {
+                ResultList.Items.Add(searchResult.Visualize());
+            }
             Searchbar.Height = ResultList.Items.Count * 60;
         }
         
         private void TextModified(object sender, TextChangedEventArgs e)
         {
             ResultList.Items.Clear();
-            NewInput?.Invoke(e.ToString() ?? string.Empty);
+            NewInput?.Invoke(Box.Text);
         }
 
         private void ActivateSearch(string searchString)
