@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearch", "WebSearch\WebSearch.csproj", "{BA746C82-DF71-477F-AD4A-CD433AA60B99}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaUI", "JoaUI\JoaUI.csproj", "{440FA12E-9A90-4CD2-AE8C-E20E4F19F5D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{BA746C82-DF71-477F-AD4A-CD433AA60B99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA746C82-DF71-477F-AD4A-CD433AA60B99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA746C82-DF71-477F-AD4A-CD433AA60B99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{440FA12E-9A90-4CD2-AE8C-E20E4F19F5D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{440FA12E-9A90-4CD2-AE8C-E20E4F19F5D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{440FA12E-9A90-4CD2-AE8C-E20E4F19F5D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{440FA12E-9A90-4CD2-AE8C-E20E4F19F5D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
