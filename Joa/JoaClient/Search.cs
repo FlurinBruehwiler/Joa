@@ -6,20 +6,23 @@ public class Search
 {
     public List<ISearchResult> SearchResults { get; set; }
 
+    private readonly PluginLoader _pluginLoader;
+
     public Search()
     {
-        SearchResults = new();
+        SearchResults = new List<ISearchResult>();
+        _pluginLoader = new PluginLoader();
     }
     
-    public async Task UpdateSearchResults(List<IPlugin> plugins, string searchString)
+    public async Task UpdateSearchResults(string searchString)
     {
         SearchResults.Clear();
-        var pluginsTasks = new List<Task<List<ISearchResult>>>();
+        var pluginsTasks = new List<Task<IEnumerable<ISearchResult>>>();
         
-        foreach (var plugin in plugins)
+        foreach (var plugin in _pluginLoader.GetPlugins())
         {
             var pluginTask = Task.Run(() => plugin.GetResults(searchString));
-            pluginsTasks.Add(pluginTask);    
+            pluginsTasks.Add(pluginTask);
         }
         
         while (pluginsTasks.Count > 0)

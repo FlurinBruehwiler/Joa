@@ -1,16 +1,16 @@
-﻿using PluginBase;
-using System.Reflection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace AppWithPlugin
+﻿namespace AppWithPlugin
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main()
         {
-            var pluginLoader = new PluginLoader();
-            var plugins = pluginLoader.GetPlugins();
+            var search = new Search();
+            await search.UpdateSearchResults("test");
+            var searchResults = search.SearchResults;
+            foreach (var searchResult in searchResults)
+            {
+                Console.WriteLine(searchResult.Title);
+            }
         }
     }
 }

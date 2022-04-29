@@ -6,11 +6,13 @@ namespace AppWithPlugin;
 
 public class PluginLoader
 {
-    private IServiceProvider ServiceProvider { get; set; }
+    private readonly IServiceProvider _serviceProvider;
+    private readonly IEnumerable<Assembly> _assemblies;
 
     public PluginLoader()
     {
-        ServiceProvider = RegisterServices();
+        _serviceProvider = RegisterServices();
+        _assemblies = LoadAssemblys(GetPluginDllPaths());
     }
 
     private IServiceProvider RegisterServices()
@@ -20,26 +22,9 @@ public class PluginLoader
         return services.BuildServiceProvider();
     }
 
-    public List<IPlugin> GetPlugins()
+    public IEnumerable<IPlugin> GetPlugins()
     {
-        List<IPlugin> plugins = new(); 
-
-        try
-        {
-            var pluginDllPaths = GetPluginDllPaths();
-                
-            plugins = pluginDllPaths.Select(pluginPath =>
-            {
-                Assembly pluginAssembly = LoadPlugin(pluginPath);
-                return CreatePlugin(pluginAssembly);
-            }).ToList();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-        }
-
-        return plugins;
+        return _assemblies.Select(InstantiatePlugin);
     }
 
     private IEnumerable<string> GetPluginDllPaths()
@@ -50,7 +35,8 @@ public class PluginLoader
         
         var pluginFolders = Directory.GetDirectories(pluginFolder);
 
-        var plugins = pluginFolders.Select(x => Directory.GetFiles(x).FirstOrDefault(file => file.EndsWith(".dll"))).Where(x => x != null).ToList();
+        var plugins = pluginFolders.Select(x => Directory.GetFiles(x)
+            .FirstOrDefault(file => file.EndsWith($"{Directory.GetParent(file)?.Name}.dll"))).Where(x => x != null).ToList();
         
         Console.WriteLine($"Found the following {plugins.Count} plugins: ");
         foreach (var plugin in plugins)
@@ -61,7 +47,12 @@ public class PluginLoader
         return plugins!;
     }
 
-    private Assembly LoadPlugin(string relativePluginPath)
+    private IEnumerable<Assembly> LoadAssemblys(IEnumerable<string> dllPaths)
+    {
+        return dllPaths.Select(LoadAssembly);
+    }
+
+    private Assembly LoadAssembly(string relativePluginPath)
     {
         var root = Path.Combine(typeof(Program).Assembly.Location, @"..\..\..\..\..\");
 
@@ -70,12 +61,12 @@ public class PluginLoader
         return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
     }
 
-    private IPlugin CreatePlugin(Assembly assembly)
+    private IPlugin InstantiatePlugin(Assembly assembly)
     {
         foreach (var type in assembly.GetTypes())
         {
             if (!typeof(IPlugin).IsAssignableFrom(type)) continue;
-            if (ActivatorUtilities.CreateInstance(ServiceProvider, type) is not IPlugin result) continue;
+            if (ActivatorUtilities.CreateInstance(_serviceProvider, type) is not IPlugin result) continue;
             return result;
         }
 
