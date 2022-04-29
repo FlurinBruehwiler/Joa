@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
+using AppWithPlugin;
 using PluginBase;
 
 namespace JoaUI
@@ -9,19 +12,36 @@ namespace JoaUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly Search _search;
+        private readonly PluginLoader _loader;
+
+        private delegate void NewInputDelegate(string searchString);
+        private event NewInputDelegate NewInput;
+        
         public MainWindow()
         {
+            NewInput += ActivateSearch;
+            _search = new Search();
+            _search.ResultsUpdated += UpdateList;
             InitializeComponent();
         }
 
-        private void UpdateList(object sender, ISearchResult result)
+        private void UpdateList(List<ISearchResult> result)
         {
-            ResultList.Items.Add(new SearchItem(result));
+            ResultList.Items.Clear();
+            ResultList.Items.Add(result);
+            Searchbar.Height = ResultList.Items.Count * 60;
         }
         
-        private void TextBoxBase_OnTextChanged(object sender, TextChangedEventArgs e)
+        private void TextModified(object sender, TextChangedEventArgs e)
         {
-            
+            ResultList.Items.Clear();
+            NewInput?.Invoke(e.ToString() ?? string.Empty);
+        }
+
+        private void ActivateSearch(string searchString)
+        {
+            _search.UpdateSearchResults(searchString);
         }
     }
 }

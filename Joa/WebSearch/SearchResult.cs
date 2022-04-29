@@ -4,14 +4,14 @@ namespace HelloPlugin;
 
 public class SearchResult : ISearchResult
 {
-    public SearchResult(string title, string description, string icon)
+    public SearchResult(string caption, string description, string icon)
     {
-        Title = title;
+        Caption = caption;
         Description = description;
         Icon = icon;
     }
-
-    public string Title { get; set; }
+    
+    public string Caption { get; set; }
     public string Description { get; set; }
     public string Icon { get; set; }
 }

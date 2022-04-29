@@ -4,9 +4,12 @@ namespace AppWithPlugin;
 
 public class Search
 {
-    public List<ISearchResult> SearchResults { get; set; }
+    private List<ISearchResult> SearchResults { get; }
 
     private readonly PluginLoader _pluginLoader;
+    
+    public delegate void ResultsUpdatedDelegate(List<ISearchResult> results);
+    public event ResultsUpdatedDelegate ResultsUpdated;
 
     public Search()
     {
@@ -30,6 +33,7 @@ public class Search
             var pluginTask = await Task.WhenAny(pluginsTasks);
             var pluginResult = await pluginTask;
             SearchResults.AddRange(pluginResult);
+            ResultsUpdated?.Invoke(SearchResults);
             pluginsTasks.Remove(pluginTask);
         }
     }

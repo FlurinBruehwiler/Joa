@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:JoaUI"
         mc:Ignorable="d"
         Title="MainWindow"
-        WindowStyle="None">
+        Name="Searchbar"
+        WindowStyle="None"
+        ResizeMode="NoResize" MinHeight="60" Height="60" MaxHeight="300" Width="600"
+        >
     
     <Window.Resources>
         
@@ -15,28 +18,28 @@
   
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="20"/>
-            <RowDefinition MinHeight="20"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition MinHeight="0"/>
         </Grid.RowDefinitions>
       
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition MinWidth="100"/>
-              <ColumnDefinition MinWidth="20"/>
+              <ColumnDefinition Width="60"/>
+              <ColumnDefinition/>
             </Grid.ColumnDefinitions>
           
           <TextBox 
-            Grid.Row="0" 
-            Grid.Column="0"
-            TextChanged="TextBoxBase_OnTextChanged">
-          
+              Name="Box"
+              Grid.Row="0"
+              Grid.Column="1"
+              TextChanged="TextModified"
+              BorderThickness="0"
+              FontSize="30"
+              TextAlignment="Left"
+              VerticalAlignment="Center">
           </TextBox>
-          <Image 
-            Grid.Column="1" 
-            Grid.Row="0">
-            
-          </Image>
         </Grid>
+        
         <ListView Name="ResultList"
           Grid.Row="1" 
           Grid.Column="0">
