@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using AppWithPlugin;
@@ -15,7 +16,7 @@ namespace JoaUI
         private readonly Search _search;
         private readonly PluginLoader _loader;
         
-        private delegate void NewInputDelegate(string searchString);
+        private delegate Task NewInputDelegate(string searchString);
         private event NewInputDelegate NewInput;
         
         public MainWindow()
@@ -42,9 +43,9 @@ namespace JoaUI
             NewInput?.Invoke(Box.Text);
         }
 
-        private void ActivateSearch(string searchString)
+        private async Task ActivateSearch(string searchString)
         {
-            _search.UpdateSearchResults(searchString);
+            await _search.UpdateSearchResults(searchString);
         }
     }
 }
