@@ -12,7 +12,7 @@ namespace HelloPlugin
         
         public List<Func<string, bool>> Matchers { get => new(); }
 
-        public async Task<List<ISearchResult>> GetResults(string searchString)
+        public List<ISearchResult> GetResults(string searchString)
         {
             throw new NotImplementedException();
         }

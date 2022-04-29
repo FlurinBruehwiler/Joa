@@ -10,21 +10,7 @@ namespace AppWithPlugin
         private static void Main(string[] args)
         {
             var pluginLoader = new PluginLoader();
-            
-            try
-            {
-                var plugins = pluginLoader.GetPluginDllPaths();
-                
-                IEnumerable<IPlugin> commands = plugins.SelectMany(pluginPath =>
-                {
-                    Assembly pluginAssembly = pluginLoader.LoadPlugin(pluginPath);
-                    return pluginLoader.CreatePlugins(pluginAssembly);
-                }).ToList();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+            var plugins = pluginLoader.GetPlugins();
         }
     }
 }

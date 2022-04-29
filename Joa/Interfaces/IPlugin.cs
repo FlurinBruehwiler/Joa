@@ -21,7 +21,7 @@ public interface IPlugin
     /// </summary>
     List<Func<string, bool>> Matchers { get; }
     
-    Task<List<ISearchResult>>  GetResults(string searchString);
+    List<ISearchResult>  GetResults(string searchString);
 
     void Execute(ISearchResult searchResult);
 }

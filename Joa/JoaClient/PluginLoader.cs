@@ -6,21 +6,43 @@ namespace AppWithPlugin;
 
 public class PluginLoader
 {
-    public IServiceProvider ServiceProvider { get; set; }
+    private IServiceProvider ServiceProvider { get; set; }
 
     public PluginLoader()
     {
         ServiceProvider = RegisterServices();
     }
-    
-    IServiceProvider RegisterServices()
+
+    private IServiceProvider RegisterServices()
     {
         var services = new ServiceCollection();
         services.AddSingleton<ISettings, Settings>();
         return services.BuildServiceProvider();
     }
 
-    public List<string> GetPluginDllPaths()
+    public List<IPlugin> GetPlugins()
+    {
+        List<IPlugin> plugins = new(); 
+
+        try
+        {
+            var pluginDllPaths = GetPluginDllPaths();
+                
+            plugins = pluginDllPaths.Select(pluginPath =>
+            {
+                Assembly pluginAssembly = LoadPlugin(pluginPath);
+                return CreatePlugin(pluginAssembly);
+            }).ToList();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+
+        return plugins;
+    }
+
+    private IEnumerable<string> GetPluginDllPaths()
     {
         var pluginFolder = Path.GetFullPath(Path.Combine(typeof(Program).Assembly.Location, @"..\..\..\..\..\Plugins"));
         
@@ -39,7 +61,7 @@ public class PluginLoader
         return plugins!;
     }
 
-    public Assembly LoadPlugin(string relativePluginPath)
+    private Assembly LoadPlugin(string relativePluginPath)
     {
         var root = Path.Combine(typeof(Program).Assembly.Location, @"..\..\..\..\..\");
 
@@ -48,20 +70,15 @@ public class PluginLoader
         return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
     }
 
-    public IEnumerable<IPlugin> CreatePlugins(Assembly assembly)
+    private IPlugin CreatePlugin(Assembly assembly)
     {
-        var count = 0;
-
         foreach (var type in assembly.GetTypes())
         {
             if (!typeof(IPlugin).IsAssignableFrom(type)) continue;
             if (ActivatorUtilities.CreateInstance(ServiceProvider, type) is not IPlugin result) continue;
-            count++;
-            yield return result;
+            return result;
         }
 
-        if (count != 0) yield break;
-        
         var availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
         throw new ApplicationException(
             $"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
