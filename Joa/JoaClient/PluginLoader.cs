@@ -10,16 +10,16 @@ public class PluginLoader
     private readonly IServiceProvider _serviceProvider;
     private readonly IEnumerable<Assembly> _assemblies;
 
-    public PluginLoader()
+    public PluginLoader(Settings settings)
     {
-        _serviceProvider = RegisterServices();
+        _serviceProvider = RegisterServices(settings);
         _assemblies = LoadAssemblys(GetPluginDllPaths());
     }
 
-    private IServiceProvider RegisterServices()
+    private IServiceProvider RegisterServices(Settings settings)
     {
         var services = new ServiceCollection();
-        services.AddSingleton<ISettings, Settings>();
+        services.AddSingleton<ISettings>(settings);
         return services.BuildServiceProvider();
     }
 

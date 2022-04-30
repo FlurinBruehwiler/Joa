@@ -22,9 +22,10 @@ public interface IPlugin
     ///     </remarks>
     /// </summary>
     List<Func<string, bool>> Matchers { get; }
+
+    public PluginSettings PluginSettings { get;}
     
     IEnumerable<ISearchResult> GetResults(string searchString);
 
     public void Execute(ISearchResult searchResult);
-    public List<Setting> GetSettings();
 }

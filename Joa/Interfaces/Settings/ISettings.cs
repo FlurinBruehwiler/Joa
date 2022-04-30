@@ -2,5 +2,5 @@
 
 public interface ISettings
 {
-    public List<Setting> PluginSettings { get; set; }
+    public List<PluginSettings> PluginSettings { get; set; }
 }

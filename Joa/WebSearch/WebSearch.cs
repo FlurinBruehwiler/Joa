@@ -17,6 +17,25 @@ namespace HelloPlugin
         public string Description => "Displays hello message.";
         public bool AcceptNonMatchingSearchString => false;
         public List<Func<string, bool>> Matchers => new();
+        public PluginSettings PluginSettings => new PluginSettings("WebSearch", new List<Setting>
+        {
+            new SettingList("Web Search Engines",
+                "engines",
+                new List<Setting>
+                {
+                    new SettingText("Name", "name", ""),
+                    new SettingText("Prefix", "prefix", ""),
+                    new SettingText("URL", "url",""),
+                    new SettingText("Suggestion URL", "surl", ""),
+                    new SettingSelection<IconType>("Icon type", "icontype",IconType.SVG),
+                    new SettingText("Icon", "icon",""),
+                    new SettingText("Priority", "priority",""),
+                    new SettingToggle("Fallback","fallback", false),
+                    new SettingToggle("Encode search term", "encode",true)
+                },
+                "Add new websearch engine")
+        });
+        
 
         public IEnumerable<ISearchResult> GetResults(string searchString)
         {
@@ -63,27 +82,6 @@ namespace HelloPlugin
         public void Execute(ISearchResult searchResult)
         {
             throw new NotImplementedException();
-        }
-
-        public List<Setting> GetSettings()
-        {
-            return new List<Setting>
-            {
-                new SettingList("WebSearchEngines", 
-                    new List<Setting>
-                    {
-                        new SettingText("Name", ""),
-                        new SettingText("Prefix", ""),
-                        new SettingText("URL", ""),
-                        new SettingText("Suggestion URL", ""),
-                        new SettingSelection<IconType>("Icon type", IconType.SVG),
-                        new SettingText("Icon", ""),
-                        new SettingText("Priority", ""),
-                        new SettingToggle("Fallback", false),
-                        new SettingToggle("Encode search term", true)
-                    }, 
-                    "Add new websearch engine")
-            };
         }
     }
 }

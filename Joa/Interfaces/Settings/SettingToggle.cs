@@ -4,12 +4,12 @@ namespace Interfaces.Settings;
 
 public class SettingToggle : Setting
 {
-    public SettingToggle(string name, bool state)
+    public SettingToggle(string name, string key , bool state)
     {
         Name = name;
         State = state;
+        Key = key;
     }
 
-    public sealed override string Name { get; set; }
     public bool State { get; set; }
 }

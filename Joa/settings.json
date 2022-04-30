@@ -1,0 +1,59 @@
+[
+  {
+    "Plugin": "WebSearch",
+    "Settings": [
+      {
+        "State": [
+          {
+            "State": "",
+            "Name": "Name",
+            "Key": "name"
+          },
+          {
+            "State": "",
+            "Name": "Prefix",
+            "Key": "prefix"
+          },
+          {
+            "State": "",
+            "Name": "URL",
+            "Key": "url"
+          },
+          {
+            "State": "",
+            "Name": "Suggestion URL",
+            "Key": "surl"
+          },
+          {
+            "State": 1,
+            "Name": "Icon type",
+            "Key": "icontype"
+          },
+          {
+            "State": "",
+            "Name": "Icon",
+            "Key": "icon"
+          },
+          {
+            "State": "",
+            "Name": "Priority",
+            "Key": "priority"
+          },
+          {
+            "State": false,
+            "Name": "Fallback",
+            "Key": "fallback"
+          }, 
+          {
+            "State": true,
+            "Name": "Encode search term",
+            "Key": "encode"
+          }
+        ],
+        "AddText": "Add new websearch engine",
+        "Name": "Web Search Engines",
+        "Key": "engines"
+      }
+    ]
+  }
+]

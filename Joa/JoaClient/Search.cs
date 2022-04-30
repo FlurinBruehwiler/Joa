@@ -10,11 +10,14 @@ public class Search
     
     public delegate void ResultsUpdatedDelegate(List<ISearchResult> results);
     public event ResultsUpdatedDelegate ResultsUpdated;
+    public Settings Settings { get; set; }
 
     public Search()
     {
+        Settings = new Settings();
         SearchResults = new List<ISearchResult>();
-        _pluginLoader = new PluginLoader();
+        _pluginLoader = new PluginLoader(Settings);
+        Settings.UpdateSettings(_pluginLoader);
     }
     
     public async Task UpdateSearchResults(string searchString)
