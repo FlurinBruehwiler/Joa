@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaClient", "JoaClient\JoaClient.csproj", "{20565E17-B7B9-4E9F-8E94-8DCF7FB7F135}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaCore", "JoaCore\JoaCore.csproj", "{20565E17-B7B9-4E9F-8E94-8DCF7FB7F135}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{82E4D949-54C5-4077-98C3-ED92A497640E}"
 EndProject

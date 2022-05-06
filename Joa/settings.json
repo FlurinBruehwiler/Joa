@@ -1,59 +1,48 @@
-[
-  {
-    "Plugin": "WebSearch",
-    "Settings": [
-      {
-        "State": [
-          {
+{
+  "Web Search": {
+    "Settings": {
+      "SearchEngines": {
+        "State": {
+          "Name": {
             "State": "",
-            "Name": "Name",
-            "Key": "name"
+            "Name": "Name"
           },
-          {
+          "Prefix": {
             "State": "",
-            "Name": "Prefix",
-            "Key": "prefix"
+            "Name": "Prefix"
           },
-          {
+          "Url": {
             "State": "",
-            "Name": "URL",
-            "Key": "url"
+            "Name": "URL"
           },
-          {
+          "SuggestionUrl": {
             "State": "",
-            "Name": "Suggestion URL",
-            "Key": "surl"
+            "Name": "Suggestion URL"
           },
-          {
+          "IconType": {
             "State": 1,
-            "Name": "Icon type",
-            "Key": "icontype"
+            "Name": "Icon type"
           },
-          {
+          "Icon": {
             "State": "",
-            "Name": "Icon",
-            "Key": "icon"
+            "Name": "Icon"
           },
-          {
+          "Priority": {
             "State": "",
-            "Name": "Priority",
-            "Key": "priority"
+            "Name": "Priority"
           },
-          {
+          "Fallback": {
             "State": false,
-            "Name": "Fallback",
-            "Key": "fallback"
-          }, 
-          {
+            "Name": "Fallback"
+          },
+          "Encode": {
             "State": true,
-            "Name": "Encode search term",
-            "Key": "encode"
+            "Name": "Encode search term"
           }
-        ],
+        },
         "AddText": "Add new websearch engine",
-        "Name": "Web Search Engines",
-        "Key": "engines"
+        "Name": "Web Search Engines"
       }
-    ]
+    }
   }
-]
+}

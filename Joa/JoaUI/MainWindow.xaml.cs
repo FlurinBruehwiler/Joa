@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using AppWithPlugin;
+using JoaCore;
 using Interfaces;
 
 namespace JoaUI
@@ -15,10 +15,11 @@ namespace JoaUI
     {
         private readonly Search _search;
         private readonly PluginLoader _loader;
-        
+
         private delegate Task NewInputDelegate(string searchString);
+
         private event NewInputDelegate NewInput;
-        
+
         public MainWindow()
         {
             NewInput += ActivateSearch;
@@ -34,9 +35,10 @@ namespace JoaUI
             {
                 ResultList.Items.Add(searchResult.Visualize());
             }
+
             Searchbar.Height = ResultList.Items.Count * 60;
         }
-        
+
         private void TextModified(object sender, TextChangedEventArgs e)
         {
             ResultList.Items.Clear();

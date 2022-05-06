@@ -2,9 +2,8 @@
 
 public class SettingPath : Setting
 {
-    public SettingPath(string name, string key, string path)
+    public SettingPath(string name, string key, string path) : base(key, name)
     {
-        Name = name;
         Path = path;
         Key = key;
     }

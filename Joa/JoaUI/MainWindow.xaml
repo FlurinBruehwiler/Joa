@@ -8,41 +8,40 @@
         Title="MainWindow"
         Name="Searchbar"
         WindowStyle="None"
-        ResizeMode="NoResize" MinHeight="60" Height="60" MaxHeight="300" Width="600"
-        >
-    
+        ResizeMode="NoResize" MinHeight="60" Height="60" MaxHeight="300" Width="600">
+
     <Window.Resources>
-        
+
     </Window.Resources>
-  
-  
+
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition MinHeight="0"/>
+            <RowDefinition Height="60" />
+            <RowDefinition MinHeight="0" />
         </Grid.RowDefinitions>
-      
+
         <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="60"/>
-              <ColumnDefinition/>
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-          
-          <TextBox 
-              Name="Box"
-              Grid.Row="0"
-              Grid.Column="1"
-              TextChanged="TextModified"
-              BorderThickness="0"
-              FontSize="30"
-              TextAlignment="Left"
-              VerticalAlignment="Center">
-          </TextBox>
+
+            <TextBox
+                Name="Box"
+                Grid.Row="0"
+                Grid.Column="1"
+                TextChanged="TextModified"
+                BorderThickness="0"
+                FontSize="30"
+                TextAlignment="Left"
+                VerticalAlignment="Center">
+            </TextBox>
         </Grid>
-        
+
         <ListView Name="ResultList"
-          Grid.Row="1" 
-          Grid.Column="0">
+                  Grid.Row="1"
+                  Grid.Column="0">
         </ListView>
     </Grid>
 </Window>

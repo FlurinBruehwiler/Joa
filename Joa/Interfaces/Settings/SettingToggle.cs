@@ -4,9 +4,8 @@ namespace Interfaces.Settings;
 
 public class SettingToggle : Setting
 {
-    public SettingToggle(string name, string key , bool state)
+    public SettingToggle(string name, string key , bool state) : base(key, name)
     {
-        Name = name;
         State = state;
         Key = key;
     }

@@ -6,13 +6,13 @@ public interface IPlugin
 {
     string Name { get; }
     string Description { get; }
-    
+
     /// <summary>
     /// true : The Searchstring will be passed to the Plugin as long as no Validator from any other plugin matches
     /// false : default behaviour
     /// </summary>
     bool AcceptNonMatchingSearchString { get; }
-    
+
     /// <summary>
     ///     <value>A list of Validators</value>
     ///     <remarks>
@@ -23,8 +23,8 @@ public interface IPlugin
     /// </summary>
     List<Func<string, bool>> Matchers { get; }
 
-    public PluginSettings PluginSettings { get;}
-    
+    public static PluginSetting PluginSetting { get; }
+
     IEnumerable<ISearchResult> GetResults(string searchString);
 
     public void Execute(ISearchResult searchResult);

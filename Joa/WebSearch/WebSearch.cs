@@ -17,7 +17,7 @@ namespace HelloPlugin
         public string Description => "Displays hello message.";
         public bool AcceptNonMatchingSearchString => false;
         public List<Func<string, bool>> Matchers => new();
-        public PluginSettings PluginSettings => new PluginSettings("WebSearch", new List<Setting>
+        public PluginSetting PluginSetting => new PluginSetting(new List<Setting>
         {
             new SettingList("Web Search Engines",
                 "engines",

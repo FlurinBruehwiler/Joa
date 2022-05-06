@@ -10,7 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
-      <ProjectReference Include="..\JoaClient\JoaClient.csproj" />
+      <ProjectReference Include="..\JoaCore\JoaCore.csproj" />
     </ItemGroup>
 
 </Project>

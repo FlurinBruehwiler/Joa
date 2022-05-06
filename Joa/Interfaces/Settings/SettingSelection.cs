@@ -2,9 +2,8 @@
 
 public class SettingSelection<T> : Setting where T : Enum
 {
-    public SettingSelection(string name, string key, T state)
+    public SettingSelection(string name, string key, T state) : base(key, name)
     {
-        Name = name;
         State = state;
         Key = key;
     }

@@ -7,31 +7,31 @@
              mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        
-        <Image 
+
+        <Image
             Name="Image"
             Grid.Column="0"
             Grid.Row="0"
             MinHeight="60"
-            MinWidth="60"/>
-        
+            MinWidth="60" />
+
         <Grid Grid.Column="1" Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition MinHeight="30"/>
-                <RowDefinition MinHeight="30"/>
+                <RowDefinition MinHeight="30" />
+                <RowDefinition MinHeight="30" />
             </Grid.RowDefinitions>
-            
-            <Label 
+
+            <Label
                 Name="CaptLabel"
-                Grid.Row="0" 
-                Grid.Column="0"/>
-            <Label 
+                Grid.Row="0"
+                Grid.Column="0" />
+            <Label
                 Name="DescLabel"
-                Grid.Row="1" 
-                Grid.Column="0"/>
+                Grid.Row="1"
+                Grid.Column="0" />
         </Grid>
     </Grid>
 </UserControl>
