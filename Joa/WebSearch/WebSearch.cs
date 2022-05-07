@@ -7,11 +7,11 @@ namespace HelloPlugin;
 [Plugin("Web Search", "Lets you search on the web!")]
 public class WebSearch : IPlugin
 {
-    private readonly ISettings _settings;
+    private readonly IJoaSettings _joaSettings;
 
-    public WebSearch(ISettings settings)
+    public WebSearch(IJoaSettings joaSettings)
     {
-        _settings = settings;
+        _joaSettings = joaSettings;
     }
     public bool AcceptNonMatchingSearchString => false;
     public List<Func<string, bool>> Matchers => new();

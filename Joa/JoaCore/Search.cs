@@ -11,17 +11,18 @@ public class Search
     public delegate void ResultsUpdatedDelegate(List<ISearchResult> results);
 
     public event ResultsUpdatedDelegate ResultsUpdated;
-    public Settings Settings { get; set; }
 
+    public Settings Settings { get; set; }
+    
     public IEnumerable<IPlugin> Plugins { get; set; }
 
     public Search()
     {
         SearchResults = new List<ISearchResult>();
         _pluginLoader = new PluginLoader();
-        Settings = new Settings(_pluginLoader.GetPluginSettings());
-        Settings.UpdateSettings(_pluginLoader);
-        Plugins = _pluginLoader.InstantiatePlugins(Settings);
+        Settings = new Settings(new CoreSettings());
+        Plugins = _pluginLoader.InstantiatePlugins(Settings.CoreSettings);
+        Settings.UpdatePluginDefinitions(Plugins);
     }
 
     public async Task UpdateSearchResults(string searchString)

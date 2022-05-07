@@ -1,42 +1,28 @@
 ﻿using Interfaces;
-using Interfaces.Settings;
-using Newtonsoft.Json;
 
 namespace JoaCore;
 
-public class Settings : ISettings
+public class Settings
 {
-    public IEnumerable<PluginSetting> PluginSettings { get; set; }
-
-    private readonly string _settingsFilePath;
-
-    public Settings(IEnumerable<PluginSetting> pluginSettings)
+    public CoreSettings CoreSettings { get; set; }
+    public IEnumerable<PluginDefinition> PluginDefinitions { get; set; }
+    
+    public Settings(CoreSettings coreSettings)
     {
-        PluginSettings = pluginSettings;
-        _settingsFilePath =
-            Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, @"..\..\..\..\..\settings.json"));
-        ReadSettings();
+        CoreSettings = coreSettings;
+        PluginDefinitions = new List<PluginDefinition>();
     }
 
-    private void ReadSettings()
+    public void UpdatePluginDefinitions(IEnumerable<IPlugin> plugins)
     {
-        var json = File.ReadAllText(_settingsFilePath);
-        if (json == string.Empty)
-            return;
-
-        //ToDo
+        PluginDefinitions = CreatePluginDefinitions(plugins);
     }
 
-    public void UpdateSettings(PluginLoader pluginLoader)
+    private IEnumerable<PluginDefinition> CreatePluginDefinitions(IEnumerable<IPlugin> plugins)
     {
-        PluginSettings = pluginLoader.GetPluginSettings();
-        
-        SaveSettings();
-    }
-
-    private void SaveSettings()
-    {
-        var json = JsonConvert.SerializeObject(PluginSettings);
-        File.WriteAllText(_settingsFilePath, json);
+        foreach (var plugin in plugins)
+        {
+            yield return new PluginDefinition(plugin);
+        }
     }
 }

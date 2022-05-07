@@ -19,9 +19,7 @@ public interface IPlugin
     ///     </remarks>
     /// </summary>
     List<Func<string, bool>> Matchers { get; }
-
-    public static PluginSetting PluginSetting { get; }
-
+    
     IEnumerable<ISearchResult> GetResults(string searchString);
 
     public void Execute(ISearchResult searchResult);

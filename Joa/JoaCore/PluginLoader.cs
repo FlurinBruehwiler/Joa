@@ -15,9 +15,9 @@ public class PluginLoader
         _pluginTypes = LoadTypes(assemblies);
     }
     
-    public IEnumerable<IPlugin> InstantiatePlugins(Settings settings)
+    public IEnumerable<IPlugin> InstantiatePlugins(CoreSettings coreSettings)
     {
-        var serviceProvider = RegisterServices(settings);
+        var serviceProvider = RegisterServices(coreSettings);
         
         foreach (var type in _pluginTypes)
         {
@@ -25,17 +25,19 @@ public class PluginLoader
             yield return result;
         }
     }
-
-    public IEnumerable<PluginSetting> GetPluginSettings()
+    
+    private IEnumerable<PropertyInfo> GetSettingsForPlugin(Type pluginType)
     {
-        foreach (var type in _pluginTypes)
+        foreach (var propertyInfo in pluginType.GetProperties())
         {
-            var propertyInfo = type.GetProperty(nameof(IPlugin.PluginSetting), BindingFlags.Public | BindingFlags.Static);
+            var attr = Attribute.GetCustomAttribute(propertyInfo, typeof(SettingPropertyAttribute));
+            if(attr == null)
+                continue;
 
-            if (propertyInfo?.GetValue(null) is not PluginSetting property)
-                throw new Exception();
-
-            yield return property;
+            if (attr is not SettingPropertyAttribute settingPropertyAttribute)
+                continue;
+            
+            yield return propertyInfo;
         }
     }
 
@@ -62,10 +64,10 @@ public class PluginLoader
             $"Available types: {availableTypes}");
     }
 
-    private IServiceProvider RegisterServices(Settings settings)
+    private IServiceProvider RegisterServices(CoreSettings coreSettings)
     {
         var services = new ServiceCollection();
-        services.AddSingleton<ISettings>(settings);
+        services.AddSingleton<IJoaSettings>(coreSettings);
         return services.BuildServiceProvider();
     }
     
