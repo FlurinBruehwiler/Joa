@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text.Json.Serialization;
 using Interfaces;
 using Interfaces.Settings;
 
@@ -14,6 +15,8 @@ public class PluginSetting
         set => _propertyInfo.SetValue(_plugin, value);
     }
 
+    public string Name { get; set; }
+    
     private readonly IPlugin _plugin;
     private readonly PropertyInfo _propertyInfo;
 
@@ -22,5 +25,6 @@ public class PluginSetting
         _plugin = plugin;
         _propertyInfo = propertyInfo;
         SettingInfo = settingInfo;
+        Name = _propertyInfo.Name;
     }
 }

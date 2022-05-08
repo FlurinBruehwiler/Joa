@@ -20,9 +20,9 @@ public class Search
     {
         SearchResults = new List<ISearchResult>();
         _pluginLoader = new PluginLoader();
-        Settings = new Settings(new CoreSettings());
-        Plugins = _pluginLoader.InstantiatePlugins(Settings.CoreSettings);
-        Settings.UpdatePluginDefinitions(Plugins);
+        var coreSettings = new CoreSettings();
+        Plugins = _pluginLoader.InstantiatePlugins(coreSettings);
+        Settings = new Settings(coreSettings, Plugins);
     }
 
     public async Task UpdateSearchResults(string searchString)

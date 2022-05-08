@@ -7,17 +7,11 @@ public class Settings
     public CoreSettings CoreSettings { get; set; }
     public IEnumerable<PluginDefinition> PluginDefinitions { get; set; }
     
-    public Settings(CoreSettings coreSettings)
+    public Settings(CoreSettings coreSettings, IEnumerable<IPlugin> plugins)
     {
         CoreSettings = coreSettings;
-        PluginDefinitions = new List<PluginDefinition>();
-    }
-
-    public void UpdatePluginDefinitions(IEnumerable<IPlugin> plugins)
-    {
         PluginDefinitions = CreatePluginDefinitions(plugins);
     }
-
     private IEnumerable<PluginDefinition> CreatePluginDefinitions(IEnumerable<IPlugin> plugins)
     {
         foreach (var plugin in plugins)

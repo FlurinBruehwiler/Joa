@@ -7,10 +7,12 @@ namespace JoaCore;
 public class PluginDefinition
 {
     public IEnumerable<PluginSetting> PluginSettings { get; set; }
+    public string Name { get; set; }
     
     public PluginDefinition(IPlugin plugin)
     {
         PluginSettings = GetPluginSettings(plugin);
+        Name = plugin.GetType().Name;
     }
 
     private IEnumerable<PluginSetting> GetPluginSettings(IPlugin plugin)

@@ -1,6 +1,4 @@
-﻿using Interfaces;
-using Interfaces.Settings;
-using Newtonsoft.Json;
+﻿using Interfaces.Settings;
 
 namespace JoaCore;
 
