@@ -1,6 +1,6 @@
 ﻿using Interfaces;
 
-namespace HelloPlugin;
+namespace WebSearch;
 
 public class SearchResult : ISearchResult
 {

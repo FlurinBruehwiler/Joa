@@ -3,44 +3,59 @@
 namespace JoaCore;
 
 public class Search
-{
-    private List<ISearchResult> SearchResults { get; }
-
-    private readonly PluginLoader _pluginLoader;
-
-    public delegate void ResultsUpdatedDelegate(List<ISearchResult> results);
-
-    public event ResultsUpdatedDelegate ResultsUpdated;
+{ 
+    public delegate void ResultsUpdatedDelegate(List<(ISearchResult, Guid)> results);
+    public event ResultsUpdatedDelegate? ResultsUpdated;
 
     public Settings Settings { get; set; }
+    private List<IPlugin> Plugins { get; set; }
     
-    public IEnumerable<IPlugin> Plugins { get; set; }
+    private readonly PluginLoader _pluginLoader;
+    private readonly CoreSettings _coreSettings;
+    
+    private List<(ISearchResult, Guid)> SearchResults { get; }
 
     public Search()
     {
-        SearchResults = new List<ISearchResult>();
+        SearchResults = new List<(ISearchResult, Guid)>();
         _pluginLoader = new PluginLoader();
-        var coreSettings = new CoreSettings();
-        Plugins = _pluginLoader.InstantiatePlugins(coreSettings);
-        Settings = new Settings(coreSettings, Plugins);
+        _coreSettings = new CoreSettings();
+        Load();
+    }
+
+    public void Load()
+    {
+        Plugins = _pluginLoader.InstantiatePlugins(_coreSettings).ToList();
+        Settings = new Settings(_coreSettings, Plugins);
+    }
+    
+    public async Task ExecuteSearchResult(Guid pluginId, ISearchResult searchResult)
+    {
+        foreach (var plugin in Plugins.Where(p => p.ID == pluginId))
+        {
+            plugin.Execute(searchResult);
+        }
     }
 
     public async Task UpdateSearchResults(string searchString)
     {
         SearchResults.Clear();
-        var pluginsTasks = new List<Task<IEnumerable<ISearchResult>>>();
+        var pluginsTasks = new Dictionary<Task<IEnumerable<ISearchResult>>, Guid>();
 
         foreach (var plugin in Plugins)
         {
             var pluginTask = Task.Run(() => plugin.GetResults(searchString));
-            pluginsTasks.Add(pluginTask);
+            pluginsTasks.Add(pluginTask, plugin.ID);
         }
 
         while (pluginsTasks.Count > 0)
         {
-            var pluginTask = await Task.WhenAny(pluginsTasks);
+            var pluginTask = await Task.WhenAny(pluginsTasks.Keys);
             var pluginResult = await pluginTask;
-            SearchResults.AddRange(pluginResult);
+            foreach (var searchResult in pluginResult)
+            {
+                SearchResults.Add((searchResult, pluginsTasks[pluginTask]));
+            }
             ResultsUpdated?.Invoke(SearchResults);
             pluginsTasks.Remove(pluginTask);
         }

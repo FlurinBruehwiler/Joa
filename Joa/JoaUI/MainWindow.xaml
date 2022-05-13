@@ -41,7 +41,8 @@
 
         <ListView Name="ResultList"
                   Grid.Row="1"
-                  Grid.Column="0">
+                  Grid.Column="0"
+                  KeyDown="KeyPressedOnItem">
         </ListView>
     </Grid>
 </Window>
