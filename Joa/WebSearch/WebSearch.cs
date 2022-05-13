@@ -49,6 +49,23 @@ public class WebSearch : IPlugin
         }
     };
     
+    [SettingProperty] public string Name { get; set; } = "Youtube";
+
+    [SettingProperty] public string Prefix { get; set; } = "y?";
+
+    [SettingProperty(Name = "URL")] public string Url { get; set; } = "https://www.youtube.com/results?search_query={{query}}";
+
+    [SettingProperty(Name = "Suggestion URL")]
+    public string SuggestionUrl { get; set; } = "https://www.google.com/complete/search?ds=yt&output=firefox&q={{query}}";
+    
+    [SettingProperty] public string Icon { get; set; } = "https://www.youtube.com/favicon.ico";
+
+    [SettingProperty] public int Priority { get; set; } = 5;
+
+    [SettingProperty] public bool Fallback { get; set; } = false;
+
+    [SettingProperty] public bool EncodeSearchTerm { get; set; } = true;
+    
     public IEnumerable<ISearchResult> GetResults(string searchString)
     {
         var client = new HttpClient();
