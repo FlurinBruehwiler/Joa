@@ -3,7 +3,7 @@ using Microsoft.VisualBasic.CompilerServices;
 
 namespace JoaCore;
 
-public class DtoSetting
+public class DtoSettings
 {
     private Dictionary<string, Dictionary<string, object>> _pluginSettings;
 
@@ -21,6 +21,18 @@ public class DtoSetting
 
             _pluginSettings = newPluginSettings;
         }
+    }
+    
+    public DtoSettings(Settings setting)
+    {
+        _pluginSettings = setting.PluginDefinitions.ToDictionary(pluginDefinition => pluginDefinition.Name,
+            pluginDefinition => pluginDefinition.PluginSettings.ToDictionary(pluginSetting => pluginSetting.Name,
+                pluginSetting => pluginSetting.Value));
+    }
+
+    public DtoSettings()
+    {
+        
     }
 
     Dictionary<string, object> ConvertPlugin(Dictionary<string, object> pluginSettings)
@@ -83,17 +95,5 @@ public class DtoSetting
         }
 
         return newDictionary;
-    }
-
-    public DtoSetting(Settings setting)
-    {
-        PluginSettings = setting.PluginDefinitions.ToDictionary(pluginDefinition => pluginDefinition.Name,
-            pluginDefinition => pluginDefinition.PluginSettings.ToDictionary(pluginSetting => pluginSetting.Name,
-                pluginSetting => pluginSetting.Value));
-    }
-
-    public DtoSetting()
-    {
-        
     }
 }

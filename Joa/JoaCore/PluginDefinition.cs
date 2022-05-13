@@ -28,12 +28,10 @@ public class PluginDefinition
         foreach (var propertyInfo in pluginType.GetProperties())
         {
             var attr = Attribute.GetCustomAttribute(propertyInfo, typeof(SettingPropertyAttribute));
-            if(attr == null)
-                continue;
 
             if (attr is not SettingPropertyAttribute settingPropertyAttribute)
                 continue;
-            
+
             yield return (propertyInfo, settingPropertyAttribute);
         }
     }

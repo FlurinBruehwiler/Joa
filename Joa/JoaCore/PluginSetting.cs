@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 using System.Text.Json.Serialization;
 using Interfaces;
 using Interfaces.Settings;
@@ -19,6 +20,7 @@ public class PluginSetting
     
     private readonly IPlugin _plugin;
     private readonly PropertyInfo _propertyInfo;
+    private readonly bool _isList;
 
     public PluginSetting(IPlugin plugin, PropertyInfo propertyInfo, SettingPropertyAttribute settingInfo)
     {
@@ -26,5 +28,13 @@ public class PluginSetting
         _propertyInfo = propertyInfo;
         SettingInfo = settingInfo;
         Name = _propertyInfo.Name;
+        _isList = IsList(Value);
+    }
+    
+    public bool IsList(object o)
+    {
+        return o is IList &&
+               o.GetType().IsGenericType &&
+               o.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>));
     }
 }
