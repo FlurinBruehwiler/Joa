@@ -1,4 +1,4 @@
-﻿namespace HelloPlugin;
+﻿namespace WebSearch;
 
 public enum IconType
 {

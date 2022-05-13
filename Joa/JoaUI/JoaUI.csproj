@@ -10,7 +10,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
-      <ProjectReference Include="..\JoaCore\JoaCore.csproj" />
     </ItemGroup>
 
 </Project>

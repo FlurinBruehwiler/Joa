@@ -1,53 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using JoaCore;
+using System.Windows.Input;
 using Interfaces;
+using Interfaces.UI.Components;
+
 
 namespace JoaUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
-        private readonly Search _search;
-        private readonly PluginLoader _loader;
-
-        private delegate Task NewInputDelegate(string searchString);
-
-        private event NewInputDelegate NewInput;
-
+    public partial class MainWindow : Window, ISearchwindow
+    { 
         public MainWindow()
         {
-            NewInput += ActivateSearch;
-            _search = new Search();
-            _search.ResultsUpdated += UpdateList;
             InitializeComponent();
         }
 
-        private void UpdateList(List<ISearchResult> results)
+        public event ISearchwindow.NewInputDelegate? NewInput;
+        public event ISearchwindow.ItemSelectedDelegate? ItemSelected;
+
+        public void UpdateList(List<(ISearchResult result, Guid pluginKey)> results)
         {
             ResultList.Items.Clear();
-            foreach (var searchResult in results)
+            foreach (var searchItem in results.Select(searchResult => searchResult.result.Visualize(searchResult.pluginKey)))
             {
-                ResultList.Items.Add(searchResult.Visualize());
+                ResultList.Items.Add(searchItem);
             }
-
             Searchbar.Height = ResultList.Items.Count * 60;
         }
-
+        
         private void TextModified(object sender, TextChangedEventArgs e)
         {
             ResultList.Items.Clear();
             NewInput?.Invoke(Box.Text);
         }
 
-        private async Task ActivateSearch(string searchString)
+        private void KeyPressedOnItem(object sender, KeyEventArgs e)
         {
-            await _search.UpdateSearchResults(searchString);
+            if (sender is not ListView {SelectedItem: SearchItem i}) return;
+            ItemSelected?.Invoke(i.Result.pluginId, i.Result.searchResult);
         }
     }
 }

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaUI", "JoaUI\JoaUI.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner", "TestRunner\TestRunner.csproj", "{F3B85EE5-794B-4EA0-A25D-9A0EFDA486BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joa", "Joa\Joa.csproj", "{AF144978-149E-4DCC-B494-A96A992BA723}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{F3B85EE5-794B-4EA0-A25D-9A0EFDA486BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3B85EE5-794B-4EA0-A25D-9A0EFDA486BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3B85EE5-794B-4EA0-A25D-9A0EFDA486BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF144978-149E-4DCC-B494-A96A992BA723}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF144978-149E-4DCC-B494-A96A992BA723}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF144978-149E-4DCC-B494-A96A992BA723}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF144978-149E-4DCC-B494-A96A992BA723}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

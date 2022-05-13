@@ -1,8 +1,9 @@
-﻿using Interfaces;
+﻿using System.Diagnostics;
+using Interfaces;
 using Interfaces.Settings;
 using Newtonsoft.Json;
 
-namespace HelloPlugin;
+namespace WebSearch;
 
 [Plugin("Web Search", "Lets you search on the web!")]
 public class WebSearch : IPlugin
@@ -12,7 +13,10 @@ public class WebSearch : IPlugin
     public WebSearch(IJoaSettings joaSettings)
     {
         _joaSettings = joaSettings;
+        ID = new Guid();
     }
+
+    public Guid ID { get; }
     public bool AcceptNonMatchingSearchString => false;
     public List<Func<string, bool>> Matchers => new();
 
@@ -87,9 +91,10 @@ public class WebSearch : IPlugin
         return searchResults;
     }
 
-    public void Execute(ISearchResult searchResult)
+    public void Execute(ISearchResult result)
     {
-        throw new NotImplementedException();
+        if (result is not  SearchResult sr) return;
+        Process.Start("chrome.exe", "https://www.google.ch");
     }
 }
 
