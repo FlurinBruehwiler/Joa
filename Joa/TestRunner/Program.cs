@@ -3,4 +3,5 @@ using System.Text.Json;
 using JoaCore;
 
 var search = new Search();
-search.Settings.SaveSettingsToJson();
+//var result = search.Settings.PluginDefinitions.First().PluginSettings.Where(x => x.ListType != null).ToList();
+await search.UpdateSearchResults("test");

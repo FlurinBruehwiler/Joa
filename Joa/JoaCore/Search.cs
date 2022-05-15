@@ -40,7 +40,7 @@ public class Search
     public async Task UpdateSearchResults(string searchString)
     {
         SearchResults.Clear();
-        var pluginsTasks = new Dictionary<Task<IEnumerable<ISearchResult>>, Guid>();
+        var pluginsTasks = new Dictionary<Task<List<ISearchResult>>, Guid>();
 
         foreach (var plugin in Plugins)
         {

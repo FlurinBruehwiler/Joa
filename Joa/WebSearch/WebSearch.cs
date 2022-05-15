@@ -21,7 +21,7 @@ public class WebSearch : IPlugin
     public List<Func<string, bool>> Matchers => new();
 
     [SettingProperty(Name = "Web Search Engines")]
-    public List<SearchEngine> SearchEngines { get; set; } = new List<SearchEngine>
+    public List<SearchEngine> SearchEngines { get; set; } = new()
     {
         new SearchEngine
         {
@@ -66,46 +66,51 @@ public class WebSearch : IPlugin
 
     [SettingProperty] public bool EncodeSearchTerm { get; set; } = true;
     
-    public IEnumerable<ISearchResult> GetResults(string searchString)
+    public List<ISearchResult> GetResults(string searchString)
     {
-        var client = new HttpClient();
-
-        HttpResponseMessage? httpResponse = null;
-        
-        try
+        return new List<ISearchResult>
         {
-            httpResponse = client.GetAsync($"https://www.google.com/complete/search?client=opera&q={searchString}")
-                .GetAwaiter().GetResult();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-        
-        var searchResults = new List<ISearchResult>
-        {
-            new SearchResult("Google", $"Search on Google for \"{searchString}\"", "")
+            new SearchResult(SearchEngines.First().Name, SearchEngines.Last().Name, SearchEngines.First().Url)   
         };
 
-        if (httpResponse != null)
-        {
-            try
-            {
-                dynamic response = JsonConvert.DeserializeObject(httpResponse.Content.ReadAsStringAsync().GetAwaiter()
-                    .GetResult()) ?? throw new InvalidOperationException();
-
-                List<string> suggestions = response[1].ToObject<List<string>>();
-                
-                searchResults.AddRange(suggestions.Select(suggestion => new SearchResult(suggestion, $"Search on Google for \"{suggestion}\"", ""))
-                    .ToList());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }
-
-        return searchResults;
+        // var client = new HttpClient();
+        //
+        // HttpResponseMessage? httpResponse = null;
+        //
+        // try
+        // {
+        //     httpResponse = client.GetAsync($"https://www.google.com/complete/search?client=opera&q={searchString}")
+        //         .GetAwaiter().GetResult();
+        // }
+        // catch (Exception e)
+        // {
+        //     Console.WriteLine(e);
+        // }
+        //
+        // var searchResults = new List<ISearchResult>
+        // {
+        //     new SearchResult("Google", $"Search on Google for \"{searchString}\"", "")
+        // };
+        //
+        // if (httpResponse != null)
+        // {
+        //     try
+        //     {
+        //         dynamic response = JsonConvert.DeserializeObject(httpResponse.Content.ReadAsStringAsync().GetAwaiter()
+        //             .GetResult()) ?? throw new InvalidOperationException();
+        //
+        //         List<string> suggestions = response[1].ToObject<List<string>>();
+        //         
+        //         searchResults.AddRange(suggestions.Select(suggestion => new SearchResult(suggestion, $"Search on Google for \"{suggestion}\"", ""))
+        //             .ToList());
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Console.WriteLine(e);
+        //     }
+        // }
+        //
+        // return searchResults;
     }
 
     public void Execute(ISearchResult result)

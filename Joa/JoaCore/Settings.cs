@@ -6,7 +6,7 @@ namespace JoaCore;
 public class Settings
 {
     public CoreSettings CoreSettings { get; set; }
-    public IEnumerable<PluginDefinition> PluginDefinitions { get; set; }
+    public List<PluginDefinition> PluginDefinitions { get; set; }
     
     
     private readonly string _filePath;
@@ -16,7 +16,7 @@ public class Settings
     public Settings(CoreSettings coreSettings, IEnumerable<IPlugin> plugins)
     {
         CoreSettings = coreSettings;
-        PluginDefinitions = CreatePluginDefinitions(plugins);
+        PluginDefinitions = CreatePluginDefinitions(plugins).ToList();
         _filePath = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location,
             @"..\..\..\..\..\settings.json"));
         _options = new JsonSerializerOptions
@@ -34,9 +34,9 @@ public class Settings
     
     public void SaveSettingsToJson()
     {
-        var dtoSetting = new DtoSettings(this);
-        var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
-        File.WriteAllText(_filePath, jsonString);
+        //var dtoSetting = new DtoSettings(this);
+        //var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
+        //File.WriteAllText(_filePath, jsonString);
     }
 
     public void UpdateSettingsFromJson()
@@ -55,11 +55,11 @@ public class Settings
 
     private void UpdatePluginDefinition(PluginDefinition pluginDefinition, DtoSettings dtoSettings)
     {
-        var newPlugin = dtoSettings.PluginSettings[pluginDefinition.Name];
-        
-        foreach (var pluginSetting in pluginDefinition.PluginSettings)
-        {
-            pluginSetting.Value = newPlugin[pluginSetting.Name];
-        }
+        // var newPlugin = dtoSettings.PluginSettings[pluginDefinition.Name];
+        //
+        // foreach (var pluginSetting in pluginDefinition.PluginSettings)
+        // {
+        //     pluginSetting.Value = newPlugin[pluginSetting.Name];
+        // }
     }
 }

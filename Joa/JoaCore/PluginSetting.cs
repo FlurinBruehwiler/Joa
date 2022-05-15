@@ -12,26 +12,48 @@ public class PluginSetting
 
     public object Value
     {
-        get => _propertyInfo.GetValue(_plugin) ?? throw new Exception();
-        set => _propertyInfo.SetValue(_plugin, value);
+        get
+        {
+            if (_list != null)
+            {
+                return _list;
+            }
+            return _propertyInfo.GetValue(_plugin) ?? throw new Exception();
+        }
+        set
+        {
+            if (_list != null)
+            {
+                //ToDo
+            }
+            else
+            {
+                _propertyInfo.SetValue(_plugin, value);
+            }
+        }
     }
 
     public string Name { get; set; }
     
-    private readonly IPlugin _plugin;
+    private readonly object _plugin;
     private readonly PropertyInfo _propertyInfo;
-    private readonly bool _isList;
+    private readonly List<SettingsCollection>? _list;
 
-    public PluginSetting(IPlugin plugin, PropertyInfo propertyInfo, SettingPropertyAttribute settingInfo)
+    public PluginSetting(object plugin, PropertyInfo propertyInfo, SettingPropertyAttribute settingInfo)
     {
         _plugin = plugin;
         _propertyInfo = propertyInfo;
         SettingInfo = settingInfo;
         Name = _propertyInfo.Name;
-        _isList = IsList(Value);
+        if (IsList(Value))
+        {
+            var listType = Value.GetType().GetGenericArguments().First();
+            
+        }
     }
     
-    public bool IsList(object o)
+
+    private bool IsList(object o)
     {
         return o is IList &&
                o.GetType().IsGenericType &&

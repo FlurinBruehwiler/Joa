@@ -23,12 +23,12 @@ public class DtoSettings
         }
     }
     
-    public DtoSettings(Settings setting)
-    {
-        _pluginSettings = setting.PluginDefinitions.ToDictionary(pluginDefinition => pluginDefinition.Name,
-            pluginDefinition => pluginDefinition.PluginSettings.ToDictionary(pluginSetting => pluginSetting.Name,
-                pluginSetting => pluginSetting.Value));
-    }
+    // public DtoSettings(Settings setting)
+    // {
+    //     _pluginSettings = setting.PluginDefinitions.ToDictionary(pluginDefinition => pluginDefinition.Name,
+    //         pluginDefinition => pluginDefinition.PluginSettings.ToDictionary(pluginSetting => pluginSetting.Name,
+    //             pluginSetting => pluginSetting.Value));
+    // }
 
     public DtoSettings()
     {
