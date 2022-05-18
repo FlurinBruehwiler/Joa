@@ -1,35 +1,38 @@
 ﻿using System.Text.Json;
-using Interfaces;
+using JoaCore.pluginCore;
 
-namespace JoaCore;
+namespace JoaCore.settings;
 
 public class Settings
 {
-    public CoreSettings CoreSettings { get; set; }
     public List<PluginDefinition> PluginDefinitions { get; set; }
-    
-    
+    private CoreSettings CoreSettings { get; set; }
+
     private readonly string _filePath;
     private readonly JsonSerializerOptions _options;
 
-    
-    public Settings(CoreSettings coreSettings, IEnumerable<IPlugin> plugins)
+    public Settings(CoreSettings coreSettings, List<PluginDefinition> pluginDefs)
     {
-        CoreSettings = coreSettings;
-        PluginDefinitions = CreatePluginDefinitions(plugins).ToList();
         _filePath = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location,
             @"..\..\..\..\..\settings.json"));
         _options = new JsonSerializerOptions
         {
             WriteIndented = true
         };
+        Load(coreSettings, pluginDefs);
     }
-    private IEnumerable<PluginDefinition> CreatePluginDefinitions(IEnumerable<IPlugin> plugins)
+
+    public void Load(CoreSettings coreSettings, List<PluginDefinition> pluginDefs)
     {
-        foreach (var plugin in plugins)
-        {
-            yield return new PluginDefinition(plugin);
-        }
+        CoreSettings = coreSettings;
+        PluginDefinitions = pluginDefs;
+        Sync();
+    }
+
+    public void Sync()
+    {
+        UpdateSettingsFromJson();
+        SaveSettingsToJson();
     }
     
     public void SaveSettingsToJson()
@@ -42,8 +45,10 @@ public class Settings
     public void UpdateSettingsFromJson()
     {
         var jsonString = File.ReadAllText(_filePath);
-        var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);
+        if (string.IsNullOrEmpty(jsonString))
+            return;
 
+        var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);
         if (result is null)
             throw new JsonException();
         

@@ -14,7 +14,7 @@
           "EncodeSearchTerm": true
         },
         {
-          "Name": "Youtube",
+          "Name": "yootoob",
           "Prefix": "y?",
           "Url": "https://www.youtube.com/results?search_query={{query}}",
           "SuggestionUrl": "https://www.google.com/complete/search?ds=yt\u0026output=firefox\u0026q={{query}}",
@@ -23,20 +23,9 @@
           "Priority": 5,
           "Fallback": false,
           "EncodeSearchTerm": true
-        },
-        {
-          "Name": "BiliBili",
-          "Prefix": "b?",
-          "Url": "https://www.youtube.com/results?search_query={{query}}",
-          "SuggestionUrl": "https://www.google.com/complete/search?ds=yt\u0026output=firefox\u0026q={{query}}",
-          "IconType": 2,
-          "Icon": "https://www.youtube.com/favicon.ico",
-          "Priority": 5,
-          "Fallback": true,
-          "EncodeSearchTerm": true
         }
       ],
-      "Name": "BiliBili",
+      "Name": "Youtube",
       "Prefix": "y?",
       "Url": "https://www.youtube.com/results?search_query={{query}}",
       "SuggestionUrl": "https://www.google.com/complete/search?ds=yt\u0026output=firefox\u0026q={{query}}",

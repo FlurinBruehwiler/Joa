@@ -1,5 +1,7 @@
 ﻿using Interfaces;
 using Interfaces.Logger;
+using JoaCore.pluginCore;
+using JoaCore.settings;
 using Microsoft.Extensions.Logging;
 
 namespace JoaCore;
@@ -10,7 +12,7 @@ public class Search
     public event ResultsUpdatedDelegate? ResultsUpdated;
 
     public Settings Settings { get; set; }
-    private List<IPlugin> Plugins { get; set; }
+    private List<PluginDefinition> Plugins { get; set; }
     
     private readonly PluginLoader _pluginLoader;
     private readonly CoreSettings _coreSettings;
@@ -29,15 +31,19 @@ public class Search
 
     public void Load()
     {
-        Plugins = _pluginLoader.InstantiatePlugins(_coreSettings).ToList();
+        Plugins = new();
+        foreach (var plugin in _pluginLoader.InstantiatePlugins(_coreSettings).ToList())
+        {
+            Plugins.Add(new PluginDefinition(plugin));
+        }
         Settings = new Settings(_coreSettings, Plugins);
     }
     
     public async Task ExecuteSearchResult(Guid pluginId, ISearchResult searchResult)
     {
-        foreach (var plugin in Plugins.Where(p => p.ID == pluginId))
+        foreach (var pluginDef in Plugins.Where(p => p.ID == pluginId))
         {
-            plugin.Execute(searchResult);
+            pluginDef.Plugin.Execute(searchResult);
         }
     }
 
@@ -46,10 +52,11 @@ public class Search
         SearchResults.Clear();
         var pluginsTasks = new Dictionary<Task<List<ISearchResult>>, Guid>();
 
-        foreach (var plugin in Plugins)
+        foreach (var pluginDef in Plugins)
         {
+            var plugin = pluginDef.Plugin;
             var pluginTask = Task.Run(() => plugin.GetResults(searchString));
-            pluginsTasks.Add(pluginTask, plugin.ID);
+            pluginsTasks.Add(pluginTask, pluginDef.ID);
         }
 
         while (pluginsTasks.Count > 0)

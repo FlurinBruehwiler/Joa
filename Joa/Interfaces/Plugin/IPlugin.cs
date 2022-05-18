@@ -4,7 +4,6 @@ namespace Interfaces;
 
 public interface IPlugin
 {
-    Guid ID { get; }
     /// <summary>
     /// true : The Searchstring will be passed to the Plugin as long as no Validator from any other plugin matches
     /// false : default behaviour

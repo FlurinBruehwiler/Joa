@@ -3,9 +3,8 @@ using Interfaces;
 using Interfaces.Logger;
 using Interfaces.Settings;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
-namespace JoaCore;
+namespace JoaCore.pluginCore;
 
 public class PluginLoader
 {

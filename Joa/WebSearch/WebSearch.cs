@@ -16,11 +16,9 @@ public class WebSearch : IPlugin
     {
         _logger = logger;
         _joaSettings = joaSettings;
-        ID = new Guid();
         _logger.Log("Websearch isch glade worde!", IJoaLogger.LogLevel.Info);
     }
-
-    public Guid ID { get; }
+    
     public bool AcceptNonMatchingSearchString => false;
     public List<Func<string, bool>> Matchers => new();
     
