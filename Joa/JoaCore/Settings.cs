@@ -34,9 +34,9 @@ public class Settings
     
     public void SaveSettingsToJson()
     {
-        //var dtoSetting = new DtoSettings(this);
-        //var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
-        //File.WriteAllText(_filePath, jsonString);
+        var dtoSetting = new DtoSettings(this);
+        var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
+        File.WriteAllText(_filePath, jsonString);
     }
 
     public void UpdateSettingsFromJson()
@@ -55,11 +55,11 @@ public class Settings
 
     private void UpdatePluginDefinition(PluginDefinition pluginDefinition, DtoSettings dtoSettings)
     {
-        // var newPlugin = dtoSettings.PluginSettings[pluginDefinition.Name];
-        //
-        // foreach (var pluginSetting in pluginDefinition.PluginSettings)
-        // {
-        //     pluginSetting.Value = newPlugin[pluginSetting.Name];
-        // }
+        var newPlugin = dtoSettings.PluginSettings[pluginDefinition.Name];
+        
+        foreach (var pluginSetting in pluginDefinition.SettingsCollection.PluginSettings)
+        {
+            pluginSetting.Value = newPlugin[pluginSetting.Name];
+        }
     }
 }

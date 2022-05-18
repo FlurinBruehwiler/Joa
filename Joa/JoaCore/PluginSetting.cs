@@ -1,4 +1,5 @@
-﻿using System.Dynamic;
+﻿using System.Collections;
+using System.Dynamic;
 using System.Reflection;
 using Interfaces.Settings;
 
@@ -17,20 +18,23 @@ public class PluginSetting
         }
         set
         {
-            var newValue = value;
-            if(value is List<SettingsCollection> list)
+            if(value is List<Dictionary<string, object>> list)
             {
-                //ToDo convert List<SettingsCollection> to List<"Type">
                 var listType = Value.GetType().GetGenericArguments().First() ?? throw new Exception();
-                var newList = new List<object>();
+                var newList = Activator.CreateInstance(typeof(List<>).MakeGenericType(listType)) as IList;
                 foreach (var settingsCollection in list)
                 {
                     var newListItem = Activator.CreateInstance(listType) ?? throw new Exception();
-                    newList.Add(newListItem);
+                    foreach (var propertyInfo in newListItem.GetType().GetProperties())
+                    {
+                        propertyInfo.SetValue(newListItem, settingsCollection[propertyInfo.Name]);
+                    }
+                    newList?.Add(newListItem);
                 }
-                newValue = newList;
+                _propertyInfo.SetValue(_plugin, newList);
+                return;
             }
-            _propertyInfo.SetValue(_plugin, newValue);
+            _propertyInfo.SetValue(_plugin, value);
         }
     }
 
