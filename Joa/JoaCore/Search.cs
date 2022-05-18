@@ -1,4 +1,6 @@
 ﻿using Interfaces;
+using Interfaces.Logger;
+using Microsoft.Extensions.Logging;
 
 namespace JoaCore;
 
@@ -12,7 +14,8 @@ public class Search
     
     private readonly PluginLoader _pluginLoader;
     private readonly CoreSettings _coreSettings;
-    
+    private readonly ILogger<IJoaLogger> _logger;
+
     private List<(ISearchResult, Guid)> SearchResults { get; }
 
     public Search()
@@ -20,6 +23,7 @@ public class Search
         SearchResults = new List<(ISearchResult, Guid)>();
         _pluginLoader = new PluginLoader();
         _coreSettings = new CoreSettings();
+        _logger = new Logger<IJoaLogger>(new LoggerFactory());
         Load();
     }
 

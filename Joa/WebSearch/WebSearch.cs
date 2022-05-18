@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Interfaces;
+using Interfaces.Logger;
 using Interfaces.Settings;
 using Newtonsoft.Json;
 
@@ -9,17 +10,20 @@ namespace WebSearch;
 public class WebSearch : IPlugin
 {
     private readonly IJoaSettings _joaSettings;
+    private IJoaLogger _logger;
 
-    public WebSearch(IJoaSettings joaSettings)
+    public WebSearch(IJoaSettings joaSettings, IJoaLogger logger)
     {
+        _logger = logger;
         _joaSettings = joaSettings;
         ID = new Guid();
+        _logger.Log("Websearch isch glade worde!", IJoaLogger.LogLevel.Info);
     }
 
     public Guid ID { get; }
     public bool AcceptNonMatchingSearchString => false;
     public List<Func<string, bool>> Matchers => new();
-
+    
     [SettingProperty(Name = "Web Search Engines")]
     public List<SearchEngine> SearchEngines { get; set; } = new()
     {

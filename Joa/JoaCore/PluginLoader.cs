@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using Interfaces;
+using Interfaces.Logger;
 using Interfaces.Settings;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace JoaCore;
 
@@ -31,22 +33,14 @@ public class PluginLoader
         foreach (var propertyInfo in pluginType.GetProperties())
         {
             var attr = Attribute.GetCustomAttribute(propertyInfo, typeof(SettingPropertyAttribute));
-            if(attr == null)
-                continue;
-
-            if (attr is not SettingPropertyAttribute settingPropertyAttribute)
-                continue;
-            
+            if(attr is not SettingPropertyAttribute settingPropertyAttribute) continue;
             yield return propertyInfo;
         }
     }
 
     private IEnumerable<Type> LoadTypes(IEnumerable<Assembly> assemblies)
     {
-        foreach (var assembly in assemblies)
-        {
-            yield return LoadType(assembly);
-        }
+        return assemblies.Select(assembly => LoadType(assembly));
     }
 
     private Type LoadType(Assembly assembly)
@@ -54,7 +48,6 @@ public class PluginLoader
         foreach (var type in assembly.GetTypes())
         {
             if (!typeof(IPlugin).IsAssignableFrom(type)) continue;
-
             return type;
         }
         
@@ -68,6 +61,7 @@ public class PluginLoader
     {
         var services = new ServiceCollection();
         services.AddSingleton<IJoaSettings>(coreSettings);
+        services.AddSingleton<IJoaLogger>(LoggingManager.JoaLogger);
         return services.BuildServiceProvider();
     }
     

@@ -1,9 +1,10 @@
 ﻿using System.Windows;
 using Interfaces;
+using Interfaces.Logger;
 using Interfaces.UI.Components;
 using JoaCore;
 using JoaUI;
-
+using Microsoft.Extensions.Logging;
 
 namespace Joa;
 
@@ -16,6 +17,7 @@ class Joa
     {
         _search = new Search();
         InitWindow(new MainWindow());
+        LoggingManager.JoaLogger.Log("Init Complete", IJoaLogger.LogLevel.Info);
     }
 
     private static void InitWindow(ISearchwindow searchwindow)
