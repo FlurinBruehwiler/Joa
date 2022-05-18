@@ -1,7 +1,5 @@
-﻿using System.Collections;
+﻿using System.Dynamic;
 using System.Reflection;
-using System.Text.Json.Serialization;
-using Interfaces;
 using Interfaces.Settings;
 
 namespace JoaCore;
@@ -14,22 +12,25 @@ public class PluginSetting
     {
         get
         {
-            if (_list != null)
-            {
-                return _list;
-            }
-            return _propertyInfo.GetValue(_plugin) ?? throw new Exception();
+            var value = _propertyInfo.GetValue(_plugin) ?? throw new Exception();
+            return value is not List<object> list ? value : list.Select(o => new SettingsCollection(o)).ToList();
         }
         set
         {
-            if (_list != null)
+            var newValue = value;
+            if(value is List<SettingsCollection> list)
             {
-                //ToDo
+                //ToDo convert List<SettingsCollection> to List<"Type">
+                var listType = Value.GetType().GetGenericArguments().First() ?? throw new Exception();
+                var newList = new List<object>();
+                foreach (var settingsCollection in list)
+                {
+                    var newListItem = Activator.CreateInstance(listType) ?? throw new Exception();
+                    newList.Add(newListItem);
+                }
+                newValue = newList;
             }
-            else
-            {
-                _propertyInfo.SetValue(_plugin, value);
-            }
+            _propertyInfo.SetValue(_plugin, newValue);
         }
     }
 
@@ -37,7 +38,6 @@ public class PluginSetting
     
     private readonly object _plugin;
     private readonly PropertyInfo _propertyInfo;
-    private readonly List<SettingsCollection>? _list;
 
     public PluginSetting(object plugin, PropertyInfo propertyInfo, SettingPropertyAttribute settingInfo)
     {
@@ -45,18 +45,5 @@ public class PluginSetting
         _propertyInfo = propertyInfo;
         SettingInfo = settingInfo;
         Name = _propertyInfo.Name;
-        if (IsList(Value))
-        {
-            var listType = Value.GetType().GetGenericArguments().First();
-            
-        }
-    }
-    
-
-    private bool IsList(object o)
-    {
-        return o is IList &&
-               o.GetType().IsGenericType &&
-               o.GetType().GetGenericTypeDefinition().IsAssignableFrom(typeof(List<>));
     }
 }
