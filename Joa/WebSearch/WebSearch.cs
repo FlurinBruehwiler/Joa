@@ -50,24 +50,7 @@ public class WebSearch : IPlugin
             EncodeSearchTerm = true
         }
     };
-    
-    [SettingProperty] public string Name { get; set; } = "Youtube";
 
-    [SettingProperty] public string Prefix { get; set; } = "y?";
-
-    [SettingProperty(Name = "URL")] public string Url { get; set; } = "https://www.youtube.com/results?search_query={{query}}";
-
-    [SettingProperty(Name = "Suggestion URL")]
-    public string SuggestionUrl { get; set; } = "https://www.google.com/complete/search?ds=yt&output=firefox&q={{query}}";
-    
-    [SettingProperty] public string Icon { get; set; } = "https://www.youtube.com/favicon.ico";
-
-    [SettingProperty] public int Priority { get; set; } = 5;
-
-    [SettingProperty] public bool Fallback { get; set; } = false;
-
-    [SettingProperty] public bool EncodeSearchTerm { get; set; } = true;
-    
     public List<ISearchResult> GetResults(string searchString)
     {
         var client = new HttpClient();
@@ -114,26 +97,4 @@ public class WebSearch : IPlugin
         if (result is not SearchResult sr) return;
         Process.Start("chrome.exe", "https://www.google.ch");
     }
-}
-
-public class SearchEngine
-{
-    [SettingProperty] public string Name { get; set; } = string.Empty;
-
-    [SettingProperty] public string Prefix { get; set; } = string.Empty;
-
-    [SettingProperty(Name = "URL")] public string Url { get; set; } = string.Empty;
-
-    [SettingProperty(Name = "Suggestion URL")]
-    public string SuggestionUrl { get; set; } = string.Empty;
-
-    [SettingProperty] public IconType IconType { get; set; } = IconType.SVG;
-    
-    [SettingProperty] public string Icon { get; set; } = string.Empty;
-
-    [SettingProperty] public int Priority { get; set; } = 0;
-
-    [SettingProperty] public bool Fallback { get; set; } = false;
-
-    [SettingProperty] public bool EncodeSearchTerm { get; set; } = true;
 }
