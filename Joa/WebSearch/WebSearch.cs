@@ -10,6 +10,13 @@ namespace WebSearch;
 [Plugin("Web Search", "Lets you search on the web!")]
 public class WebSearch : IPlugin
 {
+    private readonly IJoaLogger _logger;
+
+    public WebSearch(IJoaLogger logger)
+    {
+        _logger = logger;
+    }
+    
     public bool AcceptNonMatchingSearchString => false;
     public List<Func<string, bool>> Matchers => new();
     
@@ -45,41 +52,23 @@ public class WebSearch : IPlugin
     public List<ISearchResult> GetResults(string searchString)
     {
         var client = new HttpClient();
-        
-        HttpResponseMessage? httpResponse = null;
-        
-        try
-        {
-            httpResponse = client.GetAsync($"https://www.google.com/complete/search?client=opera&q={searchString}")
-                .GetAwaiter().GetResult();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-        
+
+        var httpResponse = client.GetAsync($"https://www.google.com/complete/search?client=opera&q={searchString}")
+            .GetAwaiter().GetResult();
+
         var searchResults = new List<ISearchResult>
         {
             new SearchResult("Google", $"Search on Google for \"{searchString}\"", "")
         };
 
-        if (httpResponse == null) return searchResults;
-        
-        try
-        {
-            dynamic response = JsonConvert.DeserializeObject(httpResponse.Content.ReadAsStringAsync().GetAwaiter()
-                .GetResult()) ?? throw new InvalidOperationException();
-    
-            List<string> suggestions = response[1].ToObject<List<string>>();
-            
-            searchResults.AddRange(suggestions.Select(suggestion => new SearchResult(suggestion, $"Search on Google for \"{suggestion}\"", ""))
-                .ToList());
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+        dynamic response = JsonConvert.DeserializeObject(httpResponse.Content.ReadAsStringAsync().GetAwaiter()
+            .GetResult()) ?? throw new InvalidOperationException();
 
+        List<string> suggestions = response[1].ToObject<List<string>>();
+        
+        searchResults.AddRange(suggestions.Select(suggestion => new SearchResult(suggestion, $"Search on Google for \"{suggestion}\"", ""))
+            .ToList());
+        
         return searchResults;
     }
 

@@ -4,46 +4,32 @@ namespace JoaCore;
 
 public static class LoggingManager
 {
-    public static JoaLogger JoaLogger = new JoaLogger("C:/temp/Joalog.txt", "JoaLogger");
+    public static JoaLogger JoaLogger = new("C:/temp/Joalog.log");
 }
 
 public class JoaLogger : IJoaLogger
 {
-    private string _me;
     private readonly string _log;
     
-    public JoaLogger(string filePath, string name)
+    public JoaLogger(string filePath)
     {
-        _me = name;
         _log = filePath;
     }
 
-    public void Log(string logMessage, IJoaLogger.LogLevel ll)
+    public void Log(string logMessage, IJoaLogger.LogLevel logLevel)
     {
-        var prefix = "Information:";
-        
-        switch (ll)
+        var prefix = logLevel switch
         {
-            case IJoaLogger.LogLevel.Warning:
-                prefix = "Warning: ";
-                break;
-            case IJoaLogger.LogLevel.Error:
-                prefix = "Error: ";
-                break;
-            default:
-                prefix = "Information: ";
-                break;
-        }
-        
+            IJoaLogger.LogLevel.Warning => "Warning: ",
+            IJoaLogger.LogLevel.Error => "Error: ",
+            _ => "Information: "
+        };
+
         LogMessage(prefix + logMessage);
     }
 
     private void LogMessage(string message)
     {
-        using (var w = File.AppendText(_log))
-        {
-            w.WriteLine(message);
-        }
+        File.AppendAllLines(_log, new List<string> {message});
     }
-    
 }

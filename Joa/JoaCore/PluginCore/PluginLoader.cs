@@ -1,32 +1,40 @@
 ﻿using System.Reflection;
+using System.Text;
 using Interfaces;
 using Interfaces.Logger;
 using Interfaces.Plugin;
 using Interfaces.Settings;
 using JoaCore.Settings;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JoaCore.PluginCore;
 
 public class PluginLoader
 {
-    private readonly IEnumerable<Type> _pluginTypes;
+    private readonly List<Type> _pluginTypes;
 
-    public PluginLoader()
+    public PluginLoader(IConfiguration configuration)
     {
-        var assemblies = LoadAssemblies(GetPluginDllPaths());
+        var assemblies = LoadAssemblies(GetPluginDllPaths(configuration));
         _pluginTypes = LoadTypes(assemblies);
     }
     
     public IEnumerable<IPlugin> InstantiatePlugins(CoreSettings coreSettings)
     {
+        var output = new List<IPlugin>();
+
         var serviceProvider = RegisterServices(coreSettings);
         
         foreach (var type in _pluginTypes)
         {
             if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not IPlugin result) continue;
-            yield return result;
+            output.Add(result);
         }
+        
+        LoggingManager.JoaLogger.Log("Loaded Plugins succesfully!!", IJoaLogger.LogLevel.Info);
+        
+        return output;
     }
     
     private IEnumerable<PropertyInfo> GetSettingsForPlugin(Type pluginType)
@@ -39,12 +47,12 @@ public class PluginLoader
         }
     }
 
-    private IEnumerable<Type> LoadTypes(IEnumerable<Assembly> assemblies)
+    private List<Type> LoadTypes(List<Assembly> assemblies)
     {
-        return assemblies.Select(assembly => LoadType(assembly));
+        return assemblies.Select(LoadType).Where(type => type != null).ToList()!;
     }
 
-    private Type LoadType(Assembly assembly)
+    private Type? LoadType(Assembly assembly)
     {
         foreach (var type in assembly.GetTypes())
         {
@@ -53,9 +61,9 @@ public class PluginLoader
         }
         
         var availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
-        throw new ApplicationException(
-            $"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
-            $"Available types: {availableTypes}");
+        LoggingManager.JoaLogger.Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
+                                     $"Available types: {availableTypes}", IJoaLogger.LogLevel.Warning);
+        return null;
     }
 
     private IServiceProvider RegisterServices(CoreSettings coreSettings)
@@ -66,12 +74,14 @@ public class PluginLoader
         return services.BuildServiceProvider();
     }
     
-    private IEnumerable<string> GetPluginDllPaths()
+    private List<string> GetPluginDllPaths(IConfiguration configuration)
     {
+        var path = configuration.GetValue<string>("SettingsLocation");
+        
         var pluginFolder =
-            Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, @"..\..\..\..\..\Plugins"));
+            Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, path));
 
-        Console.WriteLine($"Searching for Plugins in {pluginFolder}");
+        LoggingManager.JoaLogger.Log($"Searching for Plugins in {pluginFolder}", IJoaLogger.LogLevel.Info);
 
         var pluginFolders = Directory.GetDirectories(pluginFolder);
 
@@ -79,28 +89,20 @@ public class PluginLoader
                 .FirstOrDefault(file => file.EndsWith($"{Directory.GetParent(file)?.Name}.dll"))).Where(x => x != null)
             .ToList();
 
-        Console.WriteLine($"Found the following {plugins.Count} plugins: ");
-        foreach (var plugin in plugins)
-        {
-            Console.WriteLine(plugin);
-        }
+        var pluginsToLog = plugins.Aggregate("", (current, plugin) => current + Environment.NewLine + plugin);
+        LoggingManager.JoaLogger.Log($"Found the following plugins DLLs: {pluginsToLog}", IJoaLogger.LogLevel.Info);
 
         return plugins!;
     }
 
-    private IEnumerable<Assembly> LoadAssemblies(IEnumerable<string> dllPaths)
+    private List<Assembly> LoadAssemblies(List<string> dllPaths)
     {
-        return dllPaths.Select(LoadAssembly);
+        return dllPaths.Select(LoadAssembly).ToList();
     }
 
-    private Assembly LoadAssembly(string relativePluginPath)
+    private Assembly LoadAssembly(string pluginLocation)
     {
-        var root = Path.Combine(typeof(PluginLoader).Assembly.Location, @"..\..\..\..\..\");
-
-        var pluginLocation =
-            Path.GetFullPath(Path.Combine(root, relativePluginPath.Replace('\\', Path.DirectorySeparatorChar)));
         var loadContext = new PluginLoadContext(pluginLocation);
         return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
     }
-
 }

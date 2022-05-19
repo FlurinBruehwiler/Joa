@@ -2,36 +2,38 @@
 using Interfaces.Logger;
 using JoaCore.PluginCore;
 using JoaCore.Settings;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace JoaCore;
 
 public class Search
-{ 
+{
+    private readonly IConfiguration _configuration;
+    private readonly PluginLoader _pluginLoader;
+    private readonly CoreSettings _coreSettings;
+    private readonly ILogger<IJoaLogger> _logger;
+    
     public delegate void ResultsUpdatedDelegate(List<(ISearchResult, Guid)> results);
     public event ResultsUpdatedDelegate? ResultsUpdated;
 
     public SettingsManager SettingsManager { get; set; } = null!;
     private List<PluginDefinition> Plugins { get; set; } = null!;
-
-    private readonly PluginLoader _pluginLoader;
-    private readonly CoreSettings _coreSettings;
-    private readonly ILogger<IJoaLogger> _logger;
-
     private List<(ISearchResult, Guid)> SearchResults { get; }
 
-    public Search()
+    public Search(IConfiguration configuration)
     {
+        _configuration = configuration;
         SearchResults = new List<(ISearchResult, Guid)>();
-        _pluginLoader = new PluginLoader();
+        _pluginLoader = new PluginLoader(_configuration);
         _coreSettings = new CoreSettings();
         _logger = new Logger<IJoaLogger>(new LoggerFactory());
-        Load();
+        Reload();
     }
 
-    public void Load()
+    public void Reload()
     {
-        Plugins = new();
+        Plugins = new List<PluginDefinition>();
         foreach (var plugin in _pluginLoader.InstantiatePlugins(_coreSettings).ToList())
         {
             Plugins.Add(new PluginDefinition(plugin));
@@ -60,10 +62,20 @@ public class Search
         while (pluginsTasks.Count > 0)
         {
             var pluginTask = await Task.WhenAny(pluginsTasks.Keys);
-            var pluginResult = await pluginTask;
-            foreach (var searchResult in pluginResult)
+
+            try
             {
-                SearchResults.Add((searchResult, pluginsTasks[pluginTask]));
+                var pluginResult = await pluginTask;
+                foreach (var searchResult in pluginResult)
+                {
+                    SearchResults.Add((searchResult, pluginsTasks[pluginTask]));
+                }
+            }
+            catch (Exception e)
+            {
+                LoggingManager.JoaLogger.Log(
+                    $"There was an exception during the execution of a plugin with the search term \"{searchString}\" with the following exception{Environment.NewLine}" 
+                    + e, IJoaLogger.LogLevel.Error);
             }
             ResultsUpdated?.Invoke(SearchResults);
             pluginsTasks.Remove(pluginTask);

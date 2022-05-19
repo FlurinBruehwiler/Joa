@@ -9,5 +9,5 @@ public interface IJoaLogger
         Error
     }
 
-    public void Log(string message, LogLevel ll);
+    public void Log(string message, LogLevel logLevel);
 }
