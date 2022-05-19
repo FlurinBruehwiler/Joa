@@ -32,7 +32,7 @@ public class PluginLoader
             output.Add(result);
         }
         
-        LoggingManager.JoaLogger.Log("Loaded Plugins succesfully!!", IJoaLogger.LogLevel.Info);
+        LoggingManager.JoaLogger.Log("Loaded Plugins successfully!!", IJoaLogger.LogLevel.Info);
         
         return output;
     }

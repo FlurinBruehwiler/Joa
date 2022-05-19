@@ -51,6 +51,8 @@ public class WebSearch : IPlugin
 
     public List<ISearchResult> GetResults(string searchString)
     {
+        throw new Exception();
+        
         var client = new HttpClient();
 
         var httpResponse = client.GetAsync($"https://www.google.com/complete/search?client=opera&q={searchString}")

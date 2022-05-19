@@ -18,18 +18,18 @@ public class JoaLogger : IJoaLogger
 
     public void Log(string logMessage, IJoaLogger.LogLevel logLevel)
     {
-        var prefix = logLevel switch
+        var level = logLevel switch
         {
             IJoaLogger.LogLevel.Warning => "Warning: ",
             IJoaLogger.LogLevel.Error => "Error: ",
             _ => "Information: "
         };
 
-        LogMessage(prefix + logMessage);
+        LogMessage($"[{DateTime.Now} | {level} | {logMessage}");
     }
 
     private void LogMessage(string message)
     {
-        File.AppendAllLines(_log, new List<string> {message});
+        File.AppendAllText(_log, message + Environment.NewLine);
     }
 }

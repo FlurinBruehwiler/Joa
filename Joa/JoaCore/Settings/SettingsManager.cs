@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Interfaces.Logger;
 using JoaCore.PluginCore;
 
 namespace JoaCore.Settings;
@@ -37,24 +38,38 @@ public class SettingsManager
     
     public void SaveSettingsToJson()
     {
-        var dtoSetting = new DtoSettings(this);
-        var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
-        File.WriteAllText(_filePath, jsonString);
+        try
+        {
+            var dtoSetting = new DtoSettings(this);
+            var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
+            File.WriteAllText(_filePath, jsonString);
+        }
+        catch (Exception e)
+        {
+            LoggingManager.JoaLogger.Log($"There was an exception thrown while Saving the Settings with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
+        }
     }
 
     public void UpdateSettingsFromJson()
     {
-        var jsonString = File.ReadAllText(_filePath);
-        if (string.IsNullOrEmpty(jsonString))
-            return;
-
-        var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);
-        if (result is null)
-            throw new JsonException();
-        
-        foreach (var pluginDefinition in PluginDefinitions)
+        try
         {
-            UpdatePluginDefinition(pluginDefinition, result);
+            var jsonString = File.ReadAllText(_filePath);
+            if (string.IsNullOrEmpty(jsonString))
+                return;
+
+            var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);
+            if (result is null)
+                throw new JsonException();
+        
+            foreach (var pluginDefinition in PluginDefinitions)
+            {
+                UpdatePluginDefinition(pluginDefinition, result);
+            }
+        }
+        catch (Exception e)
+        {
+            LoggingManager.JoaLogger.Log($"There was an exception thrown while Updating the Settings from the settings.json with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
         }
     }
 
