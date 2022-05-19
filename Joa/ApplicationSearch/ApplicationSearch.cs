@@ -1,15 +1,11 @@
 ﻿using Interfaces;
+using Interfaces.Plugin;
 using Interfaces.Settings;
 
 namespace ApplicationSearch;
 
 public class ApplicatioinSearch : IPlugin
 {
-    public ApplicatioinSearch()
-    {
-        ID = new Guid();
-    }
-
     [SettingProperty]
     public List<ApplicationFolder> Folders { get; set; } = new()
     {
@@ -32,8 +28,6 @@ public class ApplicatioinSearch : IPlugin
     
     [SettingProperty]
     public bool UseNativeIcons { get; set; } = true;
-    
-    public Guid ID { get; }
     public bool AcceptNonMatchingSearchString => true;
     public List<Func<string, bool>> Matchers => new();
     public List<ISearchResult> GetResults(string searchString)

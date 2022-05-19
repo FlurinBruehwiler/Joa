@@ -1,12 +1,10 @@
 ﻿using System.Text.Json;
-using JoaCore.settings;
-using Microsoft.VisualBasic.CompilerServices;
 
-namespace JoaCore;
+namespace JoaCore.Settings;
 
 public class DtoSettings
 {
-    private Dictionary<string, Dictionary<string, object>> _pluginSettings;
+    private Dictionary<string, Dictionary<string, object>> _pluginSettings = null!;
 
     public Dictionary<string, Dictionary<string, object>> PluginSettings
     {
@@ -24,9 +22,9 @@ public class DtoSettings
         }
     }
     
-    public DtoSettings(Settings setting)
+    public DtoSettings(SettingsManager settingManager)
     {
-        _pluginSettings = setting.PluginDefinitions.ToDictionary(pluginDefinition => pluginDefinition.Name,
+        _pluginSettings = settingManager.PluginDefinitions.ToDictionary(pluginDefinition => pluginDefinition.Name,
             pluginDefinition => pluginDefinition.SettingsCollection.PluginSettings.ToDictionary(pluginSetting => pluginSetting.Name,
                 pluginSetting => pluginSetting.Value));
     }

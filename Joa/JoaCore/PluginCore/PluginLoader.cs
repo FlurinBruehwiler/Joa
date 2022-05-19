@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
 using Interfaces;
 using Interfaces.Logger;
+using Interfaces.Plugin;
 using Interfaces.Settings;
+using JoaCore.Settings;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JoaCore.pluginCore;
+namespace JoaCore.PluginCore;
 
 public class PluginLoader
 {

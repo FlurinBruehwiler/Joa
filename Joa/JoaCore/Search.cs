@@ -1,7 +1,7 @@
 ﻿using Interfaces;
 using Interfaces.Logger;
-using JoaCore.pluginCore;
-using JoaCore.settings;
+using JoaCore.PluginCore;
+using JoaCore.Settings;
 using Microsoft.Extensions.Logging;
 
 namespace JoaCore;
@@ -11,9 +11,9 @@ public class Search
     public delegate void ResultsUpdatedDelegate(List<(ISearchResult, Guid)> results);
     public event ResultsUpdatedDelegate? ResultsUpdated;
 
-    public Settings Settings { get; set; }
-    private List<PluginDefinition> Plugins { get; set; }
-    
+    public SettingsManager SettingsManager { get; set; } = null!;
+    private List<PluginDefinition> Plugins { get; set; } = null!;
+
     private readonly PluginLoader _pluginLoader;
     private readonly CoreSettings _coreSettings;
     private readonly ILogger<IJoaLogger> _logger;
@@ -36,15 +36,13 @@ public class Search
         {
             Plugins.Add(new PluginDefinition(plugin));
         }
-        Settings = new Settings(_coreSettings, Plugins);
+        SettingsManager = new SettingsManager(_coreSettings, Plugins);
     }
     
     public async Task ExecuteSearchResult(Guid pluginId, ISearchResult searchResult)
     {
-        foreach (var pluginDef in Plugins.Where(p => p.ID == pluginId))
-        {
-            pluginDef.Plugin.Execute(searchResult);
-        }
+        var pluginDef = Plugins.First(p => p.Id == pluginId);
+        await Task.Run(() => pluginDef.Plugin.Execute(searchResult)); //ToDo Check if it is really async
     }
 
     public async Task UpdateSearchResults(string searchString)
@@ -56,7 +54,7 @@ public class Search
         {
             var plugin = pluginDef.Plugin;
             var pluginTask = Task.Run(() => plugin.GetResults(searchString));
-            pluginsTasks.Add(pluginTask, pluginDef.ID);
+            pluginsTasks.Add(pluginTask, pluginDef.Id);
         }
 
         while (pluginsTasks.Count > 0)

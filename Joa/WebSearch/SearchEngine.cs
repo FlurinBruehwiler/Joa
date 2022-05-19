@@ -13,7 +13,7 @@ public class SearchEngine
     [SettingProperty(Name = "Suggestion URL")]
     public string SuggestionUrl { get; set; } = string.Empty;
 
-    [SettingProperty] public IconType IconType { get; set; } = IconType.SVG;
+    [SettingProperty] public IconType IconType { get; set; } = IconType.Svg;
     
     [SettingProperty] public string Icon { get; set; } = string.Empty;
 

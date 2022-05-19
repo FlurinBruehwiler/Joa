@@ -1,6 +1,6 @@
 ﻿using Interfaces.Settings;
 
-namespace JoaCore.settings;
+namespace JoaCore.Settings;
 
 public class PluginConfig
 {

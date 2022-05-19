@@ -2,7 +2,7 @@
 
 public enum IconType
 {
-    URL,
-    SVG,
+    Url,
+    Svg,
     Color,
 }

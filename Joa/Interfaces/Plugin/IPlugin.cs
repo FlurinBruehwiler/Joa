@@ -1,6 +1,4 @@
-﻿using Interfaces.Settings;
-
-namespace Interfaces;
+﻿namespace Interfaces.Plugin;
 
 public interface IPlugin
 {

@@ -4,18 +4,16 @@ using Interfaces.Logger;
 using Interfaces.UI.Components;
 using JoaCore;
 using JoaUI;
-using Microsoft.Extensions.Logging;
 
 namespace Joa;
 
 class Joa
 {
-    private static Search _search;
+    private static Search _search = new();
 
     [STAThread]
     public static void Main()
     {
-        _search = new Search();
         InitWindow(new MainWindow());
         LoggingManager.JoaLogger.Log("Init Complete", IJoaLogger.LogLevel.Info);
     }

@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Interfaces;
 using Interfaces.Logger;
+using Interfaces.Plugin;
 using Interfaces.Settings;
 using Newtonsoft.Json;
 
@@ -9,16 +10,6 @@ namespace WebSearch;
 [Plugin("Web Search", "Lets you search on the web!")]
 public class WebSearch : IPlugin
 {
-    private readonly IJoaSettings _joaSettings;
-    private IJoaLogger _logger;
-
-    public WebSearch(IJoaSettings joaSettings, IJoaLogger logger)
-    {
-        _logger = logger;
-        _joaSettings = joaSettings;
-        _logger.Log("Websearch isch glade worde!", IJoaLogger.LogLevel.Info);
-    }
-    
     public bool AcceptNonMatchingSearchString => false;
     public List<Func<string, bool>> Matchers => new();
     
@@ -31,7 +22,7 @@ public class WebSearch : IPlugin
             Prefix = "g?",
             Url = "https://google.com/search?q={{query}}",
             SuggestionUrl = "https://www.google.com/complete/search?client=opera&q={{query}}",
-            IconType = IconType.SVG,
+            IconType = IconType.Svg,
             Icon = "https://google.com/favicon.ico",
             Priority = 2,
             Fallback = false,
@@ -43,7 +34,7 @@ public class WebSearch : IPlugin
             Prefix = "y?",
             Url = "https://www.youtube.com/results?search_query={{query}}",
             SuggestionUrl = "https://www.google.com/complete/search?ds=yt&output=firefox&q={{query}}",
-            IconType = IconType.SVG,
+            IconType = IconType.Svg,
             Icon = "https://www.youtube.com/favicon.ico",
             Priority = 5,
             Fallback = false,
@@ -94,7 +85,7 @@ public class WebSearch : IPlugin
 
     public void Execute(ISearchResult result)
     {
-        if (result is not SearchResult sr) return;
+        if (result is not SearchResult) return;
         Process.Start("chrome.exe", "https://www.google.ch");
     }
 }

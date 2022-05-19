@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
-using JoaCore.pluginCore;
+using JoaCore.PluginCore;
 
-namespace JoaCore.settings;
+namespace JoaCore.Settings;
 
-public class Settings
+public class SettingsManager
 {
     public List<PluginDefinition> PluginDefinitions { get; set; }
     private CoreSettings CoreSettings { get; set; }
@@ -11,7 +11,7 @@ public class Settings
     private readonly string _filePath;
     private readonly JsonSerializerOptions _options;
 
-    public Settings(CoreSettings coreSettings, List<PluginDefinition> pluginDefs)
+    public SettingsManager(CoreSettings coreSettings, List<PluginDefinition> pluginDefs)
     {
         _filePath = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location,
             @"..\..\..\..\..\settings.json"));

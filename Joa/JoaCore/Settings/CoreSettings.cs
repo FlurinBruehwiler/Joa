@@ -1,7 +1,7 @@
 ﻿using Interfaces.Settings;
-using JoaCore.pluginCore;
+using JoaCore.PluginCore;
 
-namespace JoaCore;
+namespace JoaCore.Settings;
 
 public class CoreSettings : IJoaSettings
 {
@@ -16,9 +16,7 @@ public class CoreSettings : IJoaSettings
 
     private void ReadSettings()
     {
-        var json = File.ReadAllText(_settingsFilePath);
-        if (json == string.Empty)
-            return;
+        //var json = File.ReadAllText(_settingsFilePath);
 
         //ToDo
     }

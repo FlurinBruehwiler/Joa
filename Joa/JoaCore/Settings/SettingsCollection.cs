@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Interfaces.Settings;
 
-namespace JoaCore;
+namespace JoaCore.Settings;
 
 public class SettingsCollection
 {
