@@ -17,6 +17,7 @@
 mono_crash.*
 
 Plugins/
+settings.json
 
 # Build results
 [Dd]ebug/
