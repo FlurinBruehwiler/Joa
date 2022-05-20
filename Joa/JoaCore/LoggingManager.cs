@@ -29,7 +29,7 @@ public class JoaLogger : IJoaLogger
     }
 
     private void LogMessage(string message)
-    {
+    {   
         File.AppendAllText(_log, message + Environment.NewLine);
     }
 }

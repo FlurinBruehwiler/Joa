@@ -1,26 +1,52 @@
 ﻿using System.Text.Json;
 using Interfaces.Logger;
 using JoaCore.PluginCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.VisualBasic;
 
 namespace JoaCore.Settings;
 
 public class SettingsManager
 {
-    public List<PluginDefinition> PluginDefinitions { get; set; }
-    private CoreSettings CoreSettings { get; set; }
+    private readonly IConfiguration _configuration;
+    public List<PluginDefinition> PluginDefinitions { get; set; } = null!;
+    private CoreSettings CoreSettings { get; set; } = null!;
 
-    private readonly string _filePath;
+    private readonly string _settingsLocation;
     private readonly JsonSerializerOptions _options;
 
-    public SettingsManager(CoreSettings coreSettings, List<PluginDefinition> pluginDefs)
+    public SettingsManager(CoreSettings coreSettings, List<PluginDefinition> pluginDefs, IConfiguration configuration)
     {
-        _filePath = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location,
-            @"..\..\..\..\..\settings.json"));
+        _configuration = configuration;
+        _settingsLocation = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, configuration.GetValue<string>("SettingsLocation")));
         _options = new JsonSerializerOptions
         {
             WriteIndented = true
         };
         Load(coreSettings, pluginDefs);
+        ConfigureFileWatcher();
+    }
+    
+    ~SettingsManager()
+    {
+        LoggingManager.JoaLogger.Log($"SettingsManager is Deconstructiing", IJoaLogger.LogLevel.Info);
+    }
+
+    private void ConfigureFileWatcher()
+    {
+        LoggingManager.JoaLogger.Log($"Setting up file watcher for the file {_settingsLocation}", IJoaLogger.LogLevel.Info);
+        //Directory.GetParent(_settingsLocation)?.FullName ?? throw new Exception("Error while getting SettingsLocation")
+        //Path.GetFileName(_settingsLocation);
+        var watcher = new FileSystemWatcher(@"C:\PrivateGitHub\Joa\Joa");
+        watcher.NotifyFilter = NotifyFilters.LastWrite;
+        watcher.Changed += OnChanged;
+        watcher.Filter = "settings.json";
+        watcher.EnableRaisingEvents = true;
+    }
+
+    private void OnChanged(object sender, FileSystemEventArgs e)
+    {
+        LoggingManager.JoaLogger.Log($"The settings File has been changed", IJoaLogger.LogLevel.Info);
     }
 
     public void Load(CoreSettings coreSettings, List<PluginDefinition> pluginDefs)
@@ -42,7 +68,7 @@ public class SettingsManager
         {
             var dtoSetting = new DtoSettings(this);
             var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
-            File.WriteAllText(_filePath, jsonString);
+            File.WriteAllText(_settingsLocation, jsonString);
         }
         catch (Exception e)
         {
@@ -54,7 +80,7 @@ public class SettingsManager
     {
         try
         {
-            var jsonString = File.ReadAllText(_filePath);
+            var jsonString = File.ReadAllText(_settingsLocation);
             if (string.IsNullOrEmpty(jsonString))
                 return;
 

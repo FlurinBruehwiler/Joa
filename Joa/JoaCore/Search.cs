@@ -38,7 +38,7 @@ public class Search
         {
             Plugins.Add(new PluginDefinition(plugin));
         }
-        SettingsManager = new SettingsManager(_coreSettings, Plugins);
+        SettingsManager = new SettingsManager(_coreSettings, Plugins, _configuration);
     }
     
     public async Task ExecuteSearchResult(Guid pluginId, ISearchResult searchResult)
