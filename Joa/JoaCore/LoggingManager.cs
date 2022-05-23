@@ -1,4 +1,5 @@
-﻿using Interfaces.Logger;
+﻿using System.Diagnostics;
+using Interfaces.Logger;
 
 namespace JoaCore;
 
@@ -24,12 +25,19 @@ public class JoaLogger : IJoaLogger
     {
         var level = logLevel switch
         {
-            IJoaLogger.LogLevel.Warning => "Warning: ",
-            IJoaLogger.LogLevel.Error => "Error: ",
-            _ => "Information: "
+            IJoaLogger.LogLevel.Warning => "Warning",
+            IJoaLogger.LogLevel.Error => "Error",
+            _ => "Information"
         };
 
         LogMessage($"[{DateTime.Now} | {level} | {logMessage}");
+    }
+
+    public Stopwatch StartMeasure()
+    {
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        return stopwatch;
     }
 
     private void LogMessage(string message)

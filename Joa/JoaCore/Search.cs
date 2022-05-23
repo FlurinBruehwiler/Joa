@@ -28,17 +28,21 @@ public class Search
         _pluginLoader = new PluginLoader(_configuration);
         _coreSettings = new CoreSettings();
         _logger = new Logger<IJoaLogger>(new LoggerFactory());
-        Reload();
+        ReloadSearch();
     }
 
-    public void Reload()
+    public void ReloadSearch()
     {
+        var timer = LoggingManager.JoaLogger.StartMeasure();
+        
         Plugins = new List<PluginDefinition>();
         foreach (var plugin in _pluginLoader.InstantiatePlugins(_coreSettings).ToList())
         {
             Plugins.Add(new PluginDefinition(plugin));
         }
         SettingsManager = new SettingsManager(_coreSettings, Plugins, _configuration);
+        
+        timer.LogMeasureResult(nameof(ReloadSearch));
     }
     
     public async Task ExecuteSearchResult(Guid pluginId, ISearchResult searchResult)
