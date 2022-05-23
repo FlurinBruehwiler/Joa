@@ -1,4 +1,5 @@
 ﻿using Interfaces.Plugin;
+using Interfaces.Settings.Attributes;
 using JoaCore.Settings;
 
 namespace JoaCore.PluginCore;
@@ -8,13 +9,16 @@ public class PluginDefinition
     public Guid Id { get; }
     public IPlugin Plugin { get; set; }
     public SettingsCollection SettingsCollection { get; set; }
-    public string Name { get; set; }
-    
-    public PluginDefinition(IPlugin plugin)
+    public PluginAttribute PluginInfo { get; set; }
+    public PluginDefinition(IPlugin plugin, PluginAttribute pluginInfo)
     {
+        PluginInfo = pluginInfo;
         Id = new Guid();
         Plugin = plugin;
-        Name = plugin.GetType().Name;
+        if (string.IsNullOrEmpty(PluginInfo.Name))
+        {
+            PluginInfo.Name = plugin.GetType().Name;
+        }
         SettingsCollection = new SettingsCollection(plugin);
     }
 }

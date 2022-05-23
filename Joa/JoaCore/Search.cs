@@ -1,5 +1,7 @@
-﻿using Interfaces;
+﻿using System.Reflection;
+using Interfaces;
 using Interfaces.Logger;
+using Interfaces.Settings.Attributes;
 using JoaCore.PluginCore;
 using JoaCore.Settings;
 using Microsoft.Extensions.Configuration;
@@ -38,11 +40,21 @@ public class Search
         Plugins = new List<PluginDefinition>();
         foreach (var plugin in _pluginLoader.InstantiatePlugins(_coreSettings).ToList())
         {
-            Plugins.Add(new PluginDefinition(plugin));
+            Plugins.Add(new PluginDefinition(plugin, GetPluginInfos(plugin.GetType())));
         }
         SettingsManager = new SettingsManager(_coreSettings, Plugins, _configuration);
         
         timer.LogMeasureResult(nameof(ReloadSearch));
+    }
+    
+    private PluginAttribute GetPluginInfos(MemberInfo pluginType)
+    {
+        var attr = Attribute.GetCustomAttributes(pluginType).FirstOrDefault();
+
+        if (attr is not PluginAttribute pluginAttribute)
+            return new PluginAttribute(pluginType.Name, string.Empty);
+        
+        return pluginAttribute;
     }
     
     public async Task ExecuteSearchResult(Guid pluginId, ISearchResult searchResult)

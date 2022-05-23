@@ -103,7 +103,7 @@ public class SettingsManager
 
     private void UpdatePluginDefinition(PluginDefinition oldPluginDefinition, DtoSettings newDtoSettings)
     {
-        if (!newDtoSettings.PluginSettings.TryGetValue(oldPluginDefinition.Name, out var newPlugin))
+        if (!newDtoSettings.PluginSettings.TryGetValue(oldPluginDefinition.PluginInfo.Name, out var newPlugin))
             return;
         
         foreach (var pluginSetting in oldPluginDefinition.SettingsCollection.PluginSettings)

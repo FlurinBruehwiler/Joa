@@ -25,9 +25,9 @@ public class JoaLogger : IJoaLogger
     {
         var level = logLevel switch
         {
-            IJoaLogger.LogLevel.Warning => "Warning",
-            IJoaLogger.LogLevel.Error => "Error",
-            _ => "Information"
+            IJoaLogger.LogLevel.Warning => "Warning:",
+            IJoaLogger.LogLevel.Error => "Error:",
+            _ => "Information:"
         };
 
         LogMessage($"[{DateTime.Now} | {level} | {logMessage}");
