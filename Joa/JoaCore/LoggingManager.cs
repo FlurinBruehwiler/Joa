@@ -4,16 +4,20 @@ namespace JoaCore;
 
 public static class LoggingManager
 {
-    public static JoaLogger JoaLogger = new("C:/temp/Joalog.log");
+    public static JoaLogger JoaLogger = new("C:/temp", "Joalog.log");
 }
 
 public class JoaLogger : IJoaLogger
 {
-    private readonly string _log;
-    
-    public JoaLogger(string filePath)
+    private readonly string _directory;
+    private readonly string _fileName;
+    private readonly string _completePath;
+
+    public JoaLogger(string directory, string fileName)
     {
-        _log = filePath;
+        _directory = directory;
+        _fileName = fileName;
+        _completePath = Path.Combine(directory, fileName);
     }
 
     public void Log(string logMessage, IJoaLogger.LogLevel logLevel)
@@ -29,7 +33,13 @@ public class JoaLogger : IJoaLogger
     }
 
     private void LogMessage(string message)
-    {   
-        File.AppendAllText(_log, message + Environment.NewLine);
+    {
+        if (!File.Exists(_completePath))
+        {
+            Directory.CreateDirectory(_directory);
+            File.Create(_fileName);
+        }
+
+        File.AppendAllText(_completePath, message + Environment.NewLine);
     }
 }

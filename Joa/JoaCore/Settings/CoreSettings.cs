@@ -1,34 +1,24 @@
 ﻿using Interfaces.Settings;
-using JoaCore.PluginCore;
 
 namespace JoaCore.Settings;
 
 public class CoreSettings : IJoaSettings
 {
-    private readonly string _settingsFilePath;
-
     public CoreSettings()
     {
-        _settingsFilePath =
-            Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, @"..\..\..\..\..\settings.json"));
-        ReadSettings();
+        CoreSettingsItems = new Dictionary<string, CoreSettingsItem>()
+        {
+
+        };
     }
 
-    private void ReadSettings()
+    private Dictionary<string, CoreSettingsItem> CoreSettingsItems { get; set; }
+    
+    public object? GetSetting(string key)
     {
-        //var json = File.ReadAllText(_settingsFilePath);
+        if (CoreSettingsItems.TryGetValue(key, out var value))
+            return value.Setting;
 
-        //ToDo
-    }
-
-    public void UpdateSettings()
-    {
-        //ToDo        
-        SaveSettings();
-    }
-
-    private void SaveSettings()
-    {
-        //ToDo
+        return null;
     }
 }

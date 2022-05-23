@@ -26,27 +26,21 @@ public class SettingsManager
         Load(coreSettings, pluginDefs);
         ConfigureFileWatcher();
     }
-    
-    ~SettingsManager()
-    {
-        LoggingManager.JoaLogger.Log($"SettingsManager is Deconstructiing", IJoaLogger.LogLevel.Info);
-    }
 
     private void ConfigureFileWatcher()
     {
         LoggingManager.JoaLogger.Log($"Setting up file watcher for the file {_settingsLocation}", IJoaLogger.LogLevel.Info);
-        //Directory.GetParent(_settingsLocation)?.FullName ?? throw new Exception("Error while getting SettingsLocation")
-        //Path.GetFileName(_settingsLocation);
-        var watcher = new FileSystemWatcher(@"C:\PrivateGitHub\Joa\Joa");
+        var watcher = new FileSystemWatcher(Directory.GetParent(_settingsLocation)?.FullName ?? throw new Exception("Error while getting SettingsLocation"));
         watcher.NotifyFilter = NotifyFilters.LastWrite;
         watcher.Changed += OnChanged;
-        watcher.Filter = "settings.json";
+        watcher.Filter = Path.GetFileName(_settingsLocation);
         watcher.EnableRaisingEvents = true;
     }
 
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
-        LoggingManager.JoaLogger.Log($"The settings File has been changed", IJoaLogger.LogLevel.Info);
+        LoggingManager.JoaLogger.Log("The settings File has been changed", IJoaLogger.LogLevel.Info);
+        Sync();
     }
 
     public void Load(CoreSettings coreSettings, List<PluginDefinition> pluginDefs)
@@ -99,14 +93,17 @@ public class SettingsManager
         }
     }
 
-    private void UpdatePluginDefinition(PluginDefinition pluginDefinition, DtoSettings dtoSettings)
+    private void UpdatePluginDefinition(PluginDefinition oldPluginDefinition, DtoSettings newDtoSettings)
     {
-        if (!dtoSettings.PluginSettings.TryGetValue(pluginDefinition.Name, out var newPlugin))
+        if (!newDtoSettings.PluginSettings.TryGetValue(oldPluginDefinition.Name, out var newPlugin))
             return;
         
-        foreach (var pluginSetting in pluginDefinition.SettingsCollection.PluginSettings)
+        foreach (var pluginSetting in oldPluginDefinition.SettingsCollection.PluginSettings)
         {
-            pluginSetting.Value = newPlugin[pluginSetting.Name];
+            if(!newPlugin.TryGetValue(pluginSetting.Name, out var newValue))
+                continue;
+
+            pluginSetting.Value = newValue;
         }
     }
 }

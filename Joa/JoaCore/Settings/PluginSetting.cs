@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Reflection;
 using Interfaces.Settings;
+using Interfaces.Settings.Attributes;
 
 namespace JoaCore.Settings;
 

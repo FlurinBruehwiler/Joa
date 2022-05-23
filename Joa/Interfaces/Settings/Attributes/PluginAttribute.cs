@@ -1,4 +1,4 @@
-﻿namespace Interfaces.Settings;
+﻿namespace Interfaces.Settings.Attributes;
 
 public class PluginAttribute : Attribute
 {

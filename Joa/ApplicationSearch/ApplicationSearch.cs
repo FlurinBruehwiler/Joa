@@ -1,6 +1,7 @@
 ﻿using Interfaces;
 using Interfaces.Plugin;
 using Interfaces.Settings;
+using Interfaces.Settings.Attributes;
 
 namespace ApplicationSearch;
 

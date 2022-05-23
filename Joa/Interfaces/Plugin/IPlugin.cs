@@ -19,6 +19,5 @@ public interface IPlugin
     List<Func<string, bool>> Matchers { get; }
     
     List<ISearchResult> GetResults(string searchString);
-
     public void Execute(ISearchResult searchResult);
 }

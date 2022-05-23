@@ -1,4 +1,5 @@
 ﻿using Interfaces.Settings;
+using Interfaces.Settings.Attributes;
 
 namespace WebSearch;
 

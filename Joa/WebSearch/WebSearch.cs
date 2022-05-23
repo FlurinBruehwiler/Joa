@@ -3,6 +3,7 @@ using Interfaces;
 using Interfaces.Logger;
 using Interfaces.Plugin;
 using Interfaces.Settings;
+using Interfaces.Settings.Attributes;
 using Newtonsoft.Json;
 
 namespace WebSearch;
