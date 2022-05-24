@@ -12,7 +12,8 @@ namespace WebSearch;
 public class WebSearch : IPlugin
 {
     private readonly IJoaLogger _logger;
-
+    private readonly HttpClient _client = new();
+    
     public WebSearch(IJoaLogger logger)
     {
         _logger = logger;
@@ -61,16 +62,17 @@ public class WebSearch : IPlugin
         
         searchString = searchString.Remove(0, searchEngine.Prefix.Length);
         
-        var client = new HttpClient();
-
-        var httpResponse = client.GetAsync(searchEngine.SuggestionUrl
-                .Replace("{{query}}",searchString))
-            .GetAwaiter().GetResult();
-
         var searchResults = new List<ISearchResult>
         {
             new SearchResult(searchEngine.Name, $"Search on {searchEngine.Name} for \"{searchString}\"", "", searchEngine, searchString)
         };
+
+        if (string.IsNullOrEmpty(searchString))
+            return searchResults;
+
+        var httpResponse = _client.GetAsync(searchEngine.SuggestionUrl
+                .Replace("{{query}}",searchString))
+            .GetAwaiter().GetResult();
 
         dynamic response = JsonConvert.DeserializeObject(httpResponse.Content.ReadAsStringAsync().GetAwaiter()
             .GetResult()) ?? throw new InvalidOperationException();
@@ -95,4 +97,6 @@ public class WebSearch : IPlugin
             searchResult.SearchEngine.Url
                 .Replace("{{query}}", searchResult.SeachString));
     }
+    
+    
 }

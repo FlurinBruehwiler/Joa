@@ -35,7 +35,7 @@ public class Search
 
     public void ReloadSearch()
     {
-        var timer = LoggingManager.JoaLogger.StartMeasure();
+        var timer = JoaLogger.GetInstance().StartMeasure();
         
         Plugins = new List<PluginDefinition>();
         foreach (var plugin in _pluginLoader.InstantiatePlugins(_coreSettings).ToList())
@@ -44,7 +44,7 @@ public class Search
         }
         SettingsManager = new SettingsManager(_coreSettings, Plugins, _configuration);
         
-        timer.LogMeasureResult(nameof(ReloadSearch));
+        JoaLogger.GetInstance().LogMeasureResult(timer, nameof(ReloadSearch));
     }
     
     private PluginAttribute GetPluginInfos(MemberInfo pluginType)
@@ -65,6 +65,8 @@ public class Search
 
     public async Task UpdateSearchResults(string searchString)
     {
+        var timer = JoaLogger.GetInstance().StartMeasure();
+        
         SearchResults.Clear();
         var pluginsTasks = new Dictionary<Task<List<ISearchResult>>, Guid>();
 
@@ -89,12 +91,14 @@ public class Search
             }
             catch (Exception e)
             {
-                LoggingManager.JoaLogger.Log(
+                JoaLogger.GetInstance().Log(
                     $"There was an exception during the execution of a plugin with the search term \"{searchString}\" with the following exception{Environment.NewLine}" 
                     + e, IJoaLogger.LogLevel.Error);
             }
             ResultsUpdated?.Invoke(SearchResults);
             pluginsTasks.Remove(pluginTask);
         }
+        
+        JoaLogger.GetInstance().LogMeasureResult(timer,$"{nameof(UpdateSearchResults)}:{searchString}");
     }
 }

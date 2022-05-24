@@ -33,7 +33,7 @@ public class PluginLoader
             output.Add(result);
         }
         
-        LoggingManager.JoaLogger.Log("Loaded Plugins successfully!!", IJoaLogger.LogLevel.Info);
+        JoaLogger.GetInstance().Log("Loaded Plugins successfully!!", IJoaLogger.LogLevel.Info);
         
         return output;
     }
@@ -62,7 +62,7 @@ public class PluginLoader
         }
         
         var availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
-        LoggingManager.JoaLogger.Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
+        JoaLogger.GetInstance().Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
                                      $"Available types: {availableTypes}", IJoaLogger.LogLevel.Warning);
         return null;
     }
@@ -71,7 +71,7 @@ public class PluginLoader
     {
         var services = new ServiceCollection();
         services.AddSingleton<IJoaSettings>(coreSettings);
-        services.AddSingleton<IJoaLogger>(LoggingManager.JoaLogger);
+        services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
         return services.BuildServiceProvider();
     }
     
@@ -82,7 +82,7 @@ public class PluginLoader
         var pluginFolder =
             Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, path));
 
-        LoggingManager.JoaLogger.Log($"Searching for Plugins in {pluginFolder}", IJoaLogger.LogLevel.Info);
+        JoaLogger.GetInstance().Log($"Searching for Plugins in {pluginFolder}", IJoaLogger.LogLevel.Info);
 
         var pluginFolders = Directory.GetDirectories(pluginFolder);
 
@@ -91,7 +91,7 @@ public class PluginLoader
             .ToList();
 
         var pluginsToLog = plugins.Aggregate("", (current, plugin) => current + Environment.NewLine + plugin);
-        LoggingManager.JoaLogger.Log($"Found the following plugins DLLs: {pluginsToLog}", IJoaLogger.LogLevel.Info);
+        JoaLogger.GetInstance().Log($"Found the following plugins DLLs: {pluginsToLog}", IJoaLogger.LogLevel.Info);
 
         return plugins!;
     }

@@ -23,7 +23,7 @@ class Joa
             .Build();
         _search = new Search(configuration);
         InitWindow(new MainWindow());
-        LoggingManager.JoaLogger.Log("Init Complete", IJoaLogger.LogLevel.Info);
+        JoaLogger.GetInstance().Log("Init Complete", IJoaLogger.LogLevel.Info);
     }
 
     private static void InitWindow(ISearchwindow searchwindow)

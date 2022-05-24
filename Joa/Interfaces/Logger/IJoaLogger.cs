@@ -1,4 +1,6 @@
-﻿namespace Interfaces.Logger;
+﻿using System.Diagnostics;
+
+namespace Interfaces.Logger;
 
 public interface IJoaLogger
 {
@@ -10,4 +12,7 @@ public interface IJoaLogger
     }
 
     public void Log(string message, LogLevel logLevel);
+
+    public Stopwatch StartMeasure();
+    public void LogMeasureResult(Stopwatch stopwatch, string logName);
 }
