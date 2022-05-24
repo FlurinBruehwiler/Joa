@@ -39,7 +39,7 @@ public class SettingsManager
 
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
-        LoggingManager.JoaLogger.Log("The settings File has been changed", IJoaLogger.LogLevel.Info);
+        LoggingManager.JoaLogger.Log("The settings File has been changed.", IJoaLogger.LogLevel.Info);
         Sync();
     }
 
@@ -52,6 +52,7 @@ public class SettingsManager
 
     public void Sync()
     {
+        LoggingManager.JoaLogger.Log("Synchronizing the settings.", IJoaLogger.LogLevel.Info);
         UpdateSettingsFromJson();
         SaveSettingsToJson();
     }

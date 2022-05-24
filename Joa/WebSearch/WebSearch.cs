@@ -19,8 +19,9 @@ public class WebSearch : IPlugin
     }
     
     public bool AcceptNonMatchingSearchString => false;
-    public List<Func<string, bool>> Matchers => new();
-    
+    public bool Validator(string searchString) =>
+        SearchEngines.Any(x => searchString.StartsWith(x.Prefix));
+
     [SettingProperty(Name = "Web Search Engines")]
     public List<SearchEngine> SearchEngines { get; set; } = new()
     {
@@ -52,14 +53,23 @@ public class WebSearch : IPlugin
 
     public List<ISearchResult> GetResults(string searchString)
     {
+        var searchEngine = SearchEngines.FirstOrDefault(x =>
+            searchString.StartsWith(x.Prefix));
+
+        if (searchEngine == null || searchString.Length < searchEngine.Prefix.Length)
+            return new List<ISearchResult>();
+        
+        searchString = searchString.Remove(0, searchEngine.Prefix.Length);
+        
         var client = new HttpClient();
 
-        var httpResponse = client.GetAsync($"https://www.google.com/complete/search?client=opera&q={searchString}")
+        var httpResponse = client.GetAsync(searchEngine.SuggestionUrl
+                .Replace("{{query}}",searchString))
             .GetAwaiter().GetResult();
 
         var searchResults = new List<ISearchResult>
         {
-            new SearchResult("Google", $"Search on Google for \"{searchString}\"", "")
+            new SearchResult(searchEngine.Name, $"Search on {searchEngine.Name} for \"{searchString}\"", "", searchEngine, searchString)
         };
 
         dynamic response = JsonConvert.DeserializeObject(httpResponse.Content.ReadAsStringAsync().GetAwaiter()
@@ -67,7 +77,12 @@ public class WebSearch : IPlugin
 
         List<string> suggestions = response[1].ToObject<List<string>>();
         
-        searchResults.AddRange(suggestions.Select(suggestion => new SearchResult(suggestion, $"Search on Google for \"{suggestion}\"", ""))
+        searchResults.AddRange(suggestions.Select(suggestion 
+                => new SearchResult(suggestion, 
+                    $"Search on Google for \"{suggestion}\"", 
+                    "", 
+                    searchEngine, 
+                    searchString))
             .ToList());
         
         return searchResults;
@@ -75,7 +90,9 @@ public class WebSearch : IPlugin
 
     public void Execute(ISearchResult result)
     {
-        if (result is not SearchResult) return;
-        Process.Start("chrome.exe", "https://www.google.ch");
+        if (result is not SearchResult searchResult) return;
+        Process.Start("chrome.exe", 
+            searchResult.SearchEngine.Url
+                .Replace("{{query}}", searchResult.SeachString));
     }
 }

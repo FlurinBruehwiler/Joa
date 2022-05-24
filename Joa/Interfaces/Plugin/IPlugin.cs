@@ -6,7 +6,7 @@ public interface IPlugin
     /// true : The Searchstring will be passed to the Plugin as long as no Validator from any other plugin matches
     /// false : default behaviour
     /// </summary>
-    bool AcceptNonMatchingSearchString { get; }
+    public bool AcceptNonMatchingSearchString { get; }
 
     /// <summary>
     ///     <value>A list of Validators</value>
@@ -16,8 +16,8 @@ public interface IPlugin
     ///             Can be overriden by <see cref="AcceptNonMatchingSearchString">AcceptNonMatchingSearchString</see>
     ///     </remarks>
     /// </summary>
-    List<Func<string, bool>> Matchers { get; }
+    public bool Validator(string seachString);
     
-    List<ISearchResult> GetResults(string searchString);
+    public List<ISearchResult> GetResults(string searchString);
     public void Execute(ISearchResult searchResult);
 }

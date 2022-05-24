@@ -30,7 +30,7 @@ public class ApplicatioinSearch : IPlugin
     [SettingProperty]
     public bool UseNativeIcons { get; set; } = true;
     public bool AcceptNonMatchingSearchString => true;
-    public List<Func<string, bool>> Matchers => new();
+    public bool Validator(string searchString) => true;
     public List<ISearchResult> GetResults(string searchString)
     {
         return new List<ISearchResult>();
