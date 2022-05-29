@@ -6,5 +6,5 @@ namespace ApplicationSearch;
 public class FileExtension
 {
     [SettingProperty]
-    public string Extensions { get; set; } = null!;
+    public string Extension { get; set; } = null!;
 }

@@ -5,10 +5,37 @@ using Interfaces.Settings.Attributes;
 
 namespace ApplicationSearch;
 
-public class ApplicatioinSearch : IPlugin
+public class ApplicationSearch : IPlugin
 {
+    public ApplicationSearch(IJoaEvents joaEvents)
+    {
+        _cachedResults = new List<ISearchResult>();
+        joaEvents.UpdateIndexes += UpdateIndex;
+    }
+
+    private void UpdateIndex(object? sender, EventArgs e)
+    {
+        _cachedResults.Clear();
+        
+        var files = new List<string>();
+        
+        foreach (var applicationFolder in Folders)
+        {
+            files.AddRange(Directory.GetFiles(applicationFolder.Path, "*", SearchOption.AllDirectories));
+        }
+        
+        foreach (var file in files)
+        {
+            if (Extensions.Any(x => file.EndsWith(x.Extension)))
+            {
+                _cachedResults.Add(new SearchResult{ FilePath = file, Caption = Path.GetFileName(file)});
+            }
+        }
+    }
+
+
     [SettingProperty]
-    public List<ApplicationFolder> Folders { get; set; } = new()
+    private List<ApplicationFolder> Folders { get; set; } = new()
     {
         new ApplicationFolder { Path = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs" },
         new ApplicationFolder { Path = @"C:\Users\FBR\AppData\Roaming\Microsoft\Windows\Start Menu" },
@@ -16,12 +43,12 @@ public class ApplicatioinSearch : IPlugin
     };
 
     [SettingProperty]
-    public List<FileExtension> Extensions { get; set; } = new()
+    private List<FileExtension> Extensions { get; set; } = new()
     {
-        new FileExtension { Extensions = ".Ink" },
-        new FileExtension { Extensions = ".appref-ms" },
-        new FileExtension { Extensions = ".url" },
-        new FileExtension { Extensions = ".exe" },
+        new FileExtension { Extension = ".Ink" },
+        new FileExtension { Extension = ".appref-ms" },
+        new FileExtension { Extension = ".url" },
+        new FileExtension { Extension = ".exe" },
     };
     
     [SettingProperty]
@@ -31,9 +58,12 @@ public class ApplicatioinSearch : IPlugin
     public bool UseNativeIcons { get; set; } = true;
     public bool AcceptNonMatchingSearchString => true;
     public bool Validator(string searchString) => true;
+
+    private readonly List<ISearchResult> _cachedResults;
+
     public List<ISearchResult> GetResults(string searchString)
     {
-        return new List<ISearchResult>();
+        return _cachedResults;
     }
 
     public void Execute(ISearchResult searchResult)
