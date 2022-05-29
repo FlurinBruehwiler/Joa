@@ -2,14 +2,13 @@
 using Interfaces;
 using Interfaces.Logger;
 using Interfaces.Plugin;
-using Interfaces.Settings;
 using Interfaces.Settings.Attributes;
 using Newtonsoft.Json;
 
 namespace WebSearch;
 
 [Plugin("Web Search", "Lets you search on the web!")]
-public class WebSearch : IPlugin
+public class WebSearch : IPlugin, IStrictPlugin
 {
     private readonly IJoaLogger _logger;
     private readonly HttpClient _client = new();
@@ -19,7 +18,6 @@ public class WebSearch : IPlugin
         _logger = logger;
     }
     
-    public bool AcceptNonMatchingSearchString => false;
     public bool Validator(string searchString) =>
         SearchEngines.Any(x => searchString.StartsWith(x.Prefix));
 
@@ -97,6 +95,4 @@ public class WebSearch : IPlugin
             searchResult.SearchEngine.Url
                 .Replace("{{query}}", searchResult.SeachString));
     }
-    
-    
 }

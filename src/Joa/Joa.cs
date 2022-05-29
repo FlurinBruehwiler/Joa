@@ -52,10 +52,3 @@ class Joa
         await _search.ExecuteSearchResult(pluginId, searchResult);
     }
 }
-
-
-
-
-    
-
-    
