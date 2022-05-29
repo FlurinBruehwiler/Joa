@@ -8,9 +8,8 @@ namespace JoaCore;
 
 public class PluginManager
 {
-    
-    public List<PluginDefinition> Plugins { get; set; } = null!;
-    public SettingsManager SettingsManager { get; set; }
+    public List<PluginDefinition>? Plugins { get; set; }
+    private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     
     public PluginManager(SettingsManager settingsManager, IConfiguration configuration)
@@ -21,7 +20,13 @@ public class PluginManager
     
     public void UpdateIndexes()
     {
-        
+        if (Plugins is null)
+            return;
+
+        foreach (var pluginDefinition in Plugins)
+        {
+            pluginDefinition.IndexablePlugin?.UpdateIndex();
+        }
     }
     
     public void ReloadPlugins()
@@ -34,6 +39,7 @@ public class PluginManager
             Plugins.Add(new PluginDefinition(plugin, GetPluginInfos(plugin.GetType())));
         }
         SettingsManager.LoadPluginSettings(Plugins);
+        UpdateIndexes();
         
         JoaLogger.GetInstance().LogMeasureResult(timer, nameof(ReloadPlugins));
     }
@@ -42,9 +48,6 @@ public class PluginManager
     {
         var attr = Attribute.GetCustomAttributes(pluginType).FirstOrDefault();
 
-        if (attr is not PluginAttribute pluginAttribute)
-            return new PluginAttribute(pluginType.Name, string.Empty);
-        
-        return pluginAttribute;
+        return attr as PluginAttribute ?? new PluginAttribute(pluginType.Name, string.Empty);
     }
 }

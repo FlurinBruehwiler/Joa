@@ -18,6 +18,7 @@ public class Search
         SearchResults = new List<(ISearchResult, Guid)>();
         SettingsManager = new SettingsManager(new CoreSettings(), configuration);
         PluginManager = new PluginManager(SettingsManager, configuration);
+        PluginManager.ReloadPlugins();
     }
 
     public async Task ExecuteSearchResult(Guid pluginId, ISearchResult searchResult)
