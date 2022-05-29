@@ -10,12 +10,12 @@ public class SettingsManager
 {
     private readonly IConfiguration _configuration;
     public List<PluginDefinition> PluginDefinitions { get; set; } = null!;
-    private CoreSettings CoreSettings { get; set; } = null!;
+    public CoreSettings CoreSettings { get; set; }
 
     private readonly string _settingsLocation;
     private readonly JsonSerializerOptions _options;
 
-    public SettingsManager(CoreSettings coreSettings, List<PluginDefinition> pluginDefs, IConfiguration configuration)
+    public SettingsManager(CoreSettings coreSettings, IConfiguration configuration)
     {
         _configuration = configuration;
         _settingsLocation = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, configuration.GetValue<string>("SettingsLocation")));
@@ -23,8 +23,14 @@ public class SettingsManager
         {
             WriteIndented = true
         };
-        Load(coreSettings, pluginDefs);
+        CoreSettings = coreSettings;
         ConfigureFileWatcher();
+    }
+
+    public void LoadPluginSettings(List<PluginDefinition> pluginDefs)
+    {
+        PluginDefinitions = pluginDefs;
+        Sync();
     }
 
     private void ConfigureFileWatcher()
@@ -42,14 +48,7 @@ public class SettingsManager
         JoaLogger.GetInstance().Log("The settings File has been changed.", IJoaLogger.LogLevel.Info);
         Sync();
     }
-
-    public void Load(CoreSettings coreSettings, List<PluginDefinition> pluginDefs)
-    {
-        CoreSettings = coreSettings;
-        PluginDefinitions = pluginDefs;
-        Sync();
-    }
-
+    
     public void Sync()
     {
         JoaLogger.GetInstance().Log("Synchronizing the settings.", IJoaLogger.LogLevel.Info);

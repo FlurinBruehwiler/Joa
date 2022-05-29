@@ -1,65 +1,28 @@
-﻿using System.Reflection;
-using Interfaces;
+﻿using Interfaces;
 using Interfaces.Logger;
-using Interfaces.Settings.Attributes;
-using JoaCore.PluginCore;
 using JoaCore.Settings;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace JoaCore;
 
 public class Search
 {
-    private readonly IConfiguration _configuration;
-    private readonly PluginLoader _pluginLoader;
-    private readonly CoreSettings _coreSettings;
-    private readonly ILogger<IJoaLogger> _logger;
-    
     public delegate void ResultsUpdatedDelegate(List<(ISearchResult, Guid)> results);
     public event ResultsUpdatedDelegate? ResultsUpdated;
-
-    public SettingsManager SettingsManager { get; set; } = null!;
-    private List<PluginDefinition> Plugins { get; set; } = null!;
+    private SettingsManager SettingsManager { get; set; }
     private List<(ISearchResult, Guid)> SearchResults { get; }
+    private PluginManager PluginManager { get; set; }
 
     public Search(IConfiguration configuration)
     {
-        _configuration = configuration;
         SearchResults = new List<(ISearchResult, Guid)>();
-        _pluginLoader = new PluginLoader(_configuration);
-        _coreSettings = new CoreSettings();
-        _logger = new Logger<IJoaLogger>(new LoggerFactory());
-        ReloadSearch();
+        SettingsManager = new SettingsManager(new CoreSettings(), configuration);
+        PluginManager = new PluginManager(SettingsManager, configuration);
     }
 
-    public void ReloadSearch()
-    {
-        var timer = JoaLogger.GetInstance().StartMeasure();
-        
-        Plugins = new List<PluginDefinition>();
-        foreach (var plugin in _pluginLoader.InstantiatePlugins(_coreSettings).ToList())
-        {
-            Plugins.Add(new PluginDefinition(plugin, GetPluginInfos(plugin.GetType())));
-        }
-        SettingsManager = new SettingsManager(_coreSettings, Plugins, _configuration);
-        
-        JoaLogger.GetInstance().LogMeasureResult(timer, nameof(ReloadSearch));
-    }
-    
-    private PluginAttribute GetPluginInfos(MemberInfo pluginType)
-    {
-        var attr = Attribute.GetCustomAttributes(pluginType).FirstOrDefault();
-
-        if (attr is not PluginAttribute pluginAttribute)
-            return new PluginAttribute(pluginType.Name, string.Empty);
-        
-        return pluginAttribute;
-    }
-    
     public async Task ExecuteSearchResult(Guid pluginId, ISearchResult searchResult)
     {
-        var pluginDef = Plugins.First(p => p.Id == pluginId);
+        var pluginDef = PluginManager.Plugins.First(p => p.Id == pluginId);
         await Task.Run(() => pluginDef.Plugin.Execute(searchResult)); //ToDo Check if it is really async
     }
 
@@ -70,7 +33,7 @@ public class Search
         SearchResults.Clear();
         var pluginsTasks = new Dictionary<Task<List<ISearchResult>>, Guid>();
 
-        foreach (var pluginDef in Plugins)
+        foreach (var pluginDef in PluginManager.Plugins)
         {
             var plugin = pluginDef.Plugin;
             var pluginTask = Task.Run(() => plugin.GetResults(searchString));
