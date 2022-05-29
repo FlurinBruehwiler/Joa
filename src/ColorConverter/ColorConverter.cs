@@ -4,9 +4,8 @@ using Interfaces.Plugin;
 
 namespace ApplicationSearch;
 
-public class ColorConverter : IPlugin
+public class ColorConverter : IPlugin, IStrictPlugin
 {
-    public bool AcceptNonMatchingSearchString { get; }
     public bool Validator(string seachString)
     {
         return true;
@@ -37,11 +36,6 @@ public class ColorConverter : IPlugin
         return rgbColor.Insert(rgbColor.Length - 1, ", 1");
     }
 
-    private string HexToHsl(string hexColor)
-    {
-        
-    }
-    
     public string RgbToHex(int r, int g, int b)
     {
         var myColor = Color.FromArgb(r, g, b);
