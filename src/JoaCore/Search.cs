@@ -34,14 +34,14 @@ public class Search
         if (PluginManager.Plugins == null)
             return new List<PluginCommand>();
 
-        List<(ICommand, Guid)> searchResults = new();
+        List<PluginCommand> searchResults = new();
 
         (IStrictPlugin strictPlugin, Guid id)? matchingPlugin = GetMatchingPlugin(searchString);
 
         if (matchingPlugin.HasValue)
         {
             var strictPluginResult = await Task.Run(() => matchingPlugin.Value.strictPlugin.GetResults(searchString));
-            searchResults.AddRange(strictPluginResult.Select(x => (x, matchingPlugin.Value.id)));
+            searchResults.AddRange(strictPluginResult.Select(x => new PluginCommand(x, matchingPlugin.Value.id)));
             return searchResults;
         }
 
@@ -52,20 +52,20 @@ public class Search
 
             foreach (var searchResult in indexablePlugin.SearchResults)
             {
-                searchResults.Add((searchResult, pluginDefinition.Id));
+                searchResults.Add(new PluginCommand(searchResult, pluginDefinition.Id));
             }
         }
         
-        //ToDo SortResults
+        SortSearchResults(searchResults);
         
         JoaLogger.GetInstance().LogMeasureResult(timer,$"{nameof(UpdateSearchResults)}:{searchString}");
 
         return searchResults;
     }
 
-    private List<(ICommand, Guid)> SortSearchResults(List<(ICommand, Guid)> input)
+    private void SortSearchResults(List<PluginCommand> input)
     {
-        
+        //ToDo SortResults
     }
 
     private (IStrictPlugin, Guid)? GetMatchingPlugin(string searchString)

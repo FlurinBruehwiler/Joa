@@ -6,7 +6,7 @@ namespace ApplicationSearch;
 
 public class ColorConverter : IStrictPlugin
 {
-    public bool Validator(string seachString)
+    public bool Validator(string searchString)
     {
         return true;
     }
