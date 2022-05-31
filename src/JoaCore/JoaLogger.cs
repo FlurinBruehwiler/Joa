@@ -11,7 +11,7 @@ public class JoaLogger : IJoaLogger
     private readonly string _fileName = "Joalog.log";
     private readonly string _completePath;
 
-    public JoaLogger()
+    private JoaLogger()
     {
         _completePath = Path.Combine(_directory, _fileName);
     }

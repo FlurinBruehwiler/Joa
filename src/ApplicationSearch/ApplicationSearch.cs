@@ -5,16 +5,19 @@ using Interfaces.Settings.Attributes;
 
 namespace ApplicationSearch;
 
-public class ApplicationSearch : IPlugin, IIndexable
+public class ApplicationSearch : IIndexablePlugin
 {
+    public List<ISearchResult> SearchResults { get; set; }
+
+    
     public ApplicationSearch()
     {
-        _cachedResults = new List<ISearchResult>();
+        SearchResults = new List<ISearchResult>();
     }
     
     public void UpdateIndex()
     {
-        _cachedResults.Clear();
+        SearchResults.Clear();
 
         var files = new List<string>();
 
@@ -27,11 +30,10 @@ public class ApplicationSearch : IPlugin, IIndexable
         {
             if (Extensions.Any(x => file.EndsWith(x.Extension)))
             {
-                _cachedResults.Add(new SearchResult {FilePath = file, Caption = Path.GetFileName(file)});
+                SearchResults.Add(new SearchResult {FilePath = file, Caption = Path.GetFileName(file)});
             }
         }
     }
-
 
     [SettingProperty]
     private List<ApplicationFolder> Folders { get; set; } = new()
@@ -53,19 +55,9 @@ public class ApplicationSearch : IPlugin, IIndexable
     [SettingProperty] public bool ShowFullFilePath { get; set; } = false;
 
     [SettingProperty] public bool UseNativeIcons { get; set; } = true;
-    public bool AcceptNonMatchingSearchString => true;
-    public bool Validator(string searchString) => true;
-
-    private readonly List<ISearchResult> _cachedResults;
-
-    public List<ISearchResult> GetResults(string searchString)
-    {
-        return _cachedResults;
-    }
 
     public void Execute(ISearchResult searchResult)
     {
 
     }
-
 }

@@ -1,6 +1,5 @@
 ﻿using Interfaces;
-using Interfaces.Logger;
-using JoaCore.PluginCore;
+using Interfaces.Plugin;
 using JoaCore.Settings;
 using Microsoft.Extensions.Configuration;
 
@@ -9,7 +8,7 @@ namespace JoaCore;
 public class Search
 {
     public delegate void ResultsUpdatedDelegate(List<(ISearchResult, Guid)> results);
-    public event ResultsUpdatedDelegate? ResultsUpdated;
+    public event ResultsUpdatedDelegate ResultsUpdated;
     private SettingsManager SettingsManager { get; set; }
     private List<(ISearchResult, Guid)> SearchResults { get; }
     private PluginManager PluginManager { get; set; }
@@ -32,76 +31,52 @@ public class Search
 
     public async Task UpdateSearchResults(string searchString)
     {
+        var timer = JoaLogger.GetInstance().StartMeasure();
+
         if (PluginManager.Plugins == null)
             return;
-        
-        var timer = JoaLogger.GetInstance().StartMeasure();
-        
+
         SearchResults.Clear();
 
-        var matchingPlugins = await GetMatchingPlugins(searchString);
-        
-        if (matchingPlugins.Count != 0)
-        {
-            matchingPlugins = PluginManager.Plugins.Where(x => x.StrictPlugin is not null).ToList();
-        }
-        
-        var pluginsTasks = new Dictionary<Task<List<ISearchResult>>, Guid>();
+        (IStrictPlugin strictPlugin, Guid id)? matchingPlugin = GetMatchingPlugin(searchString);
 
-        foreach (var pluginDef in matchingPlugins)
+        if (matchingPlugin.HasValue)
         {
-            var pluginTask = Task.Run(() => pluginDef.Plugin.GetResults(searchString));
-            pluginsTasks.Add(pluginTask, pluginDef.Id);
+            var strictPluginResult = await Task.Run(() => matchingPlugin.Value.strictPlugin.GetResults(searchString));
+            SearchResults.AddRange(strictPluginResult.Select(x => (x, matchingPlugin.Value.id)));
+            return;
         }
-        
-        while (pluginsTasks.Count > 0)
-        {
-            var pluginTask = await Task.WhenAny(pluginsTasks.Keys);
 
-            try
+        foreach (var pluginDefinition in PluginManager.Plugins)
+        {
+            if(pluginDefinition.Plugin is not IIndexablePlugin indexablePlugin)
+                continue;
+
+            foreach (var searchResult in indexablePlugin.SearchResults)
             {
-                var pluginResult = await pluginTask;
-                foreach (var searchResult in pluginResult)
-                {
-                    SearchResults.Add((searchResult, pluginsTasks[pluginTask]));
-                }
+                SearchResults.Add((searchResult, pluginDefinition.Id));
             }
-            catch (Exception e)
-            {
-                JoaLogger.GetInstance().Log(
-                    $"There was an exception during the execution of a plugin with the search term \"{searchString}\" with the following exception{Environment.NewLine}" 
-                    + e, IJoaLogger.LogLevel.Error);
-            }
-            ResultsUpdated?.Invoke(SearchResults);
-            pluginsTasks.Remove(pluginTask);
         }
-        
+
+        ResultsUpdated.Invoke(SearchResults);
+
         JoaLogger.GetInstance().LogMeasureResult(timer,$"{nameof(UpdateSearchResults)}:{searchString}");
     }
 
-    private async Task<List<PluginDefinition>> GetMatchingPlugins(string searchString)
+    private (IStrictPlugin, Guid)? GetMatchingPlugin(string searchString)
     {
         if (PluginManager.Plugins == null)
-            return new List<PluginDefinition>();
+            return null;
 
-        List<Task<(bool, Guid)>> validatorTasks = new();
-        
-        foreach (var pluginDef in PluginManager.Plugins)
+        foreach (var pluginDefinition in PluginManager.Plugins)
         {
-            if(pluginDef.StrictPlugin is null)
+            if(pluginDefinition.Plugin is not IStrictPlugin strictPlugin)
                 continue;
 
-            validatorTasks.Add(Task.Run(() => ValidatorWrapper(pluginDef, searchString)));
+            if (strictPlugin.Validator(searchString))
+                return (strictPlugin, pluginDefinition.Id);
         }
 
-        var results = await Task.WhenAll(validatorTasks);
-
-        return results.Select(result =>
-            PluginManager.Plugins.First(plugin => plugin.Id == result.Item2)).ToList();
-    }
-
-    private async Task<(bool, Guid)> ValidatorWrapper(PluginDefinition pluginDef, string searchString)
-    {
-        return (await Task.Run(() => pluginDef.StrictPlugin!.Validator(searchString)), pluginDef.Id);
+        return null;
     }
 }

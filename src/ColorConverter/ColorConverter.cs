@@ -4,7 +4,7 @@ using Interfaces.Plugin;
 
 namespace ApplicationSearch;
 
-public class ColorConverter : IPlugin, IStrictPlugin
+public class ColorConverter : IStrictPlugin
 {
     public bool Validator(string seachString)
     {

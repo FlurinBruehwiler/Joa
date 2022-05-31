@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Interfaces.Plugin;
 using Interfaces.Settings.Attributes;
 using JoaCore.PluginCore;
 using JoaCore.Settings;
@@ -25,7 +26,7 @@ public class PluginManager
 
         foreach (var pluginDefinition in Plugins)
         {
-            pluginDefinition.IndexablePlugin?.UpdateIndex();
+            (pluginDefinition.Plugin as IIndexablePlugin)?.UpdateIndex();
         }
     }
     
