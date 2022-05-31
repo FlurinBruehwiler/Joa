@@ -1,6 +1,6 @@
-﻿namespace Interfaces;
+﻿namespace Interfaces.Plugin;
 
-public interface ISearchResult
+public interface ICommand
 {
     public string Caption { get; set; }
     public string Description { get; set; }

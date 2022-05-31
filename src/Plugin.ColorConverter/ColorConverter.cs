@@ -11,12 +11,12 @@ public class ColorConverter : IStrictPlugin
         return true;
     }
 
-    public List<ISearchResult> GetResults(string searchString)
+    public List<ICommand> GetResults(string searchString)
     {
         throw new NotImplementedException();
     }
 
-    public void Execute(ISearchResult searchResult)
+    public void Execute(ICommand command)
     {
         throw new NotImplementedException();
     }

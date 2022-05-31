@@ -7,15 +7,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaCore", "JoaCore\JoaCore.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interfaces", "Interfaces\Interfaces.csproj", "{82E4D949-54C5-4077-98C3-ED92A497640E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearch", "WebSearch\WebSearch.csproj", "{BA746C82-DF71-477F-AD4A-CD433AA60B99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.WebSearch", "Plugin.WebSearch\Plugin.WebSearch.csproj", "{BA746C82-DF71-477F-AD4A-CD433AA60B99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaUI", "JoaUI\JoaUI.csproj", "{440FA12E-9A90-4CD2-AE8C-E20E4F19F5D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joa", "Joa\Joa.csproj", "{AF144978-149E-4DCC-B494-A96A992BA723}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationSearch", "ApplicationSearch\ApplicationSearch.csproj", "{2CFB361F-137E-4D96-BD4B-79FABFAEA0CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.ApplicationSearch", "Plugin.ApplicationSearch\Plugin.ApplicationSearch.csproj", "{2CFB361F-137E-4D96-BD4B-79FABFAEA0CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ColorConverter", "ColorConverter\ColorConverter.csproj", "{1BE355AE-B98A-4966-B7EC-45F0B0B5A55F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.ColorConverter", "Plugin.ColorConverter\Plugin.ColorConverter.csproj", "{1BE355AE-B98A-4966-B7EC-45F0B0B5A55F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

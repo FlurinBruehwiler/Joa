@@ -2,5 +2,5 @@
 
 public interface IPlugin
 {
-    public void Execute(ISearchResult searchResult);
+    public void Execute(ICommand command);
 }

@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Interfaces;
 using Interfaces.Logger;
+using Interfaces.Plugin;
 using Interfaces.UI.Components;
 using JoaCore;
 using JoaUI;
@@ -37,7 +38,7 @@ class Joa
     
     private static void Connect(ISearchwindow searchwindow)
     {
-        _search.ResultsUpdated += searchwindow.UpdateList;
+        //_search.ResultsUpdated += searchwindow.UpdateList;
         searchwindow.NewInput += ActivateSearch;
         searchwindow.ItemSelected += ActivateExecute;
     }
@@ -47,8 +48,8 @@ class Joa
         await _search.UpdateSearchResults(searchString);
     }
 
-    private static async Task ActivateExecute(Guid pluginId, ISearchResult searchResult)
+    private static async Task ActivateExecute(Guid pluginId, ICommand command)
     {
-        await _search.ExecuteSearchResult(pluginId, searchResult);
+        await _search.ExecuteCommand(pluginId, command);
     }
 }
