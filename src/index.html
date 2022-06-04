@@ -20,6 +20,7 @@
 ></script>
 <script>
   var currentSearchResult;
+  var startTime;
   var connection = new signalR.HubConnectionBuilder()
     .withUrl("http://localhost:5000/searchHub")
     .build();
@@ -27,6 +28,7 @@
   connection.on("ReceiveSearchResults", (searchResults) => {
     currentSearchResult = searchResults;
     $("#result").text(JSON.stringify(searchResults));
+    console.log(`Search Took ${performance.now() - startTime} ms`);
   });
 
   connection
@@ -37,6 +39,7 @@
     });
 
   $("input").on("input", (event) => {
+    startTime = performance.now();
     connection
       .invoke("GetSearchResults", $("input").val())
       .catch(function (err) {
