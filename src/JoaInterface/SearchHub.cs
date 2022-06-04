@@ -17,4 +17,11 @@ public class SearchHub : Hub
         var searchResult = await _search.GetSearchResults(searchString);
         await Clients.Caller.SendAsync("ReceiveSearchResults",  searchResult);
     }
+
+    public async Task ExecuteSearchResult(string commandId)
+    {
+        if (!Guid.TryParse(commandId, out var guidId))
+            return;
+        await _search.ExecuteCommand(guidId);
+    }
 }

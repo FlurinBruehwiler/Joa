@@ -9,6 +9,7 @@
   <body>
     <input type="search" />
     <div id="result">test</div>
+    <button id="sendButton">Execute First Search Result</button>
   </body>
 </html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
@@ -18,11 +19,13 @@
   crossorigin="anonymous"
 ></script>
 <script>
+  var currentSearchResult;
   var connection = new signalR.HubConnectionBuilder()
     .withUrl("http://localhost:5000/searchHub")
     .build();
 
   connection.on("ReceiveSearchResults", (searchResults) => {
+    currentSearchResult = searchResults;
     $("#result").text(JSON.stringify(searchResults));
   });
 
@@ -40,5 +43,13 @@
         return console.error(err.toString());
       });
     event.preventDefault();
+  });
+
+  $("#sendButton").click(() => {
+    connection
+      .invoke("ExecuteSearchResult", currentSearchResult[0].commandId)
+      .catch(function (err) {
+        return console.error(err.toString());
+      });
   });
 </script>

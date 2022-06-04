@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using JoaPluginsPackage.Logger;
 using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.Settings.Attributes;
@@ -90,8 +91,35 @@ public class WebSearch : IPlugin, IStrictPlugin
     public void Execute(ICommand result)
     {
         if (result is not Command searchResult) return;
-        Process.Start("chrome.exe", 
-            searchResult.SearchEngine.Url
-                .Replace("{{query}}", searchResult.SeachString));
+        OpenBrowser(searchResult.SearchEngine.Url
+            .Replace("{{query}}", searchResult.SeachString));
+    }
+    
+    public static void OpenBrowser(string url)
+    {
+        try
+        {
+            Process.Start(url);
+        }
+        catch
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                url = url.Replace("&", "^&");
+                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", url);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", url);
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
 }

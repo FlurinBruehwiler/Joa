@@ -8,8 +8,10 @@ public class PluginCommand
     {
         Command = command;
         PluginId = pluginId;
+        CommandId = Guid.NewGuid();
     }
 
     public ICommand Command { get; }
     public Guid PluginId { get; }
+    public Guid CommandId { get; set; }
 }

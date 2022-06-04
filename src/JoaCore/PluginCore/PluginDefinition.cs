@@ -13,7 +13,7 @@ public class PluginDefinition
     public PluginDefinition(IPlugin plugin, PluginAttribute pluginInfo)
     {
         PluginInfo = pluginInfo;
-        Id = new Guid();
+        Id = Guid.NewGuid();
         Plugin = plugin;
         if (string.IsNullOrEmpty(PluginInfo.Name))
         {
