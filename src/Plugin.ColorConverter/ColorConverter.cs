@@ -1,6 +1,5 @@
 using System.Drawing;
-using Interfaces;
-using Interfaces.Plugin;
+using JoaPluginsPackage.Plugin;
 
 namespace ApplicationSearch;
 

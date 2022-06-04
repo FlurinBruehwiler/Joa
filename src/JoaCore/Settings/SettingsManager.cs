@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
-using Interfaces.Logger;
 using JoaCore.PluginCore;
+using JoaPluginsPackage.Logger;
 using Microsoft.Extensions.Configuration;
-using Microsoft.VisualBasic;
 
 namespace JoaCore.Settings;
 
@@ -46,7 +45,7 @@ public class SettingsManager
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
         JoaLogger.GetInstance().Log("The settings File has been changed.", IJoaLogger.LogLevel.Info);
-        Sync();
+        // Sync();
     }
     
     public void Sync()
@@ -80,6 +79,10 @@ public class SettingsManager
         
         try
         {
+            if (!File.Exists(_settingsLocation))
+            {
+                File.Create(_settingsLocation);
+            }
             var jsonString = File.ReadAllText(_settingsLocation);
             if (string.IsNullOrEmpty(jsonString))
                 return;

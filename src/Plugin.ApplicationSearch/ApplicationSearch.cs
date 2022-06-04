@@ -1,5 +1,5 @@
-﻿using Interfaces.Plugin;
-using Interfaces.Settings.Attributes;
+﻿using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Settings.Attributes;
 
 namespace ApplicationSearch;
 

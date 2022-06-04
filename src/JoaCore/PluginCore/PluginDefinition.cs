@@ -1,6 +1,6 @@
-﻿using Interfaces.Plugin;
-using Interfaces.Settings.Attributes;
-using JoaCore.Settings;
+﻿using JoaCore.Settings;
+using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Settings.Attributes;
 
 namespace JoaCore.PluginCore;
 

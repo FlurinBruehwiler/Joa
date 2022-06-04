@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Windows.Controls;
-using Interfaces;
-using Interfaces.Plugin;
+using JoaPluginsPackage.Plugin;
 
 namespace JoaUI;
 

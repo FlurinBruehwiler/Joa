@@ -1,7 +1,5 @@
-﻿using Interfaces;
-using Interfaces.Plugin;
-using JoaCore.PluginCore;
-using JoaCore.Settings;
+﻿using JoaCore.Settings;
+using JoaPluginsPackage.Plugin;
 using Microsoft.Extensions.Configuration;
 
 namespace JoaCore;
@@ -27,7 +25,7 @@ public class Search
         await Task.Run(() => pluginDef.Plugin.Execute(command)); //ToDo Check if it is really async
     }
 
-    public async Task<List<PluginCommand>> UpdateSearchResults(string searchString)
+    public async Task<List<PluginCommand>> GetSearchResults(string searchString)
     {
         var timer = JoaLogger.GetInstance().StartMeasure();
 
@@ -58,7 +56,7 @@ public class Search
         
         SortSearchResults(searchResults);
         
-        JoaLogger.GetInstance().LogMeasureResult(timer,$"{nameof(UpdateSearchResults)}:{searchString}");
+        JoaLogger.GetInstance().LogMeasureResult(timer,$"{nameof(GetSearchResults)}:{searchString}");
 
         return searchResults;
     }

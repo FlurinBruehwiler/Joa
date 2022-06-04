@@ -1,4 +1,4 @@
-﻿namespace Interfaces;
+﻿namespace JoaPluginsPackage;
 
 public interface IJoaEvents
 {

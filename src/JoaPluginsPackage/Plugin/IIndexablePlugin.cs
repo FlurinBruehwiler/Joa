@@ -1,4 +1,4 @@
-namespace Interfaces.Plugin;
+namespace JoaPluginsPackage.Plugin;
 
 public interface IIndexablePlugin : IPlugin
 {

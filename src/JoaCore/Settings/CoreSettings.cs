@@ -1,4 +1,4 @@
-﻿using Interfaces.Settings;
+﻿using JoaPluginsPackage.Settings;
 
 namespace JoaCore.Settings;
 

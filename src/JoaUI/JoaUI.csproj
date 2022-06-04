@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Interfaces\Interfaces.csproj" />
+      <ProjectReference Include="..\JoaPluginsPackage\JoaPluginsPackage.csproj" />
     </ItemGroup>
 
 </Project>

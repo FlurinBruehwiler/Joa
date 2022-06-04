@@ -1,4 +1,4 @@
-﻿using Interfaces.Settings.Attributes;
+﻿using JoaPluginsPackage.Settings.Attributes;
 
 namespace ApplicationSearch;
 

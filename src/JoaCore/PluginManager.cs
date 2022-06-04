@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
-using Interfaces.Plugin;
-using Interfaces.Settings.Attributes;
 using JoaCore.PluginCore;
 using JoaCore.Settings;
+using JoaPluginsPackage.Logger;
+using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Settings.Attributes;
 using Microsoft.Extensions.Configuration;
 
 namespace JoaCore;
@@ -23,10 +24,17 @@ public class PluginManager
     {
         if (Plugins is null)
             return;
-
+        
         foreach (var pluginDefinition in Plugins)
         {
-            (pluginDefinition.Plugin as IIndexablePlugin)?.UpdateIndex();
+            try
+            {
+                (pluginDefinition.Plugin as IIndexablePlugin)?.UpdateIndex();
+            }
+            catch (Exception e)
+            {
+                JoaLogger.GetInstance().Log($"There was an exception while updating the index of the plugin {pluginDefinition.PluginInfo.Name} with the following Stacktrace {e}", IJoaLogger.LogLevel.Error);
+            }
         }
     }
     

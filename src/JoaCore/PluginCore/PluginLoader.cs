@@ -1,11 +1,10 @@
 ﻿using System.Reflection;
 using System.Text;
-using Interfaces;
-using Interfaces.Logger;
-using Interfaces.Plugin;
-using Interfaces.Settings;
-using Interfaces.Settings.Attributes;
 using JoaCore.Settings;
+using JoaPluginsPackage.Logger;
+using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Settings;
+using JoaPluginsPackage.Settings.Attributes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

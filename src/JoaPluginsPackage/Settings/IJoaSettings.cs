@@ -1,5 +1,4 @@
-﻿
-namespace Interfaces.Settings;
+﻿namespace JoaPluginsPackage.Settings;
 
 public interface IJoaSettings
 {

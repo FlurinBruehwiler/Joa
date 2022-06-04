@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
-using Interfaces;
-using Interfaces.Logger;
-using Interfaces.Plugin;
-using Interfaces.Settings.Attributes;
+using JoaPluginsPackage.Logger;
+using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Settings.Attributes;
 using Newtonsoft.Json;
 
 namespace WebSearch;

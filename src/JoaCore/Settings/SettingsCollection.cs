@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
-using Interfaces.Settings;
-using Interfaces.Settings.Attributes;
+using JoaPluginsPackage.Settings.Attributes;
 
 namespace JoaCore.Settings;
 

@@ -1,6 +1,6 @@
-using Interfaces.Plugin;
+using ICommand = JoaPluginsPackage.Plugin.ICommand;
 
-namespace JoaCore.PluginCore;
+namespace JoaCore;
 
 public class PluginCommand
 {
@@ -10,6 +10,6 @@ public class PluginCommand
         PluginId = pluginId;
     }
 
-    public ICommand Command { get; set; }
-    public Guid PluginId { get; set; }
+    public ICommand Command { get; }
+    public Guid PluginId { get; }
 }

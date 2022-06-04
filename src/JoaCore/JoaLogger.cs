@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using Interfaces.Logger;
+using JoaPluginsPackage.Logger;
 
 namespace JoaCore;
 

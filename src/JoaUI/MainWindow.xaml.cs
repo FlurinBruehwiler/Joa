@@ -4,10 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Interfaces;
-using Interfaces.Plugin;
-using Interfaces.UI.Components;
-using ICommand = Interfaces.Plugin.ICommand;
+using JoaPluginsPackage.UI.Components;
+using ICommand = JoaPluginsPackage.Plugin.ICommand;
 
 
 namespace JoaUI
