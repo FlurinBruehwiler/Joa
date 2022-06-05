@@ -1,4 +1,5 @@
 ﻿using JoaCore;
+using JoaInterface.HotKey;
 using Microsoft.AspNetCore.SignalR;
 
 namespace JoaInterface;
@@ -6,10 +7,11 @@ namespace JoaInterface;
 public class SearchHub : Hub
 {
     private readonly Search _search;
-
-    public SearchHub(Search search)
+    public static IHubContext<SearchHub> GlobalContext { get; private set; }
+    public SearchHub(Search search, IHubContext<SearchHub> ctx)
     {
         _search = search;
+        GlobalContext = ctx;
     }
     
     public async Task GetSearchResults(string searchString)

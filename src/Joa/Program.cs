@@ -14,5 +14,8 @@ if (configuration is null)
     return;
 }
 var search = new Search(configuration);
+
 var interfaceProvider = new InterfaceProvider(search);
+interfaceProvider.Run();
+
 JoaLogger.GetInstance().Log("Init Complete", IJoaLogger.LogLevel.Info);

@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {HubConnectionBuilder,} from '@microsoft/signalr';
 import PluginCommand from "./models/PluginCommand";
 import {appWindow, LogicalSize} from '@tauri-apps/api/window'
 
 function App() {
-    const [ connection, setConnection ] = useState<any | undefined>(undefined);
+    const [ joaCore, setJoaCore ] = useState<any | undefined>(undefined);
     const [ searchString, setSearchString ] = useState<string>("");
     const [ searchResults, setSearchResults ] = useState<any>([]);
     const [ activeIndex, setActiveIndex ] = useState(0);
@@ -14,25 +14,26 @@ function App() {
             .withUrl("http://localhost:5000/searchHub")
             .withAutomaticReconnect()
             .build();
-        // @ts-ignore
-        setConnection(newConnection);
+        setJoaCore(newConnection);
     }, []);
-//
     useEffect(() => {
-        if (connection) {
-            connection.start({ withCredentials: false })
+        if (joaCore) {
+            joaCore.start({ withCredentials: false })
                 .then(() => {
-                    connection.on("ReceiveSearchResults", (SearchResults: any) => {
+                    joaCore.on("ReceiveSearchResults", (SearchResults: any) => {
                         setSearchResults(SearchResults.slice(0,8));
+                    });
+                    joaCore.on("ShowWindow", () => {
+                       appWindow.show();
                     });
                 })
                 .catch((e: any) => console.log('Connection failed: ', e));
         }
-    }, [connection]);
+    }, [joaCore]);
     const searchStringChanged = (e : any) => setSearchString(e.target.value);
     useEffect(() => {
-        if(connection)
-            connection
+        if(joaCore)
+            joaCore
                 .invoke("GetSearchResults", searchString)
                 .catch(function (err : any) {});
     }, [searchString])
@@ -40,7 +41,7 @@ function App() {
         appWindow.setSize(new LogicalSize(600, 60 + 50 * (searchResults ? searchResults?.length : 0)));
         setActiveIndex(0);
     }, [searchResults])
-    const handleKeyPress = (e : any) => {
+    const handleInputKeyPress = (e : React.KeyboardEvent) => {
         if(e.key === 'ArrowDown' && activeIndex < searchResults.length){
             setActiveIndex(activeIndex + 1);
         }
@@ -48,14 +49,32 @@ function App() {
             setActiveIndex(activeIndex - 1)
         }
         if(e.key === 'Enter' && searchResults.length > 0){
-            console.log(`Executing search with activeIndex ${activeIndex} and commandId ${searchResults[activeIndex].commandId}`)
-            connection.invoke("ExecuteSearchResult", searchResults[activeIndex].commandId)
+            joaCore.invoke("ExecuteSearchResult", searchResults[activeIndex].commandId)
                 .catch(function (err : any) {
                 return console.error(err.toString());
             });
         }
     }
-  //
+    const handleKeyPress = useCallback((event: any) => {
+        if(event.altKey === true && event.key === 'L')
+            appWindow.show();
+    }, []);
+
+    appWindow.listen('tauri://blur', ({event, payload}) => {
+       appWindow.hide();
+    });
+
+    useEffect(() => {
+        // attach the event listener
+        document.addEventListener('keydown', handleKeyPress);
+
+        // remove the event listener
+        return () => {
+            document.removeEventListener('keydown', handleKeyPress);
+        };
+    }, [handleKeyPress]);
+
+//
     return (
       <>
           <div className="w-full h-[60px] text-userInputText flex bg-userInputBackground items-center" data-tauri-drag-region>
@@ -68,7 +87,7 @@ function App() {
               <input className="appearance-none focus:outline-none w-full h-full bg-userInputBackground text-[24px] font-[200]" type="text" data-tauri-drag-region
                      value={searchString}
                      onChange={searchStringChanged}
-                     onKeyDown={handleKeyPress}
+                     onKeyDown={handleInputKeyPress}
               />
           </div>
           { searchResults.map((pluginCommand :any, index : number) =>
