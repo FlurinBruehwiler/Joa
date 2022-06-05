@@ -7,6 +7,7 @@ function App() {
     const [ connection, setConnection ] = useState<any | undefined>(undefined);
     const [ searchString, setSearchString ] = useState<string>("");
     const [ searchResults, setSearchResults ] = useState<any>([]);
+    const [ activeIndex, setActiveIndex ] = useState(0);
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -25,7 +26,7 @@ function App() {
                         setSearchResults(SearchResults.slice(0,8));
                     });
                 })
-                .catch((e: any) => console.log('Connectionn failed: ', e));
+                .catch((e: any) => console.log('Connection failed: ', e));
         }
     }, [connection]);
     const searchStringChanged = (e : any) => setSearchString(e.target.value);
@@ -37,15 +38,25 @@ function App() {
     }, [searchString])
     useEffect(() => {
         appWindow.setSize(new LogicalSize(600, 60 + 50 * (searchResults ? searchResults?.length : 0)));
+        setActiveIndex(0);
     }, [searchResults])
-
-  // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
+    const handleKeyPress = (e : any) => {
+        if(e.key === 'ArrowDown' && activeIndex < searchResults.length){
+            setActiveIndex(activeIndex + 1);
+        }
+        if(e.key === 'ArrowUp' && activeIndex > 0){
+            setActiveIndex(activeIndex - 1)
+        }
+        if(e.key === 'Enter' && searchResults.length > 0){
+            console.log(`Executing search with activeIndex ${activeIndex} and commandId ${searchResults[activeIndex].commandId}`)
+            connection.invoke("ExecuteSearchResult", searchResults[activeIndex].commandId)
+                .catch(function (err : any) {
+                return console.error(err.toString());
+            });
+        }
+    }
+  //
     return (
-
       <>
           <div className="w-full h-[60px] text-userInputText flex bg-userInputBackground items-center" data-tauri-drag-region>
               <svg className="fill-userInputText w-[28px] h-[28px] m-[16px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1" data-tauri-drag-region>
@@ -57,14 +68,15 @@ function App() {
               <input className="appearance-none focus:outline-none w-full h-full bg-userInputBackground text-[24px] font-[200]" type="text" data-tauri-drag-region
                      value={searchString}
                      onChange={searchStringChanged}
+                     onKeyDown={handleKeyPress}
               />
           </div>
-          { searchResults.map((pluginCommand :any) =>
-            <div key={pluginCommand.CommandId} className="w-full h-[50px] text-userInputText bg-userInputBackground items-center flex">
+          { searchResults.map((pluginCommand :any, index : number) =>
+            <div key={pluginCommand.commandId} className={`w-full h-[50px] text-userInputText ${index == activeIndex ? 'bg-searchResultActiveBackground' : 'bg-searchResultBackground' } items-center flex`}>
                 <div className="w-[60px]"></div>
                 <div>
-                    <p className="text-[17px]">{pluginCommand.command.caption}</p>
-                    <p className="text-[12px]">{pluginCommand.command.description}</p>
+                    <p className="text-[17px] text-searchResultNameText">{pluginCommand.command.caption}</p>
+                    <p className="text-[12px] text-searchResultDescriptionText">{pluginCommand.commandId}</p>
                 </div>
             </div>
           ) }
