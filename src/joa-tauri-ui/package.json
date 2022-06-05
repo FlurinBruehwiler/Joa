@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@microsoft/signalr": "^6.0.5",
     "@tauri-apps/api": "^1.0.0-rc.6",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -44,6 +45,9 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.0-rc.13",
-    "cross-env": "^7.0.3"
+    "autoprefixer": "^10.4.7",
+    "cross-env": "^7.0.3",
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.0.24"
   }
 }

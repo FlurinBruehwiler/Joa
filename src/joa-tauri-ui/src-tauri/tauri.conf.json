@@ -56,10 +56,11 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
-        "resizable": true,
+        "height": 60,
+        "resizable": false,
         "title": "Joa",
-        "width": 800
+        "width": 600,
+        "decorations": false
       }
     ]
   }

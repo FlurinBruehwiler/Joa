@@ -13,7 +13,7 @@ public class InterfaceProvider
         {
             options.AddDefaultPolicy(policyBuilder =>
             {
-                policyBuilder.WithOrigins("http://127.0.0.1:5500").AllowAnyHeader().WithMethods("GET", "POST").AllowCredentials();
+                policyBuilder.WithOrigins("http://127.0.0.1:5500", "http://localhost:3000").AllowAnyHeader().WithMethods("GET", "POST").AllowCredentials();
             });
         });
         builder.Services.AddSingleton(search);
