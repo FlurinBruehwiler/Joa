@@ -82,7 +82,7 @@ public class WebSearch : IPlugin, IStrictPlugin
                     $"Search on Google for \"{suggestion}\"", 
                     "", 
                     searchEngine, 
-                    suggestion))
+                    suggestion.Replace(" ", "+")))
             .ToList());
         
         return searchResults;

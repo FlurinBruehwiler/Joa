@@ -7,7 +7,7 @@ namespace JoaInterface;
 public class SearchHub : Hub
 {
     private readonly Search _search;
-    public static IHubContext<SearchHub> GlobalContext { get; private set; }
+    public static IHubContext<SearchHub>? GlobalContext { get; private set; }
     public SearchHub(Search search, IHubContext<SearchHub> ctx)
     {
         _search = search;

@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {HubConnectionBuilder,} from '@microsoft/signalr';
-import PluginCommand from "./models/PluginCommand";
-import {appWindow, LogicalSize} from '@tauri-apps/api/window'
+import {appWindow, LogicalPosition, LogicalSize, availableMonitors} from '@tauri-apps/api/window'
 
 function App() {
     const [ joaCore, setJoaCore ] = useState<any | undefined>(undefined);
@@ -23,13 +22,34 @@ function App() {
                     joaCore.on("ReceiveSearchResults", (SearchResults: any) => {
                         setSearchResults(SearchResults.slice(0,8));
                     });
-                    joaCore.on("ShowWindow", () => {
-                       appWindow.show();
+                    joaCore.on("ShowWindow", (posX: number, posY: number) => {
+                        availableMonitors().then(monitors => {
+                            monitors.map(monitor => {
+                                if(monitor.position.x < posX && monitor.position.y < posY){
+                                    if(monitor.position.x + monitor.size.width > posX && monitor.position.y + monitor.size.height > posY){
+                                        let centerOfScreenX = monitor.position.x + (monitor.size.width / 2);
+                                        let topThirdOfScreenY = monitor.position.y + (monitor.size.height / 3);
+                                        appWindow.setPosition(new LogicalPosition(centerOfScreenX - 300,topThirdOfScreenY - 30)).then(() => {
+                                            appWindow.show().then(() => {
+                                                appWindow.setFocus();
+                                            });
+                                        });
+                                    }
+                                }
+                            });
+                        });
+
                     });
                 })
                 .catch((e: any) => console.log('Connection failed: ', e));
         }
     }, [joaCore]);
+    appWindow.listen('tauri://blur', ({event, payload}) => hideSearchWindow());
+    const hideSearchWindow = () => {
+        appWindow.hide();
+        setSearchResults([]);
+        setSearchString("");
+    }
     const searchStringChanged = (e : any) => setSearchString(e.target.value);
     useEffect(() => {
         if(joaCore)
@@ -56,25 +76,16 @@ function App() {
         }
     }
     const handleKeyPress = useCallback((event: any) => {
-        if(event.altKey === true && event.key === 'L')
-            appWindow.show();
+        if(event.key === 'Escape')
+            hideSearchWindow();
     }, []);
-
-    appWindow.listen('tauri://blur', ({event, payload}) => {
-       appWindow.hide();
-    });
-
     useEffect(() => {
-        // attach the event listener
         document.addEventListener('keydown', handleKeyPress);
-
-        // remove the event listener
         return () => {
             document.removeEventListener('keydown', handleKeyPress);
         };
     }, [handleKeyPress]);
 
-//
     return (
       <>
           <div className="w-full h-[60px] text-userInputText flex bg-userInputBackground items-center" data-tauri-drag-region>
@@ -88,6 +99,7 @@ function App() {
                      value={searchString}
                      onChange={searchStringChanged}
                      onKeyDown={handleInputKeyPress}
+                     autoFocus
               />
           </div>
           { searchResults.map((pluginCommand :any, index : number) =>

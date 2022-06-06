@@ -15,7 +15,13 @@ public class InterfaceProvider
 
     public void Run()
     {
-        HotKeyHelper.RegisterHotKey(() => SearchHub.GlobalContext.Clients.All.SendAsync("ShowWindow"), Key.P, Modifier.Alt);
+        HotKeyHelper.RegisterHotKey(() =>
+        {
+            if (SearchHub.GlobalContext is null)
+                return;
+            var mousePos = MousePositionHelper.GetMousePosition();
+            SearchHub.GlobalContext.Clients.All.SendAsync("ShowWindow", mousePos.X, mousePos.Y);
+        }, Key.P, Modifier.Alt);
         var builder = WebApplication.CreateBuilder();
         builder.Services.AddSignalR();
         builder.Services.AddCors(options =>

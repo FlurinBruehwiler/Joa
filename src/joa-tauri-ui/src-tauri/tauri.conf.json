@@ -60,7 +60,9 @@
         "resizable": false,
         "title": "Joa",
         "width": 600,
-        "decorations": false
+        "decorations": false,
+        "skipTaskbar": true,
+        "visible": false
       }
     ]
   }
