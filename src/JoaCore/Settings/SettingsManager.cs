@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using JoaCore.PluginCore;
 using JoaPluginsPackage.Logger;
 using Microsoft.Extensions.Configuration;
@@ -9,14 +11,22 @@ public class SettingsManager
 {
     private readonly IConfiguration _configuration;
     public List<PluginDefinition> PluginDefinitions { get; set; } = null!;
+
+    
+    [JsonIgnore]
+
     public CoreSettings CoreSettings { get; set; }
 
     private readonly string _settingsLocation;
     private readonly JsonSerializerOptions _options;
+    private Stopwatch _timeSinceLastChanged;
+    private Stopwatch _timeSinceLastSinc;
 
     public SettingsManager(CoreSettings coreSettings, IConfiguration configuration)
     {
         _configuration = configuration;
+        _timeSinceLastChanged = Stopwatch.StartNew();
+        _timeSinceLastSinc = Stopwatch.StartNew();
         _settingsLocation = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, configuration.GetValue<string>("SettingsLocation")));
         _options = new JsonSerializerOptions
         {
@@ -45,11 +55,17 @@ public class SettingsManager
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
         JoaLogger.GetInstance().Log("The settings File has been changed.", IJoaLogger.LogLevel.Info);
-        // Sync();
+        if (_timeSinceLastChanged.ElapsedMilliseconds < 100)
+            return;
+        if (_timeSinceLastSinc.ElapsedMilliseconds < 1000)
+            return;
+        _timeSinceLastChanged.Restart();
+        Sync();
     }
     
     public void Sync()
     {
+        _timeSinceLastSinc.Restart();
         JoaLogger.GetInstance().Log("Synchronizing the settings.", IJoaLogger.LogLevel.Info);
         UpdateSettingsFromJson();
         SaveSettingsToJson();

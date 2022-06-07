@@ -1,15 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import Search from './feature/search/Search';
+import Settings from './feature/settings/Settings';
+
 import reportWebVitals from './reportWebVitals';
+import {WebviewWindow} from "@tauri-apps/api/window";
+import {
+    BrowserRouter,
+    Routes,
+    Route,
+} from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+const webview = new WebviewWindow('theUniqueLabel', {
+    url: 'https://github.com/tauri-apps/tauri'
+})
+
 root.render(
   <React.StrictMode>
-    <App />
+      <BrowserRouter>
+          <Routes>
+              <Route path="/search" element={<Search/>}/>
+              <Route path="/settings" element={ <Settings/> }></Route>
+          </Routes>
+      </BrowserRouter>
   </React.StrictMode>
 );
 

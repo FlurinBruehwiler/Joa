@@ -1,25 +1,28 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {HubConnectionBuilder,} from '@microsoft/signalr';
 import {appWindow, LogicalPosition, LogicalSize, availableMonitors} from '@tauri-apps/api/window'
+import PluginCommand from "../../models/PluginCommand";
 
-function App() {
+export default () => {
     const [ joaCore, setJoaCore ] = useState<any | undefined>(undefined);
     const [ searchString, setSearchString ] = useState<string>("");
-    const [ searchResults, setSearchResults ] = useState<any>([]);
+    const [ searchResults, setSearchResults ] = useState<PluginCommand[]>([]);
     const [ activeIndex, setActiveIndex ] = useState(0);
 
-    useEffect(() => {
+    useEffect(() => tryEstablishConnection, []);
+    const tryEstablishConnection = () => {
         const newConnection = new HubConnectionBuilder()
             .withUrl("http://localhost:5000/searchHub")
             .withAutomaticReconnect()
             .build();
         setJoaCore(newConnection);
-    }, []);
+    }
     useEffect(() => {
         if (joaCore) {
             joaCore.start({ withCredentials: false })
                 .then(() => {
-                    joaCore.on("ReceiveSearchResults", (SearchResults: any) => {
+                    joaCore.on("ReceiveSearchResults", (SearchResults: PluginCommand[]) => {
+                        console.log(JSON.stringify(SearchResults));
                         setSearchResults(SearchResults.slice(0,8));
                     });
                     joaCore.on("ShowWindow", (posX: number, posY: number) => {
@@ -38,7 +41,6 @@ function App() {
                                 }
                             });
                         });
-
                     });
                 })
                 .catch((e: any) => console.log('Connection failed: ', e));
@@ -69,7 +71,7 @@ function App() {
             setActiveIndex(activeIndex - 1)
         }
         if(e.key === 'Enter' && searchResults.length > 0){
-            joaCore.invoke("ExecuteSearchResult", searchResults[activeIndex].commandId)
+            joaCore.invoke("ExecuteSearchResult", searchResults[activeIndex].CommandId)
                 .catch(function (err : any) {
                 return console.error(err.toString());
             });
@@ -85,6 +87,11 @@ function App() {
             document.removeEventListener('keydown', handleKeyPress);
         };
     }, [handleKeyPress]);
+    setInterval(() => {
+        if(joaCore)
+            return;
+        tryEstablishConnection();
+    }, 1000);
 
     return (
       <>
@@ -107,12 +114,10 @@ function App() {
                 <div className="w-[60px]"></div>
                 <div>
                     <p className="text-[17px] text-searchResultNameText">{pluginCommand.command.caption}</p>
-                    <p className="text-[12px] text-searchResultDescriptionText">{pluginCommand.commandId}</p>
+                    <p className="text-[12px] text-searchResultDescriptionText">{pluginCommand.command.description}</p>
                 </div>
             </div>
           ) }
       </>
   );
 }
-
-export default App;

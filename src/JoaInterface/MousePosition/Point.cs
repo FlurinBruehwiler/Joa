@@ -1,7 +1,6 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
-namespace JoaInterface;
+namespace JoaInterface.MousePosition;
 
 [StructLayout(LayoutKind.Sequential)]
 public struct Point

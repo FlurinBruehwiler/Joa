@@ -6,7 +6,7 @@ namespace JoaCore;
 
 public class Search
 {
-    private SettingsManager SettingsManager { get; set; }
+    public SettingsManager SettingsManager { get; set; }
     private PluginManager PluginManager { get; set; }
     private List<PluginCommand>? _lastSearchResults;
 

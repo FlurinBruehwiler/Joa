@@ -1,8 +1,7 @@
 ﻿using JoaCore;
-using JoaInterface.HotKey;
 using Microsoft.AspNetCore.SignalR;
 
-namespace JoaInterface;
+namespace JoaInterface.Hubs;
 
 public class SearchHub : Hub
 {
