@@ -28,8 +28,8 @@ export default () => {
                     joaCore.on("ShowWindow", (posX: number, posY: number) => {
                         availableMonitors().then(monitors => {
                             monitors.map(monitor => {
-                                if(monitor.position.x < posX && monitor.position.y < posY){
-                                    if(monitor.position.x + monitor.size.width > posX && monitor.position.y + monitor.size.height > posY){
+                                if (monitor.position.x < posX && monitor.position.y < posY){
+                                    if (monitor.position.x + monitor.size.width > posX && monitor.position.y + monitor.size.height > posY){
                                         let centerOfScreenX = monitor.position.x + (monitor.size.width / 2);
                                         let topThirdOfScreenY = monitor.position.y + (monitor.size.height / 3);
                                         appWindow.setPosition(new LogicalPosition(centerOfScreenX - 300,topThirdOfScreenY - 30)).then(() => {
@@ -54,7 +54,7 @@ export default () => {
     }
     const searchStringChanged = (e : any) => setSearchString(e.target.value);
     useEffect(() => {
-        if(joaCore)
+        if (joaCore)
             joaCore
                 .invoke("GetSearchResults", searchString)
                 .catch(function (err : any) {});
@@ -64,13 +64,13 @@ export default () => {
         setActiveIndex(0);
     }, [searchResults])
     const handleInputKeyPress = (e : React.KeyboardEvent) => {
-        if(e.key === 'ArrowDown' && activeIndex < searchResults.length){
+        if (e.key === 'ArrowDown' && activeIndex < searchResults.length){
             setActiveIndex(activeIndex + 1);
         }
-        if(e.key === 'ArrowUp' && activeIndex > 0){
+        if (e.key === 'ArrowUp' && activeIndex > 0){
             setActiveIndex(activeIndex - 1)
         }
-        if(e.key === 'Enter' && searchResults.length > 0){
+        if (e.key === 'Enter' && searchResults.length > 0){
             joaCore.invoke("ExecuteSearchResult", searchResults[activeIndex].CommandId)
                 .catch(function (err : any) {
                 return console.error(err.toString());
@@ -78,7 +78,7 @@ export default () => {
         }
     }
     const handleKeyPress = useCallback((event: any) => {
-        if(event.key === 'Escape')
+        if (event.key === 'Escape')
             hideSearchWindow();
     }, []);
     useEffect(() => {
@@ -88,7 +88,7 @@ export default () => {
         };
     }, [handleKeyPress]);
     setInterval(() => {
-        if(joaCore)
+        if (joaCore)
             return;
         tryEstablishConnection();
     }, 1000);
