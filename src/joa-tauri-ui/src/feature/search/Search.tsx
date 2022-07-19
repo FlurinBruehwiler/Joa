@@ -1,57 +1,13 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {HubConnectionBuilder,} from '@microsoft/signalr';
 import {appWindow, LogicalPosition, LogicalSize, availableMonitors} from '@tauri-apps/api/window'
-import PluginCommand from "../../models/PluginCommand";
+import PluginCommand from "./models/PluginCommand";
+import {hideWindow} from "./services/windowService";
 
 export default () => {
-    const [ joaCore, setJoaCore ] = useState<any | undefined>(undefined);
     const [ searchString, setSearchString ] = useState<string>("");
     const [ searchResults, setSearchResults ] = useState<PluginCommand[]>([]);
     const [ activeIndex, setActiveIndex ] = useState(0);
 
-    useEffect(() => tryEstablishConnection, []);
-    const tryEstablishConnection = () => {
-        const newConnection = new HubConnectionBuilder()
-            .withUrl("http://localhost:5000/searchHub")
-            .withAutomaticReconnect()
-            .build();
-        setJoaCore(newConnection);
-    }
-    useEffect(() => {
-        if (joaCore) {
-            joaCore.start({ withCredentials: false })
-                .then(() => {
-                    joaCore.on("ReceiveSearchResults", (SearchResults: PluginCommand[]) => {
-                        console.log(JSON.stringify(SearchResults));
-                        setSearchResults(SearchResults.slice(0,8));
-                    });
-                    joaCore.on("ShowWindow", (posX: number, posY: number) => {
-                        availableMonitors().then(monitors => {
-                            monitors.map(monitor => {
-                                if (monitor.position.x < posX && monitor.position.y < posY){
-                                    if (monitor.position.x + monitor.size.width > posX && monitor.position.y + monitor.size.height > posY){
-                                        let centerOfScreenX = monitor.position.x + (monitor.size.width / 2);
-                                        let topThirdOfScreenY = monitor.position.y + (monitor.size.height / 3);
-                                        appWindow.setPosition(new LogicalPosition(centerOfScreenX - 300,topThirdOfScreenY - 30)).then(() => {
-                                            appWindow.show().then(() => {
-                                                appWindow.setFocus();
-                                            });
-                                        });
-                                    }
-                                }
-                            });
-                        });
-                    });
-                })
-                .catch((e: any) => console.log('Connection failed: ', e));
-        }
-    }, [joaCore]);
-    appWindow.listen('tauri://blur', ({event, payload}) => hideSearchWindow());
-    const hideSearchWindow = () => {
-        appWindow.hide();
-        setSearchResults([]);
-        setSearchString("");
-    }
     const searchStringChanged = (e : any) => setSearchString(e.target.value);
     useEffect(() => {
         if (joaCore)
@@ -79,7 +35,7 @@ export default () => {
     }
     const handleKeyPress = useCallback((event: any) => {
         if (event.key === 'Escape')
-            hideSearchWindow();
+            hideWindow();
     }, []);
     useEffect(() => {
         document.addEventListener('keydown', handleKeyPress);
@@ -87,11 +43,6 @@ export default () => {
             document.removeEventListener('keydown', handleKeyPress);
         };
     }, [handleKeyPress]);
-    setInterval(() => {
-        if (joaCore)
-            return;
-        tryEstablishConnection();
-    }, 1000);
 
     return (
       <>

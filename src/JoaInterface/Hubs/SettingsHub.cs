@@ -1,5 +1,7 @@
-﻿using JoaCore;
+﻿using System.Text.Json;
+using JoaCore;
 using JoaCore.Settings;
+using JoaPluginsPackage.Logger;
 using Microsoft.AspNetCore.SignalR;
 
 namespace JoaInterface.Hubs;
@@ -13,12 +15,13 @@ public class SettingsHub : Hub
         _settingsManager = settingsManager;
     }
 
-    public DtoSettings GetSettings()
+    public async Task GetSettings()
     {
-        return new DtoSettings(_settingsManager);
+        JoaLogger.GetInstance().Log(JsonSerializer.Serialize(_settingsManager), IJoaLogger.LogLevel.Info);
+        //await Clients.Caller.SendAsync("ReceiveSettings",  _settingsManager);
     }
 
-    public void SetSettings()
+    public async Task SetSettings()
     {
         
     }

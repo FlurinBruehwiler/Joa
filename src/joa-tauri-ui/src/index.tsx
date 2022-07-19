@@ -16,15 +16,15 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const webview = new WebviewWindow('theUniqueLabel', {
-    url: 'https://github.com/tauri-apps/tauri'
-})
+//const webview = new WebviewWindow('settings', {
+ //   url: 'http://localhost:3000/settings'
+//})
 
 root.render(
   <React.StrictMode>
       <BrowserRouter>
           <Routes>
-              <Route path="/search" element={<Search/>}/>
+              <Route path="/" element={<Search/>}/>
               <Route path="/settings" element={ <Settings/> }></Route>
           </Routes>
       </BrowserRouter>

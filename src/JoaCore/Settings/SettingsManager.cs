@@ -11,10 +11,8 @@ public class SettingsManager
 {
     private readonly IConfiguration _configuration;
     public List<PluginDefinition> PluginDefinitions { get; set; } = null!;
-
     
     [JsonIgnore]
-
     public CoreSettings CoreSettings { get; set; }
 
     private readonly string _settingsLocation;
