@@ -3,26 +3,25 @@ import PluginCommand from "../models/PluginCommand";
 import {showWindow} from "./windowService";
 
 class SearchService {
-    private connection: HubConnection | undefined;
 
-    ReceiveSearchResults = "ReceiveSearchResults";
-    ShowWindow = "ShowWindow";
+    ReceiveSearchResultsName = "ReceiveSearchResults";
+    ShowWindowName = "ShowWindow";
 
-    public receiveSearchResults: (searchResults: PluginCommand[]) => void
+    constructor(private connection: HubConnection) {
+        this.connection.on(this.ReceiveSearchResultsName, this.receiveSearchResults);
+        this.connection.on(this.ShowWindowName, this.showWindow);
+    }
 
-    connect = async () => {
-        this.connection = new HubConnectionBuilder()
-            .withUrl("http://localhost:5000/searchHub")
-            .withAutomaticReconnect()
-            .build();
+    receiveSearchResults = (SearchResults: PluginCommand[]) => {
 
-        await this.connection.start({ withCredentials: false })
-        this.connection.on(this.ReceiveSearchResults, (SearchResults: PluginCommand[]) => {
-            this.receiveSearchResults(SearchResults);
-        });
-        this.connection.on(this.ShowWindow, (posX: number, posY: number) => {
-            showWindow(posX, posY);
-        });
+    }
+
+    showWindow = (posX: number, posY: number) => {
+        showWindow(posX, posY);
+    }
+
+    getSearchResults = () => {
+
     }
 }
 

@@ -10,12 +10,6 @@ export default () => {
 
     const searchStringChanged = (e : any) => setSearchString(e.target.value);
     useEffect(() => {
-        if (joaCore)
-            joaCore
-                .invoke("GetSearchResults", searchString)
-                .catch(function (err : any) {});
-    }, [searchString])
-    useEffect(() => {
         appWindow.setSize(new LogicalSize(600, 60 + 50 * (searchResults ? searchResults?.length : 0)));
         setActiveIndex(0);
     }, [searchResults])
