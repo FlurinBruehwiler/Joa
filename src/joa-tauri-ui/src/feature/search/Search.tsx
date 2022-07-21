@@ -1,42 +1,33 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {appWindow, LogicalPosition, LogicalSize, availableMonitors} from '@tauri-apps/api/window'
-import PluginCommand from "./models/PluginCommand";
-import {hideWindow} from "./services/windowService";
+import React, {useEffect, useState} from 'react';
+import {useWindow} from "./services/windowService";
+import {ExecuteCommand, useJoaCore, useCommands, useSelectedCommand} from "./services/searchService";
 
 export default () => {
     const [ searchString, setSearchString ] = useState<string>("");
-    const [ searchResults, setSearchResults ] = useState<PluginCommand[]>([]);
-    const [ activeIndex, setActiveIndex ] = useState(0);
+    const [ connection ] = useJoaCore();
+    const [ commands, updateCommands, clearCommands ] = useCommands(connection);
+    const [ selectedCommandIndex, moveUp, moveDown, clearSelectedCommand ] = useSelectedCommand(commands);
+    const [ updateSize ] = useWindow(connection, clearCommands, clearSelectedCommand);
 
-    const searchStringChanged = (e : any) => setSearchString(e.target.value);
-    useEffect(() => {
-        appWindow.setSize(new LogicalSize(600, 60 + 50 * (searchResults ? searchResults?.length : 0)));
-        setActiveIndex(0);
-    }, [searchResults])
     const handleInputKeyPress = (e : React.KeyboardEvent) => {
-        if (e.key === 'ArrowDown' && activeIndex < searchResults.length){
-            setActiveIndex(activeIndex + 1);
-        }
-        if (e.key === 'ArrowUp' && activeIndex > 0){
-            setActiveIndex(activeIndex - 1)
-        }
-        if (e.key === 'Enter' && searchResults.length > 0){
-            joaCore.invoke("ExecuteSearchResult", searchResults[activeIndex].CommandId)
-                .catch(function (err : any) {
-                return console.error(err.toString());
-            });
+        switch (e.key) {
+            case 'ArrowDown':
+                moveDown();
+                break;
+            case 'ArrowUp':
+                moveUp();
+                break;
+            case 'Enter':
+                ExecuteCommand(connection, commands[selectedCommandIndex])
+                break;
         }
     }
-    const handleKeyPress = useCallback((event: any) => {
-        if (event.key === 'Escape')
-            hideWindow();
-    }, []);
+
     useEffect(() => {
-        document.addEventListener('keydown', handleKeyPress);
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
-    }, [handleKeyPress]);
+        updateCommands(searchString);
+        updateSize(commands.length);
+        clearSelectedCommand();
+    }, [searchString])
 
     return (
       <>
@@ -49,13 +40,13 @@ export default () => {
               </svg>
               <input className="appearance-none focus:outline-none w-full h-full bg-userInputBackground text-[24px] font-[200]" type="text" data-tauri-drag-region
                      value={searchString}
-                     onChange={searchStringChanged}
+                     onChange={(e : any) => setSearchString(e.target.value)}
                      onKeyDown={handleInputKeyPress}
                      autoFocus
               />
           </div>
-          { searchResults.map((pluginCommand :any, index : number) =>
-            <div key={pluginCommand.commandId} className={`w-full h-[50px] text-userInputText ${index == activeIndex ? 'bg-searchResultActiveBackground' : 'bg-searchResultBackground' } items-center flex`}>
+          { commands.map((pluginCommand :any, index : number) =>
+            <div key={pluginCommand.commandId} className={`w-full h-[50px] text-userInputText ${index == selectedCommandIndex ? 'bg-searchResultActiveBackground' : 'bg-searchResultBackground' } items-center flex`}>
                 <div className="w-[60px]"></div>
                 <div>
                     <p className="text-[17px] text-searchResultNameText">{pluginCommand.command.caption}</p>
