@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {useWindow} from "./services/windowService";
-import {ExecuteCommand, useJoaCore, useCommands, useSelectedCommand} from "./services/searchService";
+import {ExecuteCommand, useCommands, useSelectedCommand} from "./services/searchService";
+import {FeatureProps} from "../../featureProps";
 
-export default () => {
+export default (props: FeatureProps) => {
     const [ searchString, setSearchString ] = useState<string>("");
-    const [ connection ] = useJoaCore();
-    const [ commands, updateCommands, clearCommands ] = useCommands(connection);
+    const [ commands, updateCommands, clearCommands ] = useCommands(props.connection);
     const [ selectedCommandIndex, moveUp, moveDown, clearSelectedCommand ] = useSelectedCommand(commands);
-    const [ updateSize ] = useWindow(connection, clearCommands, clearSelectedCommand);
+    const [ updateSize ] = useWindow(props.connection, clearCommands, clearSelectedCommand);
 
     const handleInputKeyPress = (e : React.KeyboardEvent) => {
         switch (e.key) {
@@ -18,16 +18,19 @@ export default () => {
                 moveUp();
                 break;
             case 'Enter':
-                ExecuteCommand(connection, commands[selectedCommandIndex])
+                ExecuteCommand(props.connection, commands[selectedCommandIndex])
                 break;
         }
     }
 
     useEffect(() => {
         updateCommands(searchString);
+    }, [searchString])
+
+    useEffect(() => {
         updateSize(commands.length);
         clearSelectedCommand();
-    }, [searchString])
+    }, [commands])
 
     return (
       <>

@@ -1,6 +1,6 @@
 import {appWindow, availableMonitors, LogicalPosition, LogicalSize, Monitor} from "@tauri-apps/api/window";
 import {HubConnection} from "@microsoft/signalr";
-import {showWindowMethod} from "../models/JoaMethods";
+import {showWindowMethod} from "../models/joaMethods";
 
 const getMonitorFromMousePos = async (posX: number, posY: number) : Promise<Monitor> => {
     const monitors = await availableMonitors();

@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Search from './feature/search/Search';
-import Settings from './feature/settings/Settings';
 
 import reportWebVitals from './reportWebVitals';
-import {WebviewWindow} from "@tauri-apps/api/window";
 import {
     BrowserRouter,
     Routes,
     Route,
 } from "react-router-dom";
+import SearchWrapper from "./feature/search/SearchWrapper";
+import SettingsWrapper from "./feature/settings/SettingsWrapper";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -24,8 +23,8 @@ root.render(
   <React.StrictMode>
       <BrowserRouter>
           <Routes>
-              <Route path="/" element={<Search/>}/>
-              <Route path="/settings" element={ <Settings/> }></Route>
+              <Route path="/" element={<SearchWrapper/>}/>
+              <Route path="/settings" element={ <SettingsWrapper/> }></Route>
           </Routes>
       </BrowserRouter>
   </React.StrictMode>

@@ -1,10 +1,10 @@
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
-import {useEffect, useState} from "react";
-import PluginCommand from "../models/PluginCommand";
-import {executeCommandMethod, updateCommandsMethod, receiveCommandsMethod} from "../models/JoaMethods";
+import {useState} from "react";
+import PluginCommand from "../models/pluginCommand";
+import {executeCommandMethod, updateCommandsMethod, receiveCommandsMethod} from "../models/joaMethods";
 
 
-export function useJoaCore() : [HubConnection] {
+export function useJoaSearch() : [HubConnection] {
     const [connection, setConnection] = useState(
         new HubConnectionBuilder()
             .withUrl("http://localhost:5000/searchHub")
