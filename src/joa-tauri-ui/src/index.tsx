@@ -24,7 +24,7 @@ root.render(
       <BrowserRouter>
           <Routes>
               <Route path="/" element={<SearchWrapper/>}/>
-              <Route path="/settings" element={ <SettingsWrapper/> }></Route>
+              <Route path="/test" element={ <SettingsWrapper/> }></Route>
           </Routes>
       </BrowserRouter>
   </React.StrictMode>

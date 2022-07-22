@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {useWindow} from "./services/windowService";
-import {ExecuteCommand, useCommands, useSelectedCommand} from "./services/searchService";
+import {executeCommand, useCommands, useSelectedCommand} from "./services/searchService";
 import {FeatureProps} from "../../featureProps";
 
 export default (props: FeatureProps) => {
@@ -18,7 +18,7 @@ export default (props: FeatureProps) => {
                 moveUp();
                 break;
             case 'Enter':
-                ExecuteCommand(props.connection, commands[selectedCommandIndex])
+                executeCommand(props.connection, commands[selectedCommandIndex])
                 break;
         }
     }

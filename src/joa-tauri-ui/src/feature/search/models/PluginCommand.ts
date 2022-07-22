@@ -1,4 +1,4 @@
-import Command from "./command";
+import Command from "./Command";
 
 export default interface PluginCommand {
     PluginId : string,

@@ -1,15 +1,21 @@
-import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
+import {HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
 import {useState} from "react";
-import PluginCommand from "../models/pluginCommand";
-import {executeCommandMethod, updateCommandsMethod, receiveCommandsMethod} from "../models/joaMethods";
+import PluginCommand from "../models/PluginCommand";
+import {executeCommandMethod, receiveCommandsMethod, updateCommandsMethod} from "../models/JoaMethods";
 
-
+//fds
 export function useJoaSearch() : [HubConnection] {
-    const [connection, setConnection] = useState(
-        new HubConnectionBuilder()
-            .withUrl("http://localhost:5000/searchHub")
-            .withAutomaticReconnect()
-            .build());
+    const newConnection = new HubConnectionBuilder()
+        .withUrl("http://localhost:5000/searchHub")
+        .withAutomaticReconnect()
+        .build();
+    const [connection, setConnection] = useState(newConnection);
+
+    newConnection.start().then(() => {
+        if(connection.state === HubConnectionState.Connected){
+            setConnection(Object.assign({}, connection));
+        }
+    });
 
     return [connection]
 }
@@ -51,9 +57,10 @@ export function useSelectedCommand(commands: PluginCommand[]) : [ number, () => 
     return [ activeIndex, moveUp, moveDown, reset ]
 }
 
-export function ExecuteCommand(connection: HubConnection, command: PluginCommand) {
+export function executeCommand(connection: HubConnection, command: PluginCommand) {
     connection.invoke(executeCommandMethod, command.CommandId)
         .catch(function (err : any) {
             return console.error(err.toString());
         });
 }
+

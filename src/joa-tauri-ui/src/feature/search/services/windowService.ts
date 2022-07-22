@@ -1,6 +1,6 @@
 import {appWindow, availableMonitors, LogicalPosition, LogicalSize, Monitor} from "@tauri-apps/api/window";
 import {HubConnection} from "@microsoft/signalr";
-import {showWindowMethod} from "../models/joaMethods";
+import {showWindowMethod} from "../models/JoaMethods";
 
 const getMonitorFromMousePos = async (posX: number, posY: number) : Promise<Monitor> => {
     const monitors = await availableMonitors();
@@ -24,6 +24,8 @@ const showWindow = async (posX: number, posY: number) => {
 }
 
 export function useWindow(connection: HubConnection, clearCommands: () => void, clearSelectedCommand: () => void ) : [(numOfCommands: number) => void] {
+    console.log("useWindow");
+
     connection.on(showWindowMethod, async(posX: number, posY: number) => {
         await showWindow(posX, posY);
     });
