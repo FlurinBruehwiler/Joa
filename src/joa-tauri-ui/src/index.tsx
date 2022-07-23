@@ -8,8 +8,8 @@ import {
     Routes,
     Route,
 } from "react-router-dom";
-import SearchWrapper from "./feature/search/SearchWrapper";
 import SettingsWrapper from "./feature/settings/SettingsWrapper";
+import SearchWrapper from "./feature/search/SearchWrapper";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -20,14 +20,12 @@ const root = ReactDOM.createRoot(
 //})
 
 root.render(
-  <React.StrictMode>
       <BrowserRouter>
           <Routes>
               <Route path="/" element={<SearchWrapper/>}/>
               <Route path="/test" element={ <SettingsWrapper/> }></Route>
           </Routes>
       </BrowserRouter>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

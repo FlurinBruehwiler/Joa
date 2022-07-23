@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using JoaPluginsPackage.Logger;
 using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.Settings.Attributes;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace WebSearch;
@@ -90,6 +91,7 @@ public class WebSearch : IPlugin, IStrictPlugin
 
     public void Execute(ICommand result)
     {
+        _logger.Log("execute", IJoaLogger.LogLevel.Info);
         if (result is not Command searchResult) return;
         OpenBrowser(searchResult.SearchEngine.Url
             .Replace("{{query}}", searchResult.SeachString));

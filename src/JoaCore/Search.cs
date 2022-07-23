@@ -1,4 +1,5 @@
 ﻿using JoaCore.Settings;
+using JoaPluginsPackage.Logger;
 using JoaPluginsPackage.Plugin;
 using Microsoft.Extensions.Configuration;
 
@@ -36,6 +37,8 @@ public class Search
 
     public async Task<List<PluginCommand>> GetSearchResults(string searchString)
     {
+        JoaLogger.GetInstance().Log(searchString, IJoaLogger.LogLevel.Info);
+        
         var timer = JoaLogger.GetInstance().StartMeasure();
 
         if (PluginManager.Plugins == null)
@@ -65,8 +68,8 @@ public class Search
         
         SortSearchResults(_lastSearchResults);
         
-        JoaLogger.GetInstance().LogMeasureResult(timer,$"{nameof(GetSearchResults)}:{searchString}");
-
+        JoaLogger.GetInstance().Log(_lastSearchResults.Count.ToString(), IJoaLogger.LogLevel.Info);
+        
         return _lastSearchResults;
     }
 

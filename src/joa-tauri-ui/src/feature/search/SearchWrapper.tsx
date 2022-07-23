@@ -1,20 +1,15 @@
 import Search from "./Search";
-import {useJoaSearch} from "./services/searchService";
 import {HubConnectionState} from "@microsoft/signalr";
-import {useEffect} from "react";
+import {useJoaSearch} from "./services/searchService";
 
-export default () => {
+const SearchWrapper = () => {
     const [ connection ] = useJoaSearch();
-
-    useEffect(() => {
-        console.log("rerendering");
-    })
 
     return (
         <div>
-            {
-                connection.state === HubConnectionState.Connected && <Search connection={connection}/>
-            }
+            { connection && connection.state === HubConnectionState.Connected && <Search connection={connection}/>}
         </div>
     );
 }
+
+export default SearchWrapper;

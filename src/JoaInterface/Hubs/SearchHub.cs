@@ -1,4 +1,5 @@
 ﻿using JoaCore;
+using JoaPluginsPackage.Logger;
 using Microsoft.AspNetCore.SignalR;
 
 namespace JoaInterface.Hubs;
@@ -21,6 +22,7 @@ public class SearchHub : Hub
 
     public async Task ExecuteSearchResult(string commandId)
     {
+        JoaLogger.GetInstance().Log(commandId, IJoaLogger.LogLevel.Info);
         if (!Guid.TryParse(commandId, out var guidId))
             return;
         await _search.ExecuteCommand(guidId);

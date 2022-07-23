@@ -1,40 +1,47 @@
-import {HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
-import {useState} from "react";
+import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
+import {useEffect, useState} from "react";
 import PluginCommand from "../models/PluginCommand";
 import {executeCommandMethod, receiveCommandsMethod, updateCommandsMethod} from "../models/JoaMethods";
 
-//fds
-export function useJoaSearch() : [HubConnection] {
-    const newConnection = new HubConnectionBuilder()
-        .withUrl("http://localhost:5000/searchHub")
-        .withAutomaticReconnect()
-        .build();
-    const [connection, setConnection] = useState(newConnection);
+export function useJoaSearch() : [HubConnection | undefined] {
+    const [connection, setConnection] = useState<HubConnection>();
 
-    newConnection.start().then(() => {
-        if(connection.state === HubConnectionState.Connected){
-            setConnection(Object.assign({}, connection));
-        }
-    });
+    useEffect(() => {
+        const newConnection = new HubConnectionBuilder()
+            .withUrl("http://localhost:5000/searchHub")
+            .withAutomaticReconnect()
+            .build();
+
+        newConnection.start().then(() => {
+            setConnection(newConnection);
+        });
+    }, []);
 
     return [connection]
 }
 
 export function useCommands(connection: HubConnection) : [PluginCommand[], (searchString: string) => void, () => void]{
     const [ searchResults, setSearchResults ] = useState<PluginCommand[]>([]);
-    const updateCommandsMethods = async (searchString: string) => {
+    const updateCommands = async (searchString: string) => {
         await connection.invoke(updateCommandsMethod, searchString);
     }
 
-    connection.on(receiveCommandsMethod, (SearchResults: PluginCommand[]) => {
-        setSearchResults(SearchResults.slice(0,8));
-    })
+
+    useEffect(() => {
+        connection.on(receiveCommandsMethod, (SearchResults: PluginCommand[]) => {
+            console.log(receiveCommandsMethod);
+            setSearchResults(SearchResults.slice(0,8));
+        });
+
+        return () => connection.off(receiveCommandsMethod);
+    }, [])
+
 
     const clearCommands = () => {
         setSearchResults([]);
     }
 
-    return [searchResults, updateCommandsMethods, clearCommands];
+    return [searchResults, updateCommands, clearCommands];
 }
 
 export function useSelectedCommand(commands: PluginCommand[]) : [ number, () => void, () => void, () => void]{
@@ -58,6 +65,8 @@ export function useSelectedCommand(commands: PluginCommand[]) : [ number, () => 
 }
 
 export function executeCommand(connection: HubConnection, command: PluginCommand) {
+    console.log(JSON.stringify(command));
+    console.log(command.CommandId);
     connection.invoke(executeCommandMethod, command.CommandId)
         .catch(function (err : any) {
             return console.error(err.toString());
