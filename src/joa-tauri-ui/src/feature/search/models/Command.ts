@@ -1,5 +1,5 @@
 export default interface Command {
-    Caption: string,
-    Description: string,
-    Icon: string,
+    caption: string,
+    description: string,
+    icon: string,
 }

@@ -25,19 +25,16 @@ const showWindow = async (posX: number, posY: number) => {
     await appWindow.setFocus();
 }
 
-export function useWindow(connection: HubConnection, clearCommands: () => void, clearSelectedCommand: () => void ) : [(numOfCommands: number) => void] {
+export function useWindow(connection: HubConnection, clearCommands: () => void, clearSelectedCommand: () => void) : [((numOfCommands: number) => void)] {
     const handleEscape = async (event: any) => {
         if (event.key !== 'Escape')
             return;
 
         await hideSearchWindow();
-        clearCommands();
-        clearSelectedCommand();
     }
 
     useEffect(() => {
         connection.on(showWindowMethod, async(posX: number, posY: number) => {
-            console.log(showWindowMethod);
             await showWindow(posX, posY);
         });
 
@@ -58,6 +55,8 @@ export function useWindow(connection: HubConnection, clearCommands: () => void, 
 
     const hideSearchWindow = async () => {
         await appWindow.hide()
+        clearCommands();
+        clearSelectedCommand();
     }
 
     return [ updateSize ]

@@ -29,7 +29,6 @@ export function useCommands(connection: HubConnection) : [PluginCommand[], (sear
 
     useEffect(() => {
         connection.on(receiveCommandsMethod, (SearchResults: PluginCommand[]) => {
-            console.log(receiveCommandsMethod);
             setSearchResults(SearchResults.slice(0,8));
         });
 
@@ -65,11 +64,8 @@ export function useSelectedCommand(commands: PluginCommand[]) : [ number, () => 
 }
 
 export function executeCommand(connection: HubConnection, command: PluginCommand) {
-    console.log(JSON.stringify(command));
-    console.log(command.CommandId);
-    connection.invoke(executeCommandMethod, command.CommandId)
+    connection.invoke(executeCommandMethod, command.commandId)
         .catch(function (err : any) {
             return console.error(err.toString());
         });
 }
-
