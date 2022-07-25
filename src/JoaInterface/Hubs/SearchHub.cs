@@ -7,15 +7,14 @@ namespace JoaInterface.Hubs;
 public class SearchHub : Hub
 {
     private readonly Search _search;
-    public static IHubContext<SearchHub>? GlobalContext { get; private set; }
-    public SearchHub(Search search, IHubContext<SearchHub> ctx)
+    public SearchHub(Search search)
     {
         _search = search;
-        GlobalContext = ctx;
     }
     
     public async Task GetSearchResults(string searchString)
     {
+        JoaLogger.GetInstance().Log("GetSearchResults", IJoaLogger.LogLevel.Info);
         var searchResult = await _search.GetSearchResults(searchString);
         await Clients.Caller.SendAsync("ReceiveSearchResults",  searchResult);
     }

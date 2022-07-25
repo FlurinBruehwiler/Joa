@@ -2,6 +2,7 @@ import {appWindow, availableMonitors, LogicalPosition, LogicalSize, Monitor} fro
 import {HubConnection} from "@microsoft/signalr";
 import {showWindowMethod} from "../models/joaMethods";
 import {useEffect} from "react";
+import {register, unregister, unregisterAll} from "@tauri-apps/api/globalShortcut";
 
 const getMonitorFromMousePos = async (posX: number, posY: number) : Promise<Monitor> => {
     const monitors = await availableMonitors();
@@ -35,9 +36,10 @@ export function useWindow(connection: HubConnection, clearCommands: () => void, 
     }
 
     useEffect(() => {
-        connection.on(showWindowMethod, async(posX: number, posY: number) => {
-            await showWindow(posX, posY);
-        });
+        unregisterAll().then();
+        register("Alt+P", async () => {
+            await showWindow(100, 100);
+        }).then();
 
         document.addEventListener('keydown', handleEscape);
 
@@ -47,8 +49,8 @@ export function useWindow(connection: HubConnection, clearCommands: () => void, 
 
         return () => {
             document.removeEventListener('keydown', handleEscape);
-            connection.off(showWindowMethod);
             unlistenFn();
+            unregisterAll().then();
         };
     }, []);
 

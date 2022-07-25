@@ -36,13 +36,14 @@ export function useJoaSearch() : [HubConnection | undefined] {
 export function useCommands(connection: HubConnection) : [PluginCommand[], (searchString: string) => void, () => void]{
     const [ searchResults, setSearchResults ] = useState<PluginCommand[]>([]);
     const updateCommands = async (searchString: string) => {
-        console.log("searching...");
+        console.log("searching..." + connection.state);
         await connection.invoke(updateCommandsMethod, searchString);
     }
 
 
     useEffect(() => {
         connection.on(receiveCommandsMethod, (SearchResults: PluginCommand[]) => {
+            console.log("receiving commands...");
             setSearchResults(SearchResults.slice(0,8));
         });
 
