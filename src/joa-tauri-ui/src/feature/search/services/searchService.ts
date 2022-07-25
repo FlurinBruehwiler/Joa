@@ -1,7 +1,7 @@
-import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
+import {HubConnection, HubConnectionBuilder, RetryContext} from "@microsoft/signalr";
 import {useEffect, useState} from "react";
-import PluginCommand from "../models/PluginCommand";
-import {executeCommandMethod, receiveCommandsMethod, updateCommandsMethod} from "../models/JoaMethods";
+import {executeCommandMethod, receiveCommandsMethod, updateCommandsMethod} from "../models/joaMethods";
+import PluginCommand from "../models/pluginCommand";
 
 export function useJoaSearch() : [HubConnection | undefined] {
     const [connection, setConnection] = useState<HubConnection>();
@@ -9,12 +9,25 @@ export function useJoaSearch() : [HubConnection | undefined] {
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
             .withUrl("http://localhost:5000/searchHub")
-            .withAutomaticReconnect()
+            .withAutomaticReconnect({
+                nextRetryDelayInMilliseconds(retryContext: RetryContext): number | null {
+                    return 1000;
+                }})
             .build();
 
+        newConnection.onreconnected(() => {
+            setConnection(structuredClone(connection));
+        })
+
         newConnection.start().then(() => {
+            console.log("starting connection");
             setConnection(newConnection);
         });
+
+        return () => {
+            console.log("stopping connection");
+            newConnection.stop().then();
+        }
     }, []);
 
     return [connection]
@@ -23,6 +36,7 @@ export function useJoaSearch() : [HubConnection | undefined] {
 export function useCommands(connection: HubConnection) : [PluginCommand[], (searchString: string) => void, () => void]{
     const [ searchResults, setSearchResults ] = useState<PluginCommand[]>([]);
     const updateCommands = async (searchString: string) => {
+        console.log("searching...");
         await connection.invoke(updateCommandsMethod, searchString);
     }
 

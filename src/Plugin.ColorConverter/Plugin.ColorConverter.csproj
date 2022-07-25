@@ -6,11 +6,11 @@
         <Nullable>enable</Nullable>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <RootNamespace>ApplicationSearch</RootNamespace>
+        <RootNamespace>ColorConverter</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <OutputPath>..\Plugins\ApplicationSearch\</OutputPath>
+        <OutputPath>..\Plugins\ColorConverter\</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>

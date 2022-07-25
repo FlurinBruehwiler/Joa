@@ -1,7 +1,7 @@
 using System.Drawing;
 using JoaPluginsPackage.Plugin;
 
-namespace ApplicationSearch;
+namespace ColorConverter;
 
 public class ColorConverter : IStrictPlugin
 {
@@ -12,12 +12,12 @@ public class ColorConverter : IStrictPlugin
 
     public List<ICommand> GetResults(string searchString)
     {
-        throw new NotImplementedException();
+        return new List<ICommand>();
     }
 
     public void Execute(ICommand command)
     {
-        throw new NotImplementedException();
+        return;
     }
     
     private string HexToRgb(string hexColor)

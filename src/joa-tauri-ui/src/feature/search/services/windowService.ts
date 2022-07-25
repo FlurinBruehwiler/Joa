@@ -1,6 +1,6 @@
 import {appWindow, availableMonitors, LogicalPosition, LogicalSize, Monitor} from "@tauri-apps/api/window";
 import {HubConnection} from "@microsoft/signalr";
-import {showWindowMethod} from "../models/JoaMethods";
+import {showWindowMethod} from "../models/joaMethods";
 import {useEffect} from "react";
 
 const getMonitorFromMousePos = async (posX: number, posY: number) : Promise<Monitor> => {
@@ -16,6 +16,7 @@ const getMonitorFromMousePos = async (posX: number, posY: number) : Promise<Moni
 }
 
 const showWindow = async (posX: number, posY: number) => {
+    console.log("showing window...");
     const monitor = await getMonitorFromMousePos(posX, posY);
     let centerOfScreenX = monitor.position.x + (monitor.size.width / 2);
     let topThirdOfScreenY = monitor.position.y + (monitor.size.height / 3);
@@ -40,11 +41,14 @@ export function useWindow(connection: HubConnection, clearCommands: () => void, 
 
         document.addEventListener('keydown', handleEscape);
 
-        appWindow.listen('tauri://blur', ({event, payload}) => hideSearchWindow());
+        let unlistenFn: () => void;
+
+        appWindow.listen('tauri://blur', ({event, payload}) => hideSearchWindow()).then((x) => unlistenFn = x);
 
         return () => {
             document.removeEventListener('keydown', handleEscape);
-            connection.off(showWindowMethod)
+            connection.off(showWindowMethod);
+            unlistenFn();
         };
     }, []);
 

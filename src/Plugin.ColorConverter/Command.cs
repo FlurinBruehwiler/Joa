@@ -1,6 +1,6 @@
 ﻿using JoaPluginsPackage.Plugin;
 
-namespace ApplicationSearch;
+namespace ColorConverter;
 
 public class Command : ICommand
 {

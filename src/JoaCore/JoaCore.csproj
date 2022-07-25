@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\JoaModel\JoaModel.csproj" />
     <ProjectReference Include="..\JoaPluginsPackage\JoaPluginsPackage.csproj" />
   </ItemGroup>
 

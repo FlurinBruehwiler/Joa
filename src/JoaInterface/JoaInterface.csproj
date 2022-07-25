@@ -9,7 +9,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\JoaCore\JoaCore.csproj" />
-      <ProjectReference Include="..\JoaModel\JoaModel.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿using JoaPluginsPackage.Settings.Attributes;
 
-namespace ApplicationSearch;
+namespace ColorConverter;
 
 public class FileExtension
 {
