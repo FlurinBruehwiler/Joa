@@ -49,12 +49,19 @@ public class JoaLogger : IJoaLogger
 
     private void LogMessage(string message)
     {
-        if (!File.Exists(_completePath))
+        try
         {
-            Directory.CreateDirectory(_directory);
-            File.Create(_fileName);
-        }
+            if (!File.Exists(_completePath))
+            {
+                Directory.CreateDirectory(_directory);
+                File.Create(_fileName);
+            }
 
-        File.AppendAllText(_completePath, message + Environment.NewLine);
+            File.AppendAllText(_completePath, message + Environment.NewLine);
+        }
+        catch
+        {
+            // ignored
+        }
     }
 }

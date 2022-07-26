@@ -30,7 +30,7 @@ public class PluginManager
         if (_typedPluginsCache.TryGetValue(typeof(T), out var typedPlugins))
             return typedPlugins.Cast<PluginDefinition<T>>().ToList();
 
-        var newTypedPlugins = Plugins.Where(x => x.Plugin.GetType().IsAssignableFrom(typeof(T))).Cast<PluginDefinition<T>>().ToList();
+        var newTypedPlugins = Plugins.Where(x => x.Plugin.GetType().IsAssignableTo(typeof(T))).Cast<PluginDefinition<T>>().ToList();
         _typedPluginsCache.Add(typeof(T), newTypedPlugins.Cast<PluginDefinition<IPlugin>>().ToList());
         return newTypedPlugins;
     }

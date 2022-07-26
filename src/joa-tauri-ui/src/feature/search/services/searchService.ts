@@ -1,7 +1,7 @@
 import {HubConnection, HubConnectionBuilder, RetryContext} from "@microsoft/signalr";
 import {useEffect, useState} from "react";
-import {executeCommandMethod, receiveCommandsMethod, updateCommandsMethod} from "../models/joaMethods";
 import PluginCommand from "../models/pluginCommand";
+import {executeCommandMethod, updateCommandsMethod} from "../models/JoaMethods";
 
 export function useJoaSearch() : [HubConnection | undefined] {
     const [connection, setConnection] = useState<HubConnection>();
@@ -38,6 +38,7 @@ export function useCommands(connection: HubConnection) : [PluginCommand[], (sear
     const [ searchResults, setSearchResults ] = useState<PluginCommand[]>([]);
     const updateCommands = async (searchString: string) => {
         const commands = await connection.invoke<PluginCommand[]>(updateCommandsMethod, searchString);
+        console.log(commands.length);
         setSearchResults(commands.slice(0,8));
     }
 

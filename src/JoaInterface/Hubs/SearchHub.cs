@@ -1,5 +1,4 @@
 ﻿using JoaCore;
-using JoaPluginsPackage.Logger;
 using Microsoft.AspNetCore.SignalR;
 
 namespace JoaInterface.Hubs;
