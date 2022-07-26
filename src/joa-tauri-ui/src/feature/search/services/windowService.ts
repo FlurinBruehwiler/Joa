@@ -17,7 +17,6 @@ const getMonitorFromMousePos = async (posX: number, posY: number) : Promise<Moni
 }
 
 const showWindow = async (posX: number, posY: number) => {
-    console.log("showing window...");
     const monitor = await getMonitorFromMousePos(posX, posY);
     let centerOfScreenX = monitor.position.x + (monitor.size.width / 2);
     let topThirdOfScreenY = monitor.position.y + (monitor.size.height / 3);

@@ -7,7 +7,7 @@ public class ColorConverter : IStrictPlugin
 {
     public bool Validator(string searchString)
     {
-        return true;
+        return false;
     }
 
     public List<ICommand> GetResults(string searchString)

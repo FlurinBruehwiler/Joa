@@ -16,16 +16,17 @@ export function useJoaSearch() : [HubConnection | undefined] {
             .build();
 
         newConnection.onreconnected(() => {
+            console.log("reconnectedd");
             setConnection(structuredClone(connection));
         })
 
         newConnection.start().then(() => {
-            console.log("starting connection");
+            console.log("start");
             setConnection(newConnection);
         });
 
         return () => {
-            console.log("stopping connection");
+            console.log("stop");
             newConnection.stop().then();
         }
     }, []);
@@ -36,20 +37,9 @@ export function useJoaSearch() : [HubConnection | undefined] {
 export function useCommands(connection: HubConnection) : [PluginCommand[], (searchString: string) => void, () => void]{
     const [ searchResults, setSearchResults ] = useState<PluginCommand[]>([]);
     const updateCommands = async (searchString: string) => {
-        console.log("searching..." + connection.state);
-        await connection.invoke(updateCommandsMethod, searchString);
+        const commands = await connection.invoke<PluginCommand[]>(updateCommandsMethod, searchString);
+        setSearchResults(commands.slice(0,8));
     }
-
-
-    useEffect(() => {
-        connection.on(receiveCommandsMethod, (SearchResults: PluginCommand[]) => {
-            console.log("receiving commands...");
-            setSearchResults(SearchResults.slice(0,8));
-        });
-
-        return () => connection.off(receiveCommandsMethod);
-    }, [])
-
 
     const clearCommands = () => {
         setSearchResults([]);

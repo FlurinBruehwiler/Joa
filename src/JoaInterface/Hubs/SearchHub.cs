@@ -12,16 +12,13 @@ public class SearchHub : Hub
         _search = search;
     }
     
-    public async Task GetSearchResults(string searchString)
+    public async Task<List<PluginCommand>> GetSearchResults(string searchString)
     {
-        JoaLogger.GetInstance().Log("GetSearchResults", IJoaLogger.LogLevel.Info);
-        var searchResult = await _search.GetSearchResults(searchString);
-        await Clients.Caller.SendAsync("ReceiveSearchResults",  searchResult);
+        return await _search.GetSearchResults(searchString);
     }
 
     public async Task ExecuteSearchResult(string commandId)
     {
-        JoaLogger.GetInstance().Log(commandId, IJoaLogger.LogLevel.Info);
         if (!Guid.TryParse(commandId, out var guidId))
             return;
         await _search.ExecuteCommand(guidId);
