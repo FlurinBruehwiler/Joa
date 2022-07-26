@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.UI.Components;
-using ICommand = JoaPluginsPackage.Plugin.ICommand;
 
 
 namespace JoaUI
@@ -23,7 +23,7 @@ namespace JoaUI
         public event ISearchwindow.NewInputDelegate? NewInput;
         public event ISearchwindow.ItemSelectedDelegate? ItemSelected;
 
-        public void UpdateList(List<(ICommand result, Guid pluginKey)> results)
+        public void UpdateList(List<(ISearchResult result, Guid pluginKey)> results)
         {
             ResultList.Items.Clear();
             foreach (var searchItem in results.Select(searchResult => searchResult.result.Visualize(searchResult.pluginKey)))

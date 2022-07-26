@@ -1,17 +1,17 @@
-using ICommand = JoaPluginsPackage.Plugin.ICommand;
+using JoaPluginsPackage.Plugin;
 
 namespace JoaCore;
 
 public class PluginCommand
 {
-    public PluginCommand(ICommand command, Guid pluginId)
+    public PluginCommand(ISearchResult searchResult, Guid pluginId)
     {
-        Command = command;
+        SearchResult = searchResult;
         PluginId = pluginId;
         CommandId = Guid.NewGuid();
     }
 
-    public ICommand Command { get; }
+    public ISearchResult SearchResult { get; }
     public Guid PluginId { get; }
     public Guid CommandId { get; set; }
 }

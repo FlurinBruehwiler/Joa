@@ -10,7 +10,9 @@ namespace JoaCore;
 
 public class PluginManager
 {
-    public List<PluginDefinition>? Plugins { get; set; }
+    public List<PluginDefinition<IPlugin>>? Plugins { get; set; }
+
+    private readonly Dictionary<Type, List<PluginDefinition<IPlugin>>> _typedPluginsCache = new();
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     
@@ -19,7 +21,20 @@ public class PluginManager
         SettingsManager = settingsManager;
         _pluginLoader = new PluginLoader(configuration);
     }
-    
+
+    public List<PluginDefinition<T>> GetPluginsOfType<T>() where T : IPlugin
+    {
+        if (Plugins is null)
+            return new List<PluginDefinition<T>>();
+
+        if (_typedPluginsCache.TryGetValue(typeof(T), out var typedPlugins))
+            return typedPlugins.Cast<PluginDefinition<T>>().ToList();
+
+        var newTypedPlugins = Plugins.Where(x => x.Plugin.GetType().IsAssignableFrom(typeof(T))).Cast<PluginDefinition<T>>().ToList();
+        _typedPluginsCache.Add(typeof(T), newTypedPlugins.Cast<PluginDefinition<IPlugin>>().ToList());
+        return newTypedPlugins;
+    }
+
     public void UpdateIndexes()
     {
         if (Plugins is null)
@@ -29,7 +44,7 @@ public class PluginManager
         {
             try
             {
-                (pluginDefinition.Plugin as IIndexablePlugin)?.UpdateIndex();
+                // (pluginDefinition.Plugin as IIndexablePlugin)?.UpdateIndex();
             }
             catch (Exception e)
             {
@@ -42,10 +57,10 @@ public class PluginManager
     {
         var timer = JoaLogger.GetInstance().StartMeasure();
         
-        Plugins = new List<PluginDefinition>();
+        Plugins = new List<PluginDefinition<IPlugin>>();
         foreach (var plugin in _pluginLoader.InstantiatePlugins(SettingsManager.CoreSettings).ToList())
         {
-            Plugins.Add(new PluginDefinition(plugin, GetPluginInfos(plugin.GetType())));
+            Plugins.Add(new PluginDefinition<IPlugin>(plugin, GetPluginInfos(plugin.GetType())));
         }
         SettingsManager.LoadPluginSettings(Plugins);
         UpdateIndexes();

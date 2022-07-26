@@ -2,9 +2,10 @@
 
 namespace ColorConverter;
 
-public class Command : ICommand
+public class SearchResult : ISearchResult
 {
     public string Caption { get; init; } = null!;
     public string Description { get; init; } = null!;
     public string Icon { get; init; } = null!;
+    public List<IAction> Actions { get; set; }
 }

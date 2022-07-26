@@ -2,14 +2,14 @@
 using System.Runtime.InteropServices;
 using JoaPluginsPackage.Logger;
 using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Plugin.Search;
 using JoaPluginsPackage.Settings.Attributes;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace WebSearch;
 
 [Plugin("Web Search", "Lets you search on the web!")]
-public class WebSearch : IPlugin, IStrictPlugin
+public class WebSearch : IStrictSearchPlugin
 {
     private readonly IJoaLogger _logger;
     private readonly HttpClient _client = new();
@@ -51,19 +51,19 @@ public class WebSearch : IPlugin, IStrictPlugin
         }
     };
 
-    public List<ICommand> GetResults(string searchString)
+    public List<ISearchResult> GetStrictSearchResults(string searchString)
     {
         var searchEngine = SearchEngines.FirstOrDefault(x =>
             searchString.StartsWith(x.Prefix));
 
         if (searchEngine == null || searchString.Length < searchEngine.Prefix.Length)
-            return new List<ICommand>();
+            return new List<ISearchResult>();
         
         searchString = searchString.Remove(0, searchEngine.Prefix.Length);
         
-        var searchResults = new List<ICommand>
+        var searchResults = new List<ISearchResult>
         {
-            new Command(searchEngine.Name, $"Search on {searchEngine.Name} for \"{searchString}\"", "", searchEngine, searchString)
+            new SearchResult(searchEngine.Name, $"Search on {searchEngine.Name} for \"{searchString}\"", "", searchEngine, searchString)
         };
 
         if (string.IsNullOrEmpty(searchString))
@@ -79,7 +79,7 @@ public class WebSearch : IPlugin, IStrictPlugin
         List<string> suggestions = response[1].ToObject<List<string>>();
         
         searchResults.AddRange(suggestions.Select(suggestion 
-                => new Command(suggestion, 
+                => new SearchResult(suggestion, 
                     $"Search on Google for \"{suggestion}\"", 
                     "", 
                     searchEngine, 
@@ -89,10 +89,10 @@ public class WebSearch : IPlugin, IStrictPlugin
         return searchResults;
     }
 
-    public void Execute(ICommand result)
+    public void Execute(ISearchResult result, IAction action)
     {
         _logger.Log("execute", IJoaLogger.LogLevel.Info);
-        if (result is not Command searchResult) return;
+        if (result is not SearchResult searchResult) return;
         OpenBrowser(searchResult.SearchEngine.Url
             .Replace("{{query}}", searchResult.SeachString));
     }
@@ -124,4 +124,10 @@ public class WebSearch : IPlugin, IStrictPlugin
             }
         }
     }
+
+    public string Name => "";
+    public string Description => "";
+    public string Version => "";
+    public string Author => "";
+    public string SourceCode => "";
 }

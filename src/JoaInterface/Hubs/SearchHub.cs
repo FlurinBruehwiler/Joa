@@ -17,10 +17,10 @@ public class SearchHub : Hub
         return await _search.GetSearchResults(searchString);
     }
 
-    public async Task ExecuteSearchResult(string commandId)
+    public async Task ExecuteSearchResult(string commandId, string actionKey)
     {
         if (!Guid.TryParse(commandId, out var guidId))
             return;
-        await _search.ExecuteCommand(guidId);
+        await _search.ExecuteCommand(guidId, actionKey);
     }
 }

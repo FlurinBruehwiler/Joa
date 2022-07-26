@@ -2,9 +2,9 @@
 
 namespace WebSearch;
 
-public class Command : ICommand
+public class SearchResult : ISearchResult
 {
-    public Command(string caption, string description, string icon, SearchEngine searchEngine, string seachString)
+    public SearchResult(string caption, string description, string icon, SearchEngine searchEngine, string seachString)
     {
         Caption = caption;
         Description = description;
@@ -16,6 +16,7 @@ public class Command : ICommand
     public string Caption { get; init; }
     public string Description { get; init; }
     public string Icon { get; init; }
+    public List<IAction> Actions { get; set; }
     public SearchEngine SearchEngine { get; set; }
     public string SeachString { get; set; }
 }

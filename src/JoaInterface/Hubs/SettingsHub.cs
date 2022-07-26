@@ -15,13 +15,13 @@ public class SettingsHub : Hub
         _settingsManager = settingsManager;
     }
 
-    public async Task GetSettings()
+    public void GetSettings()
     {
         JoaLogger.GetInstance().Log(JsonSerializer.Serialize(_settingsManager), IJoaLogger.LogLevel.Info);
         //await Clients.Caller.SendAsync("ReceiveSettings",  _settingsManager);
     }
 
-    public async Task SetSettings()
+    public void SetSettings()
     {
         
     }

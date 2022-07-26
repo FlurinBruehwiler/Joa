@@ -1,6 +1,7 @@
 ﻿using JoaCore.Settings;
 using JoaPluginsPackage.Logger;
 using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Plugin.Search;
 using Microsoft.Extensions.Configuration;
 
 namespace JoaCore;
@@ -18,7 +19,7 @@ public class Search
         PluginManager.ReloadPlugins();
     }
 
-    public async Task ExecuteCommand(Guid commandId)
+    public async Task ExecuteCommand(Guid commandId, string actionKey)
     {
         var pluginCommand = _lastSearchResults?
             .FirstOrDefault(x => x.CommandId == commandId);
@@ -26,13 +27,18 @@ public class Search
         if (pluginCommand is null)
             return;
         
-        var pluginDef = PluginManager.Plugins?
+        var pluginDef = PluginManager.GetPluginsOfType<ISearchPlugin>() 
             .FirstOrDefault(p => p.Id == pluginCommand.PluginId);
         
         if (pluginDef is null)
             return;
+
+        var action = pluginCommand.SearchResult.Actions.SingleOrDefault(x => x.Key == actionKey);
+
+        if (action is null)
+            return;
         
-        await Task.Run(() => pluginDef.Plugin.Execute(pluginCommand.Command));
+        await Task.Run(() => pluginDef.Plugin.Execute(pluginCommand.SearchResult, action));
     }
 
     public async Task<List<PluginCommand>> GetSearchResults(string searchString)
@@ -46,21 +52,18 @@ public class Search
 
         _lastSearchResults = new List<PluginCommand>();
 
-        (IStrictPlugin strictPlugin, Guid id)? matchingPlugin = GetMatchingPlugin(searchString);
+        (IStrictSearchPlugin strictPlugin, Guid id)? matchingPlugin = GetMatchingPlugin(searchString);
 
         if (matchingPlugin.HasValue)
         {
-            var strictPluginResult = await Task.Run(() => matchingPlugin.Value.strictPlugin.GetResults(searchString));
+            var strictPluginResult = await Task.Run(() => matchingPlugin.Value.strictPlugin.GetStrictSearchResults(searchString));
             _lastSearchResults.AddRange(strictPluginResult.Select(x => new PluginCommand(x, matchingPlugin.Value.id)));
             return _lastSearchResults;
         }
 
-        foreach (var pluginDefinition in PluginManager.Plugins)
+        foreach (var pluginDefinition in PluginManager.GetPluginsOfType<IGlobalSearchPlugin>())
         {
-            if(pluginDefinition.Plugin is not IIndexablePlugin indexablePlugin)
-                continue;
-
-            foreach (var searchResult in indexablePlugin.SearchResults)
+            foreach (var searchResult in pluginDefinition.Plugin.GlobalSearchResults)
             {
                 _lastSearchResults.Add(new PluginCommand(searchResult, pluginDefinition.Id));
             }
@@ -78,18 +81,15 @@ public class Search
         //ToDo SortResults
     }
 
-    private (IStrictPlugin, Guid)? GetMatchingPlugin(string searchString)
+    private (IStrictSearchPlugin, Guid)? GetMatchingPlugin(string searchString)
     {
         if (PluginManager.Plugins == null)
             return null;
 
-        foreach (var pluginDefinition in PluginManager.Plugins)
+        foreach (var pluginDefinition in PluginManager.GetPluginsOfType<IStrictSearchPlugin>())
         {
-            if(pluginDefinition.Plugin is not IStrictPlugin strictPlugin)
-                continue;
-
-            if (strictPlugin.Validator(searchString))
-                return (strictPlugin, pluginDefinition.Id);
+            if (pluginDefinition.Plugin.Validator(searchString))
+                return (pluginDefinition.Plugin, pluginDefinition.Id);
         }
 
         return null;

@@ -5,8 +5,8 @@ namespace JoaUI;
 
 public partial class SearchItem
 {
-    public (Guid pluginId, ICommand searchResult) Result { get; }
-    public SearchItem(ICommand result, Guid pluginId)
+    public (Guid pluginId, ISearchResult searchResult) Result { get; }
+    public SearchItem(ISearchResult result, Guid pluginId)
     {
         Result = (pluginId, result);
         InitializeComponent();
@@ -17,5 +17,5 @@ public partial class SearchItem
 
 public static class ResultTranslator
 {
-    public static SearchItem Visualize(this ICommand command, Guid plugin) => new SearchItem(command, plugin);
+    public static SearchItem Visualize(this ISearchResult searchResult, Guid plugin) => new SearchItem(searchResult, plugin);
 }

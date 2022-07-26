@@ -1,21 +1,22 @@
 ﻿using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Plugin.Search;
 using JoaPluginsPackage.Settings.Attributes;
 
 namespace ApplicationSearch;
 
-public class ApplicationSearch : IIndexablePlugin
+public class ApplicationSearch : IGlobalSearchPlugin
 {
-    public List<ICommand> SearchResults { get; set; }
+    public List<ISearchResult> GlobalSearchResults { get; set; }
 
     
     public ApplicationSearch()
     {
-        SearchResults = new List<ICommand>();
+        GlobalSearchResults = new List<ISearchResult>();
     }
     
     public void UpdateIndex()
     {
-        SearchResults.Clear();
+        GlobalSearchResults.Clear();
 
         var files = new List<string>();
 
@@ -28,7 +29,7 @@ public class ApplicationSearch : IIndexablePlugin
         {
             if (Extensions.Any(x => file.EndsWith(x.Extension)))
             {
-                SearchResults.Add(new Command {FilePath = file, Caption = Path.GetFileName(file)});
+                GlobalSearchResults.Add(new SearchResult("", "", "", new List<IAction>(), file));
             }
         }
     }
@@ -54,8 +55,14 @@ public class ApplicationSearch : IIndexablePlugin
 
     [SettingProperty] public bool UseNativeIcons { get; set; } = true;
 
-    public void Execute(ICommand command)
+    public void Execute(ISearchResult searchResult, IAction action)
     {
 
     }
+
+    public string Name => "";
+    public string Description => "";
+    public string Version => "";
+    public string Author => "";
+    public string SourceCode => "";
 }

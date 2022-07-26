@@ -1,21 +1,22 @@
 using System.Drawing;
 using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Plugin.Search;
 
 namespace ColorConverter;
 
-public class ColorConverter : IStrictPlugin
+public class ColorConverter : IStrictSearchPlugin
 {
     public bool Validator(string searchString)
     {
         return false;
     }
 
-    public List<ICommand> GetResults(string searchString)
-    {
-        return new List<ICommand>();
+     public List<ISearchResult> GetStrictSearchResults(string searchString)
+     {
+        return new List<ISearchResult>();
     }
 
-    public void Execute(ICommand command)
+    public void Execute(ISearchResult searchResult, IAction action)
     {
         return;
     }
@@ -40,4 +41,10 @@ public class ColorConverter : IStrictPlugin
         var myColor = Color.FromArgb(r, g, b);
         return myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2");
     }
+
+    public string Name => "";
+    public string Description => "";
+    public string Version => "";
+    public string Author => "";
+    public string SourceCode => "";
 }
