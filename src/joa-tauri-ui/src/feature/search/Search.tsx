@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useWindow} from "./services/windowService";
 import {executeCommand, useCommands, useSelectedCommand} from "./services/searchService";
 import {FeatureProps} from "../../featureProps";
+import PluginCommand from "./models/pluginCommand";
 
 export default (props: FeatureProps) => {
     const [ searchString, setSearchString ] = useState<string>("");
@@ -48,12 +49,12 @@ export default (props: FeatureProps) => {
                      autoFocus
               />
           </div>
-          { commands.map((pluginCommand :any, index : number) =>
+          { commands.map((pluginCommand : PluginCommand, index : number) =>
             <div key={pluginCommand.commandId} className={`w-full h-[50px] text-userInputText ${index == selectedCommandIndex ? 'bg-searchResultActiveBackground' : 'bg-searchResultBackground' } items-center flex`}>
                 <div className="w-[60px]"></div>
                 <div>
-                    <p className="text-[17px] text-searchResultNameText">{pluginCommand.command.caption}</p>
-                    <p className="text-[12px] text-searchResultDescriptionText">{pluginCommand.command.description}</p>
+                    <p className="text-[17px] text-searchResultNameText">{pluginCommand.searchResult.caption}</p>
+                    <p className="text-[12px] text-searchResultDescriptionText">{pluginCommand.searchResult.description}</p>
                 </div>
             </div>
           ) }
