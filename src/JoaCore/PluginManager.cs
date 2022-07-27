@@ -10,9 +10,7 @@ namespace JoaCore;
 
 public class PluginManager
 {
-    public List<PluginDefinition<IPlugin>>? Plugins { get; set; }
-
-    private readonly Dictionary<Type, List<PluginDefinition<IPlugin>>> _typedPluginsCache = new();
+    public List<PluginDefinition>? Plugins { get; set; }
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     
@@ -22,17 +20,12 @@ public class PluginManager
         _pluginLoader = new PluginLoader(configuration);
     }
 
-    public List<PluginDefinition<T>> GetPluginsOfType<T>() where T : IPlugin
+    public List<T> GetPluginsOfType<T>() where T : IPlugin
     {
         if (Plugins is null)
-            return new List<PluginDefinition<T>>();
+            return new List<T>();
 
-        if (_typedPluginsCache.TryGetValue(typeof(T), out var typedPlugins))
-            return typedPlugins.Cast<PluginDefinition<T>>().ToList();
-
-        var newTypedPlugins = Plugins.Where(x => x.Plugin.GetType().IsAssignableTo(typeof(T))).Cast<PluginDefinition<T>>().ToList();
-        _typedPluginsCache.Add(typeof(T), newTypedPlugins.Cast<PluginDefinition<IPlugin>>().ToList());
-        return newTypedPlugins;
+        return Plugins.Where(x => x.Plugin.GetType().IsAssignableTo(typeof(T))).Select(x => (T)x.Plugin).ToList();
     }
 
     public void UpdateIndexes()
@@ -57,10 +50,10 @@ public class PluginManager
     {
         var timer = JoaLogger.GetInstance().StartMeasure();
         
-        Plugins = new List<PluginDefinition<IPlugin>>();
+        Plugins = new List<PluginDefinition>();
         foreach (var plugin in _pluginLoader.InstantiatePlugins(SettingsManager.CoreSettings).ToList())
         {
-            Plugins.Add(new PluginDefinition<IPlugin>(plugin, GetPluginInfos(plugin.GetType())));
+            Plugins.Add(new PluginDefinition(plugin, GetPluginInfos(plugin.GetType())));
         }
         SettingsManager.LoadPluginSettings(Plugins);
         UpdateIndexes();

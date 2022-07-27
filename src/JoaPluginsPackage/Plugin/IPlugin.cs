@@ -7,4 +7,5 @@ public interface IPlugin
     public string Version { get; }
     public string Author { get; }
     public string SourceCode { get; }
+    public Guid Id { get; }
 }

@@ -5,16 +5,16 @@ using JoaPluginsPackage.Settings.Attributes;
 
 namespace JoaCore.PluginCore;
 
-public class PluginDefinition<T> where T : IPlugin
+public class PluginDefinition
 {
     public Guid Id { get; }
 
     [JsonIgnore]
-    public T Plugin { get; set; }
+    public IPlugin Plugin { get; set; }
 
     public SettingsCollection SettingsCollection { get; set; }
     public PluginAttribute PluginInfo { get; set; }
-    public PluginDefinition(T plugin, PluginAttribute pluginInfo)
+    public PluginDefinition(IPlugin plugin, PluginAttribute pluginInfo)
     {
         PluginInfo = pluginInfo;
         Id = Guid.NewGuid();

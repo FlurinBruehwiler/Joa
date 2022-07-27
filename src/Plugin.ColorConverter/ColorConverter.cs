@@ -18,7 +18,6 @@ public class ColorConverter : IStrictSearchPlugin
 
     public void Execute(ISearchResult searchResult, IAction action)
     {
-        return;
     }
     
     private string HexToRgb(string hexColor)
@@ -47,4 +46,5 @@ public class ColorConverter : IStrictSearchPlugin
     public string Version => "";
     public string Author => "";
     public string SourceCode => "";
+    public Guid Id => Guid.NewGuid();
 }

@@ -11,7 +11,7 @@ namespace JoaCore.Settings;
 public class SettingsManager
 {
     private readonly IConfiguration _configuration;
-    public List<PluginDefinition<IPlugin>> PluginDefinitions { get; set; } = null!;
+    public List<PluginDefinition> PluginDefinitions { get; set; } = null!;
     
     [JsonIgnore]
     public CoreSettings CoreSettings { get; set; }
@@ -35,7 +35,7 @@ public class SettingsManager
         ConfigureFileWatcher();
     }
 
-    public void LoadPluginSettings(List<PluginDefinition<IPlugin>> pluginDefs)
+    public void LoadPluginSettings(List<PluginDefinition> pluginDefs)
     {
         PluginDefinitions = pluginDefs;
         Sync();
@@ -119,7 +119,7 @@ public class SettingsManager
         JoaLogger.GetInstance().LogMeasureResult(timer, nameof(UpdateSettingsFromJson));
     }
 
-    private void UpdatePluginDefinition(PluginDefinition<IPlugin> oldPluginDefinition, DtoSettings newDtoSettings)
+    private void UpdatePluginDefinition(PluginDefinition oldPluginDefinition, DtoSettings newDtoSettings)
     {
         if (!newDtoSettings.PluginSettings.TryGetValue(oldPluginDefinition.PluginInfo.Name, out var newPlugin))
             return;

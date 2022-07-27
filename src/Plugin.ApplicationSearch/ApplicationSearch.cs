@@ -65,4 +65,5 @@ public class ApplicationSearch : IGlobalSearchPlugin
     public string Version => "";
     public string Author => "";
     public string SourceCode => "";
+    public Guid Id => Guid.NewGuid();
 }

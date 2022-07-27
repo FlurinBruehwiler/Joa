@@ -38,7 +38,7 @@ public class Search
         if (action is null)
             return;
         
-        await Task.Run(() => pluginDef.Plugin.Execute(pluginCommand.SearchResult, action));
+        await Task.Run(() => pluginDef.Execute(pluginCommand.SearchResult, action));
     }
 
     public async Task<List<PluginCommand>> GetSearchResults(string searchString)
@@ -63,7 +63,7 @@ public class Search
 
         foreach (var pluginDefinition in PluginManager.GetPluginsOfType<IGlobalSearchPlugin>())
         {
-            foreach (var searchResult in pluginDefinition.Plugin.GlobalSearchResults)
+            foreach (var searchResult in pluginDefinition.GlobalSearchResults)
             {
                 _lastSearchResults.Add(new PluginCommand(searchResult, pluginDefinition.Id));
             }
@@ -86,10 +86,10 @@ public class Search
         if (PluginManager.Plugins == null)
             return null;
 
-        foreach (var pluginDefinition in PluginManager.GetPluginsOfType<IStrictSearchPlugin>())
+        foreach (var plugin in PluginManager.GetPluginsOfType<IStrictSearchPlugin>())
         {
-            if (pluginDefinition.Plugin.Validator(searchString))
-                return (pluginDefinition.Plugin, pluginDefinition.Id);
+            if (plugin.Validator(searchString))
+                return (plugin, plugin.Id);
         }
 
         return null;
