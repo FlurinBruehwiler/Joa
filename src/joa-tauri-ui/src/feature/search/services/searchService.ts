@@ -16,7 +16,7 @@ export function useJoaSearch() : [HubConnection | undefined] {
             .build();
 
         newConnection.onreconnected(() => {
-            console.log("reconnectedd");
+            console.log("ahhh");
             setConnection(structuredClone(connection));
         })
 
