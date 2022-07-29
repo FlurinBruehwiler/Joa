@@ -3,7 +3,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using JoaCore.PluginCore;
 using JoaPluginsPackage.Logger;
-using JoaPluginsPackage.Plugin;
 using Microsoft.Extensions.Configuration;
 
 namespace JoaCore.Settings;
@@ -66,6 +65,7 @@ public class SettingsManager
     {
         _timeSinceLastSinc.Restart();
         JoaLogger.GetInstance().Log("Synchronizing the settings.", IJoaLogger.LogLevel.Info);
+        Thread.Sleep(10);
         UpdateSettingsFromJson();
         SaveSettingsToJson();
     }
@@ -96,7 +96,7 @@ public class SettingsManager
         {
             if (!File.Exists(_settingsLocation))
             {
-                File.Create(_settingsLocation);
+                File.Create(_settingsLocation).Dispose();
             }
             var jsonString = File.ReadAllText(_settingsLocation);
             if (string.IsNullOrEmpty(jsonString))

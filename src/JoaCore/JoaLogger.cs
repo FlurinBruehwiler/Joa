@@ -54,7 +54,7 @@ public class JoaLogger : IJoaLogger
             if (!File.Exists(_completePath))
             {
                 Directory.CreateDirectory(_directory);
-                File.Create(_fileName);
+                File.Create(_fileName).Dispose();
             }
 
             File.AppendAllText(_completePath, message + Environment.NewLine);
