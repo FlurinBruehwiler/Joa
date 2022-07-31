@@ -3,6 +3,7 @@ using JoaCore.PluginCore;
 using JoaCore.Settings;
 using JoaPluginsPackage.Logger;
 using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Plugin.Search;
 using JoaPluginsPackage.Settings.Attributes;
 using Microsoft.Extensions.Configuration;
 
@@ -30,18 +31,15 @@ public class PluginManager
 
     public void UpdateIndexes()
     {
-        if (Plugins is null)
-            return;
-        
-        foreach (var pluginDefinition in Plugins)
+        foreach (var plugin in GetPluginsOfType<IGlobalSearchPlugin>())
         {
             try
             {
-                // (pluginDefinition.Plugin as IIndexablePlugin)?.UpdateIndex();
+                plugin.UpdateIndex();           
             }
             catch (Exception e)
             {
-                JoaLogger.GetInstance().Log($"There was an exception while updating the index of the plugin {pluginDefinition.PluginInfo.Name} with the following Stacktrace {e}", IJoaLogger.LogLevel.Error);
+                JoaLogger.GetInstance().Log($"There was an exception while updating the index of the plugin {plugin.Name} with the following Stacktrace {e}", IJoaLogger.LogLevel.Error);
             }
         }
     }

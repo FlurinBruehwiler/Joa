@@ -1,4 +1,5 @@
-﻿using JoaCore.Settings;
+﻿using FuzzySharp;
+using JoaCore.Settings;
 using JoaPluginsPackage.Logger;
 using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.Plugin.Search;
@@ -27,8 +28,9 @@ public class Search
         if (pluginCommand is null)
             return;
         
+        JoaLogger.GetInstance().Log(pluginCommand.PluginId.ToString(), IJoaLogger.LogLevel.Info);
         var pluginDef = PluginManager.GetPluginsOfType<ISearchPlugin>() 
-            .FirstOrDefault(p => p.Id == pluginCommand.PluginId);
+            .FirstOrDefault(plugin => plugin.Id == pluginCommand.PluginId);
         
         if (pluginDef is null)
             return;
@@ -43,8 +45,6 @@ public class Search
 
     public async Task<List<PluginCommand>> GetSearchResults(string searchString)
     {
-        JoaLogger.GetInstance().Log(searchString, IJoaLogger.LogLevel.Info);
-        
         var timer = JoaLogger.GetInstance().StartMeasure();
 
         if (PluginManager.Plugins == null)
@@ -61,24 +61,30 @@ public class Search
             return _lastSearchResults;
         }
 
-        foreach (var pluginDefinition in PluginManager.GetPluginsOfType<IGlobalSearchPlugin>())
+        foreach (var plugin in PluginManager.GetPluginsOfType<IGlobalSearchPlugin>())
         {
-            foreach (var searchResult in pluginDefinition.GlobalSearchResults)
+            foreach (var searchResult in plugin.GlobalSearchResults)
             {
-                _lastSearchResults.Add(new PluginCommand(searchResult, pluginDefinition.Id));
+                _lastSearchResults.Add(new PluginCommand(searchResult, plugin.Id));
+                JoaLogger.GetInstance().Log(plugin.Id.ToString(), IJoaLogger.LogLevel.Info);
             }
         }
         
-        SortSearchResults(_lastSearchResults);
-        
-        JoaLogger.GetInstance().Log(_lastSearchResults.Count.ToString(), IJoaLogger.LogLevel.Info);
-        
-        return _lastSearchResults;
+        return SortSearchResults(_lastSearchResults, searchString);
     }
 
-    private void SortSearchResults(List<PluginCommand> input)
+    private List<PluginCommand> SortSearchResults(List<PluginCommand> input, string searchString)
     {
-        //ToDo SortResults
+        var sortValues = input.Select(x => (x, Fuzz.Ratio(x.SearchResult.Caption, searchString))).ToList();
+        
+        sortValues.Sort((x, y) =>
+        {
+            if (x.Item2 > y.Item2)
+                return -1;
+            return x.Item2 < y.Item2 ? 1 : 0;
+        });
+
+        return sortValues.Select(x => x.x).ToList();
     }
 
     private (IStrictSearchPlugin, Guid)? GetMatchingPlugin(string searchString)

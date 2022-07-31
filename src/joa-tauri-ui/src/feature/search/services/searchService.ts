@@ -16,17 +16,14 @@ export function useJoaSearch() : [HubConnection | undefined] {
             .build();
 
         newConnection.onreconnected(() => {
-            console.log("ahhh");
             setConnection(structuredClone(connection));
         })
 
         newConnection.start().then(() => {
-            console.log("start");
             setConnection(newConnection);
         });
 
         return () => {
-            console.log("stop");
             newConnection.stop().then();
         }
     }, []);
@@ -69,7 +66,8 @@ export function useSelectedCommand(commands: PluginCommand[]) : [ number, () => 
 }
 
 export function executeCommand(connection: HubConnection, command: PluginCommand) {
-    connection.invoke(executeCommandMethod, command.commandId)
+    console.log("executing command");
+    connection.invoke(executeCommandMethod, command.commandId, "enter")
         .catch(function (err : any) {
             return console.error(err.toString());
         });

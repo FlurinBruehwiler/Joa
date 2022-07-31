@@ -6,9 +6,14 @@ import PluginCommand from "./models/pluginCommand";
 
 export default (props: FeatureProps) => {
     const [ searchString, setSearchString ] = useState<string>("");
+
+    const clearSearchString = () => {
+      setSearchString("");
+    }
+
     const [ commands, updateCommands, clearCommands ] = useCommands(props.connection);
     const [ selectedCommandIndex, moveUp, moveDown, clearSelectedCommand ] = useSelectedCommand(commands);
-    const [ updateSize ] = useWindow(props.connection, clearCommands, clearSelectedCommand);
+    const [ updateSize ] = useWindow(props.connection, clearCommands, clearSelectedCommand, clearSearchString);
 
     const handleInputKeyPress = (e : React.KeyboardEvent) => {
         switch (e.key) {

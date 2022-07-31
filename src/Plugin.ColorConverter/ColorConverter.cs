@@ -16,7 +16,7 @@ public class ColorConverter : IStrictSearchPlugin
         return new List<ISearchResult>();
     }
 
-    public void Execute(ISearchResult searchResult, IAction action)
+    public void Execute(ISearchResult searchResult, IContextAction contextAction)
     {
     }
     

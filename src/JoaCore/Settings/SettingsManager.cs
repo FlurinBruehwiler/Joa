@@ -52,7 +52,6 @@ public class SettingsManager
 
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
-        JoaLogger.GetInstance().Log("The settings File has been changed.", IJoaLogger.LogLevel.Info);
         if (_timeSinceLastChanged.ElapsedMilliseconds < 100)
             return;
         if (_timeSinceLastSinc.ElapsedMilliseconds < 1000)

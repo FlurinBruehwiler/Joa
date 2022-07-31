@@ -16,7 +16,7 @@ public class SearchResult : ISearchResult
     public string Caption { get; init; }
     public string Description { get; init; }
     public string Icon { get; init; }
-    public List<IAction> Actions { get; set; }
+    public List<IContextAction> Actions { get; set; }
     public SearchEngine SearchEngine { get; set; }
     public string SeachString { get; set; }
 }

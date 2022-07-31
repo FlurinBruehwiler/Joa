@@ -89,7 +89,7 @@ public class WebSearch : IStrictSearchPlugin
         return searchResults;
     }
 
-    public void Execute(ISearchResult result, IAction action)
+    public void Execute(ISearchResult result, IContextAction contextAction)
     {
         _logger.Log("execute", IJoaLogger.LogLevel.Info);
         if (result is not SearchResult searchResult) return;

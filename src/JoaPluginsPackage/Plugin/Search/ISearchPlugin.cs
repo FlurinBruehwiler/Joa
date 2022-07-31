@@ -2,5 +2,5 @@
 
 public interface ISearchPlugin : IPlugin
 {
-    public void Execute(ISearchResult searchResult, IAction action);
+    public void Execute(ISearchResult searchResult, IContextAction contextAction);
 }
