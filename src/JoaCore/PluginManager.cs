@@ -26,7 +26,7 @@ public class PluginManager
         if (Plugins is null)
             return new List<T>();
 
-        return Plugins.Where(x => x.Plugin.GetType().IsAssignableTo(typeof(T))).Select(x => (T)x.Plugin).ToList();
+        return Plugins.Where(x => x.Plugin is T).Select(x => (T)x.Plugin).ToList();
     }
 
     public void UpdateIndexes()

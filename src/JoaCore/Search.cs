@@ -1,7 +1,6 @@
-﻿using FuzzySharp;
+﻿using JoaCore.SearchEngine;
 using JoaCore.Settings;
 using JoaPluginsPackage.Logger;
-using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.Plugin.Search;
 using Microsoft.Extensions.Configuration;
 
@@ -18,6 +17,7 @@ public class Search
         SettingsManager = new SettingsManager(new CoreSettings(), configuration);
         PluginManager = new PluginManager(SettingsManager, configuration);
         PluginManager.ReloadPlugins();
+        StringMatcher.Instance = new StringMatcher();
     }
 
     public async Task ExecuteCommand(Guid commandId, string actionKey)
@@ -45,6 +45,9 @@ public class Search
 
     public async Task<List<PluginCommand>> GetSearchResults(string searchString)
     {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return new List<PluginCommand>();
+        
         var timer = JoaLogger.GetInstance().StartMeasure();
 
         if (PluginManager.Plugins == null)
@@ -75,7 +78,7 @@ public class Search
 
     private List<PluginCommand> SortSearchResults(List<PluginCommand> input, string searchString)
     {
-        var sortValues = input.Select(x => (x, Fuzz.Ratio(x.SearchResult.Caption, searchString))).ToList();
+        var sortValues = input.Select(x => (x, StringMatcher.FuzzySearch( searchString,x.SearchResult.Caption).Score)).ToList();
         
         sortValues.Sort((x, y) =>
         {

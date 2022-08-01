@@ -58,7 +58,7 @@ export function useWindow(connection: HubConnection, clearCommands: () => void, 
     }
 
     const hideSearchWindow = async () => {
-        console.log("hide window");
+        console.log("hide windoww");
         await appWindow.hide()
         clearCommands();
         clearSelectedCommand();
