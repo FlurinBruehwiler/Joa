@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
-using JoaPluginsPackage.Logger;
+using JoaPluginsPackage;
+using JoaPluginsPackage.Attributes;
+using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
-using JoaPluginsPackage.Plugin.Search;
-using JoaPluginsPackage.Settings.Attributes;
 
 namespace ApplicationSearch;
 

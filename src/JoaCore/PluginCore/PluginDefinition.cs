@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using JoaCore.Settings;
+using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Plugin;
-using JoaPluginsPackage.Settings.Attributes;
 
 namespace JoaCore.PluginCore;
 

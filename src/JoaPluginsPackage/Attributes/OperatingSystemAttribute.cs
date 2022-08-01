@@ -1,4 +1,6 @@
-﻿namespace JoaPluginsPackage.Settings.Attributes;
+﻿using OperatingSystem = JoaPluginsPackage.Enums.OperatingSystem;
+
+namespace JoaPluginsPackage.Attributes;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
 public class OperatingSystemAttribute : Attribute

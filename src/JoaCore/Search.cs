@@ -1,8 +1,8 @@
 ﻿using JoaCore.PluginCore;
 using JoaCore.SearchEngine;
 using JoaCore.Settings;
-using JoaPluginsPackage.Logger;
-using JoaPluginsPackage.Plugin.Search;
+using JoaPluginsPackage.Injectables;
+using JoaPluginsPackage.Plugin;
 using Microsoft.Extensions.Configuration;
 
 namespace JoaCore;

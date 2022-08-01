@@ -1,4 +1,4 @@
-﻿namespace JoaPluginsPackage.Settings.Attributes;
+﻿namespace JoaPluginsPackage.Attributes;
 
 public class PluginAttribute : Attribute
 {

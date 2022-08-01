@@ -1,4 +1,4 @@
-﻿namespace JoaPluginsPackage;
+﻿namespace JoaPluginsPackage.Injectables;
 
 public interface IBrowserHelper
 {

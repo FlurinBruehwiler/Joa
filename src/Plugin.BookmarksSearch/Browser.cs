@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
-using JoaPluginsPackage.Settings.Attributes;
-using OperatingSystem = JoaPluginsPackage.OperatingSystem;
+using JoaPluginsPackage.Attributes;
+using OperatingSystem = JoaPluginsPackage.Enums.OperatingSystem;
 
 namespace BookmarksSearch;
 

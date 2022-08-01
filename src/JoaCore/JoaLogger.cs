@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using JoaPluginsPackage.Logger;
+using JoaPluginsPackage.Injectables;
 
 namespace JoaCore;
 

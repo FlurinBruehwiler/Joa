@@ -1,9 +1,8 @@
 ﻿using System.Reflection;
 using JoaCore.Settings;
-using JoaPluginsPackage.Logger;
+using JoaPluginsPackage.Attributes;
+using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
-using JoaPluginsPackage.Settings;
-using JoaPluginsPackage.Settings.Attributes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

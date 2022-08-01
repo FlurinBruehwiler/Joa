@@ -1,3 +1,4 @@
+using JoaPluginsPackage;
 using JoaPluginsPackage.Plugin;
 
 namespace JoaCore;

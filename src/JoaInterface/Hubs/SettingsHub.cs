@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using JoaCore;
 using JoaCore.Settings;
-using JoaPluginsPackage.Logger;
+using JoaPluginsPackage.Injectables;
 using Microsoft.AspNetCore.SignalR;
 
 namespace JoaInterface.Hubs;

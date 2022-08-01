@@ -1,4 +1,4 @@
-﻿using JoaPluginsPackage.Settings;
+﻿using JoaPluginsPackage.Injectables;
 
 namespace JoaCore.Settings;
 

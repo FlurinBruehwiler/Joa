@@ -1,4 +1,4 @@
-﻿using JoaPluginsPackage.Settings.Attributes;
+﻿using JoaPluginsPackage.Attributes;
 
 namespace JoaCore.Settings;
 

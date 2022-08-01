@@ -1,4 +1,5 @@
-﻿using JoaPluginsPackage.Plugin;
+﻿using JoaPluginsPackage;
+using JoaPluginsPackage.Plugin;
 
 namespace ApplicationSearch;
 

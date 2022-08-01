@@ -1,7 +1,7 @@
 using System.Drawing;
+using JoaPluginsPackage;
+using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Plugin;
-using JoaPluginsPackage.Plugin.Search;
-using JoaPluginsPackage.Settings.Attributes;
 
 namespace ColorConverter;
 

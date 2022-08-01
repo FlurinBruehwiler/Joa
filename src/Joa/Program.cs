@@ -1,6 +1,6 @@
 ﻿using JoaCore;
 using JoaInterface;
-using JoaPluginsPackage.Logger;
+using JoaPluginsPackage.Injectables;
 using Microsoft.Extensions.Configuration;
 
 IConfiguration configuration = new ConfigurationBuilder()

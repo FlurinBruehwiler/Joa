@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using JoaCore.PluginCore;
-using JoaPluginsPackage.Logger;
+using JoaPluginsPackage.Injectables;
 using Microsoft.Extensions.Configuration;
 
 namespace JoaCore.Settings;

@@ -1,4 +1,4 @@
-﻿namespace JoaPluginsPackage.Plugin;
+﻿namespace JoaPluginsPackage;
 
 public class SearchResult
 {

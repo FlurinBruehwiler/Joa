@@ -1,10 +1,9 @@
 ﻿using System.Reflection;
 using JoaCore.PluginCore;
 using JoaCore.Settings;
-using JoaPluginsPackage.Logger;
+using JoaPluginsPackage.Attributes;
+using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
-using JoaPluginsPackage.Plugin.Search;
-using JoaPluginsPackage.Settings.Attributes;
 using Microsoft.Extensions.Configuration;
 
 namespace JoaCore;

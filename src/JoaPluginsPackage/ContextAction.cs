@@ -1,6 +1,4 @@
-﻿using JoaPluginsPackage.Settings;
-
-namespace JoaPluginsPackage.Plugin;
+﻿namespace JoaPluginsPackage;
 
 public class ContextAction
 {

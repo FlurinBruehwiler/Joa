@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace JoaPluginsPackage.Logger;
+namespace JoaPluginsPackage.Injectables;
 
 public interface IJoaLogger
 {

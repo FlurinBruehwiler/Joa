@@ -1,4 +1,4 @@
-﻿namespace JoaPluginsPackage.Plugin.Search;
+﻿namespace JoaPluginsPackage.Plugin;
 
 public interface IStrictSearchPlugin : ISearchPlugin
 {

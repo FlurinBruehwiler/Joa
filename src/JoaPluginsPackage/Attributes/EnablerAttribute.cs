@@ -1,4 +1,4 @@
-﻿namespace JoaPluginsPackage.Settings.Attributes;
+﻿namespace JoaPluginsPackage.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class EnablerAttribute : Attribute

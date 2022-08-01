@@ -1,4 +1,4 @@
-﻿namespace JoaPluginsPackage.Settings;
+﻿namespace JoaPluginsPackage.Injectables;
 
 public interface IJoaSettings
 {
