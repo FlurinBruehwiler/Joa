@@ -48,8 +48,6 @@ public class Search
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return new List<PluginCommand>();
-        
-        var timer = JoaLogger.GetInstance().StartMeasure();
 
         if (PluginManager.Plugins == null)
             return new List<PluginCommand>();

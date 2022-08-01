@@ -19,20 +19,14 @@ public class BookmarksSearch : IGlobalSearchPlugin
         DefaultBrowsers.Edge
     };
     
-    public List<ISearchResult> GlobalSearchResults { get; set; }
-
-    
-    private readonly List<IContextAction> _actions = new()
-    {
-        new ContextAction("enter", "Open", null, null),
-    };
+    public List<SearchResult> GlobalSearchResults { get; set; } = null!;
 
     public BookmarksSearch(IBrowserHelper browserHelper)
     {
         _browserHelper = browserHelper;
     }
     
-    public void Execute(ISearchResult searchResult, IContextAction contextAction)
+    public void Execute(SearchResult searchResult, ContextAction contextAction)
     {
         if(searchResult is not SearchResult result)
             return;
@@ -44,12 +38,6 @@ public class BookmarksSearch : IGlobalSearchPlugin
     {
         var bookmarks = Browsers.Where(x => x.Enabled).SelectMany(x => x.GetBookmarks()).DistinctBy(x => x.url).ToList();
 
-        GlobalSearchResults = bookmarks.Select(x => new SearchResult
-        {
-            Caption = x.name,
-            Description = x.url,
-            Icon = "",
-            Actions = _actions
-        }).Cast<ISearchResult>().ToList();
+        GlobalSearchResults = bookmarks.Select(x => new SearchResult(x.name, x.url, "")).ToList();
     }
 }

@@ -13,12 +13,12 @@ public class ColorConverter : IStrictSearchPlugin
         return false;
     }
 
-     public List<ISearchResult> GetStrictSearchResults(string searchString)
+     public List<SearchResult> GetStrictSearchResults(string searchString)
      {
-        return new List<ISearchResult>();
+        return new List<SearchResult>();
     }
 
-    public void Execute(ISearchResult searchResult, IContextAction contextAction)
+    public void Execute(SearchResult searchResult, ContextAction contextAction)
     {
     }
     

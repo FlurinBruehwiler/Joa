@@ -1,11 +1,10 @@
-﻿using JoaPluginsPackage.Plugin;
-using JoaPluginsPackage.Settings;
+﻿using JoaPluginsPackage.Settings;
 
-namespace BookmarksSearch;
+namespace JoaPluginsPackage.Plugin;
 
-public class ContextAction : IContextAction
+public class ContextAction
 {
-    public ContextAction(string key, string name, IShortcut shortcut, string? link)
+    public ContextAction(string key, string name, IShortcut shortcut, string? link = null)
     {
         Key = key;
         Name = name;

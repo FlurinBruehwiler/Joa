@@ -1,5 +1,4 @@
 ﻿using JoaPluginsPackage;
-using JoaPluginsPackage.Logger;
 using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.Plugin.Search;
 using JoaPluginsPackage.Settings.Attributes;
@@ -10,13 +9,11 @@ namespace WebSearch;
 [Plugin("Web Search", "Lets you search on the web!", "", "", "")]
 public class WebSearch : IStrictSearchPlugin
 {
-    private readonly IJoaLogger _logger;
     private readonly IBrowserHelper _browserHelper;
     private readonly HttpClient _client = new();
     
-    public WebSearch(IJoaLogger logger, IBrowserHelper browserHelper)
+    public WebSearch(IBrowserHelper browserHelper)
     {
-        _logger = logger;
         _browserHelper = browserHelper;
     }
     
@@ -30,19 +27,19 @@ public class WebSearch : IStrictSearchPlugin
         DefaultSearchEngines.Youtube
     };
 
-    public List<ISearchResult> GetStrictSearchResults(string searchString)
+    public List<SearchResult> GetStrictSearchResults(string searchString)
     {
         var searchEngine = SearchEngines.FirstOrDefault(x =>
             searchString.StartsWith(x.Prefix));
 
         if (searchEngine == null || searchString.Length < searchEngine.Prefix.Length)
-            return new List<ISearchResult>();
+            return new List<SearchResult>();
         
         searchString = searchString.Remove(0, searchEngine.Prefix.Length);
         
-        var searchResults = new List<ISearchResult>
+        var searchResults = new List<SearchResult>
         {
-            new SearchResult(searchEngine.Name, $"Search on {searchEngine.Name} for \"{searchString}\"", "", searchEngine, searchString)
+            new WebSearchResult(searchEngine.Name, $"Search on {searchEngine.Name} for \"{searchString}\"", "", "")
         };
 
         if (string.IsNullOrEmpty(searchString))
@@ -58,21 +55,19 @@ public class WebSearch : IStrictSearchPlugin
         List<string> suggestions = response[1].ToObject<List<string>>();
         
         searchResults.AddRange(suggestions.Select(suggestion 
-                => new SearchResult(suggestion, 
+                => new WebSearchResult(suggestion, 
                     $"Search on Google for \"{suggestion}\"", 
                     "", 
-                    searchEngine, 
-                    suggestion.Replace(" ", "+")))
+                    searchEngine.Url.Replace("{{query}}", suggestion)))
             .ToList());
         
         return searchResults;
     }
 
-    public void Execute(ISearchResult result, IContextAction contextAction)
+    public void Execute(SearchResult result, ContextAction contextAction)
     {
-        _logger.Log("execute", IJoaLogger.LogLevel.Info);
-        if (result is not SearchResult searchResult) return;
-        _browserHelper.OpenWebsite(searchResult.SearchEngine.Url
-            .Replace("{{query}}", searchResult.SeachString));
+        if (result is not WebSearchResult searchResult) 
+            return;
+        _browserHelper.OpenWebsite(searchResult.Url);
     }
 }

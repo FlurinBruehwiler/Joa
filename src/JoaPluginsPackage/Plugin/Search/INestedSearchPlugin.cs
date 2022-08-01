@@ -2,5 +2,5 @@
 
 public interface INestedSearchPlugin : ISearchPlugin
 {
-    public List<ISearchResult> GetNestedSearchResults(ISearchContext context);
+    public List<SearchResult> GetNestedSearchResults(ISearchContext context);
 }

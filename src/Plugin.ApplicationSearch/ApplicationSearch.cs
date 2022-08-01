@@ -11,18 +11,12 @@ namespace ApplicationSearch;
 public class ApplicationSearch : IGlobalSearchPlugin
 {
     private readonly IJoaLogger _joaLogger;
-    public List<ISearchResult> GlobalSearchResults { get; set; }
+    public List<SearchResult> GlobalSearchResults { get; set; }
     
-    private readonly List<IContextAction> _actions = new()
-    {
-        new ContextAction("enter", "Open", null, null),
-    };
-
-
     public ApplicationSearch(IJoaLogger joaLogger)
     {
         _joaLogger = joaLogger;
-        GlobalSearchResults = new List<ISearchResult>();
+        GlobalSearchResults = new List<SearchResult>();
     }
     
     public void UpdateIndex()
@@ -40,7 +34,7 @@ public class ApplicationSearch : IGlobalSearchPlugin
         {
             if (Extensions.Any(x => path.EndsWith(x.Extension, StringComparison.OrdinalIgnoreCase)))
             {
-                GlobalSearchResults.Add(new SearchResult(Path.GetFileNameWithoutExtension(path), "", "", _actions, path));
+                GlobalSearchResults.Add(new ApplicationSearchResult(Path.GetFileNameWithoutExtension(path), "", "", path));
             }
         }
         
@@ -68,9 +62,9 @@ public class ApplicationSearch : IGlobalSearchPlugin
 
     [SettingProperty] public bool UseNativeIcons { get; set; } = true;
 
-    public void Execute(ISearchResult sr, IContextAction contextAction)
+    public void Execute(SearchResult sr, ContextAction contextAction)
     {
-        if (sr is not SearchResult searchResult)
+        if (sr is not ApplicationSearchResult searchResult)
             return;
         
         _joaLogger.Log(searchResult.FilePath, IJoaLogger.LogLevel.Info);

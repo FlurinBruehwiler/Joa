@@ -7,7 +7,7 @@ namespace BookmarksSearch;
 public class Browser
 {
     [SettingProperty]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [Enabler]
     [SettingProperty]
@@ -15,15 +15,15 @@ public class Browser
     
     [SettingProperty]
     [OperatingSystem(OperatingSystem.Windows)]
-    public string WindowsLocation { get; set; }
-    
+    public string WindowsLocation { get; set; } = null!;
+
     [SettingProperty]
     [OperatingSystem(OperatingSystem.MacOS)]
-    public string MacOSLocation { get; set; }
-    
+    public string MacOSLocation { get; set; } = null!;
+
     [SettingProperty]
     [OperatingSystem(OperatingSystem.Linux)]
-    public string LinuxLocation { get; set; }
+    public string LinuxLocation { get; set; } = null!;
 
     public List<Bookmark> GetBookmarks()
     {
