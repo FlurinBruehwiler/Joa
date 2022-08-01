@@ -1,6 +1,6 @@
 export default () => {
     return (
-        <div>
+        <div className={"overflow-hidden"}>
         </div>
     );
 }

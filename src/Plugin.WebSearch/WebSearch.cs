@@ -125,10 +125,10 @@ public class WebSearch : IStrictSearchPlugin
         }
     }
 
-    public string Name => "";
-    public string Description => "";
-    public string Version => "";
-    public string Author => "";
-    public string SourceCode => "";
-    public Guid Id => Guid.NewGuid();
+    public string Name { get; } = "";
+    public string Description { get; } = "";
+    public string Version { get; } = "";
+    public string Author { get; } = "";
+    public string SourceCode { get; } = "";
+    public Guid Id { get; } = Guid.NewGuid();
 }
