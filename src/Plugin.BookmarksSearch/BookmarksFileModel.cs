@@ -10,7 +10,7 @@ public class BookmarksFileModel
 
 public class BookmarkBar
 {
-    public List<Child> children { get; set; }
+    public List<Bookmark> children { get; set; }
     public string date_added { get; set; }
     public string date_modified { get; set; }
     public string guid { get; set; }
@@ -19,7 +19,7 @@ public class BookmarkBar
     public string type { get; set; }
 }
 
-public class Child
+public class Bookmark
 {
     public string date_added { get; set; }
     public string guid { get; set; }

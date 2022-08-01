@@ -1,49 +1,53 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
-using System.Text.Json;
+﻿using JoaPluginsPackage;
 using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.Plugin.Search;
+using JoaPluginsPackage.Settings.Attributes;
 
 namespace BookmarksSearch;
 
 public class BookmarksSearch : IGlobalSearchPlugin
 {
+    private readonly IBrowserHelper _browserHelper;
     public string Name { get; }
     public string Description { get; }
     public string Version { get; }
     public string Author { get; }
     public string SourceCode { get; }
     public Guid Id { get; }
+
+    [SettingProperty]
+    public List<Browser> Browsers { get; set; } = new()
+    {
+        DefaultBrowsers.Chrome,
+        DefaultBrowsers.Firefox,
+        DefaultBrowsers.Brave,
+        DefaultBrowsers.Edge
+    };
     
-    private readonly string chromeBookmarksFilePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Google\Chrome\User Data\Default\Bookmarks";
+    public List<ISearchResult> GlobalSearchResults { get; set; }
+
     
     private readonly List<IContextAction> _actions = new()
     {
         new ContextAction("enter", "Open", null, null),
     };
+
+    public BookmarksSearch(IBrowserHelper browserHelper)
+    {
+        _browserHelper = browserHelper;
+    }
     
     public void Execute(ISearchResult searchResult, IContextAction contextAction)
     {
         if(searchResult is not SearchResult result)
             return;
 
-        OpenBrowser(result.Description);
+        _browserHelper.OpenWebsite(result.Description);
     }
 
-    public List<ISearchResult> GlobalSearchResults { get; set; }
     public void UpdateIndex()
     {
-        if (!File.Exists(chromeBookmarksFilePath))
-            return;
-
-        var content = File.ReadAllText(chromeBookmarksFilePath);
-        
-        var bookmarksFile = JsonSerializer.Deserialize<BookmarksFileModel>(content);
-
-        if(bookmarksFile is null)
-            return;
-
-        var bookmarks = bookmarksFile.roots.bookmark_bar.children;
+        var bookmarks = Browsers.Where(x => x.Enabled).SelectMany(x => x.GetBookmarks()).DistinctBy(x => x.url).ToList();
 
         GlobalSearchResults = bookmarks.Select(x => new SearchResult
         {
@@ -52,33 +56,5 @@ public class BookmarksSearch : IGlobalSearchPlugin
             Icon = "",
             Actions = _actions
         }).Cast<ISearchResult>().ToList();
-    }
-    
-    public static void OpenBrowser(string url)
-    {
-        try
-        {
-            Process.Start(url);
-        }
-        catch
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                url = url.Replace("&", "^&");
-                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Process.Start("xdg-open", url);
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                Process.Start("open", url);
-            }
-            else
-            {
-                throw;
-            }
-        }
     }
 }

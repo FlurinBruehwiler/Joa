@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
+﻿using JoaPluginsPackage;
 using JoaPluginsPackage.Logger;
 using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.Plugin.Search;
@@ -12,11 +11,13 @@ namespace WebSearch;
 public class WebSearch : IStrictSearchPlugin
 {
     private readonly IJoaLogger _logger;
+    private readonly IBrowserHelper _browserHelper;
     private readonly HttpClient _client = new();
     
-    public WebSearch(IJoaLogger logger)
+    public WebSearch(IJoaLogger logger, IBrowserHelper browserHelper)
     {
         _logger = logger;
+        _browserHelper = browserHelper;
     }
     
     public bool Validator(string searchString) =>
@@ -25,30 +26,8 @@ public class WebSearch : IStrictSearchPlugin
     [SettingProperty(Name = "Web Search Engines")]
     public List<SearchEngine> SearchEngines { get; set; } = new()
     {
-        new SearchEngine
-        {
-            Name = "Google",
-            Prefix = "g?",
-            Url = "https://google.com/search?q={{query}}",
-            SuggestionUrl = "https://www.google.com/complete/search?client=opera&q={{query}}",
-            IconType = IconType.Svg,
-            Icon = "https://google.com/favicon.ico",
-            Priority = 2,
-            Fallback = false,
-            EncodeSearchTerm = true
-        },
-        new SearchEngine
-        {
-            Name = "Youtube",
-            Prefix = "y?",
-            Url = "https://www.youtube.com/results?search_query={{query}}",
-            SuggestionUrl = "https://www.google.com/complete/search?ds=yt&output=firefox&q={{query}}",
-            IconType = IconType.Svg,
-            Icon = "https://www.youtube.com/favicon.ico",
-            Priority = 5,
-            Fallback = false,
-            EncodeSearchTerm = true
-        }
+        DefaultSearchEngines.Google,
+        DefaultSearchEngines.Youtube
     };
 
     public List<ISearchResult> GetStrictSearchResults(string searchString)
@@ -93,36 +72,8 @@ public class WebSearch : IStrictSearchPlugin
     {
         _logger.Log("execute", IJoaLogger.LogLevel.Info);
         if (result is not SearchResult searchResult) return;
-        OpenBrowser(searchResult.SearchEngine.Url
+        _browserHelper.OpenWebsite(searchResult.SearchEngine.Url
             .Replace("{{query}}", searchResult.SeachString));
-    }
-    
-    public static void OpenBrowser(string url)
-    {
-        try
-        {
-            Process.Start(url);
-        }
-        catch
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                url = url.Replace("&", "^&");
-                Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                Process.Start("xdg-open", url);
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                Process.Start("open", url);
-            }
-            else
-            {
-                throw;
-            }
-        }
     }
 
     public string Name { get; } = "";
