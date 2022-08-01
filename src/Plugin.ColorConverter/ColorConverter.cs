@@ -1,9 +1,11 @@
 using System.Drawing;
 using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.Plugin.Search;
+using JoaPluginsPackage.Settings.Attributes;
 
 namespace ColorConverter;
 
+[Plugin("Color Converter", "", "", "", "")]
 public class ColorConverter : IStrictSearchPlugin
 {
     public bool Validator(string searchString)
@@ -40,11 +42,4 @@ public class ColorConverter : IStrictSearchPlugin
         var myColor = Color.FromArgb(r, g, b);
         return myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2");
     }
-
-    public string Name { get; } = "";
-    public string Description { get; } = "";
-    public string Version { get; } = "";
-    public string Author { get; } = "";
-    public string SourceCode { get; } = "";
-    public Guid Id { get; } = Guid.NewGuid();
 }

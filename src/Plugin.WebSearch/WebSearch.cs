@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace WebSearch;
 
-[Plugin("Web Search", "Lets you search on the web!")]
+[Plugin("Web Search", "Lets you search on the web!", "", "", "")]
 public class WebSearch : IStrictSearchPlugin
 {
     private readonly IJoaLogger _logger;
@@ -75,11 +75,4 @@ public class WebSearch : IStrictSearchPlugin
         _browserHelper.OpenWebsite(searchResult.SearchEngine.Url
             .Replace("{{query}}", searchResult.SeachString));
     }
-
-    public string Name { get; } = "";
-    public string Description { get; } = "";
-    public string Version { get; } = "";
-    public string Author { get; } = "";
-    public string SourceCode { get; } = "";
-    public Guid Id { get; } = Guid.NewGuid();
 }

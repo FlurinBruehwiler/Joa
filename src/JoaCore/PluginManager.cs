@@ -23,11 +23,16 @@ public class PluginManager
 
     public List<T> GetPluginsOfType<T>() where T : IPlugin
     {
-        if (Plugins is null)
-            return new List<T>();
-
-        return Plugins.Where(x => x.Plugin is T).Select(x => (T)x.Plugin).ToList();
+        return GetPluginDefinitionsOfType<T>().Select(x => (T)x.Plugin).ToList();
     }
+
+    public List<PluginDefinition> GetPluginDefinitionsOfType<T>() where T : IPlugin
+    {
+        if (Plugins is null)
+            return new List<PluginDefinition>();
+
+        return Plugins.Where(x => x.Plugin is T).ToList();
+    } 
 
     public void UpdateIndexes()
     {
@@ -39,7 +44,7 @@ public class PluginManager
             }
             catch (Exception e)
             {
-                JoaLogger.GetInstance().Log($"There was an exception while updating the index of the plugin {plugin.Name} with the following Stacktrace {e}", IJoaLogger.LogLevel.Error);
+                JoaLogger.GetInstance().Log($"There was an exception while updating the index of the plugin {plugin.GetType().Name} with the following Stacktrace {e}", IJoaLogger.LogLevel.Error);
             }
         }
     }
@@ -63,6 +68,9 @@ public class PluginManager
     {
         var attr = Attribute.GetCustomAttributes(pluginType).FirstOrDefault();
 
-        return attr as PluginAttribute ?? new PluginAttribute(pluginType.Name, string.Empty);
+        if (attr is PluginAttribute pluginAttribute)
+            return pluginAttribute;
+        
+        throw new Exception($"The plugin {pluginType.Name} does not have the PluginAttribute");
     }
 }

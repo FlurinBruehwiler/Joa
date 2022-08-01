@@ -7,6 +7,7 @@ using JoaPluginsPackage.Settings.Attributes;
 
 namespace ApplicationSearch;
 
+[Plugin("Application Search", "", "", "", "")]
 public class ApplicationSearch : IGlobalSearchPlugin
 {
     private readonly IJoaLogger _joaLogger;
@@ -80,11 +81,4 @@ public class ApplicationSearch : IGlobalSearchPlugin
         };
         Process.Start(info);
     }
-
-    public string Name { get; } = "";
-    public string Description { get; } = "";
-    public string Version { get; } = "";
-    public string Author { get; } = "";
-    public string SourceCode { get; } =  "";
-    public Guid Id { get; } = Guid.NewGuid();
 }
