@@ -65,9 +65,7 @@ public class PluginManager
     
     private PluginAttribute GetPluginInfos(MemberInfo pluginType)
     {
-        var attr = Attribute.GetCustomAttributes(pluginType).FirstOrDefault();
-
-        if (attr is PluginAttribute pluginAttribute)
+        if (Attribute.GetCustomAttributes(pluginType).FirstOrDefault(x => x is PluginAttribute) is PluginAttribute pluginAttribute)
             return pluginAttribute;
         
         throw new Exception($"The plugin {pluginType.Name} does not have the PluginAttribute");

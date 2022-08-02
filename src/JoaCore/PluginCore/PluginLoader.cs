@@ -69,6 +69,7 @@ public class PluginLoader
         var services = new ServiceCollection();
         services.AddSingleton<IJoaSettings>(coreSettings);
         services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
+        services.AddSingleton<IBrowserHelper, BrowserHelper>();
         return services.BuildServiceProvider();
     }
     

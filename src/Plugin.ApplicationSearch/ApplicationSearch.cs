@@ -52,7 +52,7 @@ public class ApplicationSearch : IGlobalSearchPlugin
     [SettingProperty]
     public List<FileExtension> Extensions { get; set; } = new()
     {
-        new FileExtension {Extension = ".Ink"},
+        new FileExtension {Extension = ".lnk"},
         new FileExtension {Extension = ".appref-ms"},
         new FileExtension {Extension = ".url"},
         new FileExtension {Extension = ".exe"},

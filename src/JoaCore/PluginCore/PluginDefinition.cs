@@ -9,6 +9,7 @@ public class PluginDefinition
 {
     public Guid Id { get; }
 
+
     [JsonIgnore]
     public IPlugin Plugin { get; set; }
 
@@ -17,12 +18,8 @@ public class PluginDefinition
     public PluginDefinition(IPlugin plugin, PluginAttribute pluginInfo)
     {
         PluginInfo = pluginInfo;
-        Id = Guid.NewGuid();
         Plugin = plugin;
-        if (string.IsNullOrEmpty(PluginInfo.Name))
-        {
-            PluginInfo.Name = plugin.GetType().Name;
-        }
+        Id = Guid.NewGuid();
         SettingsCollection = new SettingsCollection(plugin);
     }
 }

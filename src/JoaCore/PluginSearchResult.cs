@@ -3,9 +3,9 @@ using JoaPluginsPackage.Plugin;
 
 namespace JoaCore;
 
-public class PluginCommand
+public class PluginSearchResult
 {
-    public PluginCommand(SearchResult searchResult, Guid pluginId)
+    public PluginSearchResult(SearchResult searchResult, Guid pluginId)
     {
         SearchResult = searchResult;
         PluginId = pluginId;

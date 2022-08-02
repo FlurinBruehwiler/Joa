@@ -15,6 +15,8 @@ public class WebSearch : IStrictSearchPlugin
     public WebSearch(IBrowserHelper browserHelper)
     {
         _browserHelper = browserHelper;
+        var res = _client.GetAsync("https://www.google.com/")
+            .GetAwaiter().GetResult();
     }
     
     public bool Validator(string searchString) =>

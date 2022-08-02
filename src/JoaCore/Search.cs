@@ -11,7 +11,9 @@ public class Search
 {
     public SettingsManager SettingsManager { get; set; }
     private PluginManager PluginManager { get; set; }
-    private List<PluginCommand>? _lastSearchResults;
+    private List<PluginSearchResult>? _lastSearchResults;
+
+    private JoaLogger _logger = JoaLogger.GetInstance();
 
     public Search(IConfiguration configuration)
     {
@@ -29,7 +31,7 @@ public class Search
         if (pluginCommand is null)
             return;
         
-        JoaLogger.GetInstance().Log(pluginCommand.PluginId.ToString(), IJoaLogger.LogLevel.Info);
+        _logger.Log(pluginCommand.PluginId.ToString(), IJoaLogger.LogLevel.Info);
         var pluginDef = PluginManager.GetPluginDefinitionsOfType<ISearchPlugin>() 
             .FirstOrDefault(plugin => plugin.Id == pluginCommand.PluginId);
         
@@ -44,22 +46,25 @@ public class Search
         await Task.Run(() => pluginDef.Plugin.GetTypedPlugin<ISearchPlugin>().Execute(pluginCommand.SearchResult, action));
     }
 
-    public async Task<List<PluginCommand>> GetSearchResults(string searchString)
+    public async Task<List<PluginSearchResult>> GetSearchResults(string searchString)
     {
+        var stopwatch = _logger.StartMeasure();
+        
         if (string.IsNullOrWhiteSpace(searchString))
-            return new List<PluginCommand>();
+            return new List<PluginSearchResult>();
 
         if (PluginManager.Plugins == null)
-            return new List<PluginCommand>();
+            return new List<PluginSearchResult>();
 
-        _lastSearchResults = new List<PluginCommand>();
+        _lastSearchResults = new List<PluginSearchResult>();
 
         var matchingPluginDefinition = GetMatchingPlugin(searchString);
 
         if (matchingPluginDefinition is not null)
         {
             var strictPluginResult = await Task.Run(() => matchingPluginDefinition.Plugin.GetTypedPlugin<IStrictSearchPlugin>().GetStrictSearchResults(searchString));
-            _lastSearchResults.AddRange(strictPluginResult.Select(x => new PluginCommand(x, matchingPluginDefinition.Id)));
+            _lastSearchResults.AddRange(strictPluginResult.Select(x => new PluginSearchResult(x, matchingPluginDefinition.Id)));
+            _logger.LogMeasureResult(stopwatch, "Search");
             return _lastSearchResults;
         }
 
@@ -67,15 +72,18 @@ public class Search
         {
             foreach (var searchResult in plugin.Plugin.GetTypedPlugin<IGlobalSearchPlugin>().GlobalSearchResults)
             {
-                _lastSearchResults.Add(new PluginCommand(searchResult, plugin.Id));
-                JoaLogger.GetInstance().Log(plugin.Id.ToString(), IJoaLogger.LogLevel.Info);
+                _lastSearchResults.Add(new PluginSearchResult(searchResult, plugin.Id));
             }
         }
         
-        return SortSearchResults(_lastSearchResults, searchString);
+        var res = SortSearchResults(_lastSearchResults, searchString);
+
+        _logger.LogMeasureResult(stopwatch, "Search");
+        
+        return res;
     }
 
-    private List<PluginCommand> SortSearchResults(List<PluginCommand> input, string searchString)
+    private List<PluginSearchResult> SortSearchResults(List<PluginSearchResult> input, string searchString)
     {
         var sortValues = input.Select(x => (x, StringMatcher.FuzzySearch( searchString,x.SearchResult.Caption).Score)).ToList();
         

@@ -11,7 +11,7 @@ public class SearchHub : Hub
         _search = search;
     }
     
-    public async Task<List<PluginCommand>> GetSearchResults(string searchString)
+    public async Task<List<PluginSearchResult>> GetSearchResults(string searchString)
     {
         return await _search.GetSearchResults(searchString);
     }
