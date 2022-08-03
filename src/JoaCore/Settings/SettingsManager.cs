@@ -23,6 +23,7 @@ public class SettingsManager
 
     public SettingsManager(CoreSettings coreSettings, IConfiguration configuration)
     {
+        _logger = JoaLogger.GetInstance();
         _configuration = configuration;
         _timeSinceLastChanged = Stopwatch.StartNew();
         _timeSinceLastSinc = Stopwatch.StartNew();

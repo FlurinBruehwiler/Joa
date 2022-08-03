@@ -9,7 +9,8 @@ namespace BookmarksSearch;
 public class BookmarksSearch : IGlobalSearchPlugin
 {
     private readonly IBrowserHelper _browserHelper;
-    
+    private readonly IJoaLogger _joaLogger;
+
     [SettingProperty]
     public List<Browser> Browsers { get; set; } = new()
     {
@@ -21,22 +22,20 @@ public class BookmarksSearch : IGlobalSearchPlugin
     
     public List<SearchResult> GlobalSearchResults { get; set; } = null!;
 
-    public BookmarksSearch(IBrowserHelper browserHelper)
+    public BookmarksSearch(IBrowserHelper browserHelper, IJoaLogger joaLogger)
     {
         _browserHelper = browserHelper;
+        _joaLogger = joaLogger;
     }
     
     public void Execute(SearchResult searchResult, ContextAction contextAction)
     {
-        if(searchResult is not SearchResult result)
-            return;
-
-        _browserHelper.OpenWebsite(result.Description);
+        _browserHelper.OpenWebsite(searchResult.Description);
     }
 
     public void UpdateIndex()
     {
-        var bookmarks = Browsers.Where(x => x.Enabled).SelectMany(x => x.GetBookmarks()).DistinctBy(x => x.url).ToList();
+        var bookmarks = Browsers.Where(x => x.Enabled).SelectMany(x => x.GetBookmarks(_joaLogger)).DistinctBy(x => x.url).ToList();
 
         GlobalSearchResults = bookmarks.Select(x => new SearchResult(x.name, x.url, "")).ToList();
     }

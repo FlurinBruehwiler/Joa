@@ -15,9 +15,9 @@ public class PluginLoader
 
     public PluginLoader(IConfiguration configuration)
     {
+        _logger = JoaLogger.GetInstance();
         var assemblies = LoadAssemblies(GetPluginDllPaths(configuration));
         _pluginTypes = LoadTypes(assemblies);
-        _logger = JoaLogger.GetInstance();
     }
     
     public IEnumerable<IPlugin> InstantiatePlugins(CoreSettings coreSettings)

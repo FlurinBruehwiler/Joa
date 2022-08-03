@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using JoaPluginsPackage.Attributes;
+using JoaPluginsPackage.Injectables;
 using OperatingSystem = JoaPluginsPackage.Enums.OperatingSystem;
 
 namespace BookmarksSearch;
@@ -25,12 +26,15 @@ public class Browser
     [OperatingSystem(OperatingSystem.Linux)]
     public string LinuxLocation { get; set; } = null!;
 
-    public List<Bookmark> GetBookmarks()
+    public List<Bookmark> GetBookmarks(IJoaLogger joaLogger)
     {
-        if (!File.Exists(WindowsLocation))
+        var bookmarkLocation =
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + WindowsLocation;
+        
+        if (!File.Exists(bookmarkLocation))
             return new List<Bookmark>();
 
-        var content = File.ReadAllText(WindowsLocation);
+        var content = File.ReadAllText(bookmarkLocation);
         
         var bookmarksFile = JsonSerializer.Deserialize<BookmarksFileModel>(content);
 

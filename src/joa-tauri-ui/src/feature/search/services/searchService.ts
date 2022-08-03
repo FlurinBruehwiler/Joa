@@ -66,7 +66,7 @@ export function useSelectedCommand(commands: PluginCommand[]) : [ number, () => 
 }
 
 export function executeCommand(connection: HubConnection, command: PluginCommand) {
-    console.log("executing commfand");
+    console.log("executing command");
     connection.invoke(executeCommandMethod, command.commandId, "enter")
         .catch(function (err : any) {
             return console.error(err.toString());
