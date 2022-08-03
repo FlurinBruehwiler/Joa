@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.ApplicationSearch", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.ColorConverter", "Plugin.ColorConverter\Plugin.ColorConverter.csproj", "{1BE355AE-B98A-4966-B7EC-45F0B0B5A55F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaInterface", "JoaInterface\JoaInterface.csproj", "{A454B873-B333-41E1-A212-CD966CE35C10}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaPluginsPackage", "JoaPluginsPackage\JoaPluginsPackage.csproj", "{6C21BD56-931E-4284-9398-A68CAFD9A775}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joa", "Joa\Joa.csproj", "{7E141558-017B-4FDD-B5D6-44E057C433D8}"
@@ -20,6 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{81094FC7-478A-4872-93E1-D9FB6EED5BC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.BookmarksSearch", "Plugin.BookmarksSearch\Plugin.BookmarksSearch.csproj", "{3A15D52C-4C87-4155-AE3B-32D519BAFB95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaInterface", "JoaInterface\JoaInterface.csproj", "{444C2DC7-A3D6-4AB9-A902-3CD756FBE776}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,10 +46,6 @@ Global
 		{1BE355AE-B98A-4966-B7EC-45F0B0B5A55F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BE355AE-B98A-4966-B7EC-45F0B0B5A55F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BE355AE-B98A-4966-B7EC-45F0B0B5A55F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A454B873-B333-41E1-A212-CD966CE35C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A454B873-B333-41E1-A212-CD966CE35C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A454B873-B333-41E1-A212-CD966CE35C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A454B873-B333-41E1-A212-CD966CE35C10}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6C21BD56-931E-4284-9398-A68CAFD9A775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6C21BD56-931E-4284-9398-A68CAFD9A775}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C21BD56-931E-4284-9398-A68CAFD9A775}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -62,6 +58,10 @@ Global
 		{3A15D52C-4C87-4155-AE3B-32D519BAFB95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A15D52C-4C87-4155-AE3B-32D519BAFB95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A15D52C-4C87-4155-AE3B-32D519BAFB95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{444C2DC7-A3D6-4AB9-A902-3CD756FBE776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{444C2DC7-A3D6-4AB9-A902-3CD756FBE776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{444C2DC7-A3D6-4AB9-A902-3CD756FBE776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{444C2DC7-A3D6-4AB9-A902-3CD756FBE776}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2CFB361F-137E-4D96-BD4B-79FABFAEA0CB} = {81094FC7-478A-4872-93E1-D9FB6EED5BC2}

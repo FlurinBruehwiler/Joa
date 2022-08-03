@@ -19,6 +19,7 @@ public class SettingsManager
     private readonly JsonSerializerOptions _options;
     private Stopwatch _timeSinceLastChanged;
     private Stopwatch _timeSinceLastSinc;
+    private readonly JoaLogger _logger;
 
     public SettingsManager(CoreSettings coreSettings, IConfiguration configuration)
     {
@@ -42,7 +43,7 @@ public class SettingsManager
 
     private void ConfigureFileWatcher()
     {
-        JoaLogger.GetInstance().Log($"Setting up file watcher for the file {_settingsLocation}", IJoaLogger.LogLevel.Info);
+        _logger.Log($"Setting up file watcher for the file {_settingsLocation}", IJoaLogger.LogLevel.Info);
         var watcher = new FileSystemWatcher(Directory.GetParent(_settingsLocation)?.FullName ?? throw new Exception("Error while getting SettingsLocation"));
         watcher.NotifyFilter = NotifyFilters.LastWrite;
         watcher.Changed += OnChanged;
@@ -63,7 +64,7 @@ public class SettingsManager
     public void Sync()
     {
         _timeSinceLastSinc.Restart();
-        JoaLogger.GetInstance().Log("Synchronizing the settings.", IJoaLogger.LogLevel.Info);
+        _logger.Log("Synchronizing the settings.", IJoaLogger.LogLevel.Info);
         Thread.Sleep(10);
         UpdateSettingsFromJson();
         SaveSettingsToJson();
@@ -81,15 +82,15 @@ public class SettingsManager
         }
         catch (Exception e)
         {
-            JoaLogger.GetInstance().Log($"There was an exception thrown while Saving the Settings with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
+            _logger.Log($"There was an exception thrown while Saving the Settings with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
         }
         
-        JoaLogger.GetInstance().LogMeasureResult(timer ,nameof(SaveSettingsToJson));
+        _logger.LogMeasureResult(timer ,nameof(SaveSettingsToJson));
     }
 
     public void UpdateSettingsFromJson()
     {
-        var timer = JoaLogger.GetInstance().StartMeasure();
+        var timer = _logger.StartMeasure();
         
         try
         {
@@ -112,10 +113,10 @@ public class SettingsManager
         }
         catch (Exception e)
         {
-            JoaLogger.GetInstance().Log($"There was an exception thrown while Updating the Settings from the settings.json with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
+            _logger.Log($"There was an exception thrown while Updating the Settings from the settings.json with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
         }
         
-        JoaLogger.GetInstance().LogMeasureResult(timer, nameof(UpdateSettingsFromJson));
+        _logger.LogMeasureResult(timer, nameof(UpdateSettingsFromJson));
     }
 
     private void UpdatePluginDefinition(PluginDefinition oldPluginDefinition, DtoSettings newDtoSettings)

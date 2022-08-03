@@ -11,11 +11,13 @@ namespace JoaCore.PluginCore;
 public class PluginLoader
 {
     private readonly List<Type> _pluginTypes;
+    private readonly JoaLogger _logger;
 
     public PluginLoader(IConfiguration configuration)
     {
         var assemblies = LoadAssemblies(GetPluginDllPaths(configuration));
         _pluginTypes = LoadTypes(assemblies);
+        _logger = JoaLogger.GetInstance();
     }
     
     public IEnumerable<IPlugin> InstantiatePlugins(CoreSettings coreSettings)
@@ -30,7 +32,7 @@ public class PluginLoader
             output.Add(result);
         }
         
-        JoaLogger.GetInstance().Log("Loaded Plugins successfully!!", IJoaLogger.LogLevel.Info);
+        _logger.Log("Loaded Plugins successfully!!", IJoaLogger.LogLevel.Info);
         
         return output;
     }
@@ -59,8 +61,8 @@ public class PluginLoader
         }
         
         var availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
-        JoaLogger.GetInstance().Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
-                                     $"Available types: {availableTypes}", IJoaLogger.LogLevel.Warning);
+        _logger.Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
+                    $"Available types: {availableTypes}", IJoaLogger.LogLevel.Warning);
         return null;
     }
 
@@ -80,7 +82,7 @@ public class PluginLoader
         var pluginFolder =
             Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, path));
 
-        JoaLogger.GetInstance().Log($"Searching for Plugins in {pluginFolder}", IJoaLogger.LogLevel.Info);
+        _logger.Log($"Searching for Plugins in {pluginFolder}", IJoaLogger.LogLevel.Info);
 
         var pluginFolders = Directory.GetDirectories(pluginFolder);
 
@@ -89,7 +91,7 @@ public class PluginLoader
             .ToList();
 
         var pluginsToLog = plugins.Aggregate("", (current, plugin) => current + Environment.NewLine + plugin);
-        JoaLogger.GetInstance().Log($"Found the following plugins DLLs: {pluginsToLog}", IJoaLogger.LogLevel.Info);
+        _logger.Log($"Found the following plugins DLLs: {pluginsToLog}", IJoaLogger.LogLevel.Info);
 
         return plugins!;
     }

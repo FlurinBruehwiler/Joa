@@ -6,14 +6,14 @@ namespace JoaCore;
 public class JoaLogger : IJoaLogger
 {
     private static JoaLogger? _instance;
-    
-    private readonly string _directory = "C:/temp";
-    private readonly string _fileName = "Joalog.log";
+
+    private const string Directory = "C:/temp";
+    private const string FileName = "Joalog.log";
     private readonly string _completePath;
 
     private JoaLogger()
     {
-        _completePath = Path.Combine(_directory, _fileName);
+        _completePath = Path.Combine(Directory, FileName);
     }
 
     public void Log(string logMessage, IJoaLogger.LogLevel logLevel)
@@ -26,6 +26,15 @@ public class JoaLogger : IJoaLogger
         };
 
         LogMessage($"[{DateTime.Now} | {level} | {logMessage}");
+    }
+
+    public void LogException(Exception e, string logName = "")
+    {
+        Log(
+            string.IsNullOrEmpty(logName)
+                ? $"There was an Exception with the following Stacktrace {e}"
+                : $"{logName} with the following Stacktrace {e}",
+            IJoaLogger.LogLevel.Error);
     }
 
     public static JoaLogger GetInstance()
@@ -53,8 +62,8 @@ public class JoaLogger : IJoaLogger
         {
             if (!File.Exists(_completePath))
             {
-                Directory.CreateDirectory(_directory);
-                File.Create(_fileName).Dispose();
+                System.IO.Directory.CreateDirectory(Directory);
+                File.Create(FileName).Dispose();
             }
 
             File.AppendAllText(_completePath, message + Environment.NewLine);

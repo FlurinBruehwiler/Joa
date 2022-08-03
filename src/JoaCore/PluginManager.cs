@@ -13,11 +13,13 @@ public class PluginManager
     public List<PluginDefinition>? Plugins { get; set; }
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
+    private readonly JoaLogger _logger;
     
     public PluginManager(SettingsManager settingsManager, IConfiguration configuration)
     {
         SettingsManager = settingsManager;
         _pluginLoader = new PluginLoader(configuration);
+        _logger = JoaLogger.GetInstance();
     }
 
     public List<T> GetPluginsOfType<T>() where T : IPlugin
@@ -43,31 +45,36 @@ public class PluginManager
             }
             catch (Exception e)
             {
-                JoaLogger.GetInstance().Log($"There was an exception while updating the index of the plugin {plugin.GetType().Name} with the following Stacktrace {e}", IJoaLogger.LogLevel.Error);
+                _logger.LogException(e, $"Updating the index for plugin {plugin.GetType().Name} failed");
             }
         }
     }
     
     public void ReloadPlugins()
     {
-        var timer = JoaLogger.GetInstance().StartMeasure();
-        
+        var timer = _logger.StartMeasure();
+    
         Plugins = new List<PluginDefinition>();
         foreach (var plugin in _pluginLoader.InstantiatePlugins(SettingsManager.CoreSettings).ToList())
         {
-            Plugins.Add(new PluginDefinition(plugin, GetPluginInfos(plugin.GetType())));
+            var pluginInfos = GetPluginInfos(plugin.GetType());
+            if(pluginInfos is null)
+                continue;
+            Plugins.Add(new PluginDefinition(plugin, pluginInfos));
         }
         SettingsManager.LoadPluginSettings(Plugins);
         UpdateIndexes();
-        
-        JoaLogger.GetInstance().LogMeasureResult(timer, nameof(ReloadPlugins));
+    
+        _logger.LogMeasureResult(timer, nameof(ReloadPlugins));
     }
     
-    private PluginAttribute GetPluginInfos(MemberInfo pluginType)
+    private PluginAttribute? GetPluginInfos(MemberInfo pluginType)
     {
         if (Attribute.GetCustomAttributes(pluginType).FirstOrDefault(x => x is PluginAttribute) is PluginAttribute pluginAttribute)
             return pluginAttribute;
         
-        throw new Exception($"The plugin {pluginType.Name} does not have the PluginAttribute");
+        
+        _logger.Log($"The plugin {pluginType.Name} does not have the PluginAttribute", IJoaLogger.LogLevel.Error);
+        return null;
     }
 }

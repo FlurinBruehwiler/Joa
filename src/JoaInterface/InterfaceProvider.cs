@@ -1,5 +1,7 @@
 ﻿using JoaCore;
 using JoaInterface.Hubs;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace JoaInterface;
 
