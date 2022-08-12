@@ -5,7 +5,7 @@ namespace JoaCore.SearchEngine;
 
 public class StringMatcher
     {
-        private readonly MatchOption _defaultMatchOption = new MatchOption();
+        private readonly MatchOption _defaultMatchOption = new();
 
         public SearchPrecisionScore UserSettingSearchPrecision { get; set; }
 

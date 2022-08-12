@@ -1,6 +1,7 @@
 ﻿namespace JoaPluginsPackage;
 
-public interface ISearchContext
+public class NestedSearchContext
 {
     public string SearchString { get; set; }
+    public PathElement[] Path { get; set; }
 }

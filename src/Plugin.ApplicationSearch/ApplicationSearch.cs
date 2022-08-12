@@ -11,12 +11,11 @@ namespace ApplicationSearch;
 public class ApplicationSearch : IGlobalSearchPlugin
 {
     private readonly IJoaLogger _joaLogger;
-    public List<SearchResult> GlobalSearchResults { get; set; }
+    public List<SearchResult> GlobalSearchResults { get; set; } = new();
     
     public ApplicationSearch(IJoaLogger joaLogger)
     {
         _joaLogger = joaLogger;
-        GlobalSearchResults = new List<SearchResult>();
     }
     
     public void UpdateIndex()

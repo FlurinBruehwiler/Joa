@@ -6,7 +6,7 @@ public class CoreSettings : IJoaSettings
 {
     public CoreSettings()
     {
-        CoreSettingsItems = new Dictionary<string, CoreSettingsItem>()
+        CoreSettingsItems = new Dictionary<string, CoreSettingsItem>
         {
 
         };

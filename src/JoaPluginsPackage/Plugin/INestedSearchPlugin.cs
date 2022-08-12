@@ -1,6 +1,6 @@
 ﻿namespace JoaPluginsPackage.Plugin;
 
-public interface INestedSearchPlugin : ISearchPlugin
+public interface INestedSearchPlugin : IGlobalSearchPlugin
 {
-    public List<SearchResult> GetNestedSearchResults(ISearchContext context);
+    public List<SearchResult> GetNestedSearchResults(NestedSearchContext context);
 }

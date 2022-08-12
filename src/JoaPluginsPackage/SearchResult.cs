@@ -9,7 +9,7 @@ public class SearchResult
         Icon = icon;
         Actions = actions ?? new List<ContextAction>
         {
-            new("enter", "Open", null)
+            new("enter", "Open", Key.Enter)
         };
     }
 
