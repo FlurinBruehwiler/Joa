@@ -1,4 +1,5 @@
-﻿using JoaCore;
+﻿using System.Reflection;
+using JoaCore;
 using Microsoft.AspNetCore.SignalR;
 
 namespace JoaInterface.Hubs;
@@ -6,14 +7,18 @@ namespace JoaInterface.Hubs;
 public class SearchHub : Hub
 {
     private readonly Search _search;
-    public SearchHub(Search search)
+    private readonly SearchRequestMaster _searchRequestMaster;
+
+    public SearchHub(Search search, SearchRequestMaster searchRequestMaster)
     {
         _search = search;
+        _searchRequestMaster = searchRequestMaster;
     }
     
-    public async Task<List<PluginSearchResult>> GetSearchResults(string searchString)
+    public Task GetSearchResults(string searchString)
     {
-        return await _search.GetSearchResults(searchString);
+        _searchRequestMaster.OnIncomingSearchRequest(searchString, Clients);
+        return Task.CompletedTask;
     }
 
     public async Task ExecuteSearchResult(string commandId, string actionKey)

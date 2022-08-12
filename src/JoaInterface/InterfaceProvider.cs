@@ -27,6 +27,7 @@ public class InterfaceProvider
         });
         builder.Services.AddSingleton(_search);
         builder.Services.AddSingleton(_search.SettingsManager);
+        builder.Services.AddSingleton<SearchRequestMaster>();
         var app = builder.Build();
         app.UseCors();
         app.MapHub<SearchHub>("/searchHub");

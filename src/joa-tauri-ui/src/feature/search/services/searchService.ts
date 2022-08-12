@@ -1,7 +1,7 @@
 import {HubConnection, HubConnectionBuilder, RetryContext} from "@microsoft/signalr";
 import {useEffect, useState} from "react";
 import PluginCommand from "../models/pluginCommand";
-import {executeCommandMethod, updateCommandsMethod} from "../models/JoaMethods";
+import {executeCommandMethod, receiveSearchResultsMethod, updateCommandsMethod} from "../models/JoaMethods";
 
 export function useJoaSearch() : [HubConnection | undefined] {
     const [connection, setConnection] = useState<HubConnection>();
@@ -11,13 +11,19 @@ export function useJoaSearch() : [HubConnection | undefined] {
             .withUrl("http://localhost:5000/searchHub")
             .withAutomaticReconnect({
                 nextRetryDelayInMilliseconds(retryContext: RetryContext): number | null {
+                    console.log("retrying...");
                     return 1000;
                 }})
             .build();
 
         newConnection.onreconnected(() => {
+            console.log("reconnected!!!");
             setConnection(structuredClone(connection));
-        })
+        });
+
+        newConnection.onclose(() => {
+            setConnection(structuredClone(connection));
+        });
 
         newConnection.start().then(() => {
             setConnection(newConnection);
@@ -31,18 +37,29 @@ export function useJoaSearch() : [HubConnection | undefined] {
     return [connection]
 }
 
-export function useCommands(connection: HubConnection) : [PluginCommand[], (searchString: string) => void, () => void]{
+let scores: { [key: string]: number } = {};
+
+export function useCommands(connection: HubConnection, currentSearchString: string) : [PluginCommand[], (searchString: string) => void, () => void]{
     const [ searchResults, setSearchResults ] = useState<PluginCommand[]>([]);
-    const updateCommands = async (searchString: string) => {
-        const commands = await connection.invoke<PluginCommand[]>(updateCommandsMethod, searchString);
-        setSearchResults(commands.slice(0,8));
+
+    useEffect(() => {
+        connection.on(receiveSearchResultsMethod, (searchString: string, commands: PluginCommand[]) => {
+            console.log(Date.now() - scores[searchString]);
+            if(currentSearchString === searchString){}
+                setSearchResults(commands.slice(0,8));
+        });
+    }, []);
+
+    const sendNewSearchString = async (searchString: string) => {
+        scores[searchString] = Date.now();
+        await connection.send(updateCommandsMethod, searchString);
     }
 
     const clearCommands = () => {
         setSearchResults([]);
     }
 
-    return [searchResults, updateCommands, clearCommands];
+    return [searchResults, sendNewSearchString, clearCommands];
 }
 
 export function useSelectedCommand(commands: PluginCommand[]) : [ number, () => void, () => void, () => void]{
@@ -66,7 +83,7 @@ export function useSelectedCommand(commands: PluginCommand[]) : [ number, () => 
 }
 
 export function executeCommand(connection: HubConnection, command: PluginCommand) {
-    console.log("executing command");
+    console.log("executingcomfnd");
     connection.invoke(executeCommandMethod, command.commandId, "enter")
         .catch(function (err : any) {
             return console.error(err.toString());
