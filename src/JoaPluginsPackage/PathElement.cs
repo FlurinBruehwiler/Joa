@@ -1,6 +1,7 @@
 namespace JoaPluginsPackage;
 
-public class PathElement
+public record PathElement
 {
-    public string DisplayName { get; set; }
+    public string DisplayName { get; init; } = default!;
+    public string Key { get; init; } = default!;
 }

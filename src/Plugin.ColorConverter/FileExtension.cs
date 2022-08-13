@@ -2,8 +2,8 @@
 
 namespace ColorConverter;
 
-public class FileExtension
+public record FileExtension
 {
     [SettingProperty]
-    public string Extensions { get; set; } = null!;
+    public string Extensions { get; init; } = null!;
 }

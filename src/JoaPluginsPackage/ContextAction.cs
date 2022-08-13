@@ -1,17 +1,9 @@
 ﻿namespace JoaPluginsPackage;
 
-public class ContextAction
+public record ContextAction
 {
-    public ContextAction(string key, string name, Key keyBoardKey, string? link = null)
-    {
-        Key = key;
-        Name = name;
-        KeyBoardKey = keyBoardKey;
-        Link = link;
-    }
-
-    public string Key { get; set; }
-    public string Name { get; set; }
-    public Key KeyBoardKey { get; set; }
-    public string? Link { get; set; }
+    public string Key { get; init; } = default!;
+    public string Name { get; init; } = default!;
+    public Key KeyBoardKey { get; init; } = default!;
+    public string? Link { get; init; }
 }

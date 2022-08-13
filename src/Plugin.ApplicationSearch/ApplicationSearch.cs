@@ -33,7 +33,13 @@ public class ApplicationSearch : IGlobalSearchPlugin
         {
             if (Extensions.Any(x => path.EndsWith(x.Extension, StringComparison.OrdinalIgnoreCase)))
             {
-                GlobalSearchResults.Add(new ApplicationSearchResult(Path.GetFileNameWithoutExtension(path), "", "", path));
+                GlobalSearchResults.Add(new ApplicationSearchResult
+                {
+                    Caption = Path.GetFileNameWithoutExtension(path),
+                    Description = "",
+                    Icon = "",
+                    FilePath = path
+                });
             }
         }
         

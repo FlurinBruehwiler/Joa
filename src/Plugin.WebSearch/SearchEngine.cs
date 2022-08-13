@@ -2,7 +2,7 @@
 
 namespace WebSearch;
 
-public class SearchEngine
+public record SearchEngine
 {
     [SettingProperty] public string Name { get; set; } = string.Empty;
 

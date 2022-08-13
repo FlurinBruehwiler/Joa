@@ -39,7 +39,13 @@ public class WebSearch : IStrictSearchPlugin
         
         var searchResults = new List<SearchResult>
         {
-            new WebSearchResult(searchEngine.Name, $"Search on {searchEngine.Name} for \"{searchString}\"", "", "")
+            new WebSearchResult
+            {
+                Caption = searchEngine.Name,
+                Description = $"Search on {searchEngine.Name} for \"{searchString}\"",
+                Icon = "",
+                Url = ""
+            }
         };
 
         if (string.IsNullOrEmpty(searchString))
@@ -55,10 +61,13 @@ public class WebSearch : IStrictSearchPlugin
         List<string> suggestions = response[1].ToObject<List<string>>();
         
         searchResults.AddRange(suggestions.Select(suggestion 
-                => new WebSearchResult(suggestion, 
-                    $"Search on Google for \"{suggestion}\"", 
-                    "", 
-                    searchEngine.Url.Replace("{{query}}", suggestion)))
+                => new WebSearchResult
+                {
+                    Caption = suggestion,
+                    Description = $"Search on Google for \"{suggestion}\"",
+                    Icon = "",
+                    Url = searchEngine.Url.Replace("{{query}}", suggestion)
+                })
             .ToList());
         
         return searchResults;

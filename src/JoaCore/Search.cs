@@ -63,7 +63,11 @@ public class Search
         if (matchingPluginDefinition is not null)
         {
             var strictPluginResult = await Task.Run(() => matchingPluginDefinition.Plugin.GetTypedPlugin<IStrictSearchPlugin>().GetStrictSearchResults(searchString));
-            _lastSearchResults.AddRange(strictPluginResult.Select(x => new PluginSearchResult(x, matchingPluginDefinition.Id)));
+            _lastSearchResults.AddRange(strictPluginResult.Select(x => new PluginSearchResult
+            {
+                SearchResult = x,
+                PluginId = matchingPluginDefinition.Id
+            }));
             _logger.LogMeasureResult(stopwatch, "Search");
             return _lastSearchResults;
         }
@@ -72,7 +76,11 @@ public class Search
         {
             foreach (var searchResult in plugin.Plugin.GetTypedPlugin<IGlobalSearchPlugin>().GlobalSearchResults)
             {
-                _lastSearchResults.Add(new PluginSearchResult(searchResult, plugin.Id));
+                _lastSearchResults.Add(new PluginSearchResult
+                {
+                    SearchResult = searchResult,
+                    PluginId = plugin.Id
+                });
             }
         }
         

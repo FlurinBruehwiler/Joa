@@ -3,16 +3,9 @@ using JoaPluginsPackage.Plugin;
 
 namespace JoaCore;
 
-public class PluginSearchResult
+public record PluginSearchResult
 {
-    public PluginSearchResult(SearchResult searchResult, Guid pluginId)
-    {
-        SearchResult = searchResult;
-        PluginId = pluginId;
-        CommandId = Guid.NewGuid();
-    }
-
-    public SearchResult SearchResult { get; }
-    public Guid PluginId { get; }
-    public Guid CommandId { get; set; }
+    public SearchResult SearchResult { get; init; } = default!;
+    public Guid PluginId { get; init; }
+    public Guid CommandId { get; } = Guid.NewGuid();
 }

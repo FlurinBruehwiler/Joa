@@ -2,9 +2,9 @@
 
 namespace ApplicationSearch;
 
-public class ApplicationFolder
+public record ApplicationFolder()
 {
     [Path]
     [SettingProperty]
-    public string Path { get; set; } = null!;
+    public string Path { get; init; } = default!;
 }

@@ -2,14 +2,8 @@
 
 namespace JoaCore.Settings;
 
-public class PluginConfig
+public record PluginConfig
 {
-    public PluginConfig(PluginAttribute pluginAttribute, IEnumerable<PluginSetting> pluginSettings)
-    {
-        PluginAttribute = pluginAttribute;
-        PluginSettings = pluginSettings;
-    }
-
-    public PluginAttribute PluginAttribute { get; set; }
-    public IEnumerable<PluginSetting> PluginSettings { get; set; }
+    public PluginAttribute PluginAttribute { get; init; }
+    public IEnumerable<PluginSetting> PluginSettings { get; init; }
 }

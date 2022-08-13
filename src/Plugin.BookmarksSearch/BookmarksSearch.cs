@@ -37,6 +37,11 @@ public class BookmarksSearch : IGlobalSearchPlugin
     {
         var bookmarks = Browsers.Where(x => x.Enabled).SelectMany(x => x.GetBookmarks(_joaLogger)).DistinctBy(x => x.url).ToList();
 
-        GlobalSearchResults = bookmarks.Select(x => new SearchResult(x.name, x.url, "")).ToList();
+        GlobalSearchResults = bookmarks.Select(x => new SearchResult
+        {
+            Caption = x.name,
+            Description = x.url,
+            Icon = "",
+        }).ToList();
     }
 }

@@ -2,8 +2,8 @@
 
 namespace ApplicationSearch;
 
-public class FileExtension
+public record FileExtension
 {
     [SettingProperty]
-    public string Extension { get; set; } = null!;
+    public string Extension { get; init; } = default!;
 }

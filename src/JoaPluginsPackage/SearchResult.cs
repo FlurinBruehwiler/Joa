@@ -1,20 +1,9 @@
 ﻿namespace JoaPluginsPackage;
 
-public class SearchResult
+public record SearchResult
 {
-    public SearchResult(string caption, string description, string icon, List<ContextAction>? actions = null)
-    {
-        Caption = caption;
-        Description = description;
-        Icon = icon;
-        Actions = actions ?? new List<ContextAction>
-        {
-            new("enter", "Open", Key.Enter)
-        };
-    }
-
-    public string Caption { get; init; }
-    public string Description { get; init; }
-    public string Icon { get; init; }
-    public List<ContextAction> Actions { get; set; }
+    public string Caption { get; init; } = default!;
+    public string Description { get; init; } = default!;
+    public string Icon { get; init; } = default!;
+    public List<ContextAction>? Actions { get; init; }
 }
