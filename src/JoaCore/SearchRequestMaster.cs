@@ -6,28 +6,25 @@ public class SearchRequestMaster
 {
     public event EventHandler<IncomingSearchRequestEventArgs>? IncomingSearchRequest;
 
-    public SearchRequestMaster(Search search){
+    public SearchRequestMaster(JoaSearch joaSearch){
         IncomingSearchRequest += async (sender, args) =>
         {
-            var res = await search.GetSearchResults(args.SearchString);
-            await args.Clients.All.SendAsync("ReceiveSearchResults", args.SearchString, res);
+            var res = await joaSearch.GetSearchResults(args.SearchString);
         };
     }
     
-    public void OnIncomingSearchRequest(string searchString, IHubCallerClients caller)
+    public void OnIncomingSearchRequest(string searchString)
     {
-        IncomingSearchRequest?.Invoke(this, new IncomingSearchRequestEventArgs(searchString, caller));
+        IncomingSearchRequest?.Invoke(this, new IncomingSearchRequestEventArgs(searchString));
     }
 }
 
 public class IncomingSearchRequestEventArgs
 {
-    public IncomingSearchRequestEventArgs(string searchString, IHubCallerClients clients)
+    public IncomingSearchRequestEventArgs(string searchString)
     {
         SearchString = searchString;
-        Clients = clients;
     }
 
     public string SearchString { get; set; }
-    public IHubCallerClients Clients { get; set; }
 }
