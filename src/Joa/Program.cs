@@ -1,4 +1,5 @@
 ﻿using JoaCore;
+using JoaInterface;
 using JoaPluginsPackage.Injectables;
 using Microsoft.Extensions.Configuration;
 
@@ -14,6 +15,8 @@ if (configuration is null)
 }
 var search = new Search(configuration);
 
+var interfaceProvider = new InterfaceProvider(search);
 JoaLogger.GetInstance().Log("Init Complete", IJoaLogger.LogLevel.Info);
 
+interfaceProvider.Run();
 
