@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace JoaCore;
 
-public class JoaSearch
+public class Search
 {
     public SettingsManager SettingsManager { get; set; }
     private PluginManager PluginManager { get; set; }
@@ -15,7 +15,7 @@ public class JoaSearch
 
     private JoaLogger _logger = JoaLogger.GetInstance();
 
-    public JoaSearch(IConfiguration configuration)
+    public Search(IConfiguration configuration)
     {
         SettingsManager = new SettingsManager(new CoreSettings(), configuration);
         PluginManager = new PluginManager(SettingsManager, configuration);
