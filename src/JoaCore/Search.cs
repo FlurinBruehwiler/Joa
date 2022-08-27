@@ -9,17 +9,17 @@ namespace JoaCore;
 
 public class Search
 {
-    public SettingsManager SettingsManager { get; set; }
-    private PluginManager PluginManager { get; set; }
+    private readonly JoaLogger _logger;
+    private readonly PluginManager _pluginManager;
     private List<PluginSearchResult>? _lastSearchResults;
 
-    private JoaLogger _logger = JoaLogger.GetInstance();
-
-    public Search(IConfiguration configuration)
-    {
-        SettingsManager = new SettingsManager(new CoreSettings(), configuration);
-        PluginManager = new PluginManager(SettingsManager, configuration);
-        PluginManager.ReloadPlugins();
+    public Search(JoaLogger logger, PluginManager pluginManager)
+    { 
+        _logger = logger;
+        _pluginManager = pluginManager;
+        
+        _pluginManager.ReloadPlugins();
+        
         StringMatcher.Instance = new StringMatcher();
     }
 
@@ -32,7 +32,7 @@ public class Search
             return;
         
         _logger.Log(pluginCommand.PluginId.ToString(), IJoaLogger.LogLevel.Info);
-        var pluginDef = PluginManager.GetPluginDefinitionsOfType<ISearchPlugin>() 
+        var pluginDef = _pluginManager.GetPluginDefinitionsOfType<ISearchPlugin>() 
             .FirstOrDefault(plugin => plugin.Id == pluginCommand.PluginId);
         
         if (pluginDef is null)
@@ -46,15 +46,22 @@ public class Search
         await Task.Run(() => pluginDef.Plugin.GetTypedPlugin<ISearchPlugin>().Execute(pluginCommand.SearchResult, action));
     }
 
-    public async Task<List<PluginSearchResult>> GetSearchResults(string searchString)
+    public async Task UpdateSearchResults(string searchString,
+        Action<List<PluginSearchResult>> callback)
     {
         var stopwatch = _logger.StartMeasure();
-        
-        if (string.IsNullOrWhiteSpace(searchString))
-            return new List<PluginSearchResult>();
 
-        if (PluginManager.Plugins == null)
-            return new List<PluginSearchResult>();
+        if (string.IsNullOrWhiteSpace(searchString))
+        {
+            callback(new List<PluginSearchResult>());
+            return;
+        }
+
+        if (_pluginManager.Plugins == null)
+        {
+            callback(new List<PluginSearchResult>());
+            return;
+        }
 
         _lastSearchResults = new List<PluginSearchResult>();
 
@@ -69,10 +76,11 @@ public class Search
                 PluginId = matchingPluginDefinition.Id
             }));
             _logger.LogMeasureResult(stopwatch, "Search");
-            return _lastSearchResults;
+            callback(_lastSearchResults);
+            return;
         }
 
-        foreach (var plugin in PluginManager.GetPluginDefinitionsOfType<IGlobalSearchPlugin>())
+        foreach (var plugin in _pluginManager.GetPluginDefinitionsOfType<IGlobalSearchPlugin>())
         {
             foreach (var searchResult in plugin.Plugin.GetTypedPlugin<IGlobalSearchPlugin>().GlobalSearchResults)
             {
@@ -88,7 +96,7 @@ public class Search
 
         _logger.LogMeasureResult(stopwatch, "Search");
         
-        return res;
+        callback(res);
     }
 
     private List<PluginSearchResult> SortSearchResults(List<PluginSearchResult> input, string searchString)
@@ -107,10 +115,10 @@ public class Search
 
     private PluginDefinition? GetMatchingPlugin(string searchString)
     {
-        if (PluginManager.Plugins == null)
+        if (_pluginManager.Plugins == null)
             return null;
 
-        foreach (var pluginDefinition in PluginManager.GetPluginDefinitionsOfType<IStrictSearchPlugin>())
+        foreach (var pluginDefinition in _pluginManager.GetPluginDefinitionsOfType<IStrictSearchPlugin>())
         {
             if (pluginDefinition.Plugin.GetTypedPlugin<IStrictSearchPlugin>().Validator(searchString))
                 return pluginDefinition;

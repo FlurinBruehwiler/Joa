@@ -28,6 +28,21 @@ public class JoaLogger : IJoaLogger
         LogMessage($"[{DateTime.Now} | {level} | {logMessage}");
     }
 
+    public void Info(string logMessage)
+    {
+        Log(logMessage, IJoaLogger.LogLevel.Info);
+    }
+
+    public void Warning(string logMessage)
+    {
+        Log(logMessage, IJoaLogger.LogLevel.Warning);
+    }
+
+    public void Error(string logMessage)
+    {
+        Log(logMessage, IJoaLogger.LogLevel.Error);
+    }
+
     public void LogException(Exception e, string logName = "")
     {
         Log(

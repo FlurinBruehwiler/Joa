@@ -1,22 +1,34 @@
 ﻿using JoaCore;
-using JoaInterface;
-using JoaPluginsPackage.Injectables;
-using Microsoft.Extensions.Configuration;
+using JoaCore.Settings;
+using JoaInterface.Hubs;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
-IConfiguration configuration = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddEnvironmentVariables()
-    .AddCommandLine(args)
-    .Build();
-if (configuration is null)
+var builder = WebApplication.CreateBuilder();
+
+builder.Services.AddSignalR();
+
+builder.Services.AddCors(options =>
 {
-    JoaLogger.GetInstance().Log("Cant read appsettings.json", IJoaLogger.LogLevel.Error);
-    return;
-}
-var search = new Search(configuration);
+    options.AddDefaultPolicy(policyBuilder =>
+    {
+        policyBuilder.WithOrigins("http://127.0.0.1:5500", "http://localhost:3000")
+            .AllowAnyHeader()
+            .WithMethods("GET", "POST")
+            .AllowCredentials();
+    });
+});
 
-var interfaceProvider = new InterfaceProvider(search);
-JoaLogger.GetInstance().Log("Init Complete", IJoaLogger.LogLevel.Info);
 
-interfaceProvider.Run();
+builder.Services.AddSingleton<Search>();
+builder.Services.AddSingleton<PluginManager>();
+builder.Services.AddSingleton<SettingsManager>();
+builder.Services.AddSingleton<CoreSettings>();
+builder.Services.AddSingleton(JoaLogger.GetInstance());
 
+var app = builder.Build();
+
+app.UseCors();
+app.MapHub<SearchHub>("/searchHub");
+app.MapHub<SettingsHub>("/settingsHub");
+app.Run(); 

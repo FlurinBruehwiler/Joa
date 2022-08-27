@@ -4,7 +4,7 @@ import PluginCommand from "../models/pluginCommand";
 import {executeCommandMethod, receiveSearchResultsMethod, updateCommandsMethod} from "../models/JoaMethods";
 
 export function useJoaSearch() : [HubConnection | undefined] {
-    const [connection, setConnection] = useState<HubConnection>();
+    const [connection, setConnection] = useState<HubConnection|undefined>();
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -17,12 +17,14 @@ export function useJoaSearch() : [HubConnection | undefined] {
             .build();
 
         newConnection.onreconnected(() => {
-            console.log("reconnected!!!");
-            setConnection(structuredClone(connection));
+            console.log(connection === newConnection);
+            console.log(newConnection.state);
+            console.log(connection?.state);
+            setConnection(newConnection);
         });
 
         newConnection.onclose(() => {
-            setConnection(structuredClone(connection));
+            setConnection(undefined);
         });
 
         newConnection.start().then(() => {
@@ -83,7 +85,7 @@ export function useSelectedCommand(commands: PluginCommand[]) : [ number, () => 
 }
 
 export function executeCommand(connection: HubConnection, command: PluginCommand) {
-    console.log("executingcomfnd");
+    console.log("execrutingoffnd");
     connection.invoke(executeCommandMethod, command.commandId, "enter")
         .catch(function (err : any) {
             return console.error(err.toString());

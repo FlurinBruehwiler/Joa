@@ -10,6 +10,7 @@ namespace JoaCore.Settings;
 public class SettingsManager
 {
     private readonly IConfiguration _configuration;
+    private readonly JoaLogger _logger;
     public List<PluginDefinition> PluginDefinitions { get; set; } = null!;
     
     [JsonIgnore]
@@ -19,12 +20,11 @@ public class SettingsManager
     private readonly JsonSerializerOptions _options;
     private Stopwatch _timeSinceLastChanged;
     private Stopwatch _timeSinceLastSinc;
-    private readonly JoaLogger _logger;
 
-    public SettingsManager(CoreSettings coreSettings, IConfiguration configuration)
+    public SettingsManager(CoreSettings coreSettings, IConfiguration configuration, JoaLogger logger)
     {
-        _logger = JoaLogger.GetInstance();
         _configuration = configuration;
+        _logger = logger;
         _timeSinceLastChanged = Stopwatch.StartNew();
         _timeSinceLastSinc = Stopwatch.StartNew();
         _settingsLocation = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, configuration.GetValue<string>("SettingsLocation")));
