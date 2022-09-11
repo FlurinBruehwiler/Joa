@@ -38,7 +38,7 @@ public class Search
         if (pluginDef is null)
             return;
 
-        var action = pluginCommand.SearchResult.Actions.SingleOrDefault(x => x.Key == actionKey);
+        var action = pluginCommand.SearchResult.Actions?.SingleOrDefault(x => x.Key == actionKey);
 
         if (action is null)
             return;

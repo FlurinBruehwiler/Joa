@@ -13,9 +13,9 @@ public class PluginLoader
     private readonly List<Type> _pluginTypes;
     private readonly JoaLogger _logger;
 
-    public PluginLoader(IConfiguration configuration)
+    public PluginLoader(IConfiguration configuration, JoaLogger logger)
     {
-        _logger = JoaLogger.GetInstance();
+        _logger = logger;
         var assemblies = LoadAssemblies(GetPluginDllPaths(configuration));
         _pluginTypes = LoadTypes(assemblies);
     }

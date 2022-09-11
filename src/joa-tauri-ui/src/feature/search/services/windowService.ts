@@ -20,7 +20,9 @@ const showWindow = async () => {
     const topThirdOfScreenY = monitor.position.y + (monitor.size.height / 3);
     const targetX = centerOfScreenX - (windowWidth / 2);
     const targetY = topThirdOfScreenY - (windowHeight / 2);
-    await appWindow.setPosition(new PhysicalPosition(0, 0));
+    const post = new PhysicalPosition(Math.floor(targetX), Math.floor(targetY));
+
+    await appWindow.setPosition(post);
     await appWindow.show();
 
     await appWindow.setFocus();
@@ -51,8 +53,8 @@ export function useWindow(connection: HubConnection, clearCommands: () => void, 
 
         let unlistenFn: () => void;
 
-        appWindow.listen('tauri://blur', ({event, payload}) => hideSearchWindow()).then((x) => unlistenFn = x);
-
+        appWindow.listen('tauri://blur', ({event, payload}) => hideSearchWindow()).then((x: () => void) => unlistenFn = x);
+        
         return () => {
             document.removeEventListener('keydown', handleEscape);
             unlistenFn();
@@ -65,7 +67,7 @@ export function useWindow(connection: HubConnection, clearCommands: () => void, 
     }
 
     const hideSearchWindow = async () => {
-        console.log("hide winwfow");
+        console.log("hide wiow");
         await appWindow.hide()
         clearCommands();
         clearSelectedCommand();

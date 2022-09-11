@@ -7,12 +7,17 @@
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <RootNamespace>BookmarksSearch</RootNamespace>
+        <RootNamespace>ApplicationSearch</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <OutputPath>..\Plugins\BookmarksSearch\</OutputPath>
+        <OutputPath>..\Joa\bin\Debug\net6.0\Plugins\BookmarksSearch\</OutputPath>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <OutputPath>..\Joa\bin\Release\net6.0\Plugins\BookmarksSearch\</OutputPath>
+    </PropertyGroup>
+    
     <ItemGroup>
         <ProjectReference Include="..\JoaPluginsPackage\JoaPluginsPackage.csproj">
             <Private>false</Private>

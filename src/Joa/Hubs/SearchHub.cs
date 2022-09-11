@@ -14,11 +14,10 @@ public class SearchHub : Hub
     
     public Task GetSearchResults(string searchString)
     {
-        _search.UpdateSearchResults(searchString, results =>
+        return _search.UpdateSearchResults(searchString, results =>
         {
             Clients.Caller.SendAsync("ReceiveSearchResults", searchString, results);
         });
-        return Task.CompletedTask;
     }
 
     public async Task ExecuteSearchResult(string commandId, string actionKey)

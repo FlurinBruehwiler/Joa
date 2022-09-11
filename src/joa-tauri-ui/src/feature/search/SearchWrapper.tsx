@@ -30,7 +30,7 @@ const SearchWrapper = () => {
             connection.onclose(() => {
                 setConnectionState(false);
             });
-        });
+        }).catch();
 
         return () => {
             connection.stop().then(() => {

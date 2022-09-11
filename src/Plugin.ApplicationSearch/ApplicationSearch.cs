@@ -26,7 +26,10 @@ public class ApplicationSearch : IGlobalSearchPlugin
 
         foreach (var applicationFolder in Folders)
         {
-            paths.AddRange(Directory.GetFiles(applicationFolder.Path, "*", SearchOption.AllDirectories));
+            if (Directory.Exists(applicationFolder.Path))
+            {
+                paths.AddRange(Directory.GetFiles(applicationFolder.Path, "*", SearchOption.AllDirectories));
+            }
         }
 
         foreach (var path in paths)

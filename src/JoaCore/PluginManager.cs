@@ -15,11 +15,11 @@ public class PluginManager
     private readonly PluginLoader _pluginLoader;
     private readonly JoaLogger _logger;
     
-    public PluginManager(SettingsManager settingsManager, IConfiguration configuration)
+    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, JoaLogger logger)
     {
         SettingsManager = settingsManager;
-        _pluginLoader = new PluginLoader(configuration);
-        _logger = JoaLogger.GetInstance();
+        _pluginLoader = pluginLoader;
+        _logger = logger;
     }
 
     public List<T> GetPluginsOfType<T>() where T : IPlugin
