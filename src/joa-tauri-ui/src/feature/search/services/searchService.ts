@@ -3,42 +3,6 @@ import {useEffect, useState} from "react";
 import PluginCommand from "../models/pluginCommand";
 import {executeCommandMethod, receiveSearchResultsMethod, updateCommandsMethod} from "../models/JoaMethods";
 
-export function useJoaSearch() : [HubConnection | undefined] {
-    const [connection, setConnection] = useState<HubConnection|undefined>();
-
-    useEffect(() => {
-        const newConnection = new HubConnectionBuilder()
-            .withUrl("http://localhost:5000/searchHub")
-            .withAutomaticReconnect({
-                nextRetryDelayInMilliseconds(retryContext: RetryContext): number | null {
-                    console.log("retrying...");
-                    return 1000;
-                }})
-            .build();
-
-        newConnection.onreconnected(() => {
-            console.log(connection === newConnection);
-            console.log(newConnection.state);
-            console.log(connection?.state);
-            setConnection(newConnection);
-        });
-
-        newConnection.onclose(() => {
-            setConnection(undefined);
-        });
-
-        newConnection.start().then(() => {
-            setConnection(newConnection);
-        });
-
-        return () => {
-            newConnection.stop().then();
-        }
-    }, []);
-
-    return [connection]
-}
-
 let scores: { [key: string]: number } = {};
 
 export function useCommands(connection: HubConnection, currentSearchString: string) : [PluginCommand[], (searchString: string) => void, () => void]{

@@ -1,20 +1,51 @@
 import Search from "./Search";
-import {HubConnectionState} from "@microsoft/signalr";
-import {useJoaSearch} from "./services/searchService";
+import {HubConnectionBuilder, HubConnectionState, RetryContext} from "@microsoft/signalr";
 import {useActivationKey} from "./services/windowService";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+
+const connection = new HubConnectionBuilder()
+    .withUrl("http://localhost:5000/searchHub")
+    .withAutomaticReconnect({
+        nextRetryDelayInMilliseconds(retryContext: RetryContext): number | null {
+            console.log("retrying...");
+            return 1000;
+        }})
+    .build();
 
 const SearchWrapper = () => {
-    const [ connection ] = useJoaSearch();
     useActivationKey();
 
+    const [connectionState, setConnectionState ] = useState(false);
+
     useEffect(() => {
-        console.log(connection?.state);
-    }, [connection]);
+        console.log("starting connection")
+        connection.start().then(() => {
+            console.log("finished starting connection")
+            setConnectionState(true);
+
+            connection.onreconnected(() => {
+                setConnectionState(true);
+            });
+
+            connection.onclose(() => {
+                setConnectionState(false);
+            });
+        });
+
+        return () => {
+            connection.stop().then(() => {
+                setConnectionState(false);
+            });
+        }
+    }, []);
+
+    useEffect(() => {
+        console.log("rerendering");
+    })
 
     return (
         <div>
-            { connection && connection.state === HubConnectionState.Connected && <Search connection={connection}/>}
+            { connectionState && <Search connection={connection}/>}
         </div>
     );
 }
