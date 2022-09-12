@@ -20,28 +20,25 @@ public class BookmarksSearch : IGlobalSearchPlugin
         DefaultBrowsers.Edge
     };
     
-    public List<SearchResult> GlobalSearchResults { get; set; } = null!;
+    public List<ISearchResult> GlobalSearchResults { get; set; } = null!;
 
     public BookmarksSearch(IBrowserHelper browserHelper, IJoaLogger joaLogger)
     {
         _browserHelper = browserHelper;
         _joaLogger = joaLogger;
     }
-    
-    public void Execute(SearchResult searchResult, ContextAction contextAction)
-    {
-        _browserHelper.OpenWebsite(searchResult.Description);
-    }
 
     public void UpdateIndex()
     {
         var bookmarks = Browsers.Where(x => x.Enabled).SelectMany(x => x.GetBookmarks(_joaLogger)).DistinctBy(x => x.url).ToList();
 
-        GlobalSearchResults = bookmarks.Select(x => new SearchResult
+        var x = bookmarks.Select(x => new BookmarkSerachResult
         {
             Caption = x.name,
             Description = x.url,
             Icon = "",
         }).ToList();
+
+        GlobalSearchResults = x.Cast<ISearchResult>().ToList();
     }
 }

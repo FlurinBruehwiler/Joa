@@ -2,6 +2,6 @@
 
 public interface IGlobalSearchPlugin : ISearchPlugin
 {
-    public List<SearchResult> GlobalSearchResults { get; set; }
+    public List<ISearchResult> GlobalSearchResults { get; set; }
     public void UpdateIndex();
 }

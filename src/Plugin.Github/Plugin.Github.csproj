@@ -6,22 +6,22 @@
         <Nullable>enable</Nullable>
         <EnableDynamicLoading>true</EnableDynamicLoading>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <RootNamespace>BookmarksSearch</RootNamespace>
+        <RootNamespace>Github</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <OutputPath>..\Joa\bin\Debug\net6.0\Plugins\BookmarksSearch\</OutputPath>
+        <OutputPath>..\Joa\bin\Debug\net6.0\Plugins\Github\</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <OutputPath>..\Joa\bin\Release\net6.0\Plugins\BookmarksSearch\</OutputPath>
+        <OutputPath>..\Joa\bin\Release\net6.0\Plugins\Github\</OutputPath>
     </PropertyGroup>
-    
+
     <ItemGroup>
         <ProjectReference Include="..\JoaPluginsPackage\JoaPluginsPackage.csproj">
             <Private>false</Private>
             <ExcludeAssets>runtime</ExcludeAssets>
         </ProjectReference>
     </ItemGroup>
-    
+
 </Project>

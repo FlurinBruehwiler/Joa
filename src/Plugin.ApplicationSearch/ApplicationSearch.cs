@@ -11,7 +11,7 @@ namespace ApplicationSearch;
 public class ApplicationSearch : IGlobalSearchPlugin
 {
     private readonly IJoaLogger _joaLogger;
-    public List<SearchResult> GlobalSearchResults { get; set; } = new();
+    public List<ISearchResult> GlobalSearchResults { get; set; } = new();
     
     public ApplicationSearch(IJoaLogger joaLogger)
     {
@@ -69,18 +69,4 @@ public class ApplicationSearch : IGlobalSearchPlugin
     [SettingProperty] public bool ShowFullFilePath { get; set; } = false;
 
     [SettingProperty] public bool UseNativeIcons { get; set; } = true;
-
-    public void Execute(SearchResult sr, ContextAction contextAction)
-    {
-        if (sr is not ApplicationSearchResult searchResult)
-            return;
-        
-        _joaLogger.Log(searchResult.FilePath, IJoaLogger.LogLevel.Info);
-        
-        var info = new ProcessStartInfo ( searchResult.FilePath )
-        {
-            UseShellExecute = true
-        };
-        Process.Start(info);
-    }
 }
