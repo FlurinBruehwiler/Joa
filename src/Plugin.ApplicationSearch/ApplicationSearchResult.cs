@@ -11,7 +11,7 @@ public class ApplicationSearchResult : ISearchResult
     public string Description { get; init; }
     public string Icon { get; init; }
     public List<ContextAction>? Actions { get; init; }
-    public void Execute()
+    public void Execute(ContextAction action)
     {
         var info = new ProcessStartInfo ( FilePath )
         {

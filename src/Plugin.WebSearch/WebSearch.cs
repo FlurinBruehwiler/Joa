@@ -27,17 +27,17 @@ public class WebSearch : IStrictSearchPlugin
         DefaultSearchEngines.Youtube
     };
 
-    public List<SearchResult> GetStrictSearchResults(string searchString)
+    public List<ISearchResult> GetStrictSearchResults(string searchString)
     {
         var searchEngine = SearchEngines.FirstOrDefault(x =>
             searchString.StartsWith(x.Prefix));
 
         if (searchEngine == null || searchString.Length < searchEngine.Prefix.Length)
-            return new List<SearchResult>();
+            return new List<ISearchResult>();
         
         searchString = searchString.Remove(0, searchEngine.Prefix.Length);
         
-        var searchResults = new List<SearchResult>
+        var searchResults = new List<ISearchResult>
         {
             new WebSearchResult
             {
@@ -71,12 +71,5 @@ public class WebSearch : IStrictSearchPlugin
             .ToList());
         
         return searchResults;
-    }
-
-    public void Execute(SearchResult result, ContextAction contextAction)
-    {
-        if (result is not WebSearchResult searchResult) 
-            return;
-        _browserHelper.OpenWebsite(searchResult.Url);
     }
 }

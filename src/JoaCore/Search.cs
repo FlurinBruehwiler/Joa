@@ -43,7 +43,7 @@ public class Search
         if (action is null)
             return;
         
-        await Task.Run(() => pluginDef.Plugin.GetTypedPlugin<ISearchPlugin>().Execute(pluginCommand.SearchResult, action));
+        await Task.Run(() => pluginCommand.SearchResult.Execute(action));
     }
 
     public async Task UpdateSearchResults(string searchString,

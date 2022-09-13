@@ -5,7 +5,7 @@ namespace Github;
 
 public class Github : IGlobalSearchPlugin
 {
-    public List<SearchResult> GlobalSearchResults { get; set; }
+    public List<ISearchResult>? GlobalSearchResults { get; set; }
     public void UpdateIndex()
     {
         throw new NotImplementedException();

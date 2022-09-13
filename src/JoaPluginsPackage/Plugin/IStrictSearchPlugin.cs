@@ -3,5 +3,5 @@
 public interface IStrictSearchPlugin : ISearchPlugin
 {
     public bool Validator(string seachString);
-    public List<SearchResult> GetStrictSearchResults(string searchString);
+    public List<ISearchResult> GetStrictSearchResults(string searchString);
 }

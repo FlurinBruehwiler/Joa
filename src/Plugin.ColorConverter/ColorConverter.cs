@@ -13,15 +13,11 @@ public class ColorConverter : IStrictSearchPlugin
         return false;
     }
 
-     public List<SearchResult> GetStrictSearchResults(string searchString)
+     public List<ISearchResult> GetStrictSearchResults(string searchString)
      {
-        return new List<SearchResult>();
-    }
+        return new List<ISearchResult>();
+     }
 
-    public void Execute(SearchResult searchResult, ContextAction contextAction)
-    {
-    }
-    
     private string HexToRgb(string hexColor)
     {
         var color = ColorTranslator.FromHtml(hexColor);
