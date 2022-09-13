@@ -11,4 +11,9 @@ public class OperatingSystemAttribute : Attribute
     {
         OperatingSystem = operatingSystem;
     }
+
+    public OperatingSystemAttribute()
+    {
+        
+    }
 }

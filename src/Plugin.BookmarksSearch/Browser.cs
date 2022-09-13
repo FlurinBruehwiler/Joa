@@ -20,7 +20,7 @@ public class Browser
 
     [SettingProperty]
     [OperatingSystem(OperatingSystem.MacOS)]
-    public string MacOSLocation { get; set; } = null!;
+    public string MacOsLocation { get; set; } = null!;
 
     [SettingProperty]
     [OperatingSystem(OperatingSystem.Linux)]

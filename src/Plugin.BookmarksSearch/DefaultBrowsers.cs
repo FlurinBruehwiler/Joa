@@ -8,7 +8,7 @@ public static class DefaultBrowsers
         Enabled = true,
         LinuxLocation = "",
         WindowsLocation = @"\Google\Chrome\User Data\Default\Bookmarks",
-        MacOSLocation = "/Google/Chrome/Default/Bookmarks"
+        MacOsLocation = "/Google/Chrome/Default/Bookmarks"
     };
     
     public static Browser Firefox = new()
@@ -17,7 +17,7 @@ public static class DefaultBrowsers
         Enabled = false,
         LinuxLocation = "",
         WindowsLocation = @"",
-        MacOSLocation = ""
+        MacOsLocation = ""
     };
     
     public static Browser Brave = new()
@@ -26,7 +26,7 @@ public static class DefaultBrowsers
         Enabled = false,
         LinuxLocation = "",
         WindowsLocation = @"",
-        MacOSLocation = ""
+        MacOsLocation = ""
     };
     
     
@@ -36,6 +36,6 @@ public static class DefaultBrowsers
         Enabled = false,
         LinuxLocation = "",
         WindowsLocation = @"",
-        MacOSLocation = ""
+        MacOsLocation = ""
     };
 }

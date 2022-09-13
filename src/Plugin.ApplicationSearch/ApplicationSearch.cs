@@ -4,6 +4,7 @@ using JoaPluginsPackage;
 using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
+using OperatingSystem = JoaPluginsPackage.Enums.OperatingSystem;
 
 namespace ApplicationSearch;
 
@@ -26,10 +27,10 @@ public class ApplicationSearch : IGlobalSearchPlugin
 
         foreach (var applicationFolder in Folders)
         {
-            if (Directory.Exists(applicationFolder.Path))
-            {
-                paths.AddRange(Directory.GetFiles(applicationFolder.Path, "*", SearchOption.AllDirectories));
-            }
+            if (!Directory.Exists(applicationFolder.Path))
+                continue;
+                
+            paths.AddRange(Directory.GetFiles(applicationFolder.Path, "*", SearchOption.AllDirectories));
         }
 
         foreach (var path in paths)
@@ -52,9 +53,27 @@ public class ApplicationSearch : IGlobalSearchPlugin
     [SettingProperty(Name = "Web Search Engines")]
     public List<ApplicationFolder> Folders { get; set; } = new()
     {
-        new ApplicationFolder {Path = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs"},
-        new ApplicationFolder {Path = @"C:\Users\FBR\AppData\Roaming\Microsoft\Windows\Start Menu"},
-        new ApplicationFolder {Path = @"C:\Users\FBR\Desktop"},
+        new ApplicationFolder
+        {
+            Path = Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.CommonApplicationData), 
+                @"\Microsoft\Windows\Start Menu\Programs"), 
+            OperatingSystem = OperatingSystem.Windows
+        },
+        new ApplicationFolder
+        {
+            Path = Path.Combine(
+                Environment.GetFolderPath(
+                    Environment.SpecialFolder.CommonApplicationData), 
+                @"\Microsoft\Windows\Start Menu"), 
+            OperatingSystem = OperatingSystem.Windows
+        },
+        new ApplicationFolder
+        {
+            Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop), 
+            OperatingSystem = OperatingSystem.Windows
+        },
     };
 
     [SettingProperty]
@@ -66,7 +85,23 @@ public class ApplicationSearch : IGlobalSearchPlugin
         new FileExtension {Extension = ".exe"},
     };
 
-    [SettingProperty] public bool ShowFullFilePath { get; set; } = false;
+    [SettingProperty] 
+    public bool ShowFullFilePath { get; set; } = false;
 
-    [SettingProperty] public bool UseNativeIcons { get; set; } = true;
+    [SettingProperty] 
+    public bool UseNativeIcons { get; set; } = true;
+
+    public void Execute(SearchResult sr, ContextAction contextAction)
+    {
+        if (sr is not ApplicationSearchResult searchResult)
+            return;
+        
+        _joaLogger.Log(searchResult.FilePath, IJoaLogger.LogLevel.Info);
+        
+        var info = new ProcessStartInfo ( searchResult.FilePath )
+        {
+            UseShellExecute = true
+        };
+        Process.Start(info);
+    }
 }
