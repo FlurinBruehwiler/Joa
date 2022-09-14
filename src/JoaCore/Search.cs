@@ -1,9 +1,7 @@
 ﻿using JoaCore.PluginCore;
 using JoaCore.SearchEngine;
-using JoaCore.Settings;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
-using Microsoft.Extensions.Configuration;
 
 namespace JoaCore;
 
@@ -11,13 +9,15 @@ public class Search
 {
     private readonly JoaLogger _logger;
     private readonly PluginManager _pluginManager;
+    private readonly ServiceProviderForPlugins _serviceProvider;
     private List<PluginSearchResult>? _lastSearchResults;
 
-    public Search(JoaLogger logger, PluginManager pluginManager)
+    public Search(JoaLogger logger, PluginManager pluginManager, ServiceProviderForPlugins serviceProvider)
     { 
         _logger = logger;
         _pluginManager = pluginManager;
-        
+        _serviceProvider = serviceProvider;
+
         _pluginManager.ReloadPlugins();
         
         StringMatcher.Instance = new StringMatcher();
@@ -42,8 +42,14 @@ public class Search
 
         if (action is null)
             return;
+
+        var executionContext = new ExecutionContext
+        {
+            ContextAction = action,
+            ServiceProvider = _serviceProvider.ServiceProvider
+        };
         
-        await Task.Run(() => pluginCommand.SearchResult.Execute(action));
+        await Task.Run(() => pluginCommand.SearchResult.Execute(executionContext));
     }
 
     public async Task UpdateSearchResults(string searchString,

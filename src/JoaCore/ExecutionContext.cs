@@ -1,6 +1,8 @@
-namespace JoaPluginsPackage;
+﻿using JoaPluginsPackage;
 
-public interface IExecutionContext
+namespace JoaCore;
+
+public class ExecutionContext : IExecutionContext
 {
     public ContextAction ContextAction { get; set; }
     public IServiceProvider ServiceProvider { get; set; }

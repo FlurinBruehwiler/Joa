@@ -12,23 +12,23 @@ public class PluginLoader
 {
     private readonly List<Type> _pluginTypes;
     private readonly JoaLogger _logger;
+    private readonly ServiceProviderForPlugins _serviceProvider;
 
-    public PluginLoader(IConfiguration configuration, JoaLogger logger)
+    public PluginLoader(IConfiguration configuration, JoaLogger logger, ServiceProviderForPlugins serviceProvider)
     {
         _logger = logger;
+        _serviceProvider = serviceProvider;
         var assemblies = LoadAssemblies(GetPluginDllPaths(configuration));
         _pluginTypes = LoadTypes(assemblies);
     }
     
-    public IEnumerable<IPlugin> InstantiatePlugins(CoreSettings coreSettings)
+    public IEnumerable<IPlugin> InstantiatePlugins()
     {
         var output = new List<IPlugin>();
 
-        var serviceProvider = RegisterServices(coreSettings);
-        
         foreach (var type in _pluginTypes)
         {
-            if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not IPlugin result) continue;
+            if (ActivatorUtilities.CreateInstance(_serviceProvider.ServiceProvider, type) is not IPlugin result) continue;
             output.Add(result);
         }
         
@@ -66,15 +66,6 @@ public class PluginLoader
         return null;
     }
 
-    private IServiceProvider RegisterServices(CoreSettings coreSettings)
-    {
-        var services = new ServiceCollection();
-        services.AddSingleton<IJoaSettings>(coreSettings);
-        services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
-        services.AddSingleton<IBrowserHelper, BrowserHelper>();
-        return services.BuildServiceProvider();
-    }
-    
     private List<string> GetPluginDllPaths(IConfiguration configuration)
     {
         var path = configuration.GetValue<string>("PluginLocation");

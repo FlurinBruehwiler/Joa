@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using JoaPluginsPackage;
-using JoaPluginsPackage.Injectables;
 
 namespace ApplicationSearch;
 
@@ -11,12 +10,13 @@ public class ApplicationSearchResult : ISearchResult
     public string Description { get; init; }
     public string Icon { get; init; }
     public List<ContextAction>? Actions { get; init; }
-    public void Execute(ContextAction action)
+    public List<ISearchResult>? Execute(IExecutionContext executionContext)
     {
         var info = new ProcessStartInfo ( FilePath )
         {
             UseShellExecute = true
         };
         Process.Start(info);
+        return null;
     }
 }

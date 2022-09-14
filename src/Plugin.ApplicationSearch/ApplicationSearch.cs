@@ -90,18 +90,4 @@ public class ApplicationSearch : IGlobalSearchPlugin
 
     [SettingProperty] 
     public bool UseNativeIcons { get; set; } = true;
-
-    public void Execute(SearchResult sr, ContextAction contextAction)
-    {
-        if (sr is not ApplicationSearchResult searchResult)
-            return;
-        
-        _joaLogger.Log(searchResult.FilePath, IJoaLogger.LogLevel.Info);
-        
-        var info = new ProcessStartInfo ( searchResult.FilePath )
-        {
-            UseShellExecute = true
-        };
-        Process.Start(info);
-    }
 }

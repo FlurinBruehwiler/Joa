@@ -27,6 +27,7 @@ builder.Services.AddSingleton<PluginLoader>();
 builder.Services.AddSingleton<SettingsManager>();
 builder.Services.AddSingleton<CoreSettings>();
 builder.Services.AddSingleton(JoaLogger.GetInstance());
+builder.Services.AddSingleton<ServiceProviderForPlugins>();
 
 builder.Services.AddHostedService<UiManagement>();
 
@@ -35,4 +36,5 @@ var app = builder.Build();
 app.UseCors();
 app.MapHub<SearchHub>("/searchHub");
 app.MapHub<SettingsHub>("/settingsHub");
+
 app.Run(); 

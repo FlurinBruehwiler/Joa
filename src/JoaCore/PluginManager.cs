@@ -55,7 +55,7 @@ public class PluginManager
         var timer = _logger.StartMeasure();
     
         Plugins = new List<PluginDefinition>();
-        foreach (var plugin in _pluginLoader.InstantiatePlugins(SettingsManager.CoreSettings).ToList())
+        foreach (var plugin in _pluginLoader.InstantiatePlugins().ToList())
         {
             var pluginInfos = GetPluginInfos(plugin.GetType());
             if(pluginInfos is null)

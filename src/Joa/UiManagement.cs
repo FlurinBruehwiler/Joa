@@ -24,7 +24,7 @@ public class UiManagement : IHostedService
             {
                 x.Start("");
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _logger.Error($"Error while trying to start the following UI Plugin {x.GetType().Assembly.Location}");
             }
@@ -41,7 +41,7 @@ public class UiManagement : IHostedService
             {
                 x.Stop();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _logger.Error($"Error while trying to start the following UI Plugin {x.GetType().Assembly.Location}");
             }
