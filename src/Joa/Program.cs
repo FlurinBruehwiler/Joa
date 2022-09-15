@@ -3,6 +3,7 @@ using JoaCore.PluginCore;
 using JoaCore.Settings;
 using JoaInterface;
 using JoaInterface.Hubs;
+using JoaPluginsPackage.Injectables;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,7 +27,7 @@ builder.Services.AddSingleton<PluginManager>();
 builder.Services.AddSingleton<PluginLoader>();
 builder.Services.AddSingleton<SettingsManager>();
 builder.Services.AddSingleton<CoreSettings>();
-builder.Services.AddSingleton(JoaLogger.GetInstance());
+builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
 builder.Services.AddSingleton<ServiceProviderForPlugins>();
 
 builder.Services.AddHostedService<UiManagement>();

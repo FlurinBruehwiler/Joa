@@ -18,4 +18,5 @@ public interface IJoaLogger
 
     public Stopwatch StartMeasure();
     public void LogMeasureResult(Stopwatch stopwatch, string logName);
+    public void LogException(Exception e, string logName = "");
 }

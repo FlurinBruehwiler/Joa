@@ -1,4 +1,5 @@
 ﻿using JoaCore;
+using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
 using Microsoft.Extensions.Hosting;
 
@@ -7,9 +8,9 @@ namespace JoaInterface;
 public class UiManagement : IHostedService
 {
     private readonly PluginManager _pluginManager;
-    private readonly JoaLogger _logger;
+    private readonly IJoaLogger _logger;
 
-    public UiManagement(PluginManager pluginManager, JoaLogger logger)
+    public UiManagement(PluginManager pluginManager, IJoaLogger logger)
     {
         _pluginManager = pluginManager;
         _logger = logger;

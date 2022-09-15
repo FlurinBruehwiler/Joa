@@ -7,12 +7,12 @@ namespace JoaCore;
 
 public class Search
 {
-    private readonly JoaLogger _logger;
+    private readonly IJoaLogger _logger;
     private readonly PluginManager _pluginManager;
     private readonly ServiceProviderForPlugins _serviceProvider;
     private List<PluginSearchResult>? _lastSearchResults;
 
-    public Search(JoaLogger logger, PluginManager pluginManager, ServiceProviderForPlugins serviceProvider)
+    public Search(IJoaLogger logger, PluginManager pluginManager, ServiceProviderForPlugins serviceProvider)
     { 
         _logger = logger;
         _pluginManager = pluginManager;

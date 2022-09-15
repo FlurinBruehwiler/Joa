@@ -11,10 +11,10 @@ namespace JoaCore.PluginCore;
 public class PluginLoader
 {
     private readonly List<Type> _pluginTypes;
-    private readonly JoaLogger _logger;
+    private readonly IJoaLogger _logger;
     private readonly ServiceProviderForPlugins _serviceProvider;
 
-    public PluginLoader(IConfiguration configuration, JoaLogger logger, ServiceProviderForPlugins serviceProvider)
+    public PluginLoader(IConfiguration configuration, IJoaLogger logger, ServiceProviderForPlugins serviceProvider)
     {
         _logger = logger;
         _serviceProvider = serviceProvider;

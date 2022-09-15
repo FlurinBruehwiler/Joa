@@ -40,7 +40,7 @@ const SearchWrapper = () => {
     }, []);
 
     useEffect(() => {
-        console.log("rerendering");
+        console.log("rerendefring");
     })
 
     return (

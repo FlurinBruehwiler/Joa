@@ -13,9 +13,9 @@ public class PluginManager
     public List<PluginDefinition>? Plugins { get; set; }
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
-    private readonly JoaLogger _logger;
+    private readonly IJoaLogger _logger;
     
-    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, JoaLogger logger)
+    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger)
     {
         SettingsManager = settingsManager;
         _pluginLoader = pluginLoader;
