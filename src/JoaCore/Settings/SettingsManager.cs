@@ -9,7 +9,6 @@ namespace JoaCore.Settings;
 
 public class SettingsManager
 {
-    private readonly IConfiguration _configuration;
     private readonly IJoaLogger _logger;
     public List<PluginDefinition> PluginDefinitions { get; set; } = null!;
     
@@ -23,7 +22,6 @@ public class SettingsManager
 
     public SettingsManager(CoreSettings coreSettings, IConfiguration configuration, IJoaLogger logger)
     {
-        _configuration = configuration;
         _logger = logger;
         _timeSinceLastChanged = Stopwatch.StartNew();
         _timeSinceLastSinc = Stopwatch.StartNew();

@@ -56,7 +56,10 @@ export default (props: FeatureProps) => {
           </div>
           { commands.map((pluginCommand : PluginCommand, index : number) =>
             <div key={pluginCommand.commandId} className={`w-full h-[50px] text-userInputText ${index == selectedCommandIndex ? 'bg-searchResultActiveBackground' : 'bg-searchResultBackground' } items-center flex`}>
-                <div className="w-[60px]"></div>
+                <div className="w-[60px]">
+
+                    <img src={pluginCommand.searchResult.icon} alt=""/>
+                </div>
                 <div>
                     <p className="text-[17px] text-searchResultNameText">{pluginCommand.searchResult.caption}</p>
                     <p className="text-[12px] text-searchResultDescriptionText whitespace-nowrap">{pluginCommand.searchResult.description}</p>
