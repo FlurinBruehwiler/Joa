@@ -53,11 +53,11 @@ export function useWindow(connection: HubConnection, clearCommands: () => void, 
 
         let unlistenFn: () => void;
 
-        appWindow.listen('tauri://blur', ({event, payload}) => hideSearchWindow()).then((x: () => void) => unlistenFn = x);
+        //appWindow.listen('tauri://blur', ({event, payload}) => hideSearchWindow()).then((x: () => void) => unlistenFn = x);
         
         return () => {
             document.removeEventListener('keydown', handleEscape);
-            unlistenFn();
+            //unlistenFn();
         };
     }, []);
 

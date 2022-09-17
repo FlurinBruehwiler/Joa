@@ -13,7 +13,19 @@
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "protocol": {
+        "asset": true,
+        "assetScope": ["**"]
+      },
+      "window": {
+        "all": true
+      },
+      "http": {
+        "all": true
+      },
+      "globalShortcut": {
+        "all": true
+      }
     },
     "bundle": {
       "active": true,
@@ -49,7 +61,7 @@
       }
     },
     "security": {
-      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost"
+      "csp": null
     },
     "updater": {
       "active": false

@@ -29,7 +29,6 @@ builder.Services.AddSingleton<PluginLoader>();
 builder.Services.AddSingleton<SettingsManager>();
 builder.Services.AddSingleton<CoreSettings>();
 builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
-builder.Services.AddSingleton<IconManager>();
 builder.Services.AddSingleton<IIconHelper, IconHelper>();
 builder.Services.AddSingleton<ServiceProviderForPlugins>();
 

@@ -22,7 +22,6 @@ const SearchWrapper = () => {
         connection.start().then(() => {
             console.log("finished starting connection")
             setConnectionState(true);
-
             connection.onreconnected(() => {
                 setConnectionState(true);
             });

@@ -13,14 +13,12 @@ public class PluginManager
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
-    private readonly IconManager _iconManager;
 
-    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger, IconManager iconManager)
+    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger)
     {
         SettingsManager = settingsManager;
         _pluginLoader = pluginLoader;
         _logger = logger;
-        _iconManager = iconManager;
     }
 
     public List<T> GetPluginsOfType<T>() where T : IPlugin
@@ -43,7 +41,6 @@ public class PluginManager
             try
             {
                 plugin.UpdateIndex();
-                _iconManager.UpdateIcons(Plugins);
             }
             catch (Exception e)
             {
