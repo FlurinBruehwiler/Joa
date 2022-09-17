@@ -24,6 +24,7 @@ public class ServiceProviderForPlugins
         services.AddSingleton<IJoaSettings>(_coreSettings);
         services.AddSingleton(_joaLogger);
         services.AddSingleton<IBrowserHelper, BrowserHelper>();
+        services.AddSingleton<IIconHelper, IconHelper>();
         return services.BuildServiceProvider();
     }
 }

@@ -1,7 +1,8 @@
-import {HubConnection, HubConnectionBuilder, RetryContext} from "@microsoft/signalr";
+import {HubConnection} from "@microsoft/signalr";
 import {useEffect, useState} from "react";
 import PluginCommand from "../models/pluginCommand";
 import {executeCommandMethod, receiveSearchResultsMethod, updateCommandsMethod} from "../models/JoaMethods";
+import { convertFileSrc } from '@tauri-apps/api/tauri';
 
 let scores: { [key: string]: number } = {};
 
@@ -14,6 +15,13 @@ export function useCommands(connection: HubConnection, currentSearchString: stri
             if(currentSearchString === searchString){}
                 setSearchResults(commands.slice(0,8));
         });
+
+        connection.on("receiveLoadImages", async (imagePaths: string[]) => {
+            for (const imagePath of imagePaths) {
+                const assetUrl = convertFileSrc(imagePath);
+                console.log(assetUrl);
+            }
+        })
     }, []);
 
     const sendNewSearchString = async (searchString: string) => {

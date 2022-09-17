@@ -16,11 +16,13 @@ namespace ApplicationSearch;
 public class ApplicationSearch : IGlobalSearchPlugin
 {
     private readonly IJoaLogger _joaLogger;
+    private readonly IIconHelper _iconHelper;
     public List<ISearchResult> GlobalSearchResults { get; set; } = new();
     
-    public ApplicationSearch(IJoaLogger joaLogger)
+    public ApplicationSearch(IJoaLogger joaLogger, IIconHelper iconHelper)
     {
         _joaLogger = joaLogger;
+        _iconHelper = iconHelper;
     }
     
     public void UpdateIndex()
@@ -38,18 +40,14 @@ public class ApplicationSearch : IGlobalSearchPlugin
                 
             paths.AddRange(Directory.GetFiles(applicationFolder.Path, "*", SearchOption.AllDirectories));
         }
-        
-        var iconsLocation = Path.Combine(Path.GetDirectoryName(typeof(ApplicationSearch).Assembly.Location), "Icons");
-        if (!Directory.Exists(iconsLocation))
-            Directory.CreateDirectory(iconsLocation);
-        
+
         foreach (var path in paths)
         {
             _joaLogger.Info(path);
 
             if (!Extensions.Any(x => path.EndsWith(x.Extension, StringComparison.OrdinalIgnoreCase))) continue;
             
-            var iconLocation = Path.Combine(iconsLocation, Path.ChangeExtension(Path.GetFileName(path), ".png"));
+            var iconLocation = Path.Combine(_iconHelper.GetIconsDirectory(typeof(ApplicationSearch)), Path.ChangeExtension(Path.GetFileName(path), ".png"));
 
             CreateIconIfNotExists(iconLocation, path);
                 

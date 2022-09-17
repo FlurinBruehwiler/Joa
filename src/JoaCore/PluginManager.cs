@@ -4,7 +4,6 @@ using JoaCore.Settings;
 using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
-using Microsoft.Extensions.Configuration;
 
 namespace JoaCore;
 
@@ -14,12 +13,14 @@ public class PluginManager
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
-    
-    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger)
+    private readonly IconManager _iconManager;
+
+    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger, IconManager iconManager)
     {
         SettingsManager = settingsManager;
         _pluginLoader = pluginLoader;
         _logger = logger;
+        _iconManager = iconManager;
     }
 
     public List<T> GetPluginsOfType<T>() where T : IPlugin
@@ -33,7 +34,7 @@ public class PluginManager
             return new List<PluginDefinition>();
 
         return Plugins.Where(x => x.Plugin is T).ToList();
-    } 
+    }
 
     public void UpdateIndexes()
     {
@@ -41,7 +42,8 @@ public class PluginManager
         {
             try
             {
-                plugin.UpdateIndex();           
+                plugin.UpdateIndex();
+                _iconManager.UpdateIcons(Plugins);
             }
             catch (Exception e)
             {
@@ -49,7 +51,7 @@ public class PluginManager
             }
         }
     }
-    
+
     public void ReloadPlugins()
     {
         var timer = _logger.StartMeasure();
