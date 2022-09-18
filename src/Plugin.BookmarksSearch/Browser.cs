@@ -26,6 +26,9 @@ public class Browser
     [OperatingSystem(OperatingSystem.Linux)]
     public string LinuxLocation { get; set; } = null!;
 
+    [SettingProperty]
+    public string BrowserLocation { get; set; } = null!;
+    
     public List<Bookmark> GetBookmarks(IJoaLogger joaLogger)
     {
         var bookmarkLocation =

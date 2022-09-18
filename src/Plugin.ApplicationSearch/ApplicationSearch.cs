@@ -1,9 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text.Json;
+﻿using System.Text.Json;
 using JoaPluginsPackage;
 using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Injectables;
@@ -49,7 +44,7 @@ public class ApplicationSearch : IGlobalSearchPlugin
             
             var iconLocation = Path.Combine(_iconHelper.GetIconsDirectory(typeof(ApplicationSearch)), Path.ChangeExtension(Path.GetFileName(path), ".png"));
 
-            CreateIconIfNotExists(iconLocation, path);
+            _iconHelper.CreateIconFromFileIfNotExists(iconLocation, path);
                 
             GlobalSearchResults.Add(new ApplicationSearchResult
             {
@@ -61,24 +56,6 @@ public class ApplicationSearch : IGlobalSearchPlugin
         }
         
         _joaLogger.Log(JsonSerializer.Serialize(GlobalSearchResults), IJoaLogger.LogLevel.Info);
-    }
-
-    private void CreateIconIfNotExists(string iconLocation, string path)
-    {
-        if (File.Exists(iconLocation)) 
-            return;
-        
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) 
-            return;
-        
-        var icon = Icon.ExtractAssociatedIcon(path);
-
-        if (icon is null) 
-            return;
-
-        var bitmapIcon = icon.ToBitmap();
-        
-        bitmapIcon.Save(iconLocation, ImageFormat.Png); 
     }
 
     [SettingProperty(Name = "Web Search Engines")]

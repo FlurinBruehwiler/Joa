@@ -8,8 +8,8 @@ namespace BookmarksSearch;
 [Plugin("Bookmark Search", "", "", "", "")]
 public class BookmarksSearch : IGlobalSearchPlugin
 {
-    private readonly IBrowserHelper _browserHelper;
     private readonly IJoaLogger _joaLogger;
+    private readonly IIconHelper _iconHelper;
 
     [SettingProperty]
     public List<Browser> Browsers { get; set; } = new()
@@ -22,23 +22,35 @@ public class BookmarksSearch : IGlobalSearchPlugin
     
     public List<ISearchResult> GlobalSearchResults { get; set; } = null!;
 
-    public BookmarksSearch(IBrowserHelper browserHelper, IJoaLogger joaLogger)
+    public BookmarksSearch(IJoaLogger joaLogger, IIconHelper iconHelper)
     {
-        _browserHelper = browserHelper;
         _joaLogger = joaLogger;
+        _iconHelper = iconHelper;
     }
 
     public void UpdateIndex()
     {
-        var bookmarks = Browsers.Where(x => x.Enabled).SelectMany(x => x.GetBookmarks(_joaLogger)).DistinctBy(x => x.url).ToList();
+        var bookmarks = Browsers.Where(x => x.Enabled)
+            .SelectMany(browser => browser.GetBookmarks(_joaLogger)
+                .Select(bookmark => (bookmark, browser)))
+            .DistinctBy(x => x.bookmark.url).ToList();
 
         var x = bookmarks.Select(x => new BookmarkSerachResult
         {
-            Caption = x.name,
-            Description = x.url,
-            Icon = "",
+            Caption = x.bookmark.name,
+            Description = x.bookmark.url,
+            Icon = GetIconForBrowser(x.browser)
         }).ToList();
 
         GlobalSearchResults = x.Cast<ISearchResult>().ToList();
+    }
+
+    public string GetIconForBrowser(Browser browser)
+    {
+        var iconLocation = Path.Combine(_iconHelper.GetIconsDirectory(typeof(BookmarksSearch)), browser.Name);
+
+        _iconHelper.CreateIconFromFileIfNotExists(iconLocation, browser.BrowserLocation);
+
+        return iconLocation;
     }
 }

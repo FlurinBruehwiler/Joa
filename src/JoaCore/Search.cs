@@ -1,5 +1,6 @@
 ﻿using JoaCore.PluginCore;
 using JoaCore.SearchEngine;
+using JoaPluginsPackage;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
 
@@ -38,14 +39,26 @@ public class Search
         if (pluginDef is null)
             return;
 
-        var action = pluginCommand.SearchResult.Actions?.SingleOrDefault(x => x.Key == actionKey);
+        ContextAction? contextAction;
+        
+        if (actionKey == "enter")
+        {
+            contextAction = new ContextAction
+            {
+                Key = "enter",
+            };
+        }
+        else
+        {
+            contextAction = pluginCommand.SearchResult.Actions?.SingleOrDefault(x => x.Key == actionKey);
+        }
 
-        if (action is null)
+        if (contextAction is null)
             return;
 
         var executionContext = new ExecutionContext
         {
-            ContextAction = action,
+            ContextAction = contextAction,
             ServiceProvider = _serviceProvider.ServiceProvider
         };
         
@@ -75,7 +88,9 @@ public class Search
 
         if (matchingPluginDefinition is not null)
         {
-            var strictPluginResult = await Task.Run(() => matchingPluginDefinition.Plugin.GetTypedPlugin<IStrictSearchPlugin>().GetStrictSearchResults(searchString));
+            var strictPluginResult = await Task.Run(() => 
+                matchingPluginDefinition.Plugin.GetTypedPlugin<IStrictSearchPlugin>().GetStrictSearchResults(searchString));
+            
             _lastSearchResults.AddRange(strictPluginResult.Select(x => new PluginSearchResult
             {
                 SearchResult = x,

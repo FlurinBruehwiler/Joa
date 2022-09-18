@@ -1,4 +1,5 @@
 ﻿using JoaPluginsPackage;
+using JoaPluginsPackage.Injectables;
 
 namespace BookmarksSearch;
 
@@ -8,8 +9,12 @@ public class BookmarkSerachResult : ISearchResult
     public string Description { get; init; }
     public string Icon { get; init; }
     public List<ContextAction>? Actions { get; init; }
-    public List<ISearchResult> Execute(IExecutionContext executionContext)
+    public List<ISearchResult>? Execute(IExecutionContext executionContext)
     {
-        throw new NotImplementedException();
+        var browserHelper = executionContext.ServiceProvider.GetService(typeof(IBrowserHelper)) as IBrowserHelper;
+
+        browserHelper?.OpenWebsite(Description);
+
+        return null;
     }
 }

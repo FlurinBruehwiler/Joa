@@ -12,14 +12,12 @@ export function useCommands(connection: HubConnection, currentSearchString: stri
     useEffect(() => {
         connection.on(receiveSearchResultsMethod, (searchString: string, commands: PluginCommand[]) => {
             console.log(Date.now() - scores[searchString]);
-            console.log("current" + currentSearchString, "incomming" + searchString);
             const firstNCommands = commands.slice(0,8);
             firstNCommands.forEach((x) => {
-                const temp = convertFileSrc(x.searchResult.icon)
-                console.log(temp);
-                x.searchResult.icon = temp;
+                if(x.searchResult.icon === "" || x.searchResult.webIcon !== undefined)
+                    return;
+                x.searchResult.webIcon = convertFileSrc(x.searchResult.icon);
             })
-
             setSearchResults(firstNCommands);
         });
     }, []);

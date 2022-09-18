@@ -8,7 +8,8 @@ public static class DefaultBrowsers
         Enabled = true,
         LinuxLocation = "",
         WindowsLocation = @"\Google\Chrome\User Data\Default\Bookmarks",
-        MacOsLocation = "/Google/Chrome/Default/Bookmarks"
+        MacOsLocation = "/Google/Chrome/Default/Bookmarks",
+        BrowserLocation = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Google Chrome.lnk"
     };
     
     public static Browser Firefox = new()

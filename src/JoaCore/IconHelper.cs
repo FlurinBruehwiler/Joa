@@ -1,20 +1,13 @@
-﻿using JoaPluginsPackage.Injectables;
+﻿using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+using JoaPluginsPackage.Injectables;
 
 namespace JoaCore;
 
 public class IconHelper : IIconHelper
 {
     public string GetIconsDirectory(Type pluginType)
-    {
-        var iconsLocation = GetIconsDirectoryIfExists(pluginType);
-        
-        if (!Directory.Exists(iconsLocation))
-            Directory.CreateDirectory(iconsLocation);
-
-        return iconsLocation;
-    }
-
-    public string? GetIconsDirectoryIfExists(Type pluginType)
     {
         var pluginDirectory = Path.GetDirectoryName(pluginType.Assembly.Location);
 
@@ -23,6 +16,26 @@ public class IconHelper : IIconHelper
         
         var iconsLocation = Path.Combine(pluginDirectory, "Icons");
 
-        return Directory.Exists(iconsLocation) ? iconsLocation : null;
+        if (!Directory.Exists(iconsLocation))
+            Directory.CreateDirectory(iconsLocation);
+
+        return iconsLocation;
+    }
+    public void CreateIconFromFileIfNotExists(string iconLocation, string fileLocation)
+    {
+        if (File.Exists(iconLocation)) 
+            return;
+        
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) 
+            return;
+        
+        var icon = Icon.ExtractAssociatedIcon(fileLocation);
+
+        if (icon is null) 
+            return;
+
+        var bitmapIcon = icon.ToBitmap();
+        
+        bitmapIcon.Save(iconLocation, ImageFormat.Png); 
     }
 }
