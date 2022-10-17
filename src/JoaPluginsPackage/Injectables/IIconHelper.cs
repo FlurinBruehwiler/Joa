@@ -4,5 +4,5 @@ public interface IIconHelper
 {
     public string GetIconsDirectory(Type pluginType);
 
-    public void CreateIconFromFileIfNotExists(string iconLocation, string fileLocation);
+    public string CreateIconFromFileIfNotExists<T>(string fileLocation);
 }

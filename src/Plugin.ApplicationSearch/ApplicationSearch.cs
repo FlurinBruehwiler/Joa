@@ -41,10 +41,8 @@ public class ApplicationSearch : IGlobalSearchPlugin
             _joaLogger.Info(path);
 
             if (!Extensions.Any(x => path.EndsWith(x.Extension, StringComparison.OrdinalIgnoreCase))) continue;
-            
-            var iconLocation = Path.Combine(_iconHelper.GetIconsDirectory(typeof(ApplicationSearch)), Path.ChangeExtension(Path.GetFileName(path), ".png"));
 
-            _iconHelper.CreateIconFromFileIfNotExists(iconLocation, path);
+            var iconLocation = _iconHelper.CreateIconFromFileIfNotExists<ApplicationSearch>(path);
                 
             GlobalSearchResults.Add(new ApplicationSearchResult
             {

@@ -10,7 +10,6 @@ export default (props: FeatureProps) => {
     const clearSearchString = () => {
       setSearchString("");
     }
-
     const [ commands, updateCommands, clearCommands ] = useCommands(props.connection, searchString);
     const [ selectedCommandIndex, moveUp, moveDown, clearSelectedCommand ] = useSelectedCommand(commands);
     const [ updateSize ] = useWindow(props.connection, clearCommands, clearSelectedCommand, clearSearchString);

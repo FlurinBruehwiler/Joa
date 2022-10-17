@@ -34,7 +34,7 @@ public class PluginManager
         return Plugins.Where(x => x.Plugin is T).ToList();
     }
 
-    public void UpdateIndexes()
+    private void UpdateIndexes()
     {
         foreach (var plugin in GetPluginsOfType<IGlobalSearchPlugin>())
         {

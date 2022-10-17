@@ -39,18 +39,9 @@ public class BookmarksSearch : IGlobalSearchPlugin
         {
             Caption = x.bookmark.name,
             Description = x.bookmark.url,
-            Icon = GetIconForBrowser(x.browser)
+            Icon = _iconHelper.CreateIconFromFileIfNotExists<BookmarksSearch>(x.browser.BrowserLocation)
         }).ToList();
 
         GlobalSearchResults = x.Cast<ISearchResult>().ToList();
-    }
-
-    public string GetIconForBrowser(Browser browser)
-    {
-        var iconLocation = Path.Combine(_iconHelper.GetIconsDirectory(typeof(BookmarksSearch)), browser.Name);
-
-        _iconHelper.CreateIconFromFileIfNotExists(iconLocation, browser.BrowserLocation);
-
-        return iconLocation;
     }
 }

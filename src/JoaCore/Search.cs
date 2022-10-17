@@ -12,6 +12,7 @@ public class Search
     private readonly PluginManager _pluginManager;
     private readonly ServiceProviderForPlugins _serviceProvider;
     private List<PluginSearchResult>? _lastSearchResults;
+    private List<PluginSearchResult>? _currentContextResults;
 
     public Search(IJoaLogger logger, PluginManager pluginManager, ServiceProviderForPlugins serviceProvider)
     { 
@@ -45,7 +46,7 @@ public class Search
         {
             contextAction = new ContextAction
             {
-                Key = "enter",
+                Key = "enter"
             };
         }
         else
@@ -70,20 +71,21 @@ public class Search
     {
         var stopwatch = _logger.StartMeasure();
 
-        if (string.IsNullOrWhiteSpace(searchString))
-        {
-            callback(new List<PluginSearchResult>());
-            return;
-        }
-
-        if (_pluginManager.Plugins == null)
-        {
-            callback(new List<PluginSearchResult>());
-            return;
-        }
-
         _lastSearchResults = new List<PluginSearchResult>();
+        
+        if (string.IsNullOrWhiteSpace(searchString) || _pluginManager.Plugins is null)
+        {
+            callback(_lastSearchResults);
+            return;
+        }
 
+        if (_currentContextResults is not null)
+        {
+            var contextRes = SortSearchResults(_currentContextResults, searchString);
+            callback(contextRes);
+            return;
+        }
+        
         var matchingPluginDefinition = GetMatchingPlugin(searchString);
 
         if (matchingPluginDefinition is not null)
