@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using JoaCore.Settings;
 using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;

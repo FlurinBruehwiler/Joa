@@ -13,14 +13,14 @@ public class SettingsManager
     public List<PluginDefinition> PluginDefinitions { get; set; } = null!;
     
     [JsonIgnore]
-    public CoreSettings CoreSettings { get; set; }
+    public SettingsProvider SettingsProvider { get; set; }
 
     private readonly string _settingsLocation;
     private readonly JsonSerializerOptions _options;
     private Stopwatch _timeSinceLastChanged;
     private Stopwatch _timeSinceLastSinc;
 
-    public SettingsManager(CoreSettings coreSettings, IConfiguration configuration, IJoaLogger logger)
+    public SettingsManager(SettingsProvider settingsProvider, IConfiguration configuration, IJoaLogger logger)
     {
         _logger = logger;
         _timeSinceLastChanged = Stopwatch.StartNew();
@@ -30,7 +30,7 @@ public class SettingsManager
         {
             WriteIndented = true
         };
-        CoreSettings = coreSettings;
+        SettingsProvider = settingsProvider;
         ConfigureFileWatcher();
     }
 

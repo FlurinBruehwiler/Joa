@@ -6,12 +6,12 @@ namespace JoaCore;
 
 public class ServiceProviderForPlugins
 {
-    private readonly CoreSettings _coreSettings;
+    private readonly SettingsProvider _settingsProvider;
     private readonly IJoaLogger _joaLogger;
 
-    public ServiceProviderForPlugins(CoreSettings coreSettings, IJoaLogger joaLogger)
+    public ServiceProviderForPlugins(SettingsProvider settingsProvider, IJoaLogger joaLogger)
     {
-        _coreSettings = coreSettings;
+        _settingsProvider = settingsProvider;
         _joaLogger = joaLogger;
         ServiceProvider = CreateServiceProvider();
     }
@@ -21,7 +21,7 @@ public class ServiceProviderForPlugins
     private IServiceProvider CreateServiceProvider()
     {
         var services = new ServiceCollection();
-        services.AddSingleton<IJoaSettings>(_coreSettings);
+        services.AddSingleton<ISettingsProvider>(_settingsProvider);
         services.AddSingleton(_joaLogger);
         services.AddSingleton<IBrowserHelper, BrowserHelper>();
         services.AddSingleton<IIconHelper, IconHelper>();

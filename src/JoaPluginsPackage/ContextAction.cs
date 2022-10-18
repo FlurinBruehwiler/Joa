@@ -1,4 +1,6 @@
-﻿namespace JoaPluginsPackage;
+﻿using JoaPluginsPackage.Enums;
+
+namespace JoaPluginsPackage;
 
 public record ContextAction
 {

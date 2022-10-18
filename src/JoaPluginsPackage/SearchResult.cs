@@ -7,5 +7,5 @@ public interface ISearchResult
     public string Icon { get; init; }
     public List<ContextAction>? Actions { get; init; }
 
-    public List<ISearchResult>? Execute(IExecutionContext executionContext);
+    public ISearchResultProvider? Execute(IExecutionContext executionContext);
 }

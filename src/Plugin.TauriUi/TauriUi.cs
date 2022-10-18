@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using JoaPluginsPackage;
 using JoaPluginsPackage.Plugin;
 
 namespace TauriUi;
@@ -16,4 +17,6 @@ public class TauriUi : IUiPlugin
     {
         //ToDo 
     }
+
+    public void ConfigurePlugin(IPluginBuilder builder) { }
 }

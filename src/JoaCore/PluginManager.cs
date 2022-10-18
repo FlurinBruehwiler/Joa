@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using JoaCore.PluginCore;
+﻿using JoaCore.PluginCore;
 using JoaCore.Settings;
-using JoaPluginsPackage.Attributes;
+using JoaPluginsPackage;
+using JoaPluginsPackage.Enums;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
 
@@ -13,6 +13,13 @@ public class PluginManager
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
+
+
+    public List<SearchResultProviderWrapper>? IntervalProviders { get; set; }
+    public List<SearchResultProviderWrapper>? Providers { get; set; }
+    public List<SearchResultProviderWrapper>? StrictProviders { get; set; }
+
+    public List<SearchResultProviderWrapper>? NonStrictProviders { get; set; }
 
     public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger)
     {
@@ -33,47 +40,47 @@ public class PluginManager
 
         return Plugins.Where(x => x.Plugin is T).ToList();
     }
-
-    private void UpdateIndexes()
-    {
-        foreach (var plugin in GetPluginsOfType<IGlobalSearchPlugin>())
-        {
-            try
-            {
-                plugin.UpdateIndex();
-            }
-            catch (Exception e)
-            {
-                _logger.LogException(e, $"Updating the index for plugin {plugin.GetType().Name} failed");
-            }
-        }
-    }
-
+    
     public void ReloadPlugins()
     {
         var timer = _logger.StartMeasure();
     
         Plugins = new List<PluginDefinition>();
+        
         foreach (var plugin in _pluginLoader.InstantiatePlugins().ToList())
         {
-            var pluginInfos = GetPluginInfos(plugin.GetType());
-            if(pluginInfos is null)
-                continue;
-            Plugins.Add(new PluginDefinition(plugin, pluginInfos));
+            var pluginBuilder = new PluginBuilder(_logger);
+            var pluginDefinition = pluginBuilder.BuildPluginDefinition(plugin);
+            Plugins.Add(pluginDefinition);
         }
-        SettingsManager.LoadPluginSettings(Plugins);
+
+        Providers = Plugins.SelectMany(x => x.SearchResultProviders).ToList();
+        
+        IntervalProviders = Providers
+            .Where(x => x.IsGlobal && x.Provider.SearchResultLifetime == SearchResultLifetime.Interval)
+            .ToList();
+
+        StrictProviders = Providers.Where(x => x.IsGlobal && x.Condition is not null).ToList();
+        
         UpdateIndexes();
-    
+        
         _logger.LogMeasureResult(timer, nameof(ReloadPlugins));
     }
     
-    private PluginAttribute? GetPluginInfos(MemberInfo pluginType)
+    private void UpdateIndexes()
     {
-        if (Attribute.GetCustomAttributes(pluginType).FirstOrDefault(x => x is PluginAttribute) is PluginAttribute pluginAttribute)
-            return pluginAttribute;
+        var context = new GlobalSearchProviderContext();
         
-        
-        _logger.Log($"The plugin {pluginType.Name} does not have the PluginAttribute", IJoaLogger.LogLevel.Error);
-        return null;
+        foreach (var provider in IntervalProviders)
+        {
+            try
+            {
+                provider.Provider.UpdateSearchResults(context);
+            }
+            catch (Exception e)
+            {
+                _logger.LogException(e, $"Updating the index for provider {provider.GetType().Name} failed");
+            }
+        }
     }
 }

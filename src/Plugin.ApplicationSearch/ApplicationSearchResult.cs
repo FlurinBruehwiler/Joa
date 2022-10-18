@@ -10,7 +10,7 @@ public class ApplicationSearchResult : ISearchResult
     public string Description { get; init; }
     public string Icon { get; init; }
     public List<ContextAction>? Actions { get; init; }
-    public List<ISearchResult>? Execute(IExecutionContext executionContext)
+    public ISearchResultProvider? Execute(IExecutionContext executionContext)
     {
         var info = new ProcessStartInfo ( FilePath )
         {

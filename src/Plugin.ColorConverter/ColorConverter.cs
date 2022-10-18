@@ -6,7 +6,7 @@ using JoaPluginsPackage.Plugin;
 namespace ColorConverter;
 
 [Plugin("Color Converter", "", "", "", "")]
-public class ColorConverter : IStrictSearchPlugin
+public class ColorConverter : IPlugin
 {
     public bool Validator(string searchString)
     {
@@ -37,5 +37,10 @@ public class ColorConverter : IStrictSearchPlugin
     {
         var myColor = Color.FromArgb(r, g, b);
         return myColor.R.ToString("X2") + myColor.G.ToString("X2") + myColor.B.ToString("X2");
+    }
+
+    public void ConfigurePlugin(IPluginBuilder builder)
+    {
+        
     }
 }

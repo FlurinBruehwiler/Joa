@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using JoaCore.Settings;
+using JoaPluginsPackage;
 using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Plugin;
 
@@ -12,14 +12,13 @@ public class PluginDefinition
 
     [JsonIgnore]
     public IPlugin Plugin { get; set; }
-
-    public SettingsCollection SettingsCollection { get; set; }
     public PluginAttribute PluginInfo { get; set; }
-    public PluginDefinition(IPlugin plugin, PluginAttribute pluginInfo)
+    public List<SearchResultProviderWrapper> SearchResultProviders { get; set; }
+    public List<ISetting> Settings { get; set; }
+    public List<ISearchResult> SearchResults { get; set; }
+    
+    public PluginDefinition()
     {
-        PluginInfo = pluginInfo;
-        Plugin = plugin;
         Id = Guid.NewGuid();
-        SettingsCollection = new SettingsCollection(plugin);
     }
 }

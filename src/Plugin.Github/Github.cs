@@ -5,14 +5,10 @@ using JoaPluginsPackage.Plugin;
 namespace Github;
 
 [Plugin("Github", "Interact with Github", "1.0", "Core", "")]
-public class Github : IGlobalSearchPlugin
+public class Github : IPlugin
 {
-    public List<ISearchResult>? GlobalSearchResults { get; set; }
-    public void UpdateIndex()
+    public void ConfigurePlugin(IPluginBuilder builder)
     {
-        GlobalSearchResults = new List<ISearchResult>
-        {
-            new RepositoriesSearchResult()
-        };
+        builder.AddGlobalProvider<RepositoriesProvider>();
     }
 }
