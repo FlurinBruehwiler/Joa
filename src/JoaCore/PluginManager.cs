@@ -1,6 +1,5 @@
 ﻿using JoaCore.PluginCore;
 using JoaCore.Settings;
-using JoaPluginsPackage;
 using JoaPluginsPackage.Enums;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
@@ -13,13 +12,8 @@ public class PluginManager
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
-
-
-    public List<SearchResultProviderWrapper>? IntervalProviders { get; set; }
     public List<SearchResultProviderWrapper>? Providers { get; set; }
-    public List<SearchResultProviderWrapper>? StrictProviders { get; set; }
 
-    public List<SearchResultProviderWrapper>? NonStrictProviders { get; set; }
 
     public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger)
     {
@@ -56,11 +50,11 @@ public class PluginManager
 
         Providers = Plugins.SelectMany(x => x.SearchResultProviders).ToList();
         
-        IntervalProviders = Providers
-            .Where(x => x.IsGlobal && x.Provider.SearchResultLifetime == SearchResultLifetime.Interval)
-            .ToList();
-
-        StrictProviders = Providers.Where(x => x.IsGlobal && x.Condition is not null).ToList();
+        // IntervalProviders = Providers
+        //     .Where(x => x.IsGlobal && x.Provider.SearchResultLifetime == SearchResultLifetime.Interval)
+        //     .ToList();
+        //
+        // StrictProviders = Providers.Where(x => x.IsGlobal && x.Condition is not null).ToList();
         
         UpdateIndexes();
         
@@ -71,16 +65,16 @@ public class PluginManager
     {
         var context = new GlobalSearchProviderContext();
         
-        foreach (var provider in IntervalProviders)
-        {
-            try
-            {
-                provider.Provider.UpdateSearchResults(context);
-            }
-            catch (Exception e)
-            {
-                _logger.LogException(e, $"Updating the index for provider {provider.GetType().Name} failed");
-            }
-        }
+        // foreach (var provider in IntervalProviders)
+        // {
+        //     try
+        //     {
+        //         provider.Provider.UpdateSearchResults(context);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         _logger.LogException(e, $"Updating the index for provider {provider.GetType().Name} failed");
+        //     }
+        // }
     }
 }

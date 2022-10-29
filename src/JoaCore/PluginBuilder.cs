@@ -34,18 +34,17 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
+    public IPluginBuilder AddGlobalResult(ISearchResult searchResult)
+    {
+        throw new NotImplementedException();
+    }
+
     public IPluginBuilder AddProvider<T>() where T : ISearchResultProvider
     {
         _providers.Add((typeof(T), false, null));
         return this;
     }
-
-    public IPluginBuilder AddGlobalResult<T>() where T : ISearchResult
-    {
-        _searchResults.Add(typeof(T));
-        return this;
-    }
-
+    
     public IPluginBuilder AddSetting<T>() where T : ISetting
     {
         _settings.Add(typeof(T));

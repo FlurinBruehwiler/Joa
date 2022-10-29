@@ -17,38 +17,38 @@ public class WebSearchResultProvider : ISearchResultProvider
 
     public List<ISearchResult> SearchResults { get; set; } = new();
     public SearchResultLifetime SearchResultLifetime { get; set; } = SearchResultLifetime.Search; 
-    public void UpdateSearchResults(ISearchProviderContext searchProviderContext)
+    public void UpdateSearchResults(string searchString)
     {
         var searchEngine = _settings.SearchEngines.FirstOrDefault(x =>
-            searchProviderContext.SearchString.StartsWith(x.Prefix));
+            searchString.StartsWith(x.Prefix));
 
-        if (searchEngine == null || searchProviderContext.SearchString.Length < searchEngine.Prefix.Length)
+        if (searchEngine == null || searchString.Length < searchEngine.Prefix.Length)
         {
             SearchResults = new List<ISearchResult>();
             return;
         }
         
-        searchProviderContext.SearchString = searchProviderContext.SearchString.Remove(0, searchEngine.Prefix.Length);
+        searchString = searchString.Remove(0, searchEngine.Prefix.Length);
         
         var searchResults = new List<ISearchResult>
         {
             new WebSearchResult
             {
                 Caption = searchEngine.Name,
-                Description = $"Search on {searchEngine.Name} for \"{searchProviderContext.SearchString}\"",
+                Description = $"Search on {searchEngine.Name} for \"{searchString}\"",
                 Icon = "",
                 Url = ""
             }
         };
 
-        if (string.IsNullOrEmpty(searchProviderContext.SearchString))
+        if (string.IsNullOrEmpty(searchString))
         {
             SearchResults = searchResults;
             return;
         }
 
         var httpResponse = _client.GetAsync(searchEngine.SuggestionUrl
-                .Replace("{{query}}",searchProviderContext.SearchString))
+                .Replace("{{query}}",searchString))
             .GetAwaiter().GetResult();
 
         dynamic response = JsonConvert.DeserializeObject(httpResponse.Content.ReadAsStringAsync().GetAwaiter()

@@ -24,9 +24,9 @@ public class DtoSettings
     
     public DtoSettings(SettingsManager settingManager)
     {
-        _pluginSettings = settingManager.PluginDefinitions.ToDictionary(pluginDefinition => pluginDefinition.PluginInfo.Name,
-            pluginDefinition => pluginDefinition.SettingsCollection.PluginSettings.ToDictionary(pluginSetting => pluginSetting.Name,
-                pluginSetting => pluginSetting.Value));
+        // _pluginSettings = settingManager.PluginDefinitions.ToDictionary(pluginDefinition => pluginDefinition.PluginInfo.Name,
+        //     pluginDefinition => pluginDefinition.SettingsCollection.PluginSettings.ToDictionary(pluginSetting => pluginSetting.Name,
+        //         pluginSetting => pluginSetting.Value));
     }
 
     public DtoSettings()

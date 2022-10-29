@@ -1,42 +1,32 @@
-﻿using JoaCore.PluginCore;
-using JoaCore.SearchEngine;
+﻿using JoaCore.SearchEngine;
 using JoaPluginsPackage;
-using JoaPluginsPackage.Injectables;
+using JoaPluginsPackage.Enums;
 
 namespace JoaCore;
 
 public class Search
 {
-    private readonly IJoaLogger _logger;
     private readonly PluginManager _pluginManager;
     private readonly ServiceProviderForPlugins _serviceProvider;
-    private List<PluginSearchResult>? _lastSearchResults;
-    private List<PluginSearchResult>? _currentContextResults;
+    private SearchResultProviderWrapper _currentProvider;
 
-    public Search(IJoaLogger logger, PluginManager pluginManager, ServiceProviderForPlugins serviceProvider)
+    public Search(PluginManager pluginManager, ServiceProviderForPlugins serviceProvider)
     { 
-        _logger = logger;
         _pluginManager = pluginManager;
         _serviceProvider = serviceProvider;
 
         _pluginManager.ReloadPlugins();
+        
         
         StringMatcher.Instance = new StringMatcher();
     }
 
     public async Task ExecuteCommand(Guid commandId, string actionKey)
     {
-        var pluginCommand = _lastSearchResults?
+        var pluginCommand = _currentProvider.LastSearchResults?
             .FirstOrDefault(x => x.CommandId == commandId);
 
         if (pluginCommand is null)
-            return;
-        
-        _logger.Log(pluginCommand.PluginId.ToString(), IJoaLogger.LogLevel.Info);
-        var pluginDef = _pluginManager.Providers
-            .FirstOrDefault(provider => provider.Id == pluginCommand.PluginId);
-        
-        if (pluginDef is null)
             return;
 
         ContextAction? contextAction;
@@ -68,58 +58,15 @@ public class Search
     public async Task UpdateSearchResults(string searchString,
         Action<List<PluginSearchResult>> callback)
     {
-        var stopwatch = _logger.StartMeasure();
-
-        _lastSearchResults = new List<PluginSearchResult>();
-        
-        if (string.IsNullOrWhiteSpace(searchString) || _pluginManager.Plugins is null)
+        if (_currentProvider.Provider.SearchResultLifetime == SearchResultLifetime.Search)
         {
-            callback(_lastSearchResults);
-            return;
+            _currentProvider.Provider.UpdateSearchResults(null);
+            callback(_currentProvider.Provider.SearchResults.ToPluginSerachResults());
         }
-
-        if (_currentContextResults is not null)
+        else
         {
-            var contextRes = SortSearchResults(_currentContextResults, searchString);
-            callback(contextRes);
-            return;
+            callback(SortSearchResults(_currentProvider.Provider.SearchResults.ToPluginSerachResults(), searchString));
         }
-        
-        var matchingProvider = GetMatchingProvider(searchString);
-
-        if (matchingProvider is not null)
-        {
-            await Task.Run(() => matchingProvider.Provider.UpdateSearchResults(null));
-
-            var strictPluginResult = matchingProvider.Provider.SearchResults;
-            
-            _lastSearchResults.AddRange(strictPluginResult.Select(x => new PluginSearchResult
-            {
-                SearchResult = x,
-                PluginId = matchingProvider.Id
-            }));
-            _logger.LogMeasureResult(stopwatch, "Search");
-            callback(_lastSearchResults);
-            return;
-        }
-
-        foreach (var provider in _pluginManager.NonStrictProviders)
-        {
-            foreach (var searchResult in provider.Provider.SearchResults)
-            {
-                _lastSearchResults.Add(new PluginSearchResult
-                {
-                    SearchResult = searchResult,
-                    PluginId = provider.Id
-                });
-            }
-        }
-        
-        var res = SortSearchResults(_lastSearchResults, searchString);
-
-        _logger.LogMeasureResult(stopwatch, "Search");
-        
-        callback(res);
     }
 
     private List<PluginSearchResult> SortSearchResults(List<PluginSearchResult> input, string searchString)
@@ -134,20 +81,5 @@ public class Search
         });
 
         return sortValues.Select(x => x.x).ToList();
-    }
-
-    private SearchResultProviderWrapper? GetMatchingProvider(string searchString)
-    {
-        if (_pluginManager.Plugins == null)
-            return null;
-
-        foreach (var provider in _pluginManager.StrictProviders)
-        {
-            // if (provider.Condition(searchString))
-            //     return pluginDefinition; 
-            //ToDo
-        }
-
-        return null;
     }
 }

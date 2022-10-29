@@ -19,7 +19,7 @@ public class BookmarksSearchResultProvider : ISearchResultProvider
     
     public List<ISearchResult> SearchResults { get; set; }
     public SearchResultLifetime SearchResultLifetime { get; set; }
-    public void UpdateSearchResults(ISearchProviderContext context)
+    public void UpdateSearchResults(string searchString)
     {
         var bookmarks = _setting.Browsers.Where(x => x.Enabled)
             .SelectMany(browser => browser.GetBookmarks(_joaLogger)

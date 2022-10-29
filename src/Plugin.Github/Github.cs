@@ -1,4 +1,5 @@
-﻿using JoaPluginsPackage;
+﻿using Github.SearchResults;
+using JoaPluginsPackage;
 using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Plugin;
 
@@ -9,6 +10,11 @@ public class Github : IPlugin
 {
     public void ConfigurePlugin(IPluginBuilder builder)
     {
-        builder.AddGlobalProvider<RepositoriesProvider>();
+        builder.AddGlobalResult(new RepositoriesSearchResult
+        {
+            Caption = "Github Repos",
+            Description = "Search for Github Repos",
+            Icon = string.Empty
+        });
     }
 }

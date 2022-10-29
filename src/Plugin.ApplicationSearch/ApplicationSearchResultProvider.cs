@@ -21,7 +21,7 @@ public class ApplicationSearchResultProvider : ISearchResultProvider
     public List<ISearchResult> SearchResults { get; set; } = new();
     public SearchResultLifetime SearchResultLifetime { get; set; }
     
-    public void UpdateSearchResults(ISearchProviderContext context)
+    public void UpdateSearchResults(string searchString)
     {
         _joaLogger.Info("Updating Indexes");
         

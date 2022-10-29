@@ -123,12 +123,12 @@ public class SettingsManager
         if (!newDtoSettings.PluginSettings.TryGetValue(oldPluginDefinition.PluginInfo.Name, out var newPlugin))
             return;
         
-        foreach (var pluginSetting in oldPluginDefinition.SettingsCollection.PluginSettings)
-        {
-            if(!newPlugin.TryGetValue(pluginSetting.Name, out var newValue))
-                continue;
-
-            pluginSetting.Value = newValue;
-        }
+        // foreach (var pluginSetting in oldPluginDefinition.SettingsCollection.PluginSettings)
+        // {
+        //     if(!newPlugin.TryGetValue(pluginSetting.Name, out var newValue))
+        //         continue;
+        //
+        //     pluginSetting.Value = newValue;
+        // }
     }
 }

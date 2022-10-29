@@ -1,11 +1,14 @@
-﻿using JoaPluginsPackage.Plugin;
+﻿using JoaPluginsPackage;
 
 namespace JoaCore;
 
 public static class PluginExtensions
 {
-    public static T GetTypedPlugin<T>(this IPlugin plugin)
+    public static List<PluginSearchResult> ToPluginSerachResults(this List<ISearchResult> searchResults)
     {
-        return (T)plugin;
+        return searchResults.Select(x => new PluginSearchResult
+        {
+            SearchResult = x
+        }).ToList();
     }
 }

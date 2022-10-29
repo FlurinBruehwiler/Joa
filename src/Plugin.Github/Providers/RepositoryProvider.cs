@@ -1,14 +1,13 @@
 ﻿using JoaPluginsPackage;
 using JoaPluginsPackage.Enums;
 
-namespace Github;
+namespace Github.Providers;
 
-public class RepositoriesProvider : ISearchResultProvider
+public class RepositoryProvider : ISearchResultProvider
 {
     public List<ISearchResult> SearchResults { get; set; }
     public SearchResultLifetime SearchResultLifetime { get; set; }
-    public ISearchProviderContext Context { get; set; }
-    public void UpdateSearchResults(ISearchProviderContext context)
+    public void UpdateSearchResults(string searchString)
     {
         throw new NotImplementedException();
     }
