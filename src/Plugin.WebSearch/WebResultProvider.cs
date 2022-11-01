@@ -1,15 +1,16 @@
 ﻿using JoaPluginsPackage;
 using JoaPluginsPackage.Enums;
+using JoaPluginsPackage.Providers;
 using Newtonsoft.Json;
 
 namespace WebSearch;
 
-public class WebSearchResultProvider : ISearchResultProvider
+public class WebResultProvider : IResultProvider
 {
     private readonly WebSearchSettings _settings;
     private readonly HttpClient _client;
 
-    public WebSearchResultProvider(WebSearchSettings settings, HttpClient client)
+    public WebResultProvider(WebSearchSettings settings, HttpClient client)
     {
         _settings = settings;
         _client = client;

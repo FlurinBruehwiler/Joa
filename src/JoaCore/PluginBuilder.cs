@@ -5,6 +5,7 @@ using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Enums;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
+using JoaPluginsPackage.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JoaCore;
@@ -18,33 +19,28 @@ public class PluginBuilder : IPluginBuilder
         _joaLogger = joaLogger;
     }
     
-    private readonly List<(Type, bool isGlobal, Delegate?)> _providers = new();
+    private readonly List<(Type, Delegate?)> _providers = new();
     private readonly List<Type> _settings = new();
-    private readonly List<Type> _searchResults = new();
+    private readonly List<ISearchResult> _searchResults = new();
     
-    public IPluginBuilder AddGlobalProvider<T>() where T : ISearchResultProvider
+    public IPluginBuilder AddGlobalProvider<T>() where T : IResultProvider
     {
-        _providers.Add((typeof(T), true, null));
+        _providers.Add((typeof(T), null));
         return this;
     }
 
-    public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : ISearchResultProvider
+    public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : IResultProvider
     {
-        _providers.Add((typeof(T), true, condition));
+        _providers.Add((typeof(T), condition));
         return this;
     }
 
     public IPluginBuilder AddGlobalResult(ISearchResult searchResult)
     {
-        throw new NotImplementedException();
-    }
-
-    public IPluginBuilder AddProvider<T>() where T : ISearchResultProvider
-    {
-        _providers.Add((typeof(T), false, null));
+        _searchResults.Add(searchResult);
         return this;
     }
-    
+
     public IPluginBuilder AddSetting<T>() where T : ISetting
     {
         _settings.Add(typeof(T));
@@ -60,40 +56,29 @@ public class PluginBuilder : IPluginBuilder
         
         plugin.ConfigurePlugin(this);
         
-        var searchResultProviders = InstantiateProviders();
+        var globalProviders = InstantiateGlobalProviders();
 
-        AddSearchResults(searchResultProviders);
+        AddSearchResults(globalProviders);
 
         return new PluginDefinition
         {
             Plugin = plugin,
             PluginInfo = pluginInfos,
-            SearchResultProviders = searchResultProviders
+            GlobalProviders = globalProviders
         };
     }
 
     private void AddSearchResults(List<SearchResultProviderWrapper> searchResultProviders)
     {
-        var searchResults = new List<ISearchResult>();
-
-        foreach (var searchResultType in _searchResults)
+        var genericSearchResultProvider = new PluginGenericResultProvider
         {
-            if (Activator.CreateInstance(searchResultType) is not ISearchResult searchResult)
-                continue;
-
-            searchResults.Add(searchResult);
-        }
-
-        var genericSearchResultProvider = new PluginGenericSearchResultProvider
-        {
-            SearchResults = searchResults,
+            SearchResults = _searchResults,
             SearchResultLifetime = SearchResultLifetime.Session
         };
 
         searchResultProviders.Add(new SearchResultProviderWrapper
         {
-            Provider = genericSearchResultProvider,
-            IsGlobal = true
+            Provider = genericSearchResultProvider
         });
     }
 
@@ -115,26 +100,25 @@ public class PluginBuilder : IPluginBuilder
         return serviceProvider;
     }
 
-    private List<SearchResultProviderWrapper> InstantiateProviders()
+    private List<SearchResultProviderWrapper> InstantiateGlobalProviders()
     {
-        var searchResultProviders = new List<SearchResultProviderWrapper>();
+        var providers = new List<SearchResultProviderWrapper>();
         
         var serviceProvider = CreateServiceProvider();
         
-        foreach (var (type, isGlobal, condition) in _providers)
+        foreach (var (type, condition) in _providers)
         {
-            if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not ISearchResultProvider searchResultProvider)
+            if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not IResultProvider searchResultProvider)
                 continue;
 
-            searchResultProviders.Add(new SearchResultProviderWrapper
+            providers.Add(new SearchResultProviderWrapper
             {
                 Condition = condition,
-                Provider = searchResultProvider,
-                IsGlobal = isGlobal
+                Provider = searchResultProvider
             });
         }
 
-        return searchResultProviders;
+        return providers;
     }
 
     //ToDo should throw Exception

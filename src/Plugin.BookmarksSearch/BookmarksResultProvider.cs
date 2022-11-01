@@ -1,22 +1,23 @@
 ﻿using JoaPluginsPackage;
 using JoaPluginsPackage.Enums;
 using JoaPluginsPackage.Injectables;
+using JoaPluginsPackage.Providers;
 
 namespace BookmarksSearch;
 
-public class BookmarksSearchResultProvider : ISearchResultProvider
+public class BookmarksResultProvider : IResultProvider
 {
     private readonly BookmarksSearchSetting _setting;
     private readonly IJoaLogger _joaLogger;
     private readonly IIconHelper _iconHelper;
 
-    public BookmarksSearchResultProvider(BookmarksSearchSetting setting, IJoaLogger joaLogger, IIconHelper iconHelper)
+    public BookmarksResultProvider(BookmarksSearchSetting setting, IJoaLogger joaLogger, IIconHelper iconHelper)
     {
         _setting = setting;
         _joaLogger = joaLogger;
         _iconHelper = iconHelper;
     }
-    
+
     public List<ISearchResult> SearchResults { get; set; }
     public SearchResultLifetime SearchResultLifetime { get; set; }
     public void UpdateSearchResults(string searchString)

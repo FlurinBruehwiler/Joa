@@ -9,7 +9,7 @@ public class BookmarksSearch : IPlugin
 {
     public void ConfigurePlugin(IPluginBuilder builder)
     {
-        builder.AddGlobalProvider<BookmarksSearchResultProvider>()
+        builder.AddGlobalProvider<BookmarksResultProvider>()
             .AddSetting<BookmarksSearchSetting>();
     }
 }

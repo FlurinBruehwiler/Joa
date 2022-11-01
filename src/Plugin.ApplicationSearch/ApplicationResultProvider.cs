@@ -2,16 +2,17 @@
 using JoaPluginsPackage;
 using JoaPluginsPackage.Enums;
 using JoaPluginsPackage.Injectables;
+using JoaPluginsPackage.Providers;
 
 namespace ApplicationSearch;
 
-public class ApplicationSearchResultProvider : ISearchResultProvider
+public class ApplicationResultProvider : IResultProvider
 {
     private readonly IJoaLogger _joaLogger;
     private readonly IIconHelper _iconHelper;
     private readonly ApplicationSearchSettings _settings;
 
-    public ApplicationSearchResultProvider(IJoaLogger joaLogger, IIconHelper iconHelper, ApplicationSearchSettings settings)
+    public ApplicationResultProvider(IJoaLogger joaLogger, IIconHelper iconHelper, ApplicationSearchSettings settings)
     {
         _joaLogger = joaLogger;
         _iconHelper = iconHelper;

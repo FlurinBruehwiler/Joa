@@ -1,8 +1,8 @@
 ﻿using JoaPluginsPackage.Enums;
 
-namespace JoaPluginsPackage;
+namespace JoaPluginsPackage.Providers;
 
-public interface ISearchResultProvider
+public interface IResultProvider
 {
     public List<ISearchResult> SearchResults { get; set; }
     public SearchResultLifetime SearchResultLifetime { get; set; }

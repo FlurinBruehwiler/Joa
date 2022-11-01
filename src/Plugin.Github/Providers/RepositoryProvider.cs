@@ -1,9 +1,10 @@
 ﻿using JoaPluginsPackage;
 using JoaPluginsPackage.Enums;
+using JoaPluginsPackage.Providers;
 
 namespace Github.Providers;
 
-public class RepositoryProvider : ISearchResultProvider
+public class RepositoryProvider : IResultProvider
 {
     public List<ISearchResult> SearchResults { get; set; }
     public SearchResultLifetime SearchResultLifetime { get; set; }

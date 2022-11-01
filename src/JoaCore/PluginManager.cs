@@ -48,7 +48,7 @@ public class PluginManager
             Plugins.Add(pluginDefinition);
         }
 
-        Providers = Plugins.SelectMany(x => x.SearchResultProviders).ToList();
+        Providers = Plugins.SelectMany(x => x.GlobalProviders).ToList();
         
         // IntervalProviders = Providers
         //     .Where(x => x.IsGlobal && x.Provider.SearchResultLifetime == SearchResultLifetime.Interval)
