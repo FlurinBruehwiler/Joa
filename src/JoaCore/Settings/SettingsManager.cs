@@ -71,7 +71,7 @@ public class SettingsManager
     
     public void SaveSettingsToJson()
     {
-        var timer = JoaLogger.GetInstance().StartMeasure();
+        using var _ = _logger.TimedOperation(nameof(SaveSettingsToJson));
         
         try
         {
@@ -83,13 +83,11 @@ public class SettingsManager
         {
             _logger.Log($"There was an exception thrown while Saving the Settings with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
         }
-        
-        _logger.LogMeasureResult(timer ,nameof(SaveSettingsToJson));
     }
 
     public void UpdateSettingsFromJson()
     {
-        var timer = _logger.StartMeasure();
+        using var _ = _logger.TimedOperation(nameof(UpdateSettingsFromJson));
         
         try
         {
@@ -114,8 +112,6 @@ public class SettingsManager
         {
             _logger.Log($"There was an exception thrown while Updating the Settings from the settings.json with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
         }
-        
-        _logger.LogMeasureResult(timer, nameof(UpdateSettingsFromJson));
     }
 
     private void UpdatePluginDefinition(PluginDefinition oldPluginDefinition, DtoSettings newDtoSettings)

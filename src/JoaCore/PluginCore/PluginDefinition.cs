@@ -13,7 +13,7 @@ public class PluginDefinition
     [JsonIgnore]
     public IPlugin Plugin { get; set; }
     public PluginAttribute PluginInfo { get; set; }
-    public List<SearchResultProviderWrapper> GlobalProviders { get; set; }
+    public List<ProviderWrapper> GlobalProviders { get; set; }
     public List<ISetting> Settings { get; set; }
     public List<ISearchResult> GlobalSearchResults { get; set; }
     

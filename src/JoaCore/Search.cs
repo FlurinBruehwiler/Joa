@@ -8,7 +8,7 @@ public class Search
 {
     private readonly PluginManager _pluginManager;
     private readonly ServiceProviderForPlugins _serviceProvider;
-    private SearchResultProviderWrapper _currentProvider;
+    private ProviderWrapper _currentProvider;
 
     public Search(PluginManager pluginManager, ServiceProviderForPlugins serviceProvider)
     { 
@@ -58,7 +58,7 @@ public class Search
     public async Task UpdateSearchResults(string searchString,
         Action<List<PluginSearchResult>> callback)
     {
-        if (_currentProvider.Provider.SearchResultLifetime == SearchResultLifetime.Search)
+        if (_currentProvider.Provider.SearchResultLifetime == SearchResultLifetime.Key)
         {
             _currentProvider.Provider.UpdateSearchResults(null);
             callback(_currentProvider.Provider.SearchResults.ToPluginSerachResults());

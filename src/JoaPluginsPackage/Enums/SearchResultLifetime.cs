@@ -2,7 +2,7 @@
 
 public enum SearchResultLifetime
 {
+    Key,
     Search,
-    Session,
     Interval
 }

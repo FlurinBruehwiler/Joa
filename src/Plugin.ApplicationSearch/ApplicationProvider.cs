@@ -6,13 +6,13 @@ using JoaPluginsPackage.Providers;
 
 namespace ApplicationSearch;
 
-public class ApplicationResultProvider : IResultProvider
+public class ApplicationProvider : IProvider
 {
     private readonly IJoaLogger _joaLogger;
     private readonly IIconHelper _iconHelper;
     private readonly ApplicationSearchSettings _settings;
 
-    public ApplicationResultProvider(IJoaLogger joaLogger, IIconHelper iconHelper, ApplicationSearchSettings settings)
+    public ApplicationProvider(IJoaLogger joaLogger, IIconHelper iconHelper, ApplicationSearchSettings settings)
     {
         _joaLogger = joaLogger;
         _iconHelper = iconHelper;

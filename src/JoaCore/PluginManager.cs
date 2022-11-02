@@ -8,13 +8,13 @@ namespace JoaCore;
 
 public class PluginManager
 {
-    public List<PluginDefinition>? Plugins { get; set; }
+    public List<PluginDefinition> Plugins { get; set; } = new();
+    public List<ProviderWrapper> Providers { get; set; } = new();
+
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
-    public List<SearchResultProviderWrapper>? Providers { get; set; }
-
-
+    
     public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger)
     {
         SettingsManager = settingsManager;
@@ -27,17 +27,19 @@ public class PluginManager
         return GetPluginDefinitionsOfType<T>().Select(x => (T)x.Plugin).ToList();
     }
 
-    public List<PluginDefinition> GetPluginDefinitionsOfType<T>() where T : IPlugin
+    private List<ProviderWrapper> GetProvidersWithLifeTime(SearchResultLifetime lifetime)
     {
-        if (Plugins is null)
-            return new List<PluginDefinition>();
+        return Providers.Where(x => x.Provider.SearchResultLifetime == lifetime).ToList();
+    }
 
+    private List<PluginDefinition> GetPluginDefinitionsOfType<T>() where T : IPlugin
+    {
         return Plugins.Where(x => x.Plugin is T).ToList();
     }
     
     public void ReloadPlugins()
     {
-        var timer = _logger.StartMeasure();
+        using var _ = _logger.TimedOperation(nameof(ReloadPlugins));
     
         Plugins = new List<PluginDefinition>();
         
@@ -50,31 +52,21 @@ public class PluginManager
 
         Providers = Plugins.SelectMany(x => x.GlobalProviders).ToList();
         
-        // IntervalProviders = Providers
-        //     .Where(x => x.IsGlobal && x.Provider.SearchResultLifetime == SearchResultLifetime.Interval)
-        //     .ToList();
-        //
-        // StrictProviders = Providers.Where(x => x.IsGlobal && x.Condition is not null).ToList();
-        
         UpdateIndexes();
-        
-        _logger.LogMeasureResult(timer, nameof(ReloadPlugins));
     }
     
     private void UpdateIndexes()
     {
-        var context = new GlobalSearchProviderContext();
-        
-        // foreach (var provider in IntervalProviders)
-        // {
-        //     try
-        //     {
-        //         provider.Provider.UpdateSearchResults(context);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         _logger.LogException(e, $"Updating the index for provider {provider.GetType().Name} failed");
-        //     }
-        // }
+        foreach (var provider in GetProvidersWithLifeTime(SearchResultLifetime.Interval))
+        {
+            try
+            {
+                provider.Provider.UpdateSearchResults(string.Empty);
+            }
+            catch (Exception e)
+            {
+                _logger.LogException(e, $"Updating the index for provider {provider.Provider.GetType().Name} failed");
+            }
+        }
     }
 }

@@ -23,13 +23,13 @@ public class PluginBuilder : IPluginBuilder
     private readonly List<Type> _settings = new();
     private readonly List<ISearchResult> _searchResults = new();
     
-    public IPluginBuilder AddGlobalProvider<T>() where T : IResultProvider
+    public IPluginBuilder AddGlobalProvider<T>() where T : IProvider
     {
         _providers.Add((typeof(T), null));
         return this;
     }
 
-    public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : IResultProvider
+    public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : IProvider
     {
         _providers.Add((typeof(T), condition));
         return this;
@@ -68,15 +68,15 @@ public class PluginBuilder : IPluginBuilder
         };
     }
 
-    private void AddSearchResults(List<SearchResultProviderWrapper> searchResultProviders)
+    private void AddSearchResults(List<ProviderWrapper> providers)
     {
-        var genericSearchResultProvider = new PluginGenericResultProvider
+        var genericSearchResultProvider = new PluginGenericProvider
         {
             SearchResults = _searchResults,
-            SearchResultLifetime = SearchResultLifetime.Session
+            SearchResultLifetime = SearchResultLifetime.Search
         };
 
-        searchResultProviders.Add(new SearchResultProviderWrapper
+        providers.Add(new ProviderWrapper
         {
             Provider = genericSearchResultProvider
         });
@@ -100,18 +100,18 @@ public class PluginBuilder : IPluginBuilder
         return serviceProvider;
     }
 
-    private List<SearchResultProviderWrapper> InstantiateGlobalProviders()
+    private List<ProviderWrapper> InstantiateGlobalProviders()
     {
-        var providers = new List<SearchResultProviderWrapper>();
+        var providers = new List<ProviderWrapper>();
         
         var serviceProvider = CreateServiceProvider();
         
         foreach (var (type, condition) in _providers)
         {
-            if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not IResultProvider searchResultProvider)
+            if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not IProvider searchResultProvider)
                 continue;
 
-            providers.Add(new SearchResultProviderWrapper
+            providers.Add(new ProviderWrapper
             {
                 Condition = condition,
                 Provider = searchResultProvider

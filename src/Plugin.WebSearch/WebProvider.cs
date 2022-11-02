@@ -5,19 +5,19 @@ using Newtonsoft.Json;
 
 namespace WebSearch;
 
-public class WebResultProvider : IResultProvider
+public class WebProvider : IProvider
 {
     private readonly WebSearchSettings _settings;
     private readonly HttpClient _client;
 
-    public WebResultProvider(WebSearchSettings settings, HttpClient client)
+    public WebProvider(WebSearchSettings settings, HttpClient client)
     {
         _settings = settings;
         _client = client;
     }
 
     public List<ISearchResult> SearchResults { get; set; } = new();
-    public SearchResultLifetime SearchResultLifetime { get; set; } = SearchResultLifetime.Search; 
+    public SearchResultLifetime SearchResultLifetime { get; set; } = SearchResultLifetime.Key; 
     public void UpdateSearchResults(string searchString)
     {
         var searchEngine = _settings.SearchEngines.FirstOrDefault(x =>

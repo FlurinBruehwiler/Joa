@@ -4,7 +4,7 @@ using JoaPluginsPackage.Providers;
 
 namespace Github.Providers;
 
-public class RepositoriesProvider : IResultProvider
+public class RepositoriesProvider : IProvider
 {
     public List<ISearchResult> SearchResults { get; set; }
     public SearchResultLifetime SearchResultLifetime { get; set; }

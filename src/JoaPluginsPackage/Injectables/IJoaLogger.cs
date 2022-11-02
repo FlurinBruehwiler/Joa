@@ -15,8 +15,6 @@ public interface IJoaLogger
     public void Info(string message);
     public void Warning(string message);
     public void Error(string message);
-
-    public Stopwatch StartMeasure();
-    public void LogMeasureResult(Stopwatch stopwatch, string logName);
+    public IDisposable TimedOperation(string message);
     public void LogException(Exception e, string logName = "");
 }

@@ -5,13 +5,13 @@ using JoaPluginsPackage.Providers;
 
 namespace BookmarksSearch;
 
-public class BookmarksResultProvider : IResultProvider
+public class BookmarksProvider : IProvider
 {
     private readonly BookmarksSearchSetting _setting;
     private readonly IJoaLogger _joaLogger;
     private readonly IIconHelper _iconHelper;
 
-    public BookmarksResultProvider(BookmarksSearchSetting setting, IJoaLogger joaLogger, IIconHelper iconHelper)
+    public BookmarksProvider(BookmarksSearchSetting setting, IJoaLogger joaLogger, IIconHelper iconHelper)
     {
         _setting = setting;
         _joaLogger = joaLogger;

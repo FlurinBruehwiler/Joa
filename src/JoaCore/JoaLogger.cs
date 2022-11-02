@@ -57,18 +57,9 @@ public class JoaLogger : IJoaLogger
         return _instance ??= new JoaLogger();
     }
 
-    public Stopwatch StartMeasure()
+    public IDisposable TimedOperation(string message)
     {
-        var stopwatch = new Stopwatch();
-        stopwatch.Start();
-        return stopwatch;
-    }
-    
-    public void LogMeasureResult(Stopwatch stopwatch, string logName)
-    {
-        stopwatch.Stop();
-        var time = stopwatch.ElapsedMilliseconds;
-        Log($"The Execution of \"{logName}\" took {time} ms to complete", IJoaLogger.LogLevel.Info);
+        return new TimedLogOperation(this, message);
     }
 
     private void LogMessage(string message)
