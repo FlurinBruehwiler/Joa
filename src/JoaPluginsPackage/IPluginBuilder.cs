@@ -7,6 +7,4 @@ public interface IPluginBuilder
     public IPluginBuilder AddGlobalProvider<T>() where T : IProvider;
     public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : IProvider;
     public IPluginBuilder AddGlobalResult(ISearchResult searchResult);
-    public IPluginBuilder AddSetting<T>() where T : ISetting;
-    public IPluginBuilder AddCache<T>() where T : ICache;
 }

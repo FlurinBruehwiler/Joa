@@ -43,12 +43,14 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
+    //Todo
     public IPluginBuilder AddSetting<T>() where T : ISetting
     {
         _settings.Add(typeof(T));
         return this;
     }
 
+    //ToDo
     public IPluginBuilder AddCache<T>() where T : ICache
     {
         _caches.Add(typeof(T));
