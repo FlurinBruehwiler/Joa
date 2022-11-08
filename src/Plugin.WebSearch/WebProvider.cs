@@ -1,23 +1,21 @@
 ﻿using JoaPluginsPackage;
-using JoaPluginsPackage.Enums;
 using JoaPluginsPackage.Providers;
 using Newtonsoft.Json;
 
 namespace WebSearch;
 
-public class WebSearchResultProvider : ISearchResultProvider
+public class WebProvider : IProvider
 {
     private readonly WebSearchSettings _settings;
     private readonly HttpClient _client;
 
-    public WebSearchResultProvider(WebSearchSettings settings, HttpClient client)
+    public WebProvider(WebSearchSettings settings, HttpClient client)
     {
         _settings = settings;
         _client = client;
     }
 
-    public SearchResultLifetime SearchResultLifetime { get; set; } = SearchResultLifetime.Key; 
-    public IEnumerable<ISearchResult> GetSearchResults(string searchString)
+    public List<ISearchResult> GetSearchResults(string searchString)
     {
         var searchEngine = _settings.SearchEngines.FirstOrDefault(x =>
             searchString.StartsWith(x.Prefix));

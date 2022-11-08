@@ -9,8 +9,7 @@ public class WebSearch : IPlugin
 {
     public void ConfigurePlugin(IPluginBuilder builder)
     {
-        builder.AddGlobalProvider<WebSearchResultProvider>(Condition)
-            .AddSetting<WebSearchSettings>();
+        builder.AddGlobalProvider<WebProvider>(Condition);
     }
 
     private bool Condition(string searchString, WebSearchSettings settings)

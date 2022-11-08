@@ -11,6 +11,6 @@ public class RepositorySearchResult : ISearchResult
     public List<ContextAction>? Actions { get; init; }
     public void Execute(IExecutionContext executionContext)
     {
-        executionContext.AddStepBuilder().AddProvider<RepositorySearchResultProvider>();
+        executionContext.AddStepBuilder().AddProvider<RepositoryProvider>();
     }
 }

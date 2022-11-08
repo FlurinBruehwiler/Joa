@@ -23,13 +23,13 @@ public class PluginBuilder : IPluginBuilder
     private readonly List<Type> _settings = new();
     private readonly List<ISearchResult> _searchResults = new();
     
-    public IPluginBuilder AddGlobalProvider<T>() where T : ISearchResultProvider
+    public IPluginBuilder AddGlobalProvider<T>() where T : IProvider
     {
         _providers.Add((typeof(T), null));
         return this;
     }
 
-    public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : ISearchResultProvider
+    public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : IProvider
     {
         _providers.Add((typeof(T), condition));
         return this;
@@ -70,16 +70,16 @@ public class PluginBuilder : IPluginBuilder
 
     private void AddSearchResults(List<ProviderWrapper> providers)
     {
-        var genericSearchResultProvider = new PluginGenericSearchResultProvider
-        {
-            SearchResults = _searchResults,
-            SearchResultLifetime = SearchResultLifetime.Search
-        };
-
-        providers.Add(new ProviderWrapper
-        {
-            SearchResultProvider = genericSearchResultProvider
-        });
+        // var genericSearchResultProvider = new PluginGenericProvider
+        // {
+        //     SearchResults = _searchResults,
+        //     SearchResultLifetime = SearchResultLifetime.Search
+        // };
+        //
+        // providers.Add(new ProviderWrapper
+        // {
+        //     Provider = genericSearchResultProvider
+        // });
     }
 
     private ServiceProvider CreateServiceProvider()
@@ -108,13 +108,13 @@ public class PluginBuilder : IPluginBuilder
         
         foreach (var (type, condition) in _providers)
         {
-            if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not ISearchResultProvider searchResultProvider)
+            if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not IProvider searchResultProvider)
                 continue;
 
             providers.Add(new ProviderWrapper
             {
                 Condition = condition,
-                SearchResultProvider = searchResultProvider
+                Provider = searchResultProvider
             });
         }
 

@@ -26,11 +26,7 @@ public class PluginManager
     {
         return GetPluginDefinitionsOfType<T>().Select(x => (T)x.Plugin).ToList();
     }
-
-    private List<ProviderWrapper> GetProvidersWithLifeTime(SearchResultLifetime lifetime)
-    {
-        return Providers.Where(x => x.SearchResultProvider.SearchResultLifetime == lifetime).ToList();
-    }
+    
 
     private List<PluginDefinition> GetPluginDefinitionsOfType<T>() where T : IPlugin
     {
@@ -57,16 +53,16 @@ public class PluginManager
     
     private void UpdateIndexes()
     {
-        foreach (var provider in GetProvidersWithLifeTime(SearchResultLifetime.Interval))
-        {
-            try
-            {
-                provider.SearchResultProvider.GetSearchResults(string.Empty);
-            }
-            catch (Exception e)
-            {
-                _logger.LogException(e, $"Updating the index for provider {provider.SearchResultProvider.GetType().Name} failed");
-            }
-        }
+        // foreach (var provider in GetProvidersWithLifeTime(SearchResultLifetime.Interval))
+        // {
+        //     try
+        //     {
+        //         provider.Provider.GetSearchResults(string.Empty);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         _logger.LogException(e, $"Updating the index for provider {provider.Provider.GetType().Name} failed");
+        //     }
+        // }
     }
 }
