@@ -3,7 +3,7 @@ using JoaPluginsPackage;
 
 namespace ApplicationSearch;
 
-public class ApplicationSearchResult : ISearchResult
+public class SearchResult : ISearchResult
 {
     public string FilePath { get; init; } = default!;
     public string Caption { get; init; }

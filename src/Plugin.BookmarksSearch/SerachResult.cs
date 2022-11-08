@@ -3,7 +3,7 @@ using JoaPluginsPackage.Injectables;
 
 namespace BookmarksSearch;
 
-public class BookmarkSerachResult : ISearchResult
+public class SerachResult : ISearchResult
 {
     public string Caption { get; init; }
     public string Description { get; init; }

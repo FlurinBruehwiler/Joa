@@ -3,7 +3,7 @@ using JoaPluginsPackage.Attributes;
 
 namespace BookmarksSearch;
 
-public class BookmarksSearchSetting : ISetting
+public class Setting : ISetting
 {
     [SettingProperty]
     public List<Browser> Browsers { get; set; } = new()

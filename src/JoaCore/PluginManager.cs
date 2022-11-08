@@ -1,6 +1,5 @@
 ﻿using JoaCore.PluginCore;
 using JoaCore.Settings;
-using JoaPluginsPackage.Enums;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
 
@@ -14,12 +13,14 @@ public class PluginManager
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
-    
-    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger)
+    private readonly ServiceProviderForPlugins _serviceProvider;
+
+    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger, ServiceProviderForPlugins serviceProvider)
     {
         SettingsManager = settingsManager;
         _pluginLoader = pluginLoader;
         _logger = logger;
+        _serviceProvider = serviceProvider;
     }
 
     public List<T> GetPluginsOfType<T>() where T : IPlugin
@@ -41,7 +42,7 @@ public class PluginManager
         
         foreach (var plugin in _pluginLoader.InstantiatePlugins().ToList())
         {
-            var pluginBuilder = new PluginBuilder(_logger);
+            var pluginBuilder = new PluginBuilder(_logger, _serviceProvider);
             var pluginDefinition = pluginBuilder.BuildPluginDefinition(plugin);
             Plugins.Add(pluginDefinition);
         }
@@ -53,16 +54,16 @@ public class PluginManager
     
     private void UpdateIndexes()
     {
-        // foreach (var provider in GetProvidersWithLifeTime(SearchResultLifetime.Interval))
-        // {
-        //     try
-        //     {
-        //         provider.Provider.GetSearchResults(string.Empty);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         _logger.LogException(e, $"Updating the index for provider {provider.Provider.GetType().Name} failed");
-        //     }
-        // }
+        foreach (var cache in Plugins.SelectMany(x => x.Caches))
+        {
+            try
+            {
+                cache.UpdateIndexes();
+            }
+            catch (Exception e)
+            {
+                _logger.LogException(e, $"Updating the index for cache {cache.GetType().Name} failed");
+            }
+        }
     }
 }

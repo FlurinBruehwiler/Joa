@@ -39,7 +39,7 @@ public class Browser
 
         var content = File.ReadAllText(bookmarkLocation);
         
-        var bookmarksFile = JsonSerializer.Deserialize<BookmarksFileModel>(content);
+        var bookmarksFile = JsonSerializer.Deserialize<FileModel>(content);
 
         if(bookmarksFile is null)
             return new List<Bookmark>();

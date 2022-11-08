@@ -15,7 +15,7 @@ public class PluginDefinition
     public PluginAttribute PluginInfo { get; set; }
     public List<ProviderWrapper> GlobalProviders { get; set; }
     public List<ISetting> Settings { get; set; }
-    public List<ISearchResult> GlobalSearchResults { get; set; }
+    public List<ICache> Caches { get; set; }
     
     public PluginDefinition()
     {

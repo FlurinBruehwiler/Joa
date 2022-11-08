@@ -4,12 +4,12 @@ using OperatingSystem = JoaPluginsPackage.Enums.OperatingSystem;
 
 namespace ApplicationSearch;
 
-public class ApplicationSearchSettings : ISetting
+public class Settings : ISetting
 {
     [SettingProperty(Name = "Web Search Engines")]
-    public List<ApplicationFolder> Folders { get; set; } = new()
+    public List<Folder> Folders { get; set; } = new()
     {
-        new ApplicationFolder
+        new Folder
         {
             Path = Path.Combine(
                 Environment.GetFolderPath(
@@ -17,7 +17,7 @@ public class ApplicationSearchSettings : ISetting
                 @"Microsoft\Windows\Start Menu\Programs"), 
             OperatingSystem = OperatingSystem.Windows
         },
-        new ApplicationFolder
+        new Folder
         {
             Path = Path.Combine(
                 Environment.GetFolderPath(
@@ -25,7 +25,7 @@ public class ApplicationSearchSettings : ISetting
                 @"Microsoft\Windows\Start Menu"), 
             OperatingSystem = OperatingSystem.Windows
         },
-        new ApplicationFolder
+        new Folder
         {
             Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop), 
             OperatingSystem = OperatingSystem.Windows

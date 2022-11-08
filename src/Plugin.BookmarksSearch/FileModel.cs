@@ -1,6 +1,6 @@
 ﻿namespace BookmarksSearch;
 
-public record BookmarksFileModel
+public record FileModel
 {
     public Roots roots { get; set; } = null!;
 }

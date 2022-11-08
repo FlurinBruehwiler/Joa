@@ -27,8 +27,8 @@ public class PluginLoader
 
         foreach (var type in _pluginTypes)
         {
-            if (ActivatorUtilities.CreateInstance(_serviceProvider.ServiceProvider, type) is not IPlugin result) continue;
-            output.Add(result);
+            if (ActivatorUtilities.CreateInstance(_serviceProvider.ServiceProvider, type) is not IPlugin plugin) continue;
+            output.Add(plugin);
         }
         
         _logger.Log("Loaded Plugins successfully!!", IJoaLogger.LogLevel.Info);

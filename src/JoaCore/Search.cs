@@ -1,6 +1,5 @@
 ﻿using JoaCore.SearchEngine;
 using JoaPluginsPackage;
-using JoaPluginsPackage.Enums;
 
 namespace JoaCore;
 

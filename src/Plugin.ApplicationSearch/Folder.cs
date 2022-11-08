@@ -3,7 +3,7 @@ using OperatingSystem = JoaPluginsPackage.Enums.OperatingSystem;
 
 namespace ApplicationSearch;
 
-public record ApplicationFolder
+public record Folder
 {
     [Path]
     [SettingProperty]

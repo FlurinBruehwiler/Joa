@@ -1,8 +1,6 @@
-﻿using JoaPluginsPackage.Plugin;
+﻿namespace JoaPluginsPackage;
 
-namespace JoaPluginsPackage;
-
-public interface IIndexablePlugin : IPlugin
+public interface ICache
 {
     public void UpdateIndexes();
 }
