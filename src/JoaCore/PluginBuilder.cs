@@ -23,13 +23,13 @@ public class PluginBuilder : IPluginBuilder
     private readonly List<Type> _settings = new();
     private readonly List<ISearchResult> _searchResults = new();
     
-    public IPluginBuilder AddGlobalProvider<T>() where T : IProvider
+    public IPluginBuilder AddGlobalProvider<T>() where T : ISearchResultProvider
     {
         _providers.Add((typeof(T), null));
         return this;
     }
 
-    public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : IProvider
+    public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : ISearchResultProvider
     {
         _providers.Add((typeof(T), condition));
         return this;
@@ -70,7 +70,7 @@ public class PluginBuilder : IPluginBuilder
 
     private void AddSearchResults(List<ProviderWrapper> providers)
     {
-        var genericSearchResultProvider = new PluginGenericProvider
+        var genericSearchResultProvider = new PluginGenericSearchResultProvider
         {
             SearchResults = _searchResults,
             SearchResultLifetime = SearchResultLifetime.Search
@@ -78,7 +78,7 @@ public class PluginBuilder : IPluginBuilder
 
         providers.Add(new ProviderWrapper
         {
-            Provider = genericSearchResultProvider
+            SearchResultProvider = genericSearchResultProvider
         });
     }
 
@@ -108,13 +108,13 @@ public class PluginBuilder : IPluginBuilder
         
         foreach (var (type, condition) in _providers)
         {
-            if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not IProvider searchResultProvider)
+            if (ActivatorUtilities.CreateInstance(serviceProvider, type) is not ISearchResultProvider searchResultProvider)
                 continue;
 
             providers.Add(new ProviderWrapper
             {
                 Condition = condition,
-                Provider = searchResultProvider
+                SearchResultProvider = searchResultProvider
             });
         }
 

@@ -9,7 +9,7 @@ public class ApplicationSearch : IPlugin
 { 
     public void ConfigurePlugin(IPluginBuilder builder)
     {
-        builder.AddGlobalProvider<ApplicationProvider>()
+        builder.AddGlobalProvider<ApplicationSearchResultProvider>()
             .AddSetting<ApplicationSearchSettings>();
     }
 }

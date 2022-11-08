@@ -2,20 +2,9 @@
 
 namespace JoaPluginsPackage;
 
-public class IStepBuilder
+public interface IStepBuilder
 {
-    public IStepBuilder AddProvider<T>(ISearchProviderContext context) where T : IProvider
-    {
-        return this;
-    }
+    public IStepBuilder AddProvider<T>(params object[] parameter) where T : ISearchResultProvider;
     
-    public IStepBuilder AddProvider<T>() where T : IProvider
-    {
-        return this;
-    }
-    
-    public IStepBuilder AddCustomName()
-    {
-        return this;
-    }
+    public IStepBuilder AddCustomName();
 }

@@ -1,5 +1,4 @@
 ﻿using Github.Providers;
-using Github.Providers.Contexts;
 using JoaPluginsPackage;
 
 namespace Github.SearchResults;
@@ -12,6 +11,6 @@ public class RepositorySearchResult : ISearchResult
     public List<ContextAction>? Actions { get; init; }
     public void Execute(IExecutionContext executionContext)
     {
-        executionContext.AddStepBuilder().AddProvider<RepositoryProvider>(new RepositoriesProviderContext());
+        executionContext.AddStepBuilder().AddProvider<RepositorySearchResultProvider>();
     }
 }

@@ -6,27 +6,25 @@ using JoaPluginsPackage.Providers;
 
 namespace ApplicationSearch;
 
-public class ApplicationProvider : IProvider
+public class ApplicationSearchResultProvider : ISearchResultProvider
 {
     private readonly IJoaLogger _joaLogger;
     private readonly IIconHelper _iconHelper;
     private readonly ApplicationSearchSettings _settings;
 
-    public ApplicationProvider(IJoaLogger joaLogger, IIconHelper iconHelper, ApplicationSearchSettings settings)
+    public ApplicationSearchResultProvider(IJoaLogger joaLogger, IIconHelper iconHelper, ApplicationSearchSettings settings)
     {
         _joaLogger = joaLogger;
         _iconHelper = iconHelper;
         _settings = settings;
     }
 
-    public List<ISearchResult> SearchResults { get; set; } = new();
     public SearchResultLifetime SearchResultLifetime { get; set; }
     
-    public void UpdateSearchResults(string searchString)
+    public IEnumerable<ISearchResult> GetSearchResults(string searchString)
     {
         _joaLogger.Info("Updating Indexes");
         
-        SearchResults.Clear();
 
         var paths = new List<string>();
 
@@ -46,15 +44,13 @@ public class ApplicationProvider : IProvider
 
             var iconLocation = _iconHelper.CreateIconFromFileIfNotExists<ApplicationSearch>(path);
                 
-            SearchResults.Add(new ApplicationSearchResult
+            yield return new ApplicationSearchResult
             {
                 Caption = Path.GetFileNameWithoutExtension(path),
                 Description = "",
                 Icon = iconLocation,
                 FilePath = path
-            });
+            };
         }
-        
-        _joaLogger.Log(JsonSerializer.Serialize(SearchResults), IJoaLogger.LogLevel.Info);
     }
 }

@@ -58,14 +58,14 @@ public class Search
     public async Task UpdateSearchResults(string searchString,
         Action<List<PluginSearchResult>> callback)
     {
-        if (_currentProvider.Provider.SearchResultLifetime == SearchResultLifetime.Key)
+        if (_currentProvider.SearchResultProvider.SearchResultLifetime == SearchResultLifetime.Key)
         {
-            _currentProvider.Provider.UpdateSearchResults(null);
-            callback(_currentProvider.Provider.SearchResults.ToPluginSerachResults());
+            _currentProvider.SearchResultProvider.GetSearchResults(null);
+            callback(_currentProvider.SearchResultProvider.SearchResults.ToPluginSerachResults());
         }
         else
         {
-            callback(SortSearchResults(_currentProvider.Provider.SearchResults.ToPluginSerachResults(), searchString));
+            callback(SortSearchResults(_currentProvider.SearchResultProvider.SearchResults.ToPluginSerachResults(), searchString));
         }
     }
 
