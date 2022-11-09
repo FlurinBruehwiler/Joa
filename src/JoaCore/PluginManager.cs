@@ -13,14 +13,12 @@ public class PluginManager
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
-    private readonly ServiceProviderForPlugins _serviceProvider;
 
-    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger, ServiceProviderForPlugins serviceProvider)
+    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger, PluginServiceProvider pluginServiceProvider)
     {
         SettingsManager = settingsManager;
         _pluginLoader = pluginLoader;
         _logger = logger;
-        _serviceProvider = serviceProvider;
     }
 
     public List<T> GetPluginsOfType<T>() where T : IPlugin
@@ -28,7 +26,6 @@ public class PluginManager
         return GetPluginDefinitionsOfType<T>().Select(x => (T)x.Plugin).ToList();
     }
     
-
     private List<PluginDefinition> GetPluginDefinitionsOfType<T>() where T : IPlugin
     {
         return Plugins.Where(x => x.Plugin is T).ToList();
@@ -36,19 +33,8 @@ public class PluginManager
     
     public void ReloadPlugins()
     {
-        using var _ = _logger.TimedOperation(nameof(ReloadPlugins));
-    
-        Plugins = new List<PluginDefinition>();
-        
-        foreach (var plugin in _pluginLoader.InstantiatePlugins().ToList())
-        {
-            var pluginBuilder = new PluginBuilder(_logger, _serviceProvider);
-            var pluginDefinition = pluginBuilder.BuildPluginDefinition(plugin);
-            Plugins.Add(pluginDefinition);
-        }
-
+        Plugins = _pluginLoader.ReloadPlugins();
         Providers = Plugins.SelectMany(x => x.GlobalProviders).ToList();
-        
         UpdateIndexes();
     }
     

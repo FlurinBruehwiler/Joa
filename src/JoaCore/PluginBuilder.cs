@@ -12,12 +12,12 @@ namespace JoaCore;
 public class PluginBuilder : IPluginBuilder
 {
     private readonly IJoaLogger _joaLogger;
-    private readonly ServiceProviderForPlugins _serviceProvider;
+    private readonly PluginServiceProvider _pluginServiceProvider;
 
-    public PluginBuilder(IJoaLogger joaLogger, ServiceProviderForPlugins serviceProvider)
+    public PluginBuilder(IJoaLogger joaLogger, PluginServiceProvider pluginServiceProvider)
     {
         _joaLogger = joaLogger;
-        _serviceProvider = serviceProvider;
+        _pluginServiceProvider = pluginServiceProvider;
     }
     
     private readonly List<(Type, Delegate?)> _providers = new();
@@ -43,21 +43,7 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
-    //Todo
-    public IPluginBuilder AddSetting<T>() where T : ISetting
-    {
-        _settings.Add(typeof(T));
-        return this;
-    }
-
-    //ToDo
-    public IPluginBuilder AddCache<T>() where T : ICache
-    {
-        _caches.Add(typeof(T));
-        return this;
-    }
-
-    public PluginDefinition BuildPluginDefinition(IPlugin plugin)
+    public PluginDefinition BuildPluginDefinition(IPlugin plugin, List<ISetting> settings, List<ICache> caches)
     {
         var pluginInfos = GetPluginInfos(plugin.GetType());
         
@@ -66,10 +52,6 @@ public class PluginBuilder : IPluginBuilder
         
         plugin.ConfigurePlugin(this);
 
-        var settings = InstantiateSettings().ToList();
-
-        var caches = InstantiateCaches().ToList();
-        
         var globalProviders = InstantiateGlobalProviders().ToList();
 
         AddSearchResults(globalProviders);
@@ -84,41 +66,12 @@ public class PluginBuilder : IPluginBuilder
         };
     }
 
-    private IEnumerable<ISetting> InstantiateSettings()
-    {
-        foreach (var settingType in _settings)
-        {
-            if (ActivatorUtilities.CreateInstance(_serviceProvider.ServiceProvider, settingType) is not ISetting setting)
-                continue;
-
-            _serviceProvider.ServiceCollection.AddSingleton(setting);
-            
-            yield return setting;
-        }
-        
-        _serviceProvider.BuildServiceProvider();
-    }
-    
-    private IEnumerable<ICache> InstantiateCaches()
-    {
-        foreach (var cacheType in _caches)
-        {
-            if(ActivatorUtilities.CreateInstance(_serviceProvider.ServiceProvider, cacheType) is not ICache cache)
-                continue;
-
-            _serviceProvider.ServiceCollection.AddSingleton(cache);
-
-            yield return cache;
-        }
-        
-        _serviceProvider.BuildServiceProvider();
-    }
     
     private IEnumerable<ProviderWrapper> InstantiateGlobalProviders()
     {
         foreach (var (type, condition) in _providers)
         {
-            if (ActivatorUtilities.CreateInstance(_serviceProvider.ServiceProvider, type) is not IProvider searchResultProvider)
+            if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, type) is not IProvider searchResultProvider)
                 continue;
 
             yield return new ProviderWrapper

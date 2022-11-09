@@ -30,7 +30,7 @@ builder.Services.AddSingleton<SettingsManager>();
 builder.Services.AddSingleton<SettingsProvider>();
 builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
 builder.Services.AddSingleton<IIconHelper, IconHelper>();
-builder.Services.AddSingleton<ServiceProviderForPlugins>();
+builder.Services.AddSingleton<PluginServiceProvider>();
 
 builder.Services.AddHostedService<UiManagement>();
 

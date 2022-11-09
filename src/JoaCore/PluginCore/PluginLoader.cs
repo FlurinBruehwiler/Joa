@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using JoaPluginsPackage.Attributes;
+using JoaPluginsPackage;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
 using Microsoft.Extensions.Configuration;
@@ -9,55 +9,98 @@ namespace JoaCore.PluginCore;
 
 public class PluginLoader
 {
-    private readonly List<Type> _pluginTypes;
+    private readonly IConfiguration _configuration;
     private readonly IJoaLogger _logger;
-    private readonly ServiceProviderForPlugins _serviceProvider;
+    private readonly PluginServiceProvider _pluginServiceProvider;
 
-    public PluginLoader(IConfiguration configuration, IJoaLogger logger, ServiceProviderForPlugins serviceProvider)
+    public PluginLoader(IConfiguration configuration, IJoaLogger logger, PluginServiceProvider pluginServiceProvider)
     {
+        _configuration = configuration;
         _logger = logger;
-        _serviceProvider = serviceProvider;
-        var assemblies = LoadAssemblies(GetPluginDllPaths(configuration));
-        _pluginTypes = LoadTypes(assemblies);
+        _pluginServiceProvider = pluginServiceProvider;
+    }
+
+    public List<PluginDefinition> ReloadPlugins()
+    {
+        List<PluginDefinition> pluginDefinitions = new();
+        var assemblies = LoadAssemblies(GetPluginDllPaths(_configuration));
+        var pluginTypes = LoadTypes(assemblies);
+        
+        foreach (var pluginType in pluginTypes)
+        {
+            var settings = InstantiateSettings(pluginType.Settings).ToList();
+            var caches = InstantiateCaches(pluginType.Caches).ToList();
+            var plugin = InstantiatePlugin(pluginType.Plugin!);
+            if(plugin is null)
+                continue;
+            var pluginBuilder = new PluginBuilder(_logger, _pluginServiceProvider);
+            pluginDefinitions.Add(pluginBuilder.BuildPluginDefinition(plugin, settings, caches));
+        }
+
+        return pluginDefinitions;
     }
     
-    public IEnumerable<IPlugin> InstantiatePlugins()
+    private IEnumerable<ISetting> InstantiateSettings(List<Type> settingTypes)
     {
-        var output = new List<IPlugin>();
-
-        foreach (var type in _pluginTypes)
+        foreach (var settingType in settingTypes)
         {
-            if (ActivatorUtilities.CreateInstance(_serviceProvider.ServiceProvider, type) is not IPlugin plugin) continue;
-            output.Add(plugin);
+            if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, settingType) is not ISetting setting)
+                continue;
+
+            _pluginServiceProvider.ServiceCollection.AddSingleton(setting);
+            
+            yield return setting;
         }
         
-        _logger.Log("Loaded Plugins successfully!!", IJoaLogger.LogLevel.Info);
-        
-        return output;
+        _pluginServiceProvider.BuildServiceProvider();
     }
     
-    private IEnumerable<PropertyInfo> GetSettingsForPlugin(Type pluginType)
+    private IEnumerable<ICache> InstantiateCaches(List<Type> cacheTypes)
     {
-        foreach (var propertyInfo in pluginType.GetProperties())
+        foreach (var cacheType in cacheTypes)
         {
-            var attr = Attribute.GetCustomAttribute(propertyInfo, typeof(SettingPropertyAttribute));
-            if(attr is not SettingPropertyAttribute settingPropertyAttribute) continue;
-            yield return propertyInfo;
+            if(ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, cacheType) is not ICache cache)
+                continue;
+
+            _pluginServiceProvider.ServiceCollection.AddSingleton(cache);
+
+            yield return cache;
         }
+        
+        _pluginServiceProvider.BuildServiceProvider();
     }
 
-    private List<Type> LoadTypes(List<Assembly> assemblies)
+    private IPlugin? InstantiatePlugin(Type pluginType)
     {
-        return assemblies.Select(LoadType).Where(type => type != null).ToList()!;
+        if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, pluginType) is IPlugin plugin)
+            return plugin;
+
+        return null;
     }
 
-    private Type? LoadType(Assembly assembly)
+    private List<PluginTypes> LoadTypes(List<Assembly> assemblies)
     {
+        return assemblies.Select(LoadType).Where(type => type is not null).ToList()!;
+    }
+
+    private PluginTypes? LoadType(Assembly assembly)
+    {
+        PluginTypes pluginTypes = new();
+        
         foreach (var type in assembly.GetTypes())
         {
-            if (!typeof(IPlugin).IsAssignableFrom(type)) continue;
-            return type;
+            if (typeof(IPlugin).IsAssignableFrom(type))
+                pluginTypes.Plugin = type;
+            
+            if (typeof(ICache).IsAssignableFrom(type))
+                pluginTypes.Caches.Add(type);
+            
+            if(typeof(ISetting).IsAssignableFrom(type))
+                pluginTypes.Settings.Add(type);
         }
+
+        if (pluginTypes.Plugin is not null)
+            return pluginTypes;
         
         var availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
         _logger.Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +

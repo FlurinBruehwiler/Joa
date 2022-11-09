@@ -4,20 +4,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace JoaCore;
 
-public class ServiceProviderForPlugins
+public class PluginServiceProvider
 {
     public IServiceProvider ServiceProvider { get; set; }
     
     public ServiceCollection ServiceCollection { get; set; }
     
-    public ServiceProviderForPlugins(SettingsProvider settingsProvider, IJoaLogger joaLogger)
+    public PluginServiceProvider(SettingsProvider settingsProvider, IJoaLogger joaLogger)
     {
         ServiceCollection = new ServiceCollection();
         ServiceCollection.AddSingleton<ISettingsProvider>(settingsProvider);
         ServiceCollection.AddSingleton(joaLogger);
         ServiceCollection.AddSingleton<IBrowserHelper, BrowserHelper>();
         ServiceCollection.AddSingleton<IIconHelper, IconHelper>();
-
         ServiceProvider = ServiceCollection.BuildServiceProvider();
     }
 

@@ -6,52 +6,50 @@ namespace JoaCore;
 public class Search
 {
     private readonly PluginManager _pluginManager;
-    private readonly ServiceProviderForPlugins _serviceProvider;
+    private readonly PluginServiceProvider _pluginServiceProvider;
     private ProviderWrapper _currentProvider;
 
-    public Search(PluginManager pluginManager, ServiceProviderForPlugins serviceProvider)
+    public Search(PluginManager pluginManager, PluginServiceProvider pluginServiceProvider)
     { 
         _pluginManager = pluginManager;
-        _serviceProvider = serviceProvider;
-
+        _pluginServiceProvider = pluginServiceProvider;
         _pluginManager.ReloadPlugins();
-        
-        
         StringMatcher.Instance = new StringMatcher();
     }
 
     public async Task ExecuteCommand(Guid commandId, string actionKey)
     {
-        var pluginCommand = _currentProvider.LastSearchResults?
+        var pluginSearchResult = _currentProvider.LastSearchResults?
             .FirstOrDefault(x => x.CommandId == commandId);
 
-        if (pluginCommand is null)
+        if (pluginSearchResult is null)
             return;
 
-        ContextAction? contextAction;
+        var contextAction = GetContextAction(actionKey, pluginSearchResult);
         
-        if (actionKey == "enter")
-        {
-            contextAction = new ContextAction
-            {
-                Key = "enter"
-            };
-        }
-        else
-        {
-            contextAction = pluginCommand.SearchResult.Actions?.SingleOrDefault(x => x.Key == actionKey);
-        }
-
         if (contextAction is null)
             return;
 
         var executionContext = new ExecutionContext
         {
             ContextAction = contextAction,
-            ServiceProvider = _serviceProvider.ServiceProvider
+            ServiceProvider = _pluginServiceProvider.ServiceProvider
         };
         
-        await Task.Run(() => pluginCommand.SearchResult.Execute(executionContext));
+        await Task.Run(() => pluginSearchResult.SearchResult.Execute(executionContext));
+    }
+
+    private ContextAction? GetContextAction(string actionKey, PluginSearchResult pluginSearchResult)
+    {
+        if (actionKey == "enter")
+        {
+            return new ContextAction
+            {
+                Key = "enter"
+            };
+        }
+
+        return pluginSearchResult.SearchResult.Actions?.SingleOrDefault(x => x.Key == actionKey);
     }
 
     public async Task UpdateSearchResults(string searchString,

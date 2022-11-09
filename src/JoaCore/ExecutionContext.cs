@@ -4,10 +4,13 @@ namespace JoaCore;
 
 public class ExecutionContext : IExecutionContext
 {
-    public ContextAction ContextAction { get; set; }
-    public IServiceProvider ServiceProvider { get; set; }
+
+    public required ContextAction ContextAction { get; set; }
+    public required IServiceProvider ServiceProvider { get; set; }
+    public StepBuilder? StepBuilder { get; set; }
     public IStepBuilder AddStepBuilder()
     {
-        throw new NotImplementedException();
+        StepBuilder = new StepBuilder(ServiceProvider);
+        return StepBuilder;
     }
 }
