@@ -12,9 +12,9 @@ public class SearchHub : Hub
         _search = search;
     }
     
-    public Task GetSearchResults(string searchString)
+    public Task GetSearchResults(string searchString, Guid stepId)
     {
-        return _search.UpdateSearchResults(searchString, results =>
+        return _search.UpdateSearchResults(searchString, stepId, results =>
         {
             Clients.Caller.SendAsync("ReceiveSearchResults", searchString, results);
         });

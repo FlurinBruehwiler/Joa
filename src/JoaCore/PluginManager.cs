@@ -8,7 +8,7 @@ namespace JoaCore;
 public class PluginManager
 {
     public List<PluginDefinition> Plugins { get; set; } = new();
-    public List<ProviderWrapper> Providers { get; set; } = new();
+    public List<ProviderWrapper> GlobalProviders { get; set; } = new();
 
     private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
@@ -34,7 +34,7 @@ public class PluginManager
     public void ReloadPlugins()
     {
         Plugins = _pluginLoader.ReloadPlugins();
-        Providers = Plugins.SelectMany(x => x.GlobalProviders).ToList();
+        GlobalProviders = Plugins.SelectMany(x => x.GlobalProviders).ToList();
         UpdateIndexes();
     }
     

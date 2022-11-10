@@ -13,11 +13,19 @@ public class StepBuilder : IStepBuilder
         _serviceProvider = serviceProvider;
     }
     
-    public List<IProvider> Providers { get; set; } = new();
+    private List<IProvider> Providers { get; set; } = new();
     
     public IStepBuilder AddProvider<T>(params object[] parameter) where T : IProvider
     {
         Providers.Add(ActivatorUtilities.CreateInstance<T>(_serviceProvider, parameter));
         return this;
+    }
+
+    public Step Build()
+    {
+        return new Step
+        {
+            Providers = Providers
+        };
     }
 }

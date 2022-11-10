@@ -1,5 +1,4 @@
-﻿using JoaCore.SearchEngine;
-using JoaPluginsPackage;
+﻿using JoaPluginsPackage;
 
 namespace JoaCore;
 
@@ -7,23 +6,24 @@ public class Search
 {
     private readonly PluginManager _pluginManager;
     private readonly PluginServiceProvider _pluginServiceProvider;
-    private ProviderWrapper _currentProvider;
+    private readonly Queue<Step> _steps; 
 
     public Search(PluginManager pluginManager, PluginServiceProvider pluginServiceProvider)
     { 
         _pluginManager = pluginManager;
         _pluginServiceProvider = pluginServiceProvider;
         _pluginManager.ReloadPlugins();
-        StringMatcher.Instance = new StringMatcher();
+        _steps = new Queue<Step>();
+        _steps.Enqueue(new Step
+        {
+            Providers = pluginManager.GlobalProviders.Where(x => x.Condition is null)
+                .Select(x => x.Provider).ToList()
+        });
     }
 
-    public async Task ExecuteCommand(Guid commandId, string actionKey)
+    public async Task ExecuteCommand(Guid resultId, string actionKey)
     {
-        var pluginSearchResult = _currentProvider.LastSearchResults?
-            .FirstOrDefault(x => x.CommandId == commandId);
-
-        if (pluginSearchResult is null)
-            return;
+        var pluginSearchResult = _steps.Peek().GetSearchResultFromId(resultId);
 
         var contextAction = GetContextAction(actionKey, pluginSearchResult);
         
@@ -36,10 +36,31 @@ public class Search
             ServiceProvider = _pluginServiceProvider.ServiceProvider
         };
         
-        await Task.Run(() => pluginSearchResult.SearchResult.Execute(executionContext));
-    }
+        await Task.Run(() => pluginSearchResult.Execute(executionContext));
 
-    private ContextAction? GetContextAction(string actionKey, PluginSearchResult pluginSearchResult)
+        if (executionContext.StepBuilder is null)
+            return;
+        
+        _steps.Enqueue(executionContext.StepBuilder.Build());
+    }
+    
+    //ToDo
+    public async Task UpdateSearchResults(string searchString, Guid stepId,
+        Action<List<PluginSearchResult>> callback)
+    {
+        while (true)
+        {
+            if (_steps.Peek().StepId == stepId)
+            {
+                callback(_steps.Peek().GetSearchResults(searchString));
+                return;
+            }
+
+            _steps.Dequeue();
+        }
+    }
+    
+    private ContextAction? GetContextAction(string actionKey, ISearchResult searchResult)
     {
         if (actionKey == "enter")
         {
@@ -49,34 +70,7 @@ public class Search
             };
         }
 
-        return pluginSearchResult.SearchResult.Actions?.SingleOrDefault(x => x.Key == actionKey);
+        return searchResult.Actions?.SingleOrDefault(x => x.Key == actionKey);
     }
 
-    public async Task UpdateSearchResults(string searchString,
-        Action<List<PluginSearchResult>> callback)
-    {
-        // if (_currentProvider.Provider.SearchResultLifetime == SearchResultLifetime.Key)
-        // {
-        //     _currentProvider.Provider.GetSearchResults(null);
-        //     callback(_currentProvider.Provider.SearchResults.ToPluginSerachResults());
-        // }
-        // else
-        // {
-        //     callback(SortSearchResults(_currentProvider.Provider.SearchResults.ToPluginSerachResults(), searchString));
-        // }
-    }
-
-    private List<PluginSearchResult> SortSearchResults(List<PluginSearchResult> input, string searchString)
-    {
-        var sortValues = input.Select(x => (x, StringMatcher.FuzzySearch( searchString,x.SearchResult.Caption).Score)).ToList();
-        
-        sortValues.Sort((x, y) =>
-        {
-            if (x.Item2 > y.Item2)
-                return -1;
-            return x.Item2 < y.Item2 ? 1 : 0;
-        });
-
-        return sortValues.Select(x => x.x).ToList();
-    }
 }

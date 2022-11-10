@@ -1,5 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-
 namespace JoaPluginsPackage;
 
 public interface IExecutionContext
