@@ -25,7 +25,10 @@ public class StepBuilder : IStepBuilder
     {
         return new Step
         {
-            Providers = Providers
+            Providers = Providers.Select(x => new ProviderWrapper
+            {
+                Provider = x
+            }).ToList()
         };
     }
 }

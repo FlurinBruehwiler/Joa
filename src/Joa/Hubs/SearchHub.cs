@@ -6,18 +6,25 @@ namespace JoaInterface.Hubs;
 public class SearchHub : Hub
 {
     private readonly Search _search;
+    private readonly StepsManager _stepsManager;
 
-    public SearchHub(Search search)
+    public SearchHub(Search search, StepsManager stepsManager)
     {
         _search = search;
+        _stepsManager = stepsManager;
     }
     
-    public Task GetSearchResults(string searchString, Guid stepId)
+    public Task GetSearchResults(string searchString)
     {
-        return _search.UpdateSearchResults(searchString, stepId, results =>
+        return _search.UpdateSearchResults(searchString, results =>
         {
             Clients.Caller.SendAsync("ReceiveSearchResults", searchString, results);
         });
+    }
+
+    public void GoToStep(Guid stepId)
+    {
+        _stepsManager.GoToStep(stepId);
     }
 
     public async Task ExecuteSearchResult(string commandId, string actionKey)

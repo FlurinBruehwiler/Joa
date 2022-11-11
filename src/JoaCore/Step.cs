@@ -1,12 +1,11 @@
 ﻿using JoaCore.SearchEngine;
 using JoaPluginsPackage;
-using JoaPluginsPackage.Providers;
 
 namespace JoaCore;
 
 public class Step
 {
-    public required List<IProvider> Providers { get; set; }
+    public required List<ProviderWrapper> Providers { get; set; }
 
     public Guid StepId { get; set; } = Guid.NewGuid();
     
@@ -26,8 +25,14 @@ public class Step
     
     public List<PluginSearchResult> GetSearchResults(string searchString)
     {
+        foreach (var providerWrapper in Providers.Where(x => x.Condition is not null))
+        {
+            providerWrapper.Condition.
+        }
+        
         _lastSearchResults = Providers
-            .SelectMany(x => x.GetSearchResults(searchString)).ToList().ToPluginSerachResults();
+            .SelectMany(x => x.Provider.GetSearchResults(searchString)).ToList().ToPluginSerachResults();
+
         return SortSearchResults(_lastSearchResults, searchString);
     }
     

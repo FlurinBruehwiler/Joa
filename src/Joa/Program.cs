@@ -36,6 +36,11 @@ builder.Services.AddHostedService<UiManagement>();
 
 var app = builder.Build();
 
+app.MapGet("", () =>
+{
+
+});
+
 app.UseCors();
 app.MapHub<SearchHub>("/searchHub");
 app.MapHub<SettingsHub>("/settingsHub");

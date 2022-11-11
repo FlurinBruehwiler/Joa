@@ -6,24 +6,20 @@ public class Search
 {
     private readonly PluginManager _pluginManager;
     private readonly PluginServiceProvider _pluginServiceProvider;
-    private readonly Queue<Step> _steps; 
+    private readonly StepsManager _stepsManager;
 
-    public Search(PluginManager pluginManager, PluginServiceProvider pluginServiceProvider)
+    public Search(PluginManager pluginManager, PluginServiceProvider pluginServiceProvider, StepsManager stepsManager)
     { 
         _pluginManager = pluginManager;
         _pluginServiceProvider = pluginServiceProvider;
+        _stepsManager = stepsManager;
         _pluginManager.ReloadPlugins();
-        _steps = new Queue<Step>();
-        _steps.Enqueue(new Step
-        {
-            Providers = pluginManager.GlobalProviders.Where(x => x.Condition is null)
-                .Select(x => x.Provider).ToList()
-        });
+
     }
 
     public async Task ExecuteCommand(Guid resultId, string actionKey)
     {
-        var pluginSearchResult = _steps.Peek().GetSearchResultFromId(resultId);
+        var pluginSearchResult = _stepsManager.GetCurrentStep().GetSearchResultFromId(resultId);
 
         var contextAction = GetContextAction(actionKey, pluginSearchResult);
         
@@ -41,25 +37,16 @@ public class Search
         if (executionContext.StepBuilder is null)
             return;
         
-        _steps.Enqueue(executionContext.StepBuilder.Build());
+        _stepsManager.AddStep(executionContext.StepBuilder.Build());
     }
     
     //ToDo
-    public async Task UpdateSearchResults(string searchString, Guid stepId,
+    public async Task UpdateSearchResults(string searchString,
         Action<List<PluginSearchResult>> callback)
     {
-        while (true)
-        {
-            if (_steps.Peek().StepId == stepId)
-            {
-                callback(_steps.Peek().GetSearchResults(searchString));
-                return;
-            }
-
-            _steps.Dequeue();
-        }
+        callback(_stepsManager.GetCurrentStep().GetSearchResults(searchString));
     }
-    
+
     private ContextAction? GetContextAction(string actionKey, ISearchResult searchResult)
     {
         if (actionKey == "enter")
