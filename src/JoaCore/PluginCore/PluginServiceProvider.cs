@@ -11,10 +11,10 @@ public class PluginServiceProvider
     
     public ServiceCollection ServiceCollection { get; set; }
     
-    public PluginServiceProvider(SettingsProvider settingsProvider, IJoaLogger joaLogger)
+    public PluginServiceProvider(IJoaLogger joaLogger)
     {
+        joaLogger.Info(nameof(PluginServiceProvider));
         ServiceCollection = new ServiceCollection();
-        ServiceCollection.AddSingleton<ISettingsProvider>(settingsProvider);
         ServiceCollection.AddSingleton(joaLogger);
         ServiceCollection.AddSingleton<IBrowserHelper, BrowserHelper>();
         ServiceCollection.AddSingleton<IIconHelper, IconHelper>();

@@ -2,6 +2,7 @@
 using JoaCore.Injectables;
 using JoaCore.PluginCore;
 using JoaCore.Settings;
+using JoaCore.Step;
 using JoaInterface;
 using JoaInterface.Hubs;
 using JoaPluginsPackage.Injectables;
@@ -28,14 +29,15 @@ builder.Services.AddSingleton<Search>();
 builder.Services.AddSingleton<PluginManager>();
 builder.Services.AddSingleton<PluginLoader>();
 builder.Services.AddSingleton<SettingsManager>();
-builder.Services.AddSingleton<SettingsProvider>();
 builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
-builder.Services.AddSingleton<IIconHelper, IconHelper>();
 builder.Services.AddSingleton<PluginServiceProvider>();
+builder.Services.AddSingleton<StepsManager>();
 
 builder.Services.AddHostedService<UiManagement>();
 
 var app = builder.Build();
+
+app.Services.GetService<Search>();
 
 app.UseCors();
 app.MapHub<SearchHub>("/searchHub");

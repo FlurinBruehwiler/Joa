@@ -10,15 +10,15 @@ public class PluginManager
     public List<PluginDefinition> Plugins { get; set; } = new();
     public List<ProviderWrapper> GlobalProviders { get; set; } = new();
 
-    private SettingsManager SettingsManager { get; set; }
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
 
-    public PluginManager(SettingsManager settingsManager, PluginLoader pluginLoader, IJoaLogger logger, PluginServiceProvider pluginServiceProvider)
+    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger)
     {
-        SettingsManager = settingsManager;
+        logger.Info(nameof(PluginManager));
         _pluginLoader = pluginLoader;
         _logger = logger;
+        ReloadPlugins();
     }
 
     public List<T> GetPluginsOfType<T>() where T : IPlugin

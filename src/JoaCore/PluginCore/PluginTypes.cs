@@ -3,6 +3,6 @@
 public class PluginTypes
 {
     public Type? Plugin { get; set; }
-    public List<Type> Settings { get; set; } = new();
+    public Type? Setting { get; set; }
     public List<Type> Caches { get; set; } = new();
 }

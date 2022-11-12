@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using JoaCore.PluginCore;
+using JoaPluginsPackage;
 using JoaPluginsPackage.Injectables;
 using Microsoft.Extensions.Configuration;
 
@@ -9,19 +10,17 @@ namespace JoaCore.Settings;
 
 public class SettingsManager
 {
+    private readonly PluginManager _pluginManager;
     private readonly IJoaLogger _logger;
-    public List<PluginDefinition> PluginDefinitions { get; set; } = null!;
-    
-    [JsonIgnore]
-    public SettingsProvider SettingsProvider { get; set; }
-
     private readonly string _settingsLocation;
     private readonly JsonSerializerOptions _options;
     private Stopwatch _timeSinceLastChanged;
     private Stopwatch _timeSinceLastSinc;
 
-    public SettingsManager(SettingsProvider settingsProvider, IConfiguration configuration, IJoaLogger logger)
+    public SettingsManager(PluginManager pluginManager, IConfiguration configuration, IJoaLogger logger)
     {
+        logger.Info(nameof(SettingsManager));
+        _pluginManager = pluginManager;
         _logger = logger;
         _timeSinceLastChanged = Stopwatch.StartNew();
         _timeSinceLastSinc = Stopwatch.StartNew();
@@ -30,16 +29,10 @@ public class SettingsManager
         {
             WriteIndented = true
         };
-        SettingsProvider = settingsProvider;
         ConfigureFileWatcher();
-    }
-
-    public void LoadPluginSettings(List<PluginDefinition> pluginDefs)
-    {
-        PluginDefinitions = pluginDefs;
         Sync();
     }
-
+    
     private void ConfigureFileWatcher()
     {
         _logger.Log($"Setting up file watcher for the file {_settingsLocation}", IJoaLogger.LogLevel.Info);
@@ -75,7 +68,7 @@ public class SettingsManager
         
         try
         {
-            var dtoSetting = new DtoSettings(this);
+            var dtoSetting = new DtoSettings(_pluginManager.Plugins);
             var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
             File.WriteAllText(_settingsLocation, jsonString);
         }
@@ -98,12 +91,11 @@ public class SettingsManager
             var jsonString = File.ReadAllText(_settingsLocation);
             if (string.IsNullOrEmpty(jsonString))
                 return;
-
             var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);
             if (result is null)
                 throw new JsonException();
         
-            foreach (var pluginDefinition in PluginDefinitions)
+            foreach (var pluginDefinition in _pluginManager.Plugins)
             {
                 UpdatePluginDefinition(pluginDefinition, result);
             }
@@ -114,17 +106,19 @@ public class SettingsManager
         }
     }
 
-    private void UpdatePluginDefinition(PluginDefinition oldPluginDefinition, DtoSettings newDtoSettings)
+    private void UpdatePluginDefinition(PluginDefinition pluginDefinition, DtoSettings newDtoSettings)
     {
-        if (!newDtoSettings.PluginSettings.TryGetValue(oldPluginDefinition.PluginInfo.Name, out var newPlugin))
+        if (!newDtoSettings.Plugins.TryGetValue(pluginDefinition.PluginInfo.Name, out var newPlugin))
             return;
-        
-        // foreach (var pluginSetting in oldPluginDefinition.SettingsCollection.PluginSettings)
-        // {
-        //     if(!newPlugin.TryGetValue(pluginSetting.Name, out var newValue))
-        //         continue;
-        //
-        //     pluginSetting.Value = newValue;
-        // }
+
+        var x = newPlugin.Setting.Deserialize(pluginDefinition.Setting.GetType());
+
+        if (x is null)
+        {
+            _logger.Error("Something went wrong while reading the settings");
+            return;
+        }
+
+        pluginDefinition.Setting = (ISetting)x;
     }
 }

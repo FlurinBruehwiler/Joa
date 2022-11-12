@@ -10,11 +10,11 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-        <OutputPath>..\Joa\bin\Debug\net6.0\Plugins\TauriUi\</OutputPath>
+        <OutputPath>..\Joa\bin\Debug\net7.0\Plugins\TauriUi\</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <OutputPath>..\Joa\bin\Release\net6.0\Plugins\TauriUi\</OutputPath>
+        <OutputPath>..\Joa\bin\Release\net7.0\Plugins\TauriUi\</OutputPath>
     </PropertyGroup>
     
     <ItemGroup>

@@ -6,13 +6,10 @@ public class JoaLogger : IJoaLogger
 {
     private static JoaLogger? _instance;
 
-    private const string Directory = "C:/temp";
-    private const string FileName = "Joalog.log";
-    private readonly string _completePath;
+    private const string FileName = "./Joalog.log";
 
     private JoaLogger()
     {
-        _completePath = Path.Combine(Directory, FileName);
     }
 
     public void Log(string logMessage, IJoaLogger.LogLevel logLevel)
@@ -65,13 +62,12 @@ public class JoaLogger : IJoaLogger
     {
         try
         {
-            if (!File.Exists(_completePath))
+            if (!File.Exists(FileName))
             {
-                System.IO.Directory.CreateDirectory(Directory);
                 File.Create(FileName).Dispose();
             }
 
-            File.AppendAllText(_completePath, message + Environment.NewLine);
+            File.AppendAllText(FileName, message + Environment.NewLine);
         }
         catch
         {

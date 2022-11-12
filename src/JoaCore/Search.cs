@@ -1,23 +1,29 @@
-﻿using JoaCore.PluginCore;
+﻿using JoaCore.Injectables;
+using JoaCore.PluginCore;
+using JoaCore.Settings;
 using JoaCore.Step;
 using JoaPluginsPackage;
+using JoaPluginsPackage.Injectables;
 using ExecutionContext = JoaCore.Step.ExecutionContext;
 
 namespace JoaCore;
 
 public class Search
 {
+    private readonly IJoaLogger _logger;
     private readonly PluginManager _pluginManager;
+    private readonly SettingsManager _settingsManager;
     private readonly PluginServiceProvider _pluginServiceProvider;
     private readonly StepsManager _stepsManager;
 
-    public Search(PluginManager pluginManager, PluginServiceProvider pluginServiceProvider, StepsManager stepsManager)
-    { 
+    public Search(IJoaLogger logger, PluginManager pluginManager, SettingsManager settingsManager, PluginServiceProvider pluginServiceProvider, StepsManager stepsManager)
+    {
+        logger.Info(nameof(Search));
+        _logger = logger;
         _pluginManager = pluginManager;
+        _settingsManager = settingsManager;
         _pluginServiceProvider = pluginServiceProvider;
         _stepsManager = stepsManager;
-        _pluginManager.ReloadPlugins();
-
     }
 
     public async Task ExecuteCommand(Guid resultId, string actionKey)

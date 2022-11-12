@@ -1,4 +1,5 @@
 ﻿using JoaCore.PluginCore;
+using JoaPluginsPackage.Injectables;
 
 namespace JoaCore.Step;
 
@@ -6,8 +7,9 @@ public class StepsManager
 {
     private readonly Stack<Step> _steps;
 
-    public StepsManager(PluginManager pluginManager)
+    public StepsManager(PluginManager pluginManager, IJoaLogger logger)
     {
+        logger.Info(nameof(StepsManager));
         _steps = new Stack<Step>();
         AddStep(new Step
         {

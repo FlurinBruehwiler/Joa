@@ -11,19 +11,19 @@ namespace JoaCore.PluginCore;
 
 public class PluginBuilder : IPluginBuilder
 {
+    private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _joaLogger;
     private readonly PluginServiceProvider _pluginServiceProvider;
 
-    public PluginBuilder(IJoaLogger joaLogger, PluginServiceProvider pluginServiceProvider)
+    public PluginBuilder(PluginLoader pluginLoader, IJoaLogger joaLogger, PluginServiceProvider pluginServiceProvider)
     {
+        _pluginLoader = pluginLoader;
         _joaLogger = joaLogger;
         _pluginServiceProvider = pluginServiceProvider;
     }
     
     private readonly List<(Type, Func<string, bool>?)> _providers = new();
-    private readonly List<Type> _settings = new();
     private readonly List<ISearchResult> _searchResults = new();
-    private readonly List<Type> _caches = new();
 
     public IPluginBuilder AddGlobalProvider<T>() where T : IProvider
     {
@@ -43,7 +43,7 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
-    public PluginDefinition BuildPluginDefinition(IPlugin plugin, List<ISetting> settings, List<ICache> caches)
+    public PluginDefinition BuildPluginDefinition(IPlugin plugin, ISetting setting, List<ICache> caches)
     {
         var pluginInfos = GetPluginInfos(plugin.GetType());
         
@@ -61,7 +61,7 @@ public class PluginBuilder : IPluginBuilder
             Plugin = plugin,
             PluginInfo = pluginInfos,
             GlobalProviders = globalProviders,
-            Settings = settings,
+            Setting = setting,
             Caches = caches
         };
     }
@@ -74,6 +74,11 @@ public class PluginBuilder : IPluginBuilder
             if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, type) is not IProvider searchResultProvider)
                 continue;
 
+            if (_pluginLoader.TryGetExistingObject<IProvider>(type, out var p))
+            {
+                searchResultProvider = p;
+            }
+            
             yield return new ProviderWrapper
             {
                 Condition = condition,

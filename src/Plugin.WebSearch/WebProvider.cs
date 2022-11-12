@@ -9,10 +9,10 @@ public class WebProvider : IProvider
     private readonly WebSearchSettings _settings;
     private readonly HttpClient _client;
 
-    public WebProvider(WebSearchSettings settings, HttpClient client)
+    public WebProvider(WebSearchSettings settings)
     {
         _settings = settings;
-        _client = client;
+        _client = new HttpClient();
     }
 
     public List<ISearchResult> GetSearchResults(string searchString)

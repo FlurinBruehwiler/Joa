@@ -29,7 +29,7 @@ public class Settings : ISetting
         {
             Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop), 
             OperatingSystem = OperatingSystem.Windows
-        },
+        }
     };
 
     [SettingProperty]
