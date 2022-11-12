@@ -1,6 +1,6 @@
 using JoaPluginsPackage;
 
-namespace JoaCore;
+namespace JoaCore.PluginCore;
 
 public record PluginSearchResult
 {

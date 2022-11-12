@@ -1,4 +1,6 @@
-﻿namespace JoaCore;
+﻿using JoaCore.PluginCore;
+
+namespace JoaCore.Step;
 
 public class StepsManager
 {

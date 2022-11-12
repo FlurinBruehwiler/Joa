@@ -1,9 +1,9 @@
-﻿using JoaCore.PluginCore;
-using JoaCore.Settings;
+﻿using JoaCore.Settings;
+using JoaCore.Step;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
 
-namespace JoaCore;
+namespace JoaCore.PluginCore;
 
 public class PluginManager
 {

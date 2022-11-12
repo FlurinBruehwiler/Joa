@@ -1,4 +1,5 @@
 ﻿using JoaCore;
+using JoaCore.Injectables;
 using JoaCore.PluginCore;
 using JoaCore.Settings;
 using JoaInterface;
@@ -35,11 +36,6 @@ builder.Services.AddSingleton<PluginServiceProvider>();
 builder.Services.AddHostedService<UiManagement>();
 
 var app = builder.Build();
-
-app.MapGet("", () =>
-{
-
-});
 
 app.UseCors();
 app.MapHub<SearchHub>("/searchHub");

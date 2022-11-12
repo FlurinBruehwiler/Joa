@@ -1,7 +1,7 @@
 ﻿using JoaPluginsPackage;
 using JoaPluginsPackage.Providers;
 
-namespace JoaCore;
+namespace JoaCore.PluginCore;
 
 public class PluginGenericProvider : IProvider
 {

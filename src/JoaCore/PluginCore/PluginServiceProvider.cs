@@ -1,8 +1,9 @@
-﻿using JoaCore.Settings;
+﻿using JoaCore.Injectables;
+using JoaCore.Settings;
 using JoaPluginsPackage.Injectables;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JoaCore;
+namespace JoaCore.PluginCore;
 
 public class PluginServiceProvider
 {

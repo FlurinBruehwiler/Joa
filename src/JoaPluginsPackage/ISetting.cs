@@ -1,6 +1,6 @@
 ﻿namespace JoaPluginsPackage;
 
-public class ISetting
+public interface ISetting
 {
     
 }

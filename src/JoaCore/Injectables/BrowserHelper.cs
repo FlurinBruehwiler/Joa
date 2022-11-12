@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using JoaPluginsPackage.Injectables;
 
-namespace JoaCore;
+namespace JoaCore.Injectables;
 
 public class BrowserHelper : IBrowserHelper
 {

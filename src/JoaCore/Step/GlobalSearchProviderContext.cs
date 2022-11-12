@@ -1,6 +1,6 @@
 ﻿using JoaPluginsPackage;
 
-namespace JoaCore;
+namespace JoaCore.Step;
 
 public class GlobalSearchProviderContext : ISearchProviderContext
 {

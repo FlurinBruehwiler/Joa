@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using JoaCore.PluginCore;
+using JoaCore.Step;
 using JoaPluginsPackage;
 using JoaPluginsPackage.Attributes;
 using JoaPluginsPackage.Injectables;
@@ -7,7 +7,7 @@ using JoaPluginsPackage.Plugin;
 using JoaPluginsPackage.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JoaCore;
+namespace JoaCore.PluginCore;
 
 public class PluginBuilder : IPluginBuilder
 {
@@ -20,7 +20,7 @@ public class PluginBuilder : IPluginBuilder
         _pluginServiceProvider = pluginServiceProvider;
     }
     
-    private readonly List<(Type, Delegate?)> _providers = new();
+    private readonly List<(Type, Func<string, bool>?)> _providers = new();
     private readonly List<Type> _settings = new();
     private readonly List<ISearchResult> _searchResults = new();
     private readonly List<Type> _caches = new();
@@ -31,7 +31,7 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
-    public IPluginBuilder AddGlobalProvider<T>(Delegate condition) where T : IProvider
+    public IPluginBuilder AddGlobalProvider<T>(Func<string, bool> condition) where T : IProvider
     {
         _providers.Add((typeof(T), condition));
         return this;
