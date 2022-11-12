@@ -39,7 +39,7 @@ export default (props: FeatureProps) => {
 
     return (
       <>
-          <div className="w-full h-[60px] text-userInputText flex bg-userInputBackground items-center overflow-hidden" data-tauri-drag-region>
+          <div className="w-full  h-[60px] text-userInputText flex bg-userInputBackground items-center overflow-hidden" data-tauri-drag-region>
               <svg className="fill-userInputText w-[28px] h-[28px] m-[16px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" version="1.1" data-tauri-drag-region>
                   <g id="surface1">
                       <path

@@ -12,6 +12,7 @@ export function useCommands(connection: HubConnection, currentSearchString: stri
     useEffect(() => {
         connection.on(receiveSearchResultsMethod, (searchString: string, commands: PluginCommand[]) => {
             console.log(Date.now() - scores[searchString]);
+            console.log(commands.length);
             const firstNCommands = commands.slice(0,8);
             firstNCommands.forEach((x) => {
                 if(x.searchResult.icon === "" || x.searchResult.webIcon !== undefined)

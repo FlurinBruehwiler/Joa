@@ -53,7 +53,17 @@ public class Search
     public async Task UpdateSearchResults(string searchString,
         Action<List<PluginSearchResult>> callback)
     {
-        callback(_stepsManager.GetCurrentStep().GetSearchResults(searchString));
+        using var _ = _logger.TimedOperation(nameof(UpdateSearchResults));
+        
+        _logger.Info($"SearchString: ${searchString}");
+        
+        if (string.IsNullOrWhiteSpace(searchString))
+        {
+            callback(new List<PluginSearchResult>());    
+            return;
+        }
+
+        callback(_stepsManager.GetCurrentStep().GetSearchResults(searchString).Take(8).ToList());
     }
 
     private ContextAction? GetContextAction(string actionKey, ISearchResult searchResult)

@@ -40,8 +40,6 @@ public class ApplicationSearch : ICache, IProvider, IPlugin
 
         foreach (var path in paths)
         {
-            _joaLogger.Info(path);
-
             if (!_settings.Extensions.Any(x => path.EndsWith(x.Extension, StringComparison.OrdinalIgnoreCase))) continue;
 
             var iconLocation = _iconHelper.CreateIconFromFileIfNotExists<ApplicationSearch>(path);

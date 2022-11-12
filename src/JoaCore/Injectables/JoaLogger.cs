@@ -53,9 +53,9 @@ public class JoaLogger : IJoaLogger
         return _instance ??= new JoaLogger();
     }
 
-    public IDisposable TimedOperation(string message)
+    public IDisposable TimedOperation(string nameOfMethod)
     {
-        return new TimedLogOperation(this, message);
+        return new TimedLogOperation(this, nameOfMethod);
     }
 
     private void LogMessage(string message)

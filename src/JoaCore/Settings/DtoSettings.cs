@@ -11,15 +11,14 @@ public class DtoSettings
     {
         Plugins = pluginDefinitions.ToDictionary(
             pluginDefinition => pluginDefinition.PluginInfo.Name,
-            pluginDefinition =>
+            pluginDefinition => new DtoPluginSettings
             {
-                return new DtoPluginSettings
-                {
-                    IsEnabled = true,
-                    Setting = JsonSerializer.SerializeToElement(pluginDefinition.Setting, pluginDefinition.Setting.GetType())
-                };
+                IsEnabled = true,
+                Setting = JsonSerializer.SerializeToElement(pluginDefinition.Setting, pluginDefinition.Setting.GetType())
             });
     }
+    
+    public DtoSettings() { }
 }
 
 public class DtoPluginSettings
