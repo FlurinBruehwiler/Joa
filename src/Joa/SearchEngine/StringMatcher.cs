@@ -9,7 +9,7 @@ public class StringMatcher
 
         public SearchPrecisionScore UserSettingSearchPrecision { get; set; }
 
-        public static StringMatcher Instance { get; internal set; }
+        public static StringMatcher Instance { get; internal set; } = null!;
 
         [Obsolete("This method is obsolete and should not be used. Please use the static function StringMatcher.FuzzySearch")]
         public static int Score(string source, string target)

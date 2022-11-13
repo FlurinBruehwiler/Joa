@@ -5,7 +5,7 @@ namespace JoaInterface.Settings;
 
 public class DtoSettings
 {
-    public Dictionary<string, DtoPluginSettings> Plugins { get; set; }
+    public Dictionary<string, DtoPluginSettings> Plugins { get; set; } = null!;
     
     public DtoSettings(List<PluginDefinition> pluginDefinitions)
     {
@@ -17,7 +17,7 @@ public class DtoSettings
                 Setting = JsonSerializer.SerializeToElement(pluginDefinition.Setting, pluginDefinition.Setting.GetType())
             });
     }
-    
+
     public DtoSettings() { }
 }
 

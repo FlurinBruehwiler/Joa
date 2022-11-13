@@ -147,7 +147,7 @@ public class PluginLoader
 
     private List<string> GetPluginDllPaths(IConfiguration configuration)
     {
-        var path = configuration.GetValue<string>("PluginLocation");
+        var path = configuration.GetValue<string>("PluginLocation") ?? throw new Exception();
         
         var pluginFolder =
             Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, path));

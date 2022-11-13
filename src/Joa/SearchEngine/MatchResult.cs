@@ -45,7 +45,7 @@ public class MatchResult
     /// <summary>
     /// Gets matched data to highlight.
     /// </summary>
-    public List<int> MatchData { get; private set; }
+    public List<int> MatchData { get; private set; } = null!;
 
     public StringMatcher.SearchPrecisionScore SearchPrecision { get; set; }
 

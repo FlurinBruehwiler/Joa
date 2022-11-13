@@ -69,14 +69,14 @@ public class PluginBuilder : IPluginBuilder
     
     private IEnumerable<ProviderWrapper> InstantiateGlobalProviders()
     {
-        foreach (var (type, condition) in _providers)
+        foreach (var (providerType, condition) in _providers)
         {
-            if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, type) is not IProvider searchResultProvider)
+            if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, providerType) is not IProvider searchResultProvider)
                 continue;
 
-            if (_pluginLoader.TryGetExistingObject<IProvider>(type, out var p))
+            if (_pluginLoader.TryGetExistingObject<IProvider>(providerType, out var provider))
             {
-                searchResultProvider = p;
+                searchResultProvider = provider ?? throw new Exception();
             }
             
             yield return new ProviderWrapper
