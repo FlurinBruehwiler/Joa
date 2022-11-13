@@ -4,8 +4,14 @@ import {executeCommand, useCommands, useSelectedCommand} from "./services/search
 import {FeatureProps} from "../../featureProps";
 import PluginCommand from "./models/pluginCommand";
 
+interface Step {
+    name: string,
+    id: string
+}
+
 export default (props: FeatureProps) => {
     const [ searchString, setSearchString ] = useState<string>("");
+    const [ steps, setSteps ] = useState<string[]>([]);
 
     const clearSearchString = () => {
       setSearchString("");

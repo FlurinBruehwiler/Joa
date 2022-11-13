@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaCore", "JoaCore\JoaCore.csproj", "{20565E17-B7B9-4E9F-8E94-8DCF7FB7F135}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.WebSearch", "Plugin.WebSearch\Plugin.WebSearch.csproj", "{BA746C82-DF71-477F-AD4A-CD433AA60B99}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.ApplicationSearch", "Plugin.ApplicationSearch\Plugin.ApplicationSearch.csproj", "{2CFB361F-137E-4D96-BD4B-79FABFAEA0CB}"
@@ -32,10 +30,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{20565E17-B7B9-4E9F-8E94-8DCF7FB7F135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{20565E17-B7B9-4E9F-8E94-8DCF7FB7F135}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{20565E17-B7B9-4E9F-8E94-8DCF7FB7F135}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{20565E17-B7B9-4E9F-8E94-8DCF7FB7F135}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA746C82-DF71-477F-AD4A-CD433AA60B99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA746C82-DF71-477F-AD4A-CD433AA60B99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA746C82-DF71-477F-AD4A-CD433AA60B99}.Release|Any CPU.ActiveCfg = Release|Any CPU

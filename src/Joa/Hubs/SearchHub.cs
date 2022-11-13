@@ -1,5 +1,4 @@
-﻿using JoaCore;
-using JoaCore.Step;
+﻿using JoaInterface.Step;
 using Microsoft.AspNetCore.SignalR;
 
 namespace JoaInterface.Hubs;
@@ -17,10 +16,7 @@ public class SearchHub : Hub
     
     public Task GetSearchResults(string searchString)
     {
-        return _search.UpdateSearchResults(searchString, results =>
-        {
-            Clients.Caller.SendAsync("ReceiveSearchResults", searchString, results);
-        });
+        return _search.UpdateSearchResults(searchString);
     }
 
     public void GoToStep(Guid stepId)

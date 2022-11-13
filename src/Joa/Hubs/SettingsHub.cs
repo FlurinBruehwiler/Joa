@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
-using JoaCore;
-using JoaCore.Injectables;
-using JoaCore.Settings;
+using JoaInterface.Injectables;
+using JoaInterface.Settings;
 using JoaPluginsPackage.Injectables;
 using Microsoft.AspNetCore.SignalR;
 

@@ -1,5 +1,4 @@
-﻿using JoaCore;
-using JoaCore.PluginCore;
+﻿using JoaInterface.PluginCore;
 using JoaPluginsPackage.Injectables;
 using JoaPluginsPackage.Plugin;
 using Microsoft.Extensions.Hosting;
