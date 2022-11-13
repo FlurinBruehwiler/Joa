@@ -1,7 +1,7 @@
-﻿using JoaInterface.Step;
-using Joa.Api;
-using Joa.Api.Attributes;
-using Joa.Api.Plugin;
+﻿using JoaLauncher.Api;
+using JoaLauncher.Api.Attributes;
+using JoaLauncher.Api.Plugin;
+using JoaInterface.Step;
 
 namespace JoaInterface.PluginCore;
 

@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using JoaLauncher.Api;
+using JoaLauncher.Api.Injectables;
 using JoaInterface.PluginCore;
-using Joa.Api;
-using Joa.Api.Injectables;
 using Microsoft.Extensions.Configuration;
 
 namespace JoaInterface.Settings;

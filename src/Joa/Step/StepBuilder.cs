@@ -1,5 +1,5 @@
-﻿using Joa.Api;
-using Joa.Api.Providers;
+﻿using JoaLauncher.Api;
+using JoaLauncher.Api.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JoaInterface.Step;

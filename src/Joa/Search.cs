@@ -1,8 +1,8 @@
-﻿using JoaInterface.Hubs;
+﻿using JoaLauncher.Api;
+using JoaLauncher.Api.Injectables;
+using JoaInterface.Hubs;
 using JoaInterface.PluginCore;
 using JoaInterface.Step;
-using Joa.Api;
-using Joa.Api.Injectables;
 using Microsoft.AspNetCore.SignalR;
 using ExecutionContext = JoaInterface.Step.ExecutionContext;
 

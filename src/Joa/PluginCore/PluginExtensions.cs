@@ -1,5 +1,5 @@
-﻿using JoaInterface.SearchEngine;
-using Joa.Api;
+﻿using JoaLauncher.Api;
+using JoaInterface.SearchEngine;
 
 namespace JoaInterface.PluginCore;
 

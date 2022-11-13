@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using Joa.Api.Injectables;
+using JoaLauncher.Api.Injectables;
 
 namespace JoaInterface.Injectables;
 

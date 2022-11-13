@@ -1,4 +1,4 @@
-using Joa.Api;
+using JoaLauncher.Api;
 
 namespace JoaInterface.PluginCore;
 

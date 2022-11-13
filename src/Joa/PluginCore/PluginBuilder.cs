@@ -1,10 +1,10 @@
 ﻿using System.Reflection;
+using JoaLauncher.Api;
+using JoaLauncher.Api.Attributes;
+using JoaLauncher.Api.Injectables;
+using JoaLauncher.Api.Plugin;
+using JoaLauncher.Api.Providers;
 using JoaInterface.Step;
-using Joa.Api;
-using Joa.Api.Attributes;
-using Joa.Api.Injectables;
-using Joa.Api.Plugin;
-using Joa.Api.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JoaInterface.PluginCore;
