@@ -4,7 +4,7 @@ using JoaInterface.Injectables;
 using JoaInterface.PluginCore;
 using JoaInterface.Settings;
 using JoaInterface.Step;
-using JoaPluginsPackage.Injectables;
+using Joa.Api.Injectables;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 

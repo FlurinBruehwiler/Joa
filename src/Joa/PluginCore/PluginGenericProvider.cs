@@ -1,5 +1,5 @@
-﻿using JoaPluginsPackage;
-using JoaPluginsPackage.Providers;
+﻿using Joa.Api;
+using Joa.Api.Providers;
 
 namespace JoaInterface.PluginCore;
 

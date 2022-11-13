@@ -1,6 +1,6 @@
 ﻿using JoaInterface.PluginCore;
-using JoaPluginsPackage.Injectables;
-using JoaPluginsPackage.Plugin;
+using Joa.Api.Injectables;
+using Joa.Api.Plugin;
 using Microsoft.Extensions.Hosting;
 
 namespace JoaInterface;

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using JoaPluginsPackage;
-using JoaPluginsPackage.Injectables;
-using JoaPluginsPackage.Plugin;
+using Joa.Api;
+using Joa.Api.Injectables;
+using Joa.Api.Plugin;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

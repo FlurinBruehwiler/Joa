@@ -1,6 +1,6 @@
-﻿using JoaPluginsPackage;
-using JoaPluginsPackage.Attributes;
-using JoaPluginsPackage.Plugin;
+﻿using Joa.Api;
+using Joa.Api.Attributes;
+using Joa.Api.Plugin;
 
 namespace WebSearch;
 

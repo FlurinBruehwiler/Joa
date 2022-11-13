@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using JoaPluginsPackage.Attributes;
-using JoaPluginsPackage.Injectables;
-using OperatingSystem = JoaPluginsPackage.Enums.OperatingSystem;
+using Joa.Api.Attributes;
+using Joa.Api.Injectables;
+using OperatingSystem = Joa.Api.Enums.OperatingSystem;
 
 namespace BookmarksSearch;
 

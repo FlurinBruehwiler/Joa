@@ -1,6 +1,6 @@
-﻿using JoaPluginsPackage;
-using JoaPluginsPackage.Enums;
-using JoaPluginsPackage.Providers;
+﻿using Joa.Api;
+using Joa.Api.Enums;
+using Joa.Api.Providers;
 
 namespace Github.Providers;
 

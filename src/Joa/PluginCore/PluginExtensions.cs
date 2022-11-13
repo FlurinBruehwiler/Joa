@@ -1,5 +1,5 @@
 ﻿using JoaInterface.SearchEngine;
-using JoaPluginsPackage;
+using Joa.Api;
 
 namespace JoaInterface.PluginCore;
 
@@ -21,7 +21,7 @@ public static class PluginExtensions
     public static List<PluginSearchResult> Sort(this List<PluginSearchResult> input, string searchString)
     {
         var sortValues = input.Select(x => 
-            (x, StringMatcher.FuzzySearch(searchString, x.SearchResult.Caption).Score)).ToList();
+            (x, StringMatcher.FuzzySearch(searchString, x.SearchResult.Title).Score)).ToList();
         
         sortValues.Sort((x, y) =>
         {

@@ -1,4 +1,4 @@
-﻿using JoaPluginsPackage;
+﻿using Joa.Api;
 
 namespace JoaInterface;
 

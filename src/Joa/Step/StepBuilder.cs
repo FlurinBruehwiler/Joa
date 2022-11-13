@@ -1,5 +1,5 @@
-﻿using JoaPluginsPackage;
-using JoaPluginsPackage.Providers;
+﻿using Joa.Api;
+using Joa.Api.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JoaInterface.Step;
@@ -31,7 +31,7 @@ public class StepBuilder : IStepBuilder
             {
                 Provider = x
             }).ToList(),
-            Name = _pluginSearchResult.Caption
+            Name = _pluginSearchResult.Title
         };
     }
 }

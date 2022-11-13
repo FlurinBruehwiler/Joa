@@ -1,4 +1,4 @@
-﻿using JoaPluginsPackage.Providers;
+﻿using Joa.Api.Providers;
 
 namespace JoaInterface.Step;
 

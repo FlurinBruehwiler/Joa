@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using JoaPluginsPackage.Injectables;
+using Joa.Api.Injectables;
 
 namespace JoaInterface;
 

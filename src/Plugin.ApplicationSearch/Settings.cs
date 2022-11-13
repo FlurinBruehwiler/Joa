@@ -1,6 +1,6 @@
-﻿using JoaPluginsPackage.Attributes;
-using JoaPluginsPackage;
-using OperatingSystem = JoaPluginsPackage.Enums.OperatingSystem;
+﻿using Joa.Api.Attributes;
+using Joa.Api;
+using OperatingSystem = Joa.Api.Enums.OperatingSystem;
 
 namespace ApplicationSearch;
 

@@ -1,5 +1,5 @@
 ﻿using JoaInterface.Injectables;
-using JoaPluginsPackage.Injectables;
+using Joa.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JoaInterface.PluginCore;

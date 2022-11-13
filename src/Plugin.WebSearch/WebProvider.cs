@@ -1,5 +1,5 @@
-﻿using JoaPluginsPackage;
-using JoaPluginsPackage.Providers;
+﻿using Joa.Api;
+using Joa.Api.Providers;
 using Newtonsoft.Json;
 
 namespace WebSearch;
@@ -31,7 +31,7 @@ public class WebProvider : IProvider
         {
             new WebSearchResult
             {
-                Caption = searchEngine.Name,
+                Title = searchEngine.Name,
                 Description = $"Search on {searchEngine.Name} for \"{searchString}\"",
                 Icon = "",
                 Url = ""
@@ -55,7 +55,7 @@ public class WebProvider : IProvider
         searchResults.AddRange(suggestions.Select(suggestion 
                 => new WebSearchResult
                 {
-                    Caption = suggestion,
+                    Title = suggestion,
                     Description = $"Search on Google for \"{suggestion}\"",
                     Icon = "",
                     Url = searchEngine.Url.Replace("{{query}}", suggestion)

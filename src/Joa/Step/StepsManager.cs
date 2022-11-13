@@ -1,6 +1,6 @@
 ﻿using JoaInterface.Hubs;
 using JoaInterface.PluginCore;
-using JoaPluginsPackage.Injectables;
+using Joa.Api.Injectables;
 using Microsoft.AspNetCore.SignalR;
 
 namespace JoaInterface.Step;

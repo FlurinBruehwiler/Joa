@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using JoaPluginsPackage.Injectables;
+using Joa.Api.Injectables;
 
 namespace JoaInterface.Injectables;
 

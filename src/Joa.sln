@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.ApplicationSearch", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.ColorConverter", "Plugin.ColorConverter\Plugin.ColorConverter.csproj", "{1BE355AE-B98A-4966-B7EC-45F0B0B5A55F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaPluginsPackage", "JoaPluginsPackage\JoaPluginsPackage.csproj", "{6C21BD56-931E-4284-9398-A68CAFD9A775}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joa.Api", "Joa.Api\Joa.Api.csproj", "{6C21BD56-931E-4284-9398-A68CAFD9A775}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{81094FC7-478A-4872-93E1-D9FB6EED5BC2}"
 EndProject

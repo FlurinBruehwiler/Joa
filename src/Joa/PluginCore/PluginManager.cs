@@ -1,6 +1,6 @@
 ﻿using JoaInterface.Step;
-using JoaPluginsPackage.Injectables;
-using JoaPluginsPackage.Plugin;
+using Joa.Api.Injectables;
+using Joa.Api.Plugin;
 
 namespace JoaInterface.PluginCore;
 

@@ -19,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\JoaPluginsPackage\JoaPluginsPackage.csproj" />
+      <ProjectReference Include="..\Joa.Api\Joa.Api.csproj" />
     </ItemGroup>
 
     <ItemGroup>

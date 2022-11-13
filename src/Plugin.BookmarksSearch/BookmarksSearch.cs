@@ -1,8 +1,8 @@
-﻿using JoaPluginsPackage;
-using JoaPluginsPackage.Attributes;
-using JoaPluginsPackage.Injectables;
-using JoaPluginsPackage.Plugin;
-using JoaPluginsPackage.Providers;
+﻿using Joa.Api;
+using Joa.Api.Attributes;
+using Joa.Api.Injectables;
+using Joa.Api.Plugin;
+using Joa.Api.Providers;
 
 namespace BookmarksSearch;
 
@@ -32,7 +32,7 @@ public class BookmarksSearch : ICache, IProvider, IPlugin
 
         _searchResults = bookmarks.Select(x => new SerachResult
         {
-            Caption = x.bookmark.name,
+            Title = x.bookmark.name,
             Description = x.bookmark.url,
             Icon = _iconHelper.CreateIconFromFileIfNotExists<BookmarksSearch>(x.browser.BrowserLocation)
         }).Cast<ISearchResult>().ToList();

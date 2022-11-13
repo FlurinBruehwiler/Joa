@@ -1,8 +1,8 @@
-﻿using JoaPluginsPackage;
-using JoaPluginsPackage.Attributes;
-using JoaPluginsPackage.Injectables;
-using JoaPluginsPackage.Plugin;
-using JoaPluginsPackage.Providers;
+﻿using Joa.Api;
+using Joa.Api.Attributes;
+using Joa.Api.Injectables;
+using Joa.Api.Plugin;
+using Joa.Api.Providers;
 
 namespace ApplicationSearch;
 
@@ -46,7 +46,7 @@ public class ApplicationSearch : ICache, IProvider, IPlugin
                 
             _searchResults.Add(new SearchResult
             {
-                Caption = Path.GetFileNameWithoutExtension(path),
+                Title = Path.GetFileNameWithoutExtension(path),
                 Description = "",
                 Icon = iconLocation,
                 FilePath = path
