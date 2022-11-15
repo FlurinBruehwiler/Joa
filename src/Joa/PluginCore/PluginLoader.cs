@@ -147,14 +147,12 @@ public class PluginLoader
 
     private List<string> GetPluginDllPaths(IConfiguration configuration)
     {
-        var path = configuration.GetValue<string>("PluginLocation") ?? throw new Exception();
+        var path = configuration.GetValue<string>("PluginLocation") 
+                   ?? throw new Exception("Could not find PluginLocation in Configuration");
         
-        var pluginFolder =
-            Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, path));
+        _logger.Log($"Searching for Plugins in {path}", IJoaLogger.LogLevel.Info);
 
-        _logger.Log($"Searching for Plugins in {pluginFolder}", IJoaLogger.LogLevel.Info);
-
-        var pluginFolders = Directory.GetDirectories(pluginFolder);
+        var pluginFolders = Directory.GetDirectories(path);
 
         var plugins = pluginFolders.Select(x => Directory.GetFiles(x)
                 .FirstOrDefault(file => file.EndsWith($"{Directory.GetParent(file)?.Name}.dll"))).Where(x => x != null)

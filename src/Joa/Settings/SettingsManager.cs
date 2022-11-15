@@ -23,7 +23,8 @@ public class SettingsManager
         _logger = logger;
         _timeSinceLastChanged = Stopwatch.StartNew();
         _timeSinceLastSinc = Stopwatch.StartNew();
-        _settingsLocation = Path.GetFullPath(Path.Combine(typeof(PluginLoader).Assembly.Location, configuration.GetValue<string>("SettingsLocation") ?? throw new Exception()));
+        _settingsLocation = configuration.GetValue<string>("SettingsLocation") 
+                            ?? throw new Exception("Could not find SettingsLocation in Configuration");
         _options = new JsonSerializerOptions
         {
             WriteIndented = true
