@@ -115,7 +115,7 @@ public class PluginLoader
     private PluginTypes? LoadType(Assembly assembly)
     {
         PluginTypes pluginTypes = new();
-        
+
         foreach (var type in assembly.GetTypes())
         {
             if (typeof(IPlugin).IsAssignableFrom(type))
@@ -139,9 +139,9 @@ public class PluginLoader
         if (pluginTypes.Plugin is not null)
             return pluginTypes;
         
-        var availableTypes = string.Join(",", assembly.GetTypes().Select(t => t.FullName));
+        var availableTypes = string.Join("\n", assembly.GetTypes().Select(t => t.FullName));
         _logger.Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
-                    $"Available types: {availableTypes}", IJoaLogger.LogLevel.Warning);
+                    $"Available types: \n{availableTypes}", IJoaLogger.LogLevel.Warning);
         return null;
     }
 

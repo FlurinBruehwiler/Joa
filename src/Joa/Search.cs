@@ -2,6 +2,7 @@
 using JoaLauncher.Api.Injectables;
 using JoaInterface.Hubs;
 using JoaInterface.PluginCore;
+using JoaInterface.Settings;
 using JoaInterface.Step;
 using Microsoft.AspNetCore.SignalR;
 using ExecutionContext = JoaInterface.Step.ExecutionContext;
@@ -14,15 +15,17 @@ public class Search
     private readonly PluginServiceProvider _pluginServiceProvider;
     private readonly StepsManager _stepsManager;
     private readonly IHubContext<SearchHub> _hubContext;
+    private readonly SettingsManager _settingsManager;
 
     public Search(IJoaLogger logger, PluginServiceProvider pluginServiceProvider, StepsManager stepsManager,
-        IHubContext<SearchHub> hubContext)
+        IHubContext<SearchHub> hubContext, SettingsManager settingsManager)
     {
         logger.Info(nameof(Search));
         _logger = logger;
         _pluginServiceProvider = pluginServiceProvider;
         _stepsManager = stepsManager;
         _hubContext = hubContext;
+        _settingsManager = settingsManager;
     }
 
     public async Task ExecuteCommand(Guid resultId, string actionKey)
