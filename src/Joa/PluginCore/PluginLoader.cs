@@ -2,19 +2,19 @@
 using JoaLauncher.Api;
 using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace JoaInterface.PluginCore;
 
 public class PluginLoader
 {
-    private readonly IConfiguration _configuration;
+    private readonly IOptions<PathsConfiguration> _configuration;
     private readonly IJoaLogger _logger;
     private readonly PluginServiceProvider _pluginServiceProvider;
     private Dictionary<Type, object> _instantiatedTypes = new();
 
-    public PluginLoader(IConfiguration configuration, IJoaLogger logger, PluginServiceProvider pluginServiceProvider)
+    public PluginLoader(IOptions<PathsConfiguration> configuration, IJoaLogger logger, PluginServiceProvider pluginServiceProvider)
     {
         logger.Info(nameof(PluginLoader));
         _configuration = configuration;
@@ -24,9 +24,10 @@ public class PluginLoader
 
     public List<PluginDefinition> ReloadPlugins()
     {
+        MovePluginDllsToCopyLocation(_configuration.Value.PluginLocation, _configuration.Value.PluginsFinalLocation);
         List<PluginDefinition> pluginDefinitions = new();
         _instantiatedTypes = new Dictionary<Type, object>();
-        var assemblies = LoadAssemblies(GetPluginDllPaths(_configuration));
+        var assemblies = LoadAssemblies(GetPluginDllPaths());
         var pluginTypes = LoadTypes(assemblies);
         
         foreach (var pluginType in pluginTypes)
@@ -41,6 +42,30 @@ public class PluginLoader
         }
 
         return pluginDefinitions;
+    }
+
+    private void MovePluginDllsToCopyLocation(string pluginLocation, string pluginsFinalLocation)
+    {
+        var dir = new DirectoryInfo(pluginLocation);
+
+        if (!dir.Exists)
+            throw new DirectoryNotFoundException($"Source directory not found: {dir.FullName}");
+
+        var dirs = dir.GetDirectories();
+
+        Directory.CreateDirectory(pluginsFinalLocation);
+
+        foreach (var file in dir.GetFiles())
+        {
+            var targetFilePath = Path.Combine(pluginsFinalLocation, file.Name);
+            file.CopyTo(targetFilePath);
+        }
+
+        foreach (var subDir in dirs)
+        {
+            var newDestinationDir = Path.Combine(pluginsFinalLocation, subDir.Name);
+            MovePluginDllsToCopyLocation(subDir.FullName, newDestinationDir);
+        }
     }
 
     public bool TryGetExistingObject<T>(Type type, out T? obj) where T : class
@@ -145,10 +170,9 @@ public class PluginLoader
         return null;
     }
 
-    private List<string> GetPluginDllPaths(IConfiguration configuration)
+    private List<string> GetPluginDllPaths()
     {
-        var path = configuration.GetValue<string>("PluginLocation") 
-                   ?? throw new Exception("Could not find PluginLocation in Configuration");
+        var path = _configuration.Value.PluginsFinalLocation;
         
         _logger.Log($"Searching for Plugins in {path}", IJoaLogger.LogLevel.Info);
 

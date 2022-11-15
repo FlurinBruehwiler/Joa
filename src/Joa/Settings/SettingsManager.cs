@@ -1,94 +1,75 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Injectables;
 using JoaInterface.PluginCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace JoaInterface.Settings;
 
 public class SettingsManager
 {
     private readonly PluginManager _pluginManager;
+    private readonly IOptions<PathsConfiguration> _configuration;
     private readonly IJoaLogger _logger;
-    private readonly string _settingsLocation;
     private readonly JsonSerializerOptions _options;
-    private Stopwatch _timeSinceLastChanged;
-    private Stopwatch _timeSinceLastSinc;
-
-    public SettingsManager(PluginManager pluginManager, IConfiguration configuration, IJoaLogger logger)
+    private readonly FileWatcher _fileWatcher;
+    
+    public SettingsManager(PluginManager pluginManager, IOptions<PathsConfiguration> configuration, IJoaLogger logger)
     {
         logger.Info(nameof(SettingsManager));
         _pluginManager = pluginManager;
+        _configuration = configuration;
         _logger = logger;
-        _timeSinceLastChanged = Stopwatch.StartNew();
-        _timeSinceLastSinc = Stopwatch.StartNew();
-        _settingsLocation = configuration.GetValue<string>("SettingsLocation") 
-                            ?? throw new Exception("Could not find SettingsLocation in Configuration");
         _options = new JsonSerializerOptions
         {
             WriteIndented = true
         };
-        ConfigureFileWatcher();
+        _fileWatcher = new FileWatcher(configuration.Value.SettingsLocation, Sync);
         Sync();
     }
     
-    private void ConfigureFileWatcher()
-    {
-        _logger.Log($"Setting up file watcher for the file {_settingsLocation}", IJoaLogger.LogLevel.Info);
-        var watcher = new FileSystemWatcher(Directory.GetParent(_settingsLocation)?.FullName ?? throw new Exception("Error while getting SettingsLocation"));
-        watcher.NotifyFilter = NotifyFilters.LastWrite;
-        watcher.Changed += OnChanged;
-        watcher.Filter = Path.GetFileName(_settingsLocation);
-        watcher.EnableRaisingEvents = true;
-    }
-
-    private void OnChanged(object sender, FileSystemEventArgs e)
-    {
-        if (_timeSinceLastChanged.ElapsedMilliseconds < 100)
-            return;
-        if (_timeSinceLastSinc.ElapsedMilliseconds < 1000)
-            return;
-        _timeSinceLastChanged.Restart();
-        Sync();
-    }
     
-    public void Sync()
+    private void Sync()
     {
-        _timeSinceLastSinc.Restart();
         _logger.Log("Synchronizing the settings.", IJoaLogger.LogLevel.Info);
-        Thread.Sleep(10);
         UpdateSettingsFromJson();
         SaveSettingsToJson();
     }
     
-    public void SaveSettingsToJson()
+    private void SaveSettingsToJson()
     {
+        _fileWatcher.Disable();
         using var _ = _logger.TimedOperation(nameof(SaveSettingsToJson));
-        
+
         try
         {
+            if (!File.Exists(_configuration.Value.SettingsLocation))
+            {
+                File.Create(_configuration.Value.SettingsLocation).Dispose();
+            }
             var dtoSetting = new DtoSettings(_pluginManager.Plugins);
             var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
-            File.WriteAllText(_settingsLocation, jsonString);
+            File.WriteAllText(_configuration.Value.SettingsLocation, jsonString);
         }
         catch (Exception e)
         {
-            _logger.Log($"There was an exception thrown while Saving the Settings with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
+            _logger.Log(
+                $"There was an exception thrown while Saving the Settings with the following exception{Environment.NewLine}{e}",
+                IJoaLogger.LogLevel.Error);
+        }
+        finally
+        {
+            _fileWatcher.Enable();
         }
     }
 
-    public void UpdateSettingsFromJson()
+    private void UpdateSettingsFromJson()
     {
         using var _ = _logger.TimedOperation(nameof(UpdateSettingsFromJson));
         
         try
         {
-            if (!File.Exists(_settingsLocation))
-            {
-                File.Create(_settingsLocation).Dispose();
-            }
-            var jsonString = File.ReadAllText(_settingsLocation);
+            var jsonString = File.ReadAllText(_configuration.Value.SettingsLocation);
             if (string.IsNullOrEmpty(jsonString))
                 return;
             var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);
