@@ -23,13 +23,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddSingleton<Search>();
-builder.Services.AddSingleton<PluginManager>();
-builder.Services.AddSingleton<PluginLoader>();
-builder.Services.AddSingleton<SettingsManager>();
+
 builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
-builder.Services.AddSingleton<PluginServiceProvider>();
-builder.Services.AddSingleton<StepsManager>();
+builder.Services.AddSingleton<JoaManager>();
 
 builder.Services.Configure<PathsConfiguration>(builder.Configuration.GetSection("Paths"));
 
@@ -37,7 +33,7 @@ builder.Services.AddHostedService<UiManagement>();
 
 var app = builder.Build();
 
-app.Services.GetService<Search>();
+
 
 app.UseCors();
 app.MapHub<SearchHub>("/searchHub");
