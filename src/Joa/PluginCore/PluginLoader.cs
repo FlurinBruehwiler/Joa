@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.Loader;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
@@ -14,6 +15,8 @@ public class PluginLoader
     private readonly PluginServiceProvider _pluginServiceProvider;
     private Dictionary<Type, object> _instantiatedTypes = new();
 
+    public AssemblyLoadContext? AssemblyLoadContext { get; private set; }
+    
     public PluginLoader(IOptions<PathsConfiguration> configuration, IJoaLogger logger, PluginServiceProvider pluginServiceProvider)
     {
         logger.Info(nameof(PluginLoader));
@@ -24,6 +27,7 @@ public class PluginLoader
 
     public List<PluginDefinition> ReloadPlugins()
     {
+        ClearPluginsFinalLocation(_configuration.Value.PluginsFinalLocation);
         MovePluginDllsToCopyLocation(_configuration.Value.PluginLocation, _configuration.Value.PluginsFinalLocation);
         List<PluginDefinition> pluginDefinitions = new();
         _instantiatedTypes = new Dictionary<Type, object>();
@@ -42,6 +46,20 @@ public class PluginLoader
         }
 
         return pluginDefinitions;
+    }
+
+    private void ClearPluginsFinalLocation(string path)
+    {
+        var di = new DirectoryInfo(path);
+
+        foreach (var file in di.GetFiles())
+        {
+            file.Delete(); 
+        }
+        foreach (var dir in di.GetDirectories())
+        {
+            dir.Delete(true); 
+        }
     }
 
     private void MovePluginDllsToCopyLocation(string pluginLocation, string pluginsFinalLocation)
@@ -195,7 +213,7 @@ public class PluginLoader
 
     private Assembly LoadAssembly(string pluginLocation)
     {
-        var loadContext = new PluginLoadContext(pluginLocation);
-        return loadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
+        AssemblyLoadContext = new PluginLoadContext(pluginLocation);
+        return AssemblyLoadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
     }
 }

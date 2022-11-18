@@ -28,7 +28,6 @@ public class SettingsManager
         Sync();
     }
     
-    
     private void Sync()
     {
         _logger.Log("Synchronizing the settings.", IJoaLogger.LogLevel.Info);
@@ -66,7 +65,7 @@ public class SettingsManager
     private void UpdateSettingsFromJson()
     {
         using var _ = _logger.TimedOperation(nameof(UpdateSettingsFromJson));
-        
+
         try
         {
             var jsonString = File.ReadAllText(_configuration.Value.SettingsLocation);
@@ -75,7 +74,7 @@ public class SettingsManager
             var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);
             if (result is null)
                 throw new JsonException();
-        
+
             foreach (var pluginDefinition in _pluginManager.Plugins)
             {
                 UpdatePluginDefinition(pluginDefinition, result);
@@ -83,7 +82,9 @@ public class SettingsManager
         }
         catch (Exception e)
         {
-            _logger.Log($"There was an exception thrown while Updating the Settings from the settings.json with the following exception{Environment.NewLine}{e}", IJoaLogger.LogLevel.Error);
+            _logger.Log(
+                $"There was an exception thrown while Updating the Settings from the settings.json with the following exception{Environment.NewLine}{e}",
+                IJoaLogger.LogLevel.Error);
         }
     }
 

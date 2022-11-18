@@ -12,14 +12,12 @@ public class PluginManager
 
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
-    private readonly FileWatcher _fileWatcher;
     
     public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, IOptions<PathsConfiguration> configuration)
     {
         logger.Info(nameof(PluginManager));
         _pluginLoader = pluginLoader;
         _logger = logger;
-        _fileWatcher = new FileWatcher(configuration.Value.PluginLocation, ReloadPlugins);
         ReloadPlugins();
     }
 
@@ -35,9 +33,7 @@ public class PluginManager
     
     public void ReloadPlugins()
     {
-        _fileWatcher.Disable();
         Plugins = _pluginLoader.ReloadPlugins();
-        _fileWatcher.Enable();
         GlobalProviders = Plugins.SelectMany(x => x.GlobalProviders).ToList();
         UpdateIndexes();
     }
