@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using JoaInterface.Injectables;
 
 namespace JoaInterface;
 
@@ -29,10 +30,15 @@ public class FileWatcher
         var watcher = new FileSystemWatcher(directory);
         watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
         watcher.Changed += OnChanged;
+        watcher.Error += (sender, args) =>
+        {
+            JoaLogger.GetInstance().Error(args.GetException().Message);
+        };
         
         if(file is not null)
             watcher.Filter = Path.GetFileName(file);
-        
+
+        watcher.IncludeSubdirectories = true;
         watcher.EnableRaisingEvents = true;
     }
 

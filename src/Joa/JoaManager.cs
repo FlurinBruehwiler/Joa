@@ -10,17 +10,19 @@ namespace JoaInterface;
 
 public class JoaManager : IDisposable
 {
+    private readonly IOptions<PathsConfiguration> _configuration;
     private readonly IServiceProvider _serviceProvider;
     private readonly IJoaLogger _joaLogger;
     public IServiceScope? CurrentScope { get; set; }
-    private readonly FileWatcher _fileWatcher;
+    private FileWatcher _fileWatcher;
 
     public JoaManager(IOptions<PathsConfiguration> configuration, IServiceProvider serviceProvider,
         IJoaLogger joaLogger)
     {
+        _configuration = configuration;
         _serviceProvider = serviceProvider;
         _joaLogger = joaLogger;
-        _fileWatcher = new FileWatcher(configuration.Value.PluginLocation, NewScope, 500);
+        _fileWatcher = new FileWatcher(_configuration.Value.PluginLocation, NewScope, 500);
         NewScope();
     }
 
@@ -37,14 +39,12 @@ public class JoaManager : IDisposable
                 GC.WaitForPendingFinalizers();
             }
 
-            _joaLogger.Info("before break");
-            System.Diagnostics.Debugger.Break();
-            _joaLogger.Info("after break");
-
             if (alcWeakRef.IsAlive)
                 _joaLogger.Error("Unloading failed");
             else
                 _joaLogger.Info("Unloading succeeded");
+            
+            _fileWatcher = new FileWatcher(_configuration.Value.PluginLocation, NewScope, 500);
         }
 
         CurrentScope = _serviceProvider.CreateScope();
