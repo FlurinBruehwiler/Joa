@@ -1,10 +1,6 @@
-﻿using System.Text.Json;
-using JoaLauncher.Api.Injectables;
-using JoaInterface.Injectables;
-using JoaInterface.Settings;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 
-namespace JoaInterface.Hubs;
+namespace Joa.Hubs;
 
 public class SettingsHub : Hub
 {

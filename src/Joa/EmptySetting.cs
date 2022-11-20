@@ -1,6 +1,6 @@
 ﻿using JoaLauncher.Api;
 
-namespace JoaInterface;
+namespace Joa;
 
 public class EmptySetting : ISetting
 {

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
-namespace JoaInterface.PluginCore;
+namespace Joa.PluginCore;
 
 public class PluginLoadContext : AssemblyLoadContext
 {

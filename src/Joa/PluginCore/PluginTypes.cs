@@ -1,4 +1,4 @@
-﻿namespace JoaInterface.PluginCore;
+﻿namespace Joa.PluginCore;
 
 public class PluginTypes
 {

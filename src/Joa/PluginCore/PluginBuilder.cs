@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
+using Joa.Step;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Attributes;
 using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
 using JoaLauncher.Api.Providers;
-using JoaInterface.Step;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JoaInterface.PluginCore;
+namespace Joa.PluginCore;
 
 public class PluginBuilder : IPluginBuilder
 {

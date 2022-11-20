@@ -1,9 +1,9 @@
-﻿using JoaLauncher.Api.Injectables;
+﻿using Joa.Step;
+using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
-using JoaInterface.Step;
 using Microsoft.Extensions.Options;
 
-namespace JoaInterface.PluginCore;
+namespace Joa.PluginCore;
 
 public class PluginManager
 {
@@ -15,7 +15,6 @@ public class PluginManager
     
     public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, IOptions<PathsConfiguration> configuration)
     {
-        logger.Info(nameof(PluginManager));
         _pluginLoader = pluginLoader;
         _logger = logger;
         ReloadPlugins();

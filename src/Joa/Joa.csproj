@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputType>Exe</OutputType>
-        <RootNamespace>JoaInterface</RootNamespace>
+        <RootNamespace>Joa</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

@@ -3,7 +3,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using JoaLauncher.Api.Injectables;
 
-namespace JoaInterface.Injectables;
+namespace Joa.Injectables;
 
 public class IconHelper : IIconHelper
 {

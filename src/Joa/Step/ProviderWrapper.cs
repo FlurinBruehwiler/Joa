@@ -1,6 +1,6 @@
 ﻿using JoaLauncher.Api.Providers;
 
-namespace JoaInterface.Step;
+namespace Joa.Step;
 
 public class ProviderWrapper
 {

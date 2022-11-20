@@ -1,16 +1,13 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Web;
 using JoaLauncher.Api.Injectables;
 
-namespace JoaInterface.Injectables;
+namespace Joa.Injectables;
 
 public class BrowserHelper : IBrowserHelper
 {
     public void OpenWebsite(string url)
     {
-        url = HttpUtility.UrlEncode(url);
-        
         try
         {
             Process.Start(url);

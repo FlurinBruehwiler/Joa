@@ -1,8 +1,8 @@
-﻿using JoaInterface.Step;
+﻿using Joa.Step;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JoaInterface.Hubs;
+namespace Joa.Hubs;
 
 public class SearchHub : Hub
 {
@@ -13,7 +13,7 @@ public class SearchHub : Hub
         _joaManager = joaManager;
     }
     
-    public Task GetSearchResults(string searchString)
+    public Task UpdateSearchResults(string searchString)
     {
         return _joaManager.CurrentScope.ServiceProvider.GetRequiredService<Search>().UpdateSearchResults(searchString);
     }
@@ -21,6 +21,15 @@ public class SearchHub : Hub
     public void GoToStep(Guid stepId)
     {
         _joaManager.CurrentScope.ServiceProvider.GetRequiredService<StepsManager>().GoToStep(stepId);
+    }
+
+    public List<DtoStep> GetSteps()
+    {
+        return _joaManager.CurrentScope.ServiceProvider.GetRequiredService<StepsManager>().GetSteps().Select(x => new DtoStep
+        {
+            Id = x.Id,
+            Name = x.Name
+        }).ToList();
     }
 
     public async Task ExecuteSearchResult(string commandId, string actionKey)

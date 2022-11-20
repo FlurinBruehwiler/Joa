@@ -6,7 +6,7 @@ using JoaLauncher.Api.Plugin;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace JoaInterface.PluginCore;
+namespace Joa.PluginCore;
 
 public class PluginLoader
 {
@@ -19,7 +19,6 @@ public class PluginLoader
     
     public PluginLoader(IOptions<PathsConfiguration> configuration, IJoaLogger logger, PluginServiceProvider pluginServiceProvider)
     {
-        logger.Info(nameof(PluginLoader));
         _configuration = configuration;
         _logger = logger;
         _pluginServiceProvider = pluginServiceProvider;

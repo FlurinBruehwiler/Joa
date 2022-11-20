@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
-using JoaInterface.PluginCore;
+using Joa.PluginCore;
 using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace JoaInterface;
+namespace Joa;
 
 public class JoaManager : IDisposable
 {

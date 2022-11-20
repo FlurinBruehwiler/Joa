@@ -1,10 +1,10 @@
-﻿using JoaLauncher.Api.Injectables;
-using JoaInterface;
-using JoaInterface.Hubs;
-using JoaInterface.Injectables;
-using JoaInterface.PluginCore;
-using JoaInterface.Settings;
-using JoaInterface.Step;
+﻿using Joa;
+using Joa.Hubs;
+using Joa.Injectables;
+using Joa.PluginCore;
+using Joa.Settings;
+using Joa.Step;
+using JoaLauncher.Api.Injectables;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,7 +1,7 @@
-﻿using JoaLauncher.Api;
-using JoaInterface.SearchEngine;
+﻿using Joa.SearchEngine;
+using JoaLauncher.Api;
 
-namespace JoaInterface.PluginCore;
+namespace Joa.PluginCore;
 
 public static class PluginExtensions
 {

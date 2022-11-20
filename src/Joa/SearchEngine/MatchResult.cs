@@ -1,4 +1,4 @@
-﻿namespace JoaInterface.SearchEngine;
+﻿namespace Joa.SearchEngine;
 
 public class MatchResult
 {

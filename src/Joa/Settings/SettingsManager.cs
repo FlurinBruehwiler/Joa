@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
+using Joa.PluginCore;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Injectables;
-using JoaInterface.PluginCore;
 using Microsoft.Extensions.Options;
 
-namespace JoaInterface.Settings;
+namespace Joa.Settings;
 
 public class SettingsManager
 {
@@ -16,7 +16,6 @@ public class SettingsManager
     
     public SettingsManager(PluginManager pluginManager, IOptions<PathsConfiguration> configuration, IJoaLogger logger)
     {
-        logger.Info(nameof(SettingsManager));
         _pluginManager = pluginManager;
         _configuration = configuration;
         _logger = logger;

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using JoaLauncher.Api.Injectables;
 
-namespace JoaInterface;
+namespace Joa;
 
 public class TimedLogOperation : IDisposable
 {
@@ -19,6 +19,6 @@ public class TimedLogOperation : IDisposable
     public void Dispose()
     {
         _stopwatch.Stop();
-        _logger.Log($"{_message} completet in {_stopwatch.ElapsedMilliseconds}ms", IJoaLogger.LogLevel.Info);
+        _logger.Info($"{_message} completet in {_stopwatch.ElapsedMilliseconds}ms");
     }
 }

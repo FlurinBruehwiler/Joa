@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using JoaInterface.PluginCore;
+using Joa.PluginCore;
 
-namespace JoaInterface.Settings;
+namespace Joa.Settings;
 
 public class DtoSettings
 {

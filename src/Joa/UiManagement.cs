@@ -1,9 +1,9 @@
-﻿using JoaLauncher.Api.Injectables;
+﻿using Joa.PluginCore;
+using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
-using JoaInterface.PluginCore;
 using Microsoft.Extensions.Hosting;
 
-namespace JoaInterface;
+namespace Joa;
 
 public class UiManagement : IHostedService
 {

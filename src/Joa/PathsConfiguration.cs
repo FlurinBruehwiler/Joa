@@ -1,4 +1,4 @@
-﻿namespace JoaInterface;
+﻿namespace Joa;
 
 public class PathsConfiguration
 {

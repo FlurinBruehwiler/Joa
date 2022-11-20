@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using JoaInterface.Injectables;
+using Joa.Injectables;
 
-namespace JoaInterface;
+namespace Joa;
 
 public class FileWatcher
 {

@@ -1,25 +1,28 @@
-﻿using JoaLauncher.Api.Injectables;
-using JoaInterface.Hubs;
-using JoaInterface.PluginCore;
+﻿using Joa.Hubs;
+using Joa.PluginCore;
 using Microsoft.AspNetCore.SignalR;
 
-namespace JoaInterface.Step;
+namespace Joa.Step;
 
 public class StepsManager
 {
     private readonly IHubContext<SearchHub> _hubContext;
     private readonly Stack<Step> _steps;
 
-    public StepsManager(PluginManager pluginManager, IJoaLogger logger, IHubContext<SearchHub> hubContext)
+    public StepsManager(PluginManager pluginManager, IHubContext<SearchHub> hubContext)
     {
         _hubContext = hubContext;
-        logger.Info(nameof(StepsManager));
         _steps = new Stack<Step>();
         AddStep(new Step
         {
             Providers = pluginManager.GlobalProviders,
             Name = string.Empty
         });
+    }
+
+    public List<Step> GetSteps()
+    {
+        return _steps.ToList();
     }
 
     public Step GetCurrentStep()
@@ -30,7 +33,7 @@ public class StepsManager
     public void AddStep(Step step)
     {
         _steps.Push(step);
-        _hubContext.Clients.All.SendAsync("AddStep", new { id = step.Id, name = "some name" });
+        _hubContext.Clients.All.SendAsync("AddStep", new DtoStep { Id = step.Id, Name = "some name" });
     }
     
     public void GoToStep(Guid stepId)

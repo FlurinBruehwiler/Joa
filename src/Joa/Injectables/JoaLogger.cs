@@ -1,6 +1,6 @@
 ﻿using JoaLauncher.Api.Injectables;
 
-namespace JoaInterface.Injectables;
+namespace Joa.Injectables;
 
 public class JoaLogger : IJoaLogger
 {

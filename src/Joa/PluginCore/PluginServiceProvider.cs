@@ -1,8 +1,8 @@
-﻿using JoaLauncher.Api.Injectables;
-using JoaInterface.Injectables;
+﻿using Joa.Injectables;
+using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace JoaInterface.PluginCore;
+namespace Joa.PluginCore;
 
 public class PluginServiceProvider
 {
@@ -12,7 +12,6 @@ public class PluginServiceProvider
     
     public PluginServiceProvider(IJoaLogger joaLogger)
     {
-        joaLogger.Info(nameof(PluginServiceProvider));
         ServiceCollection = new ServiceCollection();
         ServiceCollection.AddSingleton(joaLogger);
         ServiceCollection.AddSingleton<IBrowserHelper, BrowserHelper>();

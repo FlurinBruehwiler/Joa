@@ -1,6 +1,6 @@
 ﻿using JoaLauncher.Api;
 
-namespace JoaInterface.Step;
+namespace Joa.Step;
 
 public class ExecutionContext : IExecutionContext
 {

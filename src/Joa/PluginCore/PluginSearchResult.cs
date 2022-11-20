@@ -1,6 +1,6 @@
 using JoaLauncher.Api;
 
-namespace JoaInterface.PluginCore;
+namespace Joa.PluginCore;
 
 public record PluginSearchResult
 {

@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace JoaInterface.SearchEngine;
+namespace Joa.SearchEngine;
 
 
 public class StringMatcher

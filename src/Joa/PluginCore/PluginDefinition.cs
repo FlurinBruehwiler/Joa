@@ -1,9 +1,9 @@
-﻿using JoaLauncher.Api;
+﻿using Joa.Step;
+using JoaLauncher.Api;
 using JoaLauncher.Api.Attributes;
 using JoaLauncher.Api.Plugin;
-using JoaInterface.Step;
 
-namespace JoaInterface.PluginCore;
+namespace Joa.PluginCore;
 
 public class PluginDefinition
 {
