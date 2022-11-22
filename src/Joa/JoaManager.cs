@@ -24,7 +24,7 @@ public class JoaManager : IDisposable
         _reflectionConfiguration = reflectionConfiguration;
         _serviceProvider = serviceProvider;
         _joaLogger = joaLogger;
-        _fileWatcher = new FileWatcher(_configuration.Value.PluginLocation, NewScope, 500);
+        _fileWatcher = new FileWatcher(_pathsConfiguration.Value.PluginLocation, NewScope, 500);
         NewScope();
     }
 
@@ -46,7 +46,7 @@ public class JoaManager : IDisposable
             else
                 _joaLogger.Info("Unloading succeeded");
             
-            _fileWatcher = new FileWatcher(_configuration.Value.PluginLocation, NewScope, 500);
+            _fileWatcher = new FileWatcher(_pathsConfiguration.Value.PluginLocation, NewScope, 500);
         }
 
         CurrentScope = _serviceProvider.CreateScope();
