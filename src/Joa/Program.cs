@@ -31,7 +31,7 @@ builder.Services.AddScoped<PluginLoader>();
 builder.Services.AddScoped<SettingsManager>();
 builder.Services.AddScoped<PluginServiceProvider>();
 builder.Services.AddScoped<StepsManager>();
-
+builder.Services.AddSingleton<FileSystemManager>();
 builder.Services.Configure<PathsConfiguration>(builder.Configuration.GetSection("Paths"));
 builder.Services.Configure<ReflectionConfiguration>(builder.Configuration.GetSection("Reflection"));
 

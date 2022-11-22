@@ -9,21 +9,21 @@ namespace Joa.Settings;
 public class SettingsManager
 {
     private readonly PluginManager _pluginManager;
-    private readonly IOptions<PathsConfiguration> _configuration;
     private readonly IJoaLogger _logger;
+    private readonly FileSystemManager _fileSystemManager;
     private readonly JsonSerializerOptions _options;
     private readonly FileWatcher _fileWatcher;
     
-    public SettingsManager(PluginManager pluginManager, IOptions<PathsConfiguration> configuration, IJoaLogger logger)
+    public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager)
     {
         _pluginManager = pluginManager;
-        _configuration = configuration;
         _logger = logger;
+        _fileSystemManager = fileSystemManager;
         _options = new JsonSerializerOptions
         {
             WriteIndented = true
         };
-        _fileWatcher = new FileWatcher(configuration.Value.SettingsLocation, Sync);
+        _fileWatcher = new FileWatcher(fileSystemManager.GetSettingsLocation() ,Sync);
         Sync();
     }
     
@@ -41,13 +41,9 @@ public class SettingsManager
 
         try
         {
-            if (!File.Exists(_configuration.Value.SettingsLocation))
-            {
-                File.Create(_configuration.Value.SettingsLocation).Dispose();
-            }
             var dtoSetting = new DtoSettings(_pluginManager.Plugins);
             var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
-            File.WriteAllText(_configuration.Value.SettingsLocation, jsonString);
+            File.WriteAllText(_fileSystemManager.GetSettingsLocation(), jsonString);
         }
         catch (Exception e)
         {
@@ -67,7 +63,7 @@ public class SettingsManager
 
         try
         {
-            var jsonString = File.ReadAllText(_configuration.Value.SettingsLocation);
+            var jsonString = File.ReadAllText(_fileSystemManager.GetSettingsLocation());
             if (string.IsNullOrEmpty(jsonString))
                 return;
             var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);

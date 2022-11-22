@@ -10,35 +10,40 @@ namespace Joa.PluginCore;
 
 public class PluginLoader
 {
-    private readonly IOptions<PathsConfiguration> _configuration;
     private readonly IJoaLogger _logger;
     private readonly PluginServiceProvider _pluginServiceProvider;
     private Dictionary<Type, object> _instantiatedTypes = new();
+    private readonly FileSystemManager _fileSystemManager;
 
     public AssemblyLoadContext? AssemblyLoadContext { get; private set; }
-    
-    public PluginLoader(IOptions<PathsConfiguration> configuration, IJoaLogger logger, PluginServiceProvider pluginServiceProvider)
+
+    public PluginLoader(IJoaLogger logger, PluginServiceProvider pluginServiceProvider, 
+        FileSystemManager fileSystemManager)
     {
-        _configuration = configuration;
         _logger = logger;
         _pluginServiceProvider = pluginServiceProvider;
+        _fileSystemManager = fileSystemManager;
     }
 
     public List<PluginDefinition> ReloadPlugins()
     {
-        ClearPluginsFinalLocation(_configuration.Value.PluginsFinalLocation);
-        MovePluginDllsToCopyLocation(_configuration.Value.PluginLocation, _configuration.Value.PluginsFinalLocation);
+        var pluginsFinalLocation = _fileSystemManager.GetPluginsFinalLocation();
+        var pluginsLocation = _fileSystemManager.GetPluginsLocation();
+        
+        ClearPluginsFinalLocation(pluginsFinalLocation);
+        MovePluginDllsToCopyLocation(pluginsLocation, pluginsFinalLocation);
+        
         List<PluginDefinition> pluginDefinitions = new();
         _instantiatedTypes = new Dictionary<Type, object>();
-        var assemblies = LoadAssemblies(GetPluginDllPaths());
+        var assemblies = LoadAssemblies(GetPluginDllPaths(pluginsFinalLocation));
         var pluginTypes = LoadTypes(assemblies);
-        
+
         foreach (var pluginType in pluginTypes)
         {
             var setting = pluginType.Setting is null ? new EmptySetting() : InstantiateSettings(pluginType.Setting);
             var caches = InstantiateCaches(pluginType.Caches).ToList();
             var plugin = InstantiatePlugin(pluginType.Plugin!);
-            if(plugin is null)
+            if (plugin is null)
                 continue;
             var pluginBuilder = new PluginBuilder(this, _logger, _pluginServiceProvider);
             pluginDefinitions.Add(pluginBuilder.BuildPluginDefinition(plugin, setting, caches));
@@ -46,18 +51,31 @@ public class PluginLoader
 
         return pluginDefinitions;
     }
-
-    private void ClearPluginsFinalLocation(string path)
+    
+    public bool TryGetExistingObject<T>(Type type, out T? obj) where T : class
     {
-        var di = new DirectoryInfo(path);
+        if (_instantiatedTypes.TryGetValue(type, out var x))
+        {
+            obj = (T)x;
+            return true;
+        }
+
+        obj = null;
+        return false;
+    }
+
+    private void ClearPluginsFinalLocation(string pluginsFinalLocation)
+    {
+        var di = new DirectoryInfo(pluginsFinalLocation);
 
         foreach (var file in di.GetFiles())
         {
-            file.Delete(); 
+            file.Delete();
         }
+
         foreach (var dir in di.GetDirectories())
         {
-            dir.Delete(true); 
+            dir.Delete(true);
         }
     }
 
@@ -85,22 +103,11 @@ public class PluginLoader
         }
     }
 
-    public bool TryGetExistingObject<T>(Type type, out T? obj) where T : class
-    {
-        if (_instantiatedTypes.TryGetValue(type, out var x))
-        {
-            obj = (T)x;
-            return true;
-        }
-        obj = null;
-        return false;
-    }
-    
     private ISetting InstantiateSettings(Type settingType)
     {
         if (TryGetExistingObject<ISetting>(settingType, out var s))
             return s!;
-        
+
         if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, settingType) is not ISetting
             setting)
         {
@@ -114,7 +121,7 @@ public class PluginLoader
 
         return setting;
     }
-    
+
     private IEnumerable<ICache> InstantiateCaches(List<Type> cacheTypes)
     {
         foreach (var cacheType in cacheTypes)
@@ -124,8 +131,9 @@ public class PluginLoader
                 yield return c!;
                 continue;
             }
-            
-            if(ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, cacheType) is not ICache cache)
+
+            if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider,
+                    cacheType) is not ICache cache)
                 continue;
 
             _instantiatedTypes.Add(cacheType, cache);
@@ -133,7 +141,7 @@ public class PluginLoader
 
             yield return cache;
         }
-        
+
         _pluginServiceProvider.BuildServiceProvider();
     }
 
@@ -144,7 +152,7 @@ public class PluginLoader
 
         if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, pluginType) is not IPlugin plugin)
             return null;
-        
+
         _instantiatedTypes.Add(pluginType, plugin);
         return plugin;
     }
@@ -162,7 +170,7 @@ public class PluginLoader
         {
             if (typeof(IPlugin).IsAssignableFrom(type))
                 pluginTypes.Plugin = type;
-            
+
             if (typeof(ICache).IsAssignableFrom(type))
                 pluginTypes.Caches.Add(type);
 
@@ -173,27 +181,25 @@ public class PluginLoader
                     _logger.Error("A plugin can only contain one Setting");
                     continue;
                 }
-                    
+
                 pluginTypes.Setting = type;
             }
         }
 
         if (pluginTypes.Plugin is not null)
             return pluginTypes;
-        
+
         var availableTypes = string.Join("\n", assembly.GetTypes().Select(t => t.FullName));
         _logger.Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
                     $"Available types: \n{availableTypes}", IJoaLogger.LogLevel.Warning);
         return null;
     }
 
-    private List<string> GetPluginDllPaths()
+    private List<string> GetPluginDllPaths(string pluginsFinalLocation)
     {
-        var path = _configuration.Value.PluginsFinalLocation;
-        
-        _logger.Log($"Searching for Plugins in {path}", IJoaLogger.LogLevel.Info);
+        _logger.Log($"Searching for Plugins in {pluginsFinalLocation}", IJoaLogger.LogLevel.Info);
 
-        var pluginFolders = Directory.GetDirectories(path);
+        var pluginFolders = Directory.GetDirectories(pluginsFinalLocation);
 
         var plugins = pluginFolders.Select(x => Directory.GetFiles(x)
                 .FirstOrDefault(file => file.EndsWith($"{Directory.GetParent(file)?.Name}.dll"))).Where(x => x != null)
@@ -213,6 +219,7 @@ public class PluginLoader
     private Assembly LoadAssembly(string pluginLocation)
     {
         AssemblyLoadContext = new PluginLoadContext(pluginLocation);
-        return AssemblyLoadContext.LoadFromAssemblyName(new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
+        return AssemblyLoadContext.LoadFromAssemblyName(
+            new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
     }
 }

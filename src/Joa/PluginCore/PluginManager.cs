@@ -13,7 +13,7 @@ public class PluginManager
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
     
-    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, IOptions<PathsConfiguration> configuration)
+    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger)
     {
         _pluginLoader = pluginLoader;
         _logger = logger;
