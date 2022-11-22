@@ -10,16 +10,18 @@ namespace Joa;
 
 public class JoaManager : IDisposable
 {
-    private readonly IOptions<PathsConfiguration> _configuration;
+    private readonly IOptions<PathsConfiguration> _pathsConfiguration;
+    private readonly IOptions<ReflectionConfiguration> _reflectionConfiguration;
     private readonly IServiceProvider _serviceProvider;
     private readonly IJoaLogger _joaLogger;
     public IServiceScope? CurrentScope { get; set; }
     private FileWatcher _fileWatcher;
 
-    public JoaManager(IOptions<PathsConfiguration> configuration, IServiceProvider serviceProvider,
-        IJoaLogger joaLogger)
+    public JoaManager(IOptions<PathsConfiguration> pathsConfiguration, IOptions<ReflectionConfiguration> reflectionConfiguration,
+        IServiceProvider serviceProvider,IJoaLogger joaLogger)
     {
-        _configuration = configuration;
+        _pathsConfiguration = pathsConfiguration;
+        _reflectionConfiguration = reflectionConfiguration;
         _serviceProvider = serviceProvider;
         _joaLogger = joaLogger;
         _fileWatcher = new FileWatcher(_configuration.Value.PluginLocation, NewScope, 500);
@@ -65,8 +67,8 @@ public class JoaManager : IDisposable
             return null;
 
         var assembly = typeof(JsonSerializerOptions).Assembly;
-        var updateHandlerType = assembly.GetType("System.Text.Json.JsonSerializerOptionsUpdateHandler");
-        var clearCacheMethod = updateHandlerType?.GetMethod("ClearCache", BindingFlags.Static | BindingFlags.Public);
+        var updateHandlerType = assembly.GetType(_reflectionConfiguration.Value.AssemblyType);
+        var clearCacheMethod = updateHandlerType?.GetMethod(_reflectionConfiguration.Value.ClearCache, BindingFlags.Static | BindingFlags.Public);
         clearCacheMethod?.Invoke(null, new object?[] { null });
 
         var alcWeakRef = new WeakReference(asmLoadContext);
