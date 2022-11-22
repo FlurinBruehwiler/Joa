@@ -33,6 +33,7 @@ builder.Services.AddScoped<PluginServiceProvider>();
 builder.Services.AddScoped<StepsManager>();
 
 builder.Services.Configure<PathsConfiguration>(builder.Configuration.GetSection("Paths"));
+builder.Services.Configure<ReflectionConfiguration>(builder.Configuration.GetSection("Reflection"));
 
 // builder.Services.AddHostedService<UiManagement>();
 
