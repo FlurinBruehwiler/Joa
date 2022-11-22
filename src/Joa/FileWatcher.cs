@@ -8,6 +8,8 @@ public class FileWatcher
     private readonly Action _callback;
     private readonly int _delay;
     private readonly Stopwatch _swSinceLastChanged;
+    // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+    private readonly FileSystemWatcher _watcher;
     private bool _isDisabled;
     private int _numberOfQuedUpChanges;
     
@@ -27,19 +29,19 @@ public class FileWatcher
             file = path;
         }
         
-        var watcher = new FileSystemWatcher(directory);
-        watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
-        watcher.Changed += OnChanged;
-        watcher.Error += (sender, args) =>
+        _watcher = new FileSystemWatcher(directory);
+        _watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
+        _watcher.Changed += OnChanged;
+        _watcher.Error += (sender, args) =>
         {
             JoaLogger.GetInstance().Error(args.GetException().Message);
         };
         
         if(file is not null)
-            watcher.Filter = Path.GetFileName(file);
+            _watcher.Filter = Path.GetFileName(file);
 
-        watcher.IncludeSubdirectories = true;
-        watcher.EnableRaisingEvents = true;
+        _watcher.IncludeSubdirectories = true;
+        _watcher.EnableRaisingEvents = true;
     }
 
     private bool IsDirectory(string path)
