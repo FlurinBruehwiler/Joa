@@ -15,13 +15,8 @@ public class StepBuilder : IStepBuilder
         _pluginSearchResult = pluginSearchResult;
     }
     
-    private List<IProvider> Providers { get; set; } = new();
+    private List<IGenericProvider> Providers { get; set; } = new();
     
-    public IStepBuilder AddProvider<T>(params object[] parameter) where T : IProvider
-    {
-        Providers.Add(ActivatorUtilities.CreateInstance<T>(_serviceProvider, parameter));
-        return this;
-    }
 
     public Step Build()
     {
@@ -33,5 +28,17 @@ public class StepBuilder : IStepBuilder
             }).ToList(),
             Name = _pluginSearchResult.Title
         };
+    }
+
+    public IStepBuilder AddProvider<T>() where T : IProvider
+    {
+        Providers.Add(ActivatorUtilities.CreateInstance<T>(_serviceProvider));
+        return this;
+    }
+
+    public IStepBuilder AddProvider<TProvider, TContext>(TContext providerContext) where TProvider : IProvider<TContext> where TContext : IProviderContext
+    {
+        Providers.Add(ActivatorUtilities.CreateInstance<TProvider>(_serviceProvider, providerContext));
+        return this;
     }
 }

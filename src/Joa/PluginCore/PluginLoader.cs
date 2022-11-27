@@ -183,7 +183,7 @@ public class PluginLoader
         
         var availableTypes = string.Join("\n", assembly.GetTypes().Select(t => t.FullName));
         _logger.Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
-                    $"Available types: \n{availableTypes}", IJoaLogger.LogLevel.Warning);
+                    $"Available types: \n{availableTypes}", LogLevel.Warning);
         return null;
     }
 
@@ -191,7 +191,7 @@ public class PluginLoader
     {
         var path = _configuration.Value.PluginsFinalLocation;
         
-        _logger.Log($"Searching for Plugins in {path}", IJoaLogger.LogLevel.Info);
+        _logger.Log($"Searching for Plugins in {path}", LogLevel.Info);
 
         var pluginFolders = Directory.GetDirectories(path);
 
@@ -200,7 +200,7 @@ public class PluginLoader
             .ToList();
 
         var pluginsToLog = plugins.Aggregate("", (current, plugin) => current + Environment.NewLine + plugin);
-        _logger.Log($"Found the following plugins DLLs: {pluginsToLog}", IJoaLogger.LogLevel.Info);
+        _logger.Log($"Found the following plugins DLLs: {pluginsToLog}", LogLevel.Info);
 
         return plugins!;
     }

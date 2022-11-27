@@ -29,7 +29,7 @@ public class SettingsManager
     
     private void Sync()
     {
-        _logger.Log("Synchronizing the settings.", IJoaLogger.LogLevel.Info);
+        _logger.Log("Synchronizing the settings.", LogLevel.Info);
         UpdateSettingsFromJson();
         SaveSettingsToJson();
     }
@@ -53,7 +53,7 @@ public class SettingsManager
         {
             _logger.Log(
                 $"There was an exception thrown while Saving the Settings with the following exception{Environment.NewLine}{e}",
-                IJoaLogger.LogLevel.Error);
+                LogLevel.Error);
         }
         finally
         {
@@ -83,7 +83,7 @@ public class SettingsManager
         {
             _logger.Log(
                 $"There was an exception thrown while Updating the Settings from the settings.json with the following exception{Environment.NewLine}{e}",
-                IJoaLogger.LogLevel.Error);
+                LogLevel.Error);
         }
     }
 

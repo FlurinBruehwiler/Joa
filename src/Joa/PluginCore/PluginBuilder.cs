@@ -107,7 +107,7 @@ public class PluginBuilder : IPluginBuilder
         if (Attribute.GetCustomAttributes(pluginType).FirstOrDefault(x => x is PluginAttribute) is PluginAttribute pluginAttribute)
             return pluginAttribute;
         
-        _joaLogger.Log($"The plugin {pluginType.Name} does not have the PluginAttribute", IJoaLogger.LogLevel.Error);
+        _joaLogger.Log($"The plugin {pluginType.Name} does not have the PluginAttribute", LogLevel.Error);
         return null;
     }
 }

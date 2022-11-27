@@ -12,12 +12,12 @@ public class JoaLogger : IJoaLogger
     {
     }
 
-    public void Log(string logMessage, IJoaLogger.LogLevel logLevel)
+    public void Log(string logMessage, LogLevel logLevel)
     {
         var level = logLevel switch
         {
-            IJoaLogger.LogLevel.Warning => "Warning:",
-            IJoaLogger.LogLevel.Error => "Error:",
+            LogLevel.Warning => "Warning:",
+            LogLevel.Error => "Error:",
             _ => "Information:"
         };
 
@@ -26,17 +26,17 @@ public class JoaLogger : IJoaLogger
 
     public void Info(string logMessage)
     {
-        Log(logMessage, IJoaLogger.LogLevel.Info);
+        Log(logMessage, LogLevel.Info);
     }
 
     public void Warning(string logMessage)
     {
-        Log(logMessage, IJoaLogger.LogLevel.Warning);
+        Log(logMessage, LogLevel.Warning);
     }
 
     public void Error(string logMessage)
     {
-        Log(logMessage, IJoaLogger.LogLevel.Error);
+        Log(logMessage, LogLevel.Error);
     }
 
     public void LogException(Exception e, string logName = "")
@@ -45,7 +45,7 @@ public class JoaLogger : IJoaLogger
             string.IsNullOrEmpty(logName)
                 ? $"There was an Exception with the following Stacktrace {e}"
                 : $"{logName} with the following Stacktrace {e}",
-            IJoaLogger.LogLevel.Error);
+            LogLevel.Error);
     }
 
     public static JoaLogger GetInstance()
