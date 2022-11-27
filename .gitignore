@@ -1,3 +1,4 @@
 
 src/Joa/appsettings.json
 src/Joa/nuget.config
+src/Joa/appsettings.Development.json

@@ -1,3 +1,3 @@
 # Joa
 
-A cross-platform keystroke launcher with plugins
+A (soon to be cross-) platform keystroke launcher with plugins
