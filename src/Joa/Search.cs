@@ -3,6 +3,7 @@ using Joa.PluginCore;
 using Joa.Settings;
 using Joa.Step;
 using JoaLauncher.Api;
+using JoaLauncher.Api.Enums;
 using JoaLauncher.Api.Injectables;
 using Microsoft.AspNetCore.SignalR;
 using ExecutionContext = Joa.Step.ExecutionContext;
@@ -67,20 +68,27 @@ public class Search
         {
             results = _stepsManager.GetCurrentStep().GetSearchResults(searchString).Take(8).ToList();
         }
+        
+        foreach (var result in results)
+        {
+            result.SearchResult.Actions ??= new List<ContextAction>();
+
+            if (result.SearchResult.Actions.All(x => x.Key != Key.Enter))
+            {
+                result.SearchResult.Actions.Add(new ContextAction
+                {
+                    Id = "Enter",
+                    Key = Key.Enter,
+                    Name = "Execute"
+                });
+            }
+        }
 
         await _hubContext.Clients.All.SendAsync("ReceiveSearchResults", searchString, results);
     }
 
     private ContextAction? GetContextAction(string actionId, SearchResult searchResult)
     {
-        if (actionId == "enter")
-        {
-            return new ContextAction
-            {
-                Id = "enter"
-            };
-        }
-
         return searchResult.Actions?.SingleOrDefault(x => x.Id == actionId);
     }
 }

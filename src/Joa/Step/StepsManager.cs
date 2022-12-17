@@ -33,7 +33,7 @@ public class StepsManager
     public void AddStep(Step step)
     {
         _steps.Push(step);
-        _hubContext.Clients.All.SendAsync("AddStep", new DtoStep { Id = step.Id, Name = "some name" });
+        _hubContext.Clients.All.SendAsync("AddStep", new DtoStep { Id = step.Id, Name = step.Name });
     }
     
     public void GoToStep(Guid stepId)

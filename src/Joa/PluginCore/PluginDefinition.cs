@@ -13,6 +13,7 @@ public class PluginDefinition
     public required List<ProviderWrapper> GlobalProviders { get; set; }
     public required ISetting Setting { get; set; }
     public required List<ICache> Caches { get; set; }
+    public required List<IAsyncCache> AsyncCaches { get; set; }
     
     public PluginDefinition()
     {

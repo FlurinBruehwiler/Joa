@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="JoaLauncher.Api" Version="1.0.9-ga7d7ce7191" />
+      <PackageReference Include="JoaLauncher.Api" Version="1.0.12-g77d52fa514" />
       <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     </ItemGroup>
 

@@ -36,8 +36,11 @@ public class StepBuilder : IStepBuilder
         return this;
     }
 
-    public IStepBuilder AddProvider<TProvider, TContext>(TContext providerContext) where TProvider : IProvider<TContext> where TContext : IProviderContext
+    public IStepBuilder AddProvider<TProvider, TContext>(TContext providerContext) where TProvider : IProvider<TContext>
     {
+        if (providerContext is null)
+            throw new ArgumentNullException();
+
         Providers.Add(ActivatorUtilities.CreateInstance<TProvider>(_serviceProvider, providerContext));
         return this;
     }

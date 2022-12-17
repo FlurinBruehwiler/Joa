@@ -4,7 +4,6 @@ using JoaLauncher.Api;
 using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Joa.PluginCore;
 
@@ -43,11 +42,12 @@ public class PluginLoader
         {
             var setting = pluginType.Setting is null ? new EmptySetting() : InstantiateSettings(pluginType.Setting);
             var caches = InstantiateCaches(pluginType.Caches).ToList();
+            var asyncCaches = InstantiateAsyncCaches(pluginType.AsyncCaches).ToList();
             var plugin = InstantiatePlugin(pluginType.Plugin!);
             if (plugin is null)
                 continue;
             var pluginBuilder = new PluginBuilder(this, _logger, _pluginServiceProvider);
-            pluginDefinitions.Add(pluginBuilder.BuildPluginDefinition(plugin, setting, caches));
+            pluginDefinitions.Add(pluginBuilder.BuildPluginDefinition(plugin, setting, caches, asyncCaches));
         }
 
         return pluginDefinitions;
@@ -145,6 +145,29 @@ public class PluginLoader
 
         _pluginServiceProvider.BuildServiceProvider();
     }
+    
+    private IEnumerable<IAsyncCache> InstantiateAsyncCaches(List<Type> asyncCacheTypes)
+    {
+        foreach (var cacheType in asyncCacheTypes)
+        {
+            if (TryGetExistingObject<IAsyncCache>(cacheType, out var c))
+            {
+                yield return c!;
+                continue;
+            }
+
+            if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider,
+                    cacheType) is not IAsyncCache cache)
+                continue;
+
+            _instantiatedTypes.Add(cacheType, cache);
+            _pluginServiceProvider.ServiceCollection.AddSingleton(cache.GetType(), cache);
+
+            yield return cache;
+        }
+
+        _pluginServiceProvider.BuildServiceProvider();
+    }
 
     private IPlugin? InstantiatePlugin(Type pluginType)
     {
@@ -174,6 +197,9 @@ public class PluginLoader
 
             if (typeof(ICache).IsAssignableFrom(type))
                 pluginTypes.Caches.Add(type);
+            
+            if (typeof(IAsyncCache).IsAssignableFrom(type))
+                pluginTypes.AsyncCaches.Add(type);
 
             if (typeof(ISetting).IsAssignableFrom(type))
             {
