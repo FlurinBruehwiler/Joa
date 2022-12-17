@@ -16,7 +16,7 @@ public class StepsManager
         AddStep(new Step
         {
             Providers = pluginManager.GlobalProviders,
-            Name = "Global Step"
+            Name = string.Empty
         });
     }
 
