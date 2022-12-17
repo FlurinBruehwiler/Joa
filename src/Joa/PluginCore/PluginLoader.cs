@@ -31,7 +31,6 @@ public class PluginLoader
         var pluginsLocation = _fileSystemManager.GetPluginsLocation();
         
         ClearPluginsFinalLocation(pluginsFinalLocation);
-        _logger.Info($"Moving plugins from {pluginsLocation} to {pluginsFinalLocation}");
         MovePluginDllsToCopyLocation(pluginsLocation, pluginsFinalLocation);
         
         List<PluginDefinition> pluginDefinitions = new();
