@@ -7,9 +7,9 @@ namespace Joa.Step;
 public class StepBuilder : IStepBuilder
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ISearchResult _pluginSearchResult;
+    private readonly SearchResult _pluginSearchResult;
 
-    public StepBuilder(IServiceProvider serviceProvider, ISearchResult pluginSearchResult)
+    public StepBuilder(IServiceProvider serviceProvider, SearchResult pluginSearchResult)
     {
         _serviceProvider = serviceProvider;
         _pluginSearchResult = pluginSearchResult;

@@ -17,7 +17,7 @@ public class Step
         _lastSearchResults = new List<PluginSearchResult>();
     }
 
-    public ISearchResult GetSearchResultFromId(Guid id)
+    public SearchResult GetSearchResultFromId(Guid id)
     {
         return _lastSearchResults.FirstOrDefault(x => x.CommandId == id)?.SearchResult 
                ?? throw new Exception("Could not find Search Result");

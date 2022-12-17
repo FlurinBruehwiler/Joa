@@ -4,9 +4,9 @@ namespace Joa.Step;
 
 public class ExecutionContext : IExecutionContext
 {
-    private readonly ISearchResult _pluginSearchResult;
+    private readonly SearchResult _pluginSearchResult;
 
-    public ExecutionContext(ISearchResult pluginSearchResult)
+    public ExecutionContext(SearchResult pluginSearchResult)
     {
         _pluginSearchResult = pluginSearchResult;
     }

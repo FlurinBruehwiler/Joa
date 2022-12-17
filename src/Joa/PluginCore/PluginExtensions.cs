@@ -10,7 +10,7 @@ public static class PluginExtensions
         StringMatcher.Instance = new StringMatcher();
     }
     
-    public static List<PluginSearchResult> ToPluginSerachResults(this List<ISearchResult> searchResults)
+    public static List<PluginSearchResult> ToPluginSerachResults(this List<SearchResult> searchResults)
     {
         return searchResults.Select(x => new PluginSearchResult
         {

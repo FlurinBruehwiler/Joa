@@ -5,9 +5,9 @@ namespace Joa.PluginCore;
 
 public class PluginGenericProvider : IProvider
 {
-    public required List<ISearchResult> SearchResults { get; set; }
+    public required List<SearchResult> SearchResults { get; set; }
     
-    public List<ISearchResult> GetSearchResults(string searchString)
+    public List<SearchResult> GetSearchResults(string searchString)
     {
         return SearchResults;
     }

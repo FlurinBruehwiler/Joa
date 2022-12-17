@@ -27,11 +27,11 @@ public class Search
         _settingsManager = settingsManager;
     }
 
-    public async Task ExecuteCommand(Guid resultId, string actionKey)
+    public async Task ExecuteCommand(Guid resultId, string actionId)
     {
         var pluginSearchResult = _stepsManager.GetCurrentStep().GetSearchResultFromId(resultId);
 
-        var contextAction = GetContextAction(actionKey, pluginSearchResult);
+        var contextAction = GetContextAction(actionId, pluginSearchResult);
 
         if (contextAction is null)
             return;
@@ -71,16 +71,16 @@ public class Search
         await _hubContext.Clients.All.SendAsync("ReceiveSearchResults", searchString, results);
     }
 
-    private ContextAction? GetContextAction(string actionKey, ISearchResult searchResult)
+    private ContextAction? GetContextAction(string actionId, SearchResult searchResult)
     {
-        if (actionKey == "enter")
+        if (actionId == "enter")
         {
             return new ContextAction
             {
-                Key = "enter"
+                Id = "enter"
             };
         }
 
-        return searchResult.Actions?.SingleOrDefault(x => x.Key == actionKey);
+        return searchResult.Actions?.SingleOrDefault(x => x.Id == actionId);
     }
 }

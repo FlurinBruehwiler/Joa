@@ -23,7 +23,7 @@ public class PluginBuilder : IPluginBuilder
     }
     
     private readonly List<(Type, Func<string, bool>?)> _providers = new();
-    private readonly List<ISearchResult> _searchResults = new();
+    private readonly List<SearchResult> _searchResults = new();
 
     public IPluginBuilder AddGlobalProvider<T>() where T : IProvider
     {
@@ -37,7 +37,7 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
-    public IPluginBuilder AddGlobalResult(ISearchResult searchResult)
+    public IPluginBuilder AddGlobalResult(SearchResult searchResult)
     {
         _searchResults.Add(searchResult);
         return this;
