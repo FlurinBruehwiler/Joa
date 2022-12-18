@@ -58,16 +58,7 @@ public class Search
 
         _logger.Info($"SearchString: ${searchString}");
 
-        List<PluginSearchResult> results;
-
-        if (string.IsNullOrWhiteSpace(searchString))
-        {
-            results = new List<PluginSearchResult>();
-        }
-        else
-        {
-            results = _stepsManager.GetCurrentStep().GetSearchResults(searchString).Take(8).ToList();
-        }
+        var results = _stepsManager.GetCurrentStep().GetSearchResults(searchString).Take(8).ToList();
         
         foreach (var result in results)
         {

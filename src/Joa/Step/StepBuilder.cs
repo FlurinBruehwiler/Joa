@@ -16,7 +16,7 @@ public class StepBuilder : IStepBuilder
     }
     
     private List<IGenericProvider> Providers { get; set; } = new();
-    
+    private StepOptions StepOptions { get; set; } = new();
 
     public Step Build()
     {
@@ -26,7 +26,8 @@ public class StepBuilder : IStepBuilder
             {
                 Provider = x
             }).ToList(),
-            Name = _pluginSearchResult.Title
+            Name = _pluginSearchResult.Title,
+            Options = StepOptions
         };
     }
 
@@ -42,6 +43,12 @@ public class StepBuilder : IStepBuilder
             throw new ArgumentNullException();
 
         Providers.Add(ActivatorUtilities.CreateInstance<TProvider>(_serviceProvider, providerContext));
+        return this;
+    }
+
+    public IStepBuilder WithOptions(StepOptions stepOptions)
+    {
+        StepOptions = stepOptions;
         return this;
     }
 }

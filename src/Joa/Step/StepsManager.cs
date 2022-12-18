@@ -1,5 +1,6 @@
 ﻿using Joa.Hubs;
 using Joa.PluginCore;
+using JoaLauncher.Api;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Joa.Step;
@@ -16,7 +17,8 @@ public class StepsManager
         AddStep(new Step
         {
             Providers = pluginManager.GlobalProviders,
-            Name = "Global Step"
+            Name = "Global Step",
+            Options = new StepOptions()
         });
     }
 
@@ -33,7 +35,12 @@ public class StepsManager
     public void AddStep(Step step)
     {
         _steps.Push(step);
-        _hubContext.Clients.All.SendAsync("AddStep", new DtoStep { Id = step.Id, Name = step.Name });
+        UpdateStepsOnClient();
+    }
+
+    public void UpdateStepsOnClient()
+    {
+        _hubContext.Clients.All.SendAsync("UpdateSteps", _steps.Select(x => new DtoStep { Id = x.Id, Name = x.Name }).Reverse());
     }
     
     public void GoToStep(Guid stepId)

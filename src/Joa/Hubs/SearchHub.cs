@@ -15,29 +15,28 @@ public class SearchHub : Hub
     
     public Task UpdateSearchResults(string searchString)
     {
-        return _joaManager.CurrentScope?.ServiceProvider.GetRequiredService<Search>().UpdateSearchResults(searchString) ?? Task.CompletedTask;
+        return GetRequiredService<Search>().UpdateSearchResults(searchString);
     }
 
     public void GoToStep(Guid stepId)
     {
-        _joaManager.CurrentScope?.ServiceProvider.GetRequiredService<StepsManager>().GoToStep(stepId);
+        GetRequiredService<StepsManager>().GoToStep(stepId);
     }
 
-    public List<DtoStep> GetSteps()
+    public void UpdateSteps()
     {
-        return _joaManager.CurrentScope?.ServiceProvider.GetRequiredService<StepsManager>().GetSteps().Select(x => new DtoStep
-        {
-            Id = x.Id,
-            Name = x.Name
-        }).ToList() ?? new List<DtoStep>();
+        GetRequiredService<StepsManager>().UpdateStepsOnClient();
     }
 
     public async Task ExecuteSearchResult(string commandId, string actionId)
     {
         if (!Guid.TryParse(commandId, out var guidId))
             return;
-        var task = _joaManager.CurrentScope?.ServiceProvider.GetRequiredService<Search>().ExecuteCommand(guidId, actionId);
-        if (task is not null)
-            await task;
+        await GetRequiredService<Search>().ExecuteCommand(guidId, actionId);
+    }
+
+    private T GetRequiredService<T>()
+    {
+        return (T)_joaManager.CurrentScope?.ServiceProvider.GetRequiredService(typeof(T))! ?? throw new InvalidOperationException();
     }
 }
