@@ -96,6 +96,6 @@ public class SettingsManager
             return;
         }
 
-        pluginDefinition.Setting = (ISetting)x;
+        pluginDefinition.Setting.Value = (ISetting)x;
     }
 }

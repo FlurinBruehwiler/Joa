@@ -43,7 +43,7 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
-    public PluginDefinition BuildPluginDefinition(IPlugin plugin, ISetting setting, List<ICache> caches, List<IAsyncCache> asyncCaches)
+    public PluginDefinition BuildPluginDefinition(IPlugin plugin, SettingOption setting, List<ICache> caches, List<IAsyncCache> asyncCaches)
     {
         var pluginInfos = GetPluginInfos(plugin.GetType());
         
@@ -56,12 +56,11 @@ public class PluginBuilder : IPluginBuilder
 
         AddSearchResults(globalProviders);
 
-        return new PluginDefinition
+        return new PluginDefinition(setting)
         {
             Plugin = plugin,
             PluginInfo = pluginInfos,
             GlobalProviders = globalProviders,
-            Setting = setting,
             Caches = caches,
             AsyncCaches = asyncCaches
         };

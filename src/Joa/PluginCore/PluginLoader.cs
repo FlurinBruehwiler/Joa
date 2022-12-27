@@ -4,6 +4,7 @@ using JoaLauncher.Api;
 using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Joa.PluginCore;
 
@@ -40,7 +41,7 @@ public class PluginLoader
 
         foreach (var pluginType in pluginTypes)
         {
-            var setting = pluginType.Setting is null ? new EmptySetting() : InstantiateSettings(pluginType.Setting);
+            var setting = pluginType.Setting is null ? new SettingOption(new EmptySetting()) : InstantiateSettings(pluginType.Setting);
             var caches = InstantiateCaches(pluginType.Caches).ToList();
             var asyncCaches = InstantiateAsyncCaches(pluginType.AsyncCaches).ToList();
             var plugin = InstantiatePlugin(pluginType.Plugin!);
@@ -104,23 +105,25 @@ public class PluginLoader
         }
     }
 
-    private ISetting InstantiateSettings(Type settingType)
+    private SettingOption InstantiateSettings(Type settingType)
     {
         if (TryGetExistingObject<ISetting>(settingType, out var s))
-            return s!;
+            return new SettingOption(s!);
 
         if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, settingType) is not ISetting
             setting)
         {
             _logger.Error($"{settingType.Name} does not inherit from {nameof(ISetting)}");
-            return new EmptySetting();
+            return new SettingOption(new EmptySetting());
         }
 
+        var settingOptionsType = typeof(IOptions<>).MakeGenericType(setting.GetType());
+        
         _instantiatedTypes.Add(settingType, setting);
-        _pluginServiceProvider.ServiceCollection.AddSingleton(setting.GetType(), setting);
+        _pluginServiceProvider.ServiceCollection.AddSingleton(settingOptionsType, new SettingOption(setting));
         _pluginServiceProvider.BuildServiceProvider();
 
-        return setting;
+        return new SettingOption(setting);
     }
 
     private IEnumerable<ICache> InstantiateCaches(List<Type> cacheTypes)
