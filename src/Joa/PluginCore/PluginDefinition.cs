@@ -3,7 +3,6 @@ using Joa.Step;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Attributes;
 using JoaLauncher.Api.Plugin;
-using Microsoft.Extensions.Options;
 
 namespace Joa.PluginCore;
 
@@ -16,12 +15,12 @@ public class PluginDefinition
     public SettingOption Setting { get; set; }
     public required List<ICache> Caches { get; set; }
     public required List<IAsyncCache> AsyncCaches { get; set; }
-    public SettingConfiguration SettingConfiguration { get; set; }
+    public ClassInstance SettingConfiguration { get; set; }
     
     public PluginDefinition(SettingOption setting)
     {
         Id = Guid.NewGuid();
         Setting = setting;
-        SettingConfiguration = new SettingConfiguration(setting);
+        SettingConfiguration = new ClassInstance(setting.Value, new ClassDescription(setting.Value.GetType()));
     }
 }

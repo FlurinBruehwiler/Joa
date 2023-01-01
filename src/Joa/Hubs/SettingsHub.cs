@@ -1,4 +1,7 @@
-﻿using Joa.PluginCore;
+﻿using System.Collections;
+using System.Diagnostics;
+using System.Net;
+using Joa.PluginCore;
 using Joa.Settings;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,25 +19,31 @@ public class SettingsHub : Hub
     
     public void SetProperty(Guid pluginId, string propertyName, object value)
     {
-        GetRequiredService<PluginManager>().Plugins.First(x => x.Id == pluginId)
-            .SettingConfiguration.PropertyDefinitions.OfType<SettingsProperty>()
-            .First(x => x.PropertyInfo.Name == propertyName).SetValue(value);
+        GetRequiredService<PluginManager>()
+            .GetPluginWithId(pluginId)
+            .SettingConfiguration
+            .GetPropertyWithName(propertyName)
+            .SetValue(value);
     }
     
     public void SetPropertyInList(Guid pluginId, string listName, int listIndex, string propertyName, object value)
     {
-        GetRequiredService<PluginManager>().Plugins.First(x => x.Id == pluginId)
-            .SettingConfiguration.PropertyDefinitions.OfType<SettingsPropertyList>()
-            .First(x => x.PropertyInfo.Name == listName)
-            .SetPropertyOnItem(listIndex, propertyName, value);
+        GetRequiredService<PluginManager>()
+            .GetPluginWithId(pluginId)
+            .SettingConfiguration
+            .GetListPropertyWithNamie(listName)
+            .Items[listIndex]
+            .GetPropertyWithName(propertyName)
+            .SetValue(value);
     }
     
     public void AddItemToList(Guid pluginId, string listName)
     {
-        //return this somehow (in json)
-        var res = GetRequiredService<PluginManager>().Plugins.First(x => x.Id == pluginId)
-            .SettingConfiguration.PropertyDefinitions.OfType<SettingsPropertyList>()
-            .First(x => x.PropertyInfo.Name == listName)
+        //ToDo return this somehow (in json)
+        GetRequiredService<PluginManager>()
+            .GetPluginWithId(pluginId)
+            .SettingConfiguration
+            .GetListPropertyWithNamie(listName)
             .AddItem();
     }
 
@@ -48,7 +57,7 @@ public class SettingsHub : Hub
             {
                 if (y is SettingsProperty settingsProperty)
                 {
-                    var dtoSettingsDescription = new DtoSettingsDescription
+                    var dtoSettingsDescription = new DtoPropertyDescription
                     {
                         Name = settingsProperty.PropertyInfo.Name,
                         Attributes = settingsProperty.PropertyInfo.CustomAttributes.ToList()
@@ -56,7 +65,7 @@ public class SettingsHub : Hub
                     
                     res.SettingsDescriptions.Add(dtoSettingsDescription);
                     
-                    res.Properties.Add(new DtoProperty
+                    res.Properties.Add(new DtoPropertyInstance
                     {
                         Value = settingsProperty.GetValue(),
                         SettingsDescriptionId = dtoSettingsDescription.Id
@@ -66,7 +75,7 @@ public class SettingsHub : Hub
                 
                 if (y is SettingsPropertyList settingsPropertyList)
                 {
-                    var dtoSettingsDescription = new DtoSettingsDescription
+                    var dtoSettingsDescription = new DtoPropertyDescription
                     {
                         Name = settingsPropertyList.PropertyInfo.Name,
                         Attributes = settingsPropertyList.PropertyInfo.CustomAttributes.ToList()
@@ -74,7 +83,7 @@ public class SettingsHub : Hub
                     
                     res.SettingsDescriptions.Add(dtoSettingsDescription);
                     
-                    res.Properties.Add(new DtoProperty
+                    res.Properties.Add(new DtoPropertyInstance
                     {
                         SettingsDescriptionId = dtoSettingsDescription.Id,
                         Value = settingsPropertyList
@@ -82,7 +91,7 @@ public class SettingsHub : Hub
                     
                     foreach (var propertyInfo in settingsPropertyList.SettingsProperties)
                     {
-                        var a = new DtoSettingsDescription
+                        var a = new DtoPropertyDescription
                         {
                             Name = propertyInfo.Name,
                             Attributes = propertyInfo.CustomAttributes.ToList()

@@ -35,7 +35,12 @@ public class PluginManager
         GlobalProviders = Plugins.SelectMany(x => x.GlobalProviders).ToList();
         await UpdateIndexesAsync();
     }
-    
+
+    public PluginDefinition GetPluginWithId(Guid id)
+    {
+        return Plugins.First(x => x.Id == id);
+    }
+
     private async Task UpdateIndexesAsync()
     {
         foreach (var cache in Plugins.SelectMany(x => x.Caches))
