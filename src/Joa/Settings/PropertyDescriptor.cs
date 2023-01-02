@@ -6,6 +6,7 @@ namespace Joa.Settings;
 
 public class PropertyDescription
 {
+    public Guid Id { get; set; } = Guid.NewGuid();
     public required PropertyInfo PropertyInfo { get; set; }
 }
 
