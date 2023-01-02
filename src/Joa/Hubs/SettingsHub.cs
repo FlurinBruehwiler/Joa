@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using System.Net;
-using Joa.PluginCore;
+﻿using Joa.PluginCore;
 using Joa.Settings;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,66 +46,61 @@ public class SettingsHub : Hub
 
     public void GetAllSettings()
     {
-        var res = new DtoFrontendSettings();
-        
-        foreach (var x in GetRequiredService<PluginManager>().Plugins)
+        var setting = new DtoSetting();
+
+        foreach (var pluginDefinition in GetRequiredService<PluginManager>()
+                     .Plugins)
         {
-            foreach (var y in x.SettingConfiguration.PropertyDefinitions)
+            var plugin = new DtoPlugin
             {
-                if (y is SettingsProperty settingsProperty)
-                {
-                    var dtoSettingsDescription = new DtoPropertyDescription
-                    {
-                        Name = settingsProperty.PropertyInfo.Name,
-                        Attributes = settingsProperty.PropertyInfo.CustomAttributes.ToList()
-                    };
-                    
-                    res.SettingsDescriptions.Add(dtoSettingsDescription);
-                    
-                    res.Properties.Add(new DtoPropertyInstance
-                    {
-                        Value = settingsProperty.GetValue(),
-                        SettingsDescriptionId = dtoSettingsDescription.Id
-                    }); 
-                    
-                }
-                
-                if (y is SettingsPropertyList settingsPropertyList)
-                {
-                    var dtoSettingsDescription = new DtoPropertyDescription
-                    {
-                        Name = settingsPropertyList.PropertyInfo.Name,
-                        Attributes = settingsPropertyList.PropertyInfo.CustomAttributes.ToList()
-                    };
-                    
-                    res.SettingsDescriptions.Add(dtoSettingsDescription);
-                    
-                    res.Properties.Add(new DtoPropertyInstance
-                    {
-                        SettingsDescriptionId = dtoSettingsDescription.Id,
-                        Value = settingsPropertyList
-                    }); 
-                    
-                    foreach (var propertyInfo in settingsPropertyList.SettingsProperties)
-                    {
-                        var a = new DtoPropertyDescription
-                        {
-                            Name = propertyInfo.Name,
-                            Attributes = propertyInfo.CustomAttributes.ToList()
-                        };
-                    
-                        res.SettingsDescriptions.Add(a);
-                    }
-                    
-                    foreach (var value in settingsPropertyList.GetValues())
-                    {
-                        
-                    }
-                }
-            }
+                Id = pluginDefinition.Id,
+                Name = "not shure",
+                Description = "desc",
+            };
+            
+            plugin.Fields = AddClassInstance(pluginDefinition.SettingConfiguration, plugin).ToList();
+
+            
+            setting.Plugins.Add(plugin);
         }
     }
-    
+
+    private IEnumerable<DtoField> AddClassInstance(ClassInstance classInstance, DtoPlugin plugin)
+    {
+        foreach (var property in classInstance.PropertyInstances)
+        {
+            var template = new DtoTemplate
+            {
+                Name = property.PropertyDescription.PropertyInfo.Name
+            };
+            var templateId = 
+
+            var field = new DtoField
+            {
+                TemplateId = templateId,
+                Value = GetValue(property, plugin)
+            };
+
+            plugin.Templates.Add(templateId, template);
+            yield return field;
+        }
+    }
+
+    private object GetValue(PropertyInstance property, DtoPlugin plugin)
+    {
+        if (property is not ListPropertyInstance listProperty)
+            return property.GetValue();
+
+        var items = new List<List<DtoField>>();
+
+        foreach (var item in listProperty.Items)
+        {
+            items.Add(AddClassInstance(item, plugin).ToList());
+        }
+
+        return items;
+    }
+
     private T GetRequiredService<T>()
     {
         return (T)_joaManager.CurrentScope?.ServiceProvider.GetRequiredService(typeof(T))! ?? throw new InvalidOperationException();

@@ -1,22 +1,27 @@
-﻿using System.Reflection;
+﻿namespace Joa.Settings;
 
-namespace Joa.Settings;
-
-public class DtoPropertyDescription
+public class DtoSetting
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public List<DtoPlugin> Plugins { get; set; } = new();
+}
+
+public class DtoPlugin
+{
+    public Guid Id { get; set; }
     public string Name { get; set; }
-    public List<CustomAttributeData> Attributes { get; set; } = new();
+    public string Description { get; set; }
+    public List<DtoField> Fields { get; set; } = new();
+    public Dictionary<Guid, DtoTemplate> Templates { get; set; } = new();
 }
 
-public class DtoPropertyInstance
+public class DtoField
 {
-    public object Value { get; set; }
-    public Guid SettingsDescriptionId { get; set; }
+    public Guid TemplateId { get; set; }
+    //Could be either a primitive type or a list of fields
+    public object Value { get; set; } 
 }
 
-public class DtoFronten1dSettings
+public class DtoTemplate
 {
-    public List<DtoPropertyDescription> SettingsDescriptions { get; set; } = new();
-    public List<DtoPropertyInstance> Properties { get; set; } = new();
+    public string Name { get; set; }
 }
