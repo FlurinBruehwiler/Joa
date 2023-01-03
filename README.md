@@ -1,21 +1,21 @@
 # Joa
 
 Joa is a cross-platform command-palette for everything. It has similarities to Spotlight, Alfred and Powertoys Run. 
-For a detailed comparison on what makes Joa better than the alternatives, see [here](#Comoparison-to-alternatives). Joa is currently still in development, for a list of tasks that need to be done bevore Joa can release, see [here](#ToDo-for-1.0-release).
+For a detailed comparison on what makes Joa better than the alternatives, see [here](#comparison-to-alternatives). Joa is currently still in development, for a list of tasks that need to be done bevore Joa can release, see [here](#todo-for-10-release).
 
-# Features
+### Features
 - Cross-plattform (Windows, Mac, Linux)
 - Extensible via Plugins (C#)
 - UI can be replaced (The UI is also a plugin)
 - Search Results can act as "directories"
 - Completly free of charge and open source (MIT Licence)
 
-# Plugins
+### Plugins
 Joa offers a bunch a default plugins which cover the most common use cases. But you can also import plugins other people have created or even create your own. The Joa plugin api is very flexible and easy to use.
 
 The main purpose of plugins is to provide search result, but it is important to know that the ui itself is also a plugin. So if you dont like the default UI, you could theoretically create your own.
 
-# ToDo for 1.0 release
+### ToDo for 1.0 release
 Planned release date is the 29. April
 
 - Create documentation
@@ -25,7 +25,7 @@ Planned release date is the 29. April
 - Create release process
 - Implement settings ui
 
-# Comparison to alternatives
+### Comparison to alternatives
 todo
 
 ### Development
