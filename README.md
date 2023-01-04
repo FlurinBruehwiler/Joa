@@ -13,7 +13,7 @@ Joa is a cross-platform command-palette for everything. It has similarities to S
 For a detailed comparison on what makes Joa better than the alternatives, see [here](#comparison-to-alternatives). Joa is currently still in development, for a list of tasks that need to be done before Joa can release, see [here](#todo-for-10-release).
 
 ### Features
-- Cross-plattform (Windows, Mac, Linux)
+- Cross-platform (Windows, Mac, Linux)
 - Extensible via Plugins (C#)
 - UI can be replaced (The UI is also a plugin)
 - Search Results can act as "directories"
@@ -35,7 +35,7 @@ Planned release date is the 29. April
 - Implement settings ui
 
 ### Comparison to alternatives
-|               | Cross plattform | Free of charge        | Plugin support  | Open source | Customizable UI | Nested Search Results |
+|               | Cross platform | Free of charge        | Plugin support  | Open source | Customizable UI | Nested Search Results |
 |---------------|-----------------|-----------------------|-----------------|-------------|-----------------|-----------------------|
 | Spotlight     | MacOS           | Yes                   | No              | No          |                 |                       |
 | Alfred        | MacOS           | Yes (without plugins) | Yes (only paid) | No          |                 |                       |
