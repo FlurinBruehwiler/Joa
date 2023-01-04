@@ -35,7 +35,18 @@ Planned release date is the 29. April
 - Implement settings ui
 
 ### Comparison to alternatives
-todo
+|               | Cross plattform | Free of charge        | Plugin support  | Open source | Customizable UI | Nested Search Results |
+|---------------|-----------------|-----------------------|-----------------|-------------|-----------------|-----------------------|
+| Spotlight     | MacOS           | Yes                   | No              | No          |                 |                       |
+| Alfred        | MacOS           | Yes (without plugins) | Yes (only paid) | No          |                 |                       |
+| Raycast       | MacOS           | Yes                   | Yes             | No          |                 |                       |
+| Powertoys     | Windows         | Yes                   | No              | Yes         |                 |                       |
+| Fluent Search | Windows         | Yes                   | Yes             | No          |                 |                       |
+| Flow-Launcher | Windows         | Yes                   | Yes             | Yes         |                 |                       |
+| Cerebro       | Yes             | Yes                   | Yes             | Yes         |                 |                       |
+| Wox           | Windows         | Yes                   | Yes             | Yes         |                 |                       |
+| Keypirinha    | Windows         | Yes                   | Yes             | No          |                 |                       |
+| Joa           | Yes             | Yes                   | Yes             | Yes         | Yes             | Yes                   |
 
 ### Development
 Joa relies on the nuget package JoaLauncher.Api, which is hosted on two different platforms:
