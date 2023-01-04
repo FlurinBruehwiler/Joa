@@ -4,7 +4,6 @@ using JoaLauncher.Api;
 using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Joa.PluginCore;
 

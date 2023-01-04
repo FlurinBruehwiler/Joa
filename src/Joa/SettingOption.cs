@@ -1,5 +1,4 @@
 ﻿using JoaLauncher.Api;
-using Microsoft.Extensions.Options;
 
 namespace Joa;
 
