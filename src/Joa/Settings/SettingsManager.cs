@@ -2,7 +2,7 @@
 using Joa.PluginCore;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Injectables;
-using Microsoft.Extensions.Options;
+using LogLevel = JoaLauncher.Api.Injectables.LogLevel;
 
 namespace Joa.Settings;
 
@@ -16,6 +16,7 @@ public class SettingsManager
     
     public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager)
     {
+        logger.Info(nameof(SettingsManager));
         _pluginManager = pluginManager;
         _logger = logger;
         _fileSystemManager = fileSystemManager;
@@ -88,7 +89,7 @@ public class SettingsManager
         if (!newDtoSettings.Plugins.TryGetValue(pluginDefinition.PluginInfo.Name, out var newPlugin))
             return;
 
-        var x = newPlugin.Setting.Deserialize(pluginDefinition.Setting.GetType());
+        var x = newPlugin.Setting.Deserialize(pluginDefinition.Setting.GetType().GetGenericArguments().First());
 
         if (x is null)
         {

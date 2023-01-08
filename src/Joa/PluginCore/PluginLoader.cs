@@ -19,6 +19,7 @@ public class PluginLoader
     public PluginLoader(IJoaLogger logger, PluginServiceProvider pluginServiceProvider, 
         FileSystemManager fileSystemManager)
     {
+        logger.Info(nameof(PluginLoader));
         _logger = logger;
         _pluginServiceProvider = pluginServiceProvider;
         _fileSystemManager = fileSystemManager;
@@ -40,7 +41,7 @@ public class PluginLoader
 
         foreach (var pluginType in pluginTypes)
         {
-            var setting = pluginType.Setting is null ? new SettingOption(new EmptySetting()) : InstantiateSettings(pluginType.Setting);
+            var setting = pluginType.Setting is null ? new Options<ISetting>(new EmptySetting()) : InstantiateSettings(pluginType.Setting);
             var caches = InstantiateCaches(pluginType.Caches).ToList();
             var asyncCaches = InstantiateAsyncCaches(pluginType.AsyncCaches).ToList();
             var plugin = InstantiatePlugin(pluginType.Plugin!);
@@ -104,27 +105,32 @@ public class PluginLoader
         }
     }
 
-    private SettingOption InstantiateSettings(Type settingType)
+    private Options<ISetting> InstantiateSettings(Type settingType)
     {
         if (TryGetExistingObject<ISetting>(settingType, out var s))
-            return new SettingOption(s!);
+            return new Options<ISetting>(s!);
 
         if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, settingType) is not ISetting
             setting)
         {
             _logger.Error($"{settingType.Name} does not inherit from {nameof(ISetting)}");
-            return new SettingOption(new EmptySetting());
+            return new Options<ISetting>(new EmptySetting());
         }
 
         var settingOptionsType = typeof(IOptions<>).MakeGenericType(setting.GetType());
+        var settingInstanceOptionsType = typeof(Options<>).MakeGenericType(setting.GetType());
+
+        var instance = Activator.CreateInstance(settingInstanceOptionsType, setting);
         
         _instantiatedTypes.Add(settingType, setting);
-        _pluginServiceProvider.ServiceCollection.AddSingleton(settingOptionsType, new SettingOption(setting));
+        _pluginServiceProvider.ServiceCollection.AddSingleton(settingOptionsType, instance);
         _pluginServiceProvider.BuildServiceProvider();
 
-        return new SettingOption(setting);
+        return new Options<ISetting>(setting);
     }
 
+
+    
     private IEnumerable<ICache> InstantiateCaches(List<Type> cacheTypes)
     {
         foreach (var cacheType in cacheTypes)

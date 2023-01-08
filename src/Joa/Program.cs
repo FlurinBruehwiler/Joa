@@ -1,49 +1,78 @@
-﻿using Joa;
-using Joa.Hubs;
-using Joa.Injectables;
+﻿using Joa.Injectables;
 using Joa.PluginCore;
 using Joa.Settings;
-using Joa.Step;
+using Joa.UI;
 using JoaLauncher.Api.Injectables;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Photino.Blazor;
 
-var builder = WebApplication.CreateBuilder();
+namespace Joa;
 
-builder.Services.AddSignalR();
-
-builder.Services.AddCors(options =>
+public class Program
 {
-    options.AddDefaultPolicy(policyBuilder =>
+    [STAThread]
+    public static void Main(string[] args)
     {
-        policyBuilder.WithOrigins("http://127.0.0.1:5500", "http://localhost:3000", "http://localhost:1420")
-            .AllowAnyHeader()
-            .WithMethods("GET", "POST")
-            .AllowCredentials();
-    });
-});
+        IConfiguration configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables()
+            .AddCommandLine(args)
+            .Build();
+        
+        var serviceCollection = new ServiceCollection();
+        
+        serviceCollection.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
+        serviceCollection.AddSingleton<JoaManager>();
+        serviceCollection.AddSingleton<FileSystemManager>();
+        
+        serviceCollection.AddScoped<Search>();
+        serviceCollection.AddScoped<PluginManager>();
+        serviceCollection.AddScoped<PluginLoader>();
+        serviceCollection.AddScoped<SettingsManager>();
+        serviceCollection.AddScoped<PluginServiceProvider>();
+        
+        serviceCollection.Configure<PathsConfiguration>(configuration.GetSection("Paths"));
 
-builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
-builder.Services.AddSingleton<JoaManager>();
-builder.Services.AddScoped<Search>();
-builder.Services.AddScoped<PluginManager>();
-builder.Services.AddScoped<PluginLoader>();
-builder.Services.AddScoped<SettingsManager>();
-builder.Services.AddScoped<PluginServiceProvider>();
-builder.Services.AddScoped<StepsManager>();
-builder.Services.AddSingleton<FileSystemManager>();
-builder.Services.Configure<PathsConfiguration>(builder.Configuration.GetSection("Paths"));
-builder.Services.Configure<ReflectionConfiguration>(builder.Configuration.GetSection("Reflection"));
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        
+        var joaManager = serviceProvider.GetRequiredService<JoaManager>();
+        joaManager.NewScope();
+        
+        CreateWindow(serviceProvider);
+    }
+    
+    private static void CreateWindow(IServiceProvider serviceProvider)
+    {
+        var newAppBuilder = PhotinoBlazorAppBuilder.CreateDefault();
+        
+        newAppBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<IJoaLogger>());
+        newAppBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<JoaManager>());
+        newAppBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<FileSystemManager>());
 
-// builder.Services.AddHostedService<UiManagement>();
+        //ToDo
+        newAppBuilder.Services.AddLogging();
 
-var app = builder.Build();
+        newAppBuilder.RootComponents.Add<App>("app");
+        
+        var photinoBlazorApp = newAppBuilder.Build();
+        
+        photinoBlazorApp.MainWindow
+            .SetIconFile("favicon.ico")
+            .SetTitle("Joa")
+            .SetSize(600, 90)
+            .SetUseOsDefaultSize(false)
+            .SetResizable(false)
+            .SetChromeless(true);
 
-app.Services.GetRequiredService<JoaManager>();
+        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+        {
+            JoaLogger.GetInstance().Error(args.ExceptionObject.ToString());
+        };
+        
+        photinoBlazorApp.Run();
+    }
+}
 
 
-app.UseCors();
-app.MapHub<SearchHub>("/searchHub");
-app.MapHub<SettingsHub>("/settingsHub");
-
-app.Run(); 

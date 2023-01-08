@@ -1,13 +1,13 @@
 ﻿using JoaLauncher.Api;
 
 namespace Joa;
-
-public class SettingOption : IOptions<ISetting>
+public class Options<T> : IOptions<T> where T : class
 {
-    public SettingOption(ISetting value)
+    public Options(T value)
     {
         Value = value;
     }
 
-    public ISetting Value { get; set; }
+    public T Value { get; set; }
 }
+

@@ -14,6 +14,7 @@ public class PluginManager
     
     public PluginManager(PluginLoader pluginLoader, IJoaLogger logger)
     {
+        logger.Info(nameof(PluginManager));
         _pluginLoader = pluginLoader;
         _logger = logger;
         ReloadPlugins().GetAwaiter().GetResult();
@@ -34,11 +35,6 @@ public class PluginManager
         Plugins = _pluginLoader.ReloadPlugins();
         GlobalProviders = Plugins.SelectMany(x => x.GlobalProviders).ToList();
         await UpdateIndexesAsync();
-    }
-
-    public PluginDefinition GetPluginWithId(Guid id)
-    {
-        return Plugins.First(x => x.Id == id);
     }
 
     private async Task UpdateIndexesAsync()

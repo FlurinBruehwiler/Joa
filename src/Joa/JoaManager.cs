@@ -2,30 +2,31 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Joa.PluginCore;
+using Joa.UI;
 using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Photino.Blazor;
 
 namespace Joa;
 
 public class JoaManager : IDisposable
 {
-    private readonly IOptions<ReflectionConfiguration> _reflectionConfiguration;
     private readonly IServiceProvider _serviceProvider;
     private readonly IJoaLogger _joaLogger;
     private readonly FileSystemManager _fileSystemManager;
     public IServiceScope? CurrentScope { get; set; }
     private FileWatcher _fileWatcher;
 
-    public JoaManager(IOptions<ReflectionConfiguration> reflectionConfiguration,
-        IServiceProvider serviceProvider,IJoaLogger joaLogger, FileSystemManager fileSystemManager)
+    private const string AssemblyType = "System.Text.Json.JsonSerializerOptionsUpdateHandle";
+    private const string ClearCache = "ClearCache";
+
+    public JoaManager(IServiceProvider serviceProvider, IJoaLogger joaLogger, FileSystemManager fileSystemManager)
     {
-        _reflectionConfiguration = reflectionConfiguration;
+        joaLogger.Info(nameof(JoaManager));
         _serviceProvider = serviceProvider;
         _joaLogger = joaLogger;
         _fileSystemManager = fileSystemManager;
         _fileWatcher = new FileWatcher(fileSystemManager.GetPluginsLocation(), NewScope, 500);
-        NewScope();
     }
 
     public void NewScope()
@@ -48,9 +49,9 @@ public class JoaManager : IDisposable
             
             _fileWatcher = new FileWatcher(_fileSystemManager.GetPluginsLocation(), NewScope, 500);
         }
-
+        
         CurrentScope = _serviceProvider.CreateScope();
-
+        
         CurrentScope.ServiceProvider.GetService<Search>();
         _fileWatcher.Enable();
     }
@@ -67,8 +68,8 @@ public class JoaManager : IDisposable
             return null;
 
         var assembly = typeof(JsonSerializerOptions).Assembly;
-        var updateHandlerType = assembly.GetType(_reflectionConfiguration.Value.AssemblyType);
-        var clearCacheMethod = updateHandlerType?.GetMethod(_reflectionConfiguration.Value.ClearCache, BindingFlags.Static | BindingFlags.Public);
+        var updateHandlerType = assembly.GetType(AssemblyType);
+        var clearCacheMethod = updateHandlerType?.GetMethod(ClearCache, BindingFlags.Static | BindingFlags.Public);
         clearCacheMethod?.Invoke(null, new object?[] { null });
 
         var alcWeakRef = new WeakReference(asmLoadContext);
@@ -79,6 +80,8 @@ public class JoaManager : IDisposable
         asmLoadContext.Unload();
         return alcWeakRef;
     }
+    
+
 
     public void Dispose()
     {

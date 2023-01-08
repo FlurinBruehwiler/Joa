@@ -1,11 +1,10 @@
-﻿using Joa.Hubs;
-using Joa.PluginCore;
+﻿using Joa.PluginCore;
 using Joa.Settings;
 using Joa.Step;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Enums;
 using JoaLauncher.Api.Injectables;
-using Microsoft.AspNetCore.SignalR;
+using Photino.Blazor;
 using ExecutionContext = Joa.Step.ExecutionContext;
 
 namespace Joa;
@@ -14,51 +13,37 @@ public class Search
 {
     private readonly IJoaLogger _logger;
     private readonly PluginServiceProvider _pluginServiceProvider;
-    private readonly StepsManager _stepsManager;
-    private readonly IHubContext<SearchHub> _hubContext;
     private readonly SettingsManager _settingsManager;
 
-    public Search(IJoaLogger logger, PluginServiceProvider pluginServiceProvider, StepsManager stepsManager,
-        IHubContext<SearchHub> hubContext, SettingsManager settingsManager)
+    public Search(IJoaLogger logger, PluginServiceProvider pluginServiceProvider, SettingsManager settingsManager)
     {
+        logger.Info(nameof(Search));
         _logger = logger;
         _pluginServiceProvider = pluginServiceProvider;
-        _stepsManager = stepsManager;
-        _hubContext = hubContext;
         _settingsManager = settingsManager;
     }
 
-    public async Task ExecuteCommand(Guid resultId, string actionId)
+    public async Task<Step.Step?> ExecuteCommand(SearchResult searchResult, ContextAction contextAction)
     {
-        var pluginSearchResult = _stepsManager.GetCurrentStep().GetSearchResultFromId(resultId);
-
-        var contextAction = GetContextAction(actionId, pluginSearchResult);
-
-        if (contextAction is null)
-            return;
-
-        var executionContext = new ExecutionContext(pluginSearchResult)
+        var executionContext = new ExecutionContext(searchResult)
         {
             ContextAction = contextAction,
             ServiceProvider = _pluginServiceProvider.ServiceProvider
         };
 
-        await Task.Run(() => pluginSearchResult.Execute(executionContext));
+        await Task.Run(() => searchResult.Execute(executionContext));
 
-        if (executionContext.StepBuilder is null)
-            return;
-
-        _stepsManager.AddStep(executionContext.StepBuilder.Build());
+        return executionContext.StepBuilder?.Build();
     }
 
     //ToDo
-    public async Task UpdateSearchResults(string searchString)
+    public async Task<List<PluginSearchResult>> UpdateSearchResults(Step.Step step, string searchString)
     {
         using var _ = _logger.TimedOperation(nameof(UpdateSearchResults));
 
         _logger.Info($"SearchString: ${searchString}");
 
-        var results = _stepsManager.GetCurrentStep().GetSearchResults(searchString).Take(8).ToList();
+        var results = step.GetSearchResults(searchString).Take(8).ToList();
         
         foreach (var result in results)
         {
@@ -75,11 +60,6 @@ public class Search
             }
         }
 
-        await _hubContext.Clients.All.SendAsync("ReceiveSearchResults", searchString, results);
-    }
-
-    private ContextAction? GetContextAction(string actionId, SearchResult searchResult)
-    {
-        return searchResult.Actions?.SingleOrDefault(x => x.Id == actionId);
+        return results;
     }
 }
