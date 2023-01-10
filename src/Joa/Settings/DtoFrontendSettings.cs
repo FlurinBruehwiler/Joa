@@ -18,7 +18,7 @@ public class DtoField
 {
     public required Guid TemplateId { get; set; }
     //Could be either a primitive type or a list of fields
-    public required object Value { get; set; } 
+    public required object Value { get; set; }
 }
 
 public class DtoTemplate

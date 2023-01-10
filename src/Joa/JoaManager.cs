@@ -2,10 +2,8 @@
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Joa.PluginCore;
-using Joa.UI;
 using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
-using Photino.Blazor;
 
 namespace Joa;
 
@@ -46,12 +44,12 @@ public class JoaManager : IDisposable
                 _joaLogger.Error("Unloading failed");
             else
                 _joaLogger.Info("Unloading succeeded");
-            
+
             _fileWatcher = new FileWatcher(_fileSystemManager.GetPluginsLocation(), NewScope, 500);
         }
-        
+
         CurrentScope = _serviceProvider.CreateScope();
-        
+
         CurrentScope.ServiceProvider.GetService<Search>();
         _fileWatcher.Enable();
     }
@@ -80,7 +78,7 @@ public class JoaManager : IDisposable
         asmLoadContext.Unload();
         return alcWeakRef;
     }
-    
+
 
 
     public void Dispose()

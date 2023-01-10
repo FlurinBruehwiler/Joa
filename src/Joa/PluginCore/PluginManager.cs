@@ -11,7 +11,7 @@ public class PluginManager
 
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
-    
+
     public PluginManager(PluginLoader pluginLoader, IJoaLogger logger)
     {
         logger.Info(nameof(PluginManager));
@@ -24,12 +24,12 @@ public class PluginManager
     {
         return GetPluginDefinitionsOfType<T>().Select(x => (T)x.Plugin).ToList();
     }
-    
+
     private List<PluginDefinition> GetPluginDefinitionsOfType<T>() where T : IPlugin
     {
         return Plugins.Where(x => x.Plugin is T).ToList();
     }
-    
+
     public async Task ReloadPlugins()
     {
         Plugins = _pluginLoader.ReloadPlugins();
@@ -50,7 +50,7 @@ public class PluginManager
                 _logger.LogException(e, $"Updating the index for cache {cache.GetType().Name} failed");
             }
         }
-        
+
         foreach (var asyncCache in Plugins.SelectMany(x => x.AsyncCaches))
         {
             try

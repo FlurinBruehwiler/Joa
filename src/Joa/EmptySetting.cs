@@ -4,5 +4,5 @@ namespace Joa;
 
 public class EmptySetting : ISetting
 {
-    
+
 }

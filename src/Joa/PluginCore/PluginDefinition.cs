@@ -16,7 +16,7 @@ public class PluginDefinition
     public required List<ICache> Caches { get; set; }
     public required List<IAsyncCache> AsyncCaches { get; set; }
     public ClassInstance SettingConfiguration { get; set; }
-    
+
     public PluginDefinition(Options<ISetting> setting)
     {
         Id = Guid.NewGuid();

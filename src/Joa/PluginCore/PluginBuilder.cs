@@ -21,7 +21,7 @@ public class PluginBuilder : IPluginBuilder
         _joaLogger = joaLogger;
         _pluginServiceProvider = pluginServiceProvider;
     }
-    
+
     private readonly List<(Type, Func<string, bool>?)> _providers = new();
     private readonly List<SearchResult> _searchResults = new();
 
@@ -46,10 +46,10 @@ public class PluginBuilder : IPluginBuilder
     public PluginDefinition BuildPluginDefinition(IPlugin plugin, Options<ISetting> setting, List<ICache> caches, List<IAsyncCache> asyncCaches)
     {
         var pluginInfos = GetPluginInfos(plugin.GetType());
-        
+
         if (pluginInfos is null)
             throw new Exception("Error while Building Plugin Definition");
-        
+
         plugin.ConfigurePlugin(this);
 
         var globalProviders = InstantiateGlobalProviders().ToList();
@@ -66,7 +66,7 @@ public class PluginBuilder : IPluginBuilder
         };
     }
 
-    
+
     private IEnumerable<ProviderWrapper> InstantiateGlobalProviders()
     {
         foreach (var (providerType, condition) in _providers)
@@ -78,7 +78,7 @@ public class PluginBuilder : IPluginBuilder
             {
                 searchResultProvider = provider ?? throw new Exception();
             }
-            
+
             yield return new ProviderWrapper
             {
                 Condition = condition,
@@ -93,20 +93,20 @@ public class PluginBuilder : IPluginBuilder
         {
             SearchResults = _searchResults
         };
-        
+
         providers.Add(new ProviderWrapper
         {
             Provider = genericSearchResultProvider
         });
     }
-    
+
 
     //ToDo should throw Exception
     private PluginAttribute? GetPluginInfos(MemberInfo pluginType)
     {
         if (Attribute.GetCustomAttributes(pluginType).FirstOrDefault(x => x is PluginAttribute) is PluginAttribute pluginAttribute)
             return pluginAttribute;
-        
+
         _joaLogger.Log($"The plugin {pluginType.Name} does not have the PluginAttribute", LogLevel.Error);
         return null;
     }

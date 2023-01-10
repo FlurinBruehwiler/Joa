@@ -1,10 +1,8 @@
 ﻿using Joa.PluginCore;
 using Joa.Settings;
-using Joa.Step;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Enums;
 using JoaLauncher.Api.Injectables;
-using Photino.Blazor;
 using ExecutionContext = Joa.Step.ExecutionContext;
 
 namespace Joa;
@@ -44,7 +42,7 @@ public class Search
         _logger.Info($"SearchString: ${searchString}");
 
         var results = step.GetSearchResults(searchString).Take(8).ToList();
-        
+
         foreach (var result in results)
         {
             result.SearchResult.Actions ??= new List<ContextAction>();

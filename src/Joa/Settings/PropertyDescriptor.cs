@@ -25,7 +25,7 @@ public class ClassDescription
             PropertyInfo = x
         }).ToList();
     }
-    
+
     public List<PropertyDescription> PropertyDescriptions { get; set; }
 }
 
@@ -40,7 +40,7 @@ public class PropertyInstance
     }
 
     public PropertyDescription PropertyDescription { get; set; }
-    
+
     public void SetValue(object value)
     {
         PropertyDescription.PropertyInfo.SetValue(_instance, value);
@@ -58,7 +58,7 @@ public class ListPropertyInstance : PropertyInstance
     private readonly ListPropertyDescription _propertyDescription;
 
     public List<ClassInstance> Items { get; set; } = new();
-    
+
     public ListPropertyInstance(object instance, ListPropertyDescription propertyDescription) : base(instance, propertyDescription)
     {
         _instance = instance;
@@ -77,11 +77,11 @@ public class ListPropertyInstance : PropertyInstance
     {
         return (IList)GetValue();
     }
-    
+
     public object AddItem()
     {
         var newItem = Activator.CreateInstance(_propertyDescription.GenericType) ?? throw new Exception("Could not create Instance");
-        _propertyDescription.AddMethod.Invoke( _propertyDescription.PropertyInfo.GetValue(_instance), new[] { newItem });
+        _propertyDescription.AddMethod.Invoke(_propertyDescription.PropertyInfo.GetValue(_instance), new[] { newItem });
         return newItem;
     }
 }
@@ -90,16 +90,16 @@ public class ClassInstance
 {
     public ClassDescription ClassDescription { get; set; }
     public List<PropertyInstance> PropertyInstances { get; set; } = new();
-    
+
     public ClassInstance(object instance, ClassDescription classDescription)
     {
         ClassDescription = classDescription;
-        
+
         var addMethod = typeof(List<>).GetMethod("Add");
 
         if (addMethod is null)
             throw new UnreachableException();
-        
+
         foreach (var propertyInfo in instance.GetType().GetProperties())
         {
             if (propertyInfo.PropertyType.IsAssignableTo(typeof(List<>)))
@@ -113,7 +113,7 @@ public class ClassInstance
                 ClassDescription.PropertyDescriptions.Add(pd);
                 PropertyInstances.Add(new ListPropertyInstance(instance, pd));
             }
-            
+
             if (propertyInfo.PropertyType.IsPrimitive || propertyInfo.PropertyType == typeof(decimal) || propertyInfo.PropertyType == typeof(string))
             {
                 var pd = new PropertyDescription

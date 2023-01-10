@@ -12,14 +12,14 @@ public class FileWatcher
     private readonly FileSystemWatcher _watcher;
     private bool _isDisabled;
     private int _numberOfQuedUpChanges;
-    
+
     public FileWatcher(string path, Action callback, int delay = 0)
     {
         _isDisabled = false;
         _callback = callback;
         _delay = delay;
         _swSinceLastChanged = Stopwatch.StartNew();
-        
+
         var directory = path;
         string? file = null;
 
@@ -28,7 +28,7 @@ public class FileWatcher
             directory = Directory.GetParent(path)?.FullName ?? throw new Exception();
             file = path;
         }
-        
+
         _watcher = new FileSystemWatcher(directory);
         _watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime;
         _watcher.Changed += OnChanged;
@@ -36,8 +36,8 @@ public class FileWatcher
         {
             JoaLogger.GetInstance().Error(args.GetException().Message);
         };
-        
-        if(file is not null)
+
+        if (file is not null)
             _watcher.Filter = Path.GetFileName(file);
 
         _watcher.IncludeSubdirectories = true;
@@ -48,7 +48,7 @@ public class FileWatcher
     {
         return (File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory;
     }
-    
+
     public void Disable()
     {
         _isDisabled = true;
@@ -61,7 +61,7 @@ public class FileWatcher
             _isDisabled = false;
         });
     }
-    
+
     private void OnChanged(object sender, FileSystemEventArgs e)
     {
         var timeSinceLastChange = _swSinceLastChanged.ElapsedMilliseconds;
@@ -73,11 +73,11 @@ public class FileWatcher
             return;
 
         _numberOfQuedUpChanges++;
-        
+
         Task.Delay(new TimeSpan(0, 0, 0, 0, _delay)).ContinueWith(_ =>
         {
             _numberOfQuedUpChanges--;
-            if(_numberOfQuedUpChanges == 0)
+            if (_numberOfQuedUpChanges == 0)
                 _callback();
         });
     }

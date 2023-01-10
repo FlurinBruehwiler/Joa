@@ -15,7 +15,7 @@ public class UiManagement : IHostedService
         _pluginManager = pluginManager;
         _logger = logger;
     }
-    
+
     public Task StartAsync(CancellationToken cancellationToken)
     {
 
@@ -30,7 +30,7 @@ public class UiManagement : IHostedService
                 _logger.Error($"Error while trying to start the following UI Plugin {x.GetType().Assembly.Location}");
             }
         });
-        
+
         return Task.CompletedTask;
     }
 
@@ -47,7 +47,7 @@ public class UiManagement : IHostedService
                 _logger.Error($"Error while trying to start the following UI Plugin {x.GetType().Assembly.Location}");
             }
         });
-        
+
         return Task.CompletedTask;
     }
 }

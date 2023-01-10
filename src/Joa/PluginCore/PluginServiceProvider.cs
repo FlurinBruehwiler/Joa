@@ -7,9 +7,9 @@ namespace Joa.PluginCore;
 public class PluginServiceProvider
 {
     public IServiceProvider ServiceProvider { get; set; }
-    
+
     public ServiceCollection ServiceCollection { get; set; }
-    
+
     public PluginServiceProvider(IJoaLogger joaLogger)
     {
         joaLogger.Info(nameof(PluginServiceProvider));

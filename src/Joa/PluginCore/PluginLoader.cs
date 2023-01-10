@@ -16,7 +16,7 @@ public class PluginLoader
 
     public AssemblyLoadContext? AssemblyLoadContext { get; private set; }
 
-    public PluginLoader(IJoaLogger logger, PluginServiceProvider pluginServiceProvider, 
+    public PluginLoader(IJoaLogger logger, PluginServiceProvider pluginServiceProvider,
         FileSystemManager fileSystemManager)
     {
         logger.Info(nameof(PluginLoader));
@@ -29,11 +29,11 @@ public class PluginLoader
     {
         var pluginsFinalLocation = _fileSystemManager.GetPluginsFinalLocation();
         var pluginsLocation = _fileSystemManager.GetPluginsLocation();
-        
+
         ClearPluginsFinalLocation(pluginsFinalLocation);
         _logger.Info($"Moving plugins from {pluginsLocation} to {pluginsFinalLocation}");
         MovePluginDllsToCopyLocation(pluginsLocation, pluginsFinalLocation);
-        
+
         List<PluginDefinition> pluginDefinitions = new();
         _instantiatedTypes = new Dictionary<Type, object>();
         var assemblies = LoadAssemblies(GetPluginDllPaths(pluginsFinalLocation));
@@ -53,7 +53,7 @@ public class PluginLoader
 
         return pluginDefinitions;
     }
-    
+
     public bool TryGetExistingObject<T>(Type type, out T? obj) where T : class
     {
         if (_instantiatedTypes.TryGetValue(type, out var x))
@@ -121,7 +121,7 @@ public class PluginLoader
         var settingInstanceOptionsType = typeof(Options<>).MakeGenericType(setting.GetType());
 
         var instance = Activator.CreateInstance(settingInstanceOptionsType, setting);
-        
+
         _instantiatedTypes.Add(settingType, setting);
         _pluginServiceProvider.ServiceCollection.AddSingleton(settingOptionsType, instance);
         _pluginServiceProvider.BuildServiceProvider();
@@ -130,7 +130,7 @@ public class PluginLoader
     }
 
 
-    
+
     private IEnumerable<ICache> InstantiateCaches(List<Type> cacheTypes)
     {
         foreach (var cacheType in cacheTypes)
@@ -153,7 +153,7 @@ public class PluginLoader
 
         _pluginServiceProvider.BuildServiceProvider();
     }
-    
+
     private IEnumerable<IAsyncCache> InstantiateAsyncCaches(List<Type> asyncCacheTypes)
     {
         foreach (var cacheType in asyncCacheTypes)
@@ -205,7 +205,7 @@ public class PluginLoader
 
             if (typeof(ICache).IsAssignableFrom(type))
                 pluginTypes.Caches.Add(type);
-            
+
             if (typeof(IAsyncCache).IsAssignableFrom(type))
                 pluginTypes.AsyncCaches.Add(type);
 

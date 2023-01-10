@@ -8,7 +8,7 @@ public class TimedLogOperation : IDisposable
     private readonly IJoaLogger _logger;
     private readonly string _message;
     private readonly Stopwatch _stopwatch;
-    
+
     public TimedLogOperation(IJoaLogger logger, string message)
     {
         _logger = logger;

@@ -10,7 +10,7 @@ public class ExecutionContext : IExecutionContext
     {
         _pluginSearchResult = pluginSearchResult;
     }
-    
+
     public required ContextAction ContextAction { get; set; }
     public required IServiceProvider ServiceProvider { get; set; }
     public StepBuilder? StepBuilder { get; set; }

@@ -15,12 +15,12 @@ public class FileSystemManager
     {
         return CreateDirectoryIfNotExists(_config.Value.PluginLocation);
     }
-    
+
     public string GetPluginsFinalLocation()
     {
         return CreateDirectoryIfNotExists(_config.Value.PluginsFinalLocation);
     }
-    
+
     public string GetSettingsLocation()
     {
         return CreateFileIfNotExists(_config.Value.SettingsLocation);
@@ -33,7 +33,7 @@ public class FileSystemManager
 
         return path;
     }
-    
+
     private string CreateFileIfNotExists(string path)
     {
         if (!File.Exists(path))

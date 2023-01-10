@@ -13,7 +13,7 @@ public class SettingsManager
     private readonly FileSystemManager _fileSystemManager;
     private readonly JsonSerializerOptions _options;
     private readonly FileWatcher _fileWatcher;
-    
+
     public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager)
     {
         logger.Info(nameof(SettingsManager));
@@ -24,17 +24,17 @@ public class SettingsManager
         {
             WriteIndented = true
         };
-        _fileWatcher = new FileWatcher(fileSystemManager.GetSettingsLocation() ,Sync);
+        _fileWatcher = new FileWatcher(fileSystemManager.GetSettingsLocation(), Sync);
         Sync();
     }
-    
+
     private void Sync()
     {
         _logger.Log("Synchronizing the settings.", LogLevel.Info);
         UpdateSettingsFromJson();
         SaveSettingsToJson();
     }
-    
+
     private void SaveSettingsToJson()
     {
         _fileWatcher.Disable();
