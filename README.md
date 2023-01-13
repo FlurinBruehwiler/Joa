@@ -30,7 +30,7 @@ Planned release date is the 29. April
 - Create documentation
 - Create landing page
 - Create more default plugins
-- Imlement a way to specify a Github repository as a plugin source and add automatic updates
+- Implement a way to specify a Github repository as a plugin source and add automatic updates
 - Create release process
 - Implement settings ui
 
