@@ -25,7 +25,7 @@ Joa offers a bunch a default plugins which cover the most common use cases. But 
 The main purpose of plugins is to provide search result, but it is important to know that the ui itself is also a plugin. So if you dont like the default UI, you could theoretically create your own.
 
 ### ToDo for 1.0 release
-Planned release date is the 29. April
+Planned release date is the 29. April 2023
 
 - Create documentation
 - Create landing page
