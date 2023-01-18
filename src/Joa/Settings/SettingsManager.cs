@@ -31,7 +31,7 @@ public class SettingsManager
     private void Sync()
     {
         _logger.Log("Synchronizing the settings.", LogLevel.Info);
-        UpdateSettingsFromJson();
+        //UpdateSettingsFromJson();
         SaveSettingsToJson();
     }
 
@@ -67,6 +67,7 @@ public class SettingsManager
             var jsonString = File.ReadAllText(_fileSystemManager.GetSettingsLocation());
             if (string.IsNullOrEmpty(jsonString))
                 return;
+            
             var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);
             if (result is null)
                 throw new JsonException();
@@ -89,14 +90,7 @@ public class SettingsManager
         if (!newDtoSettings.Plugins.TryGetValue(pluginDefinition.PluginInfo.Name, out var newPlugin))
             return;
 
-        var x = newPlugin.Setting.Deserialize(pluginDefinition.Setting.GetType().GetGenericArguments().First());
-
-        if (x is null)
-        {
-            _logger.Error("Something went wrong while reading the settings");
-            return;
-        }
-
-        pluginDefinition.Setting.Value = (ISetting)x;
+        JsonSerializerExt.PopulateObject(newPlugin.Setting, pluginDefinition.Setting.GetType(),
+            pluginDefinition.Setting);
     }
 }

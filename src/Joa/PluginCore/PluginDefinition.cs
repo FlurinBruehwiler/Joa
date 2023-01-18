@@ -12,15 +12,15 @@ public class PluginDefinition
     public required IPlugin Plugin { get; set; }
     public required PluginAttribute PluginInfo { get; set; }
     public required List<ProviderWrapper> GlobalProviders { get; set; }
-    public Options<ISetting> Setting { get; set; }
+    public ISetting Setting { get; set; }
     public required List<ICache> Caches { get; set; }
     public required List<IAsyncCache> AsyncCaches { get; set; }
     public ClassInstance SettingConfiguration { get; set; }
 
-    public PluginDefinition(Options<ISetting> setting)
+    public PluginDefinition(ISetting setting)
     {
         Id = Guid.NewGuid();
         Setting = setting;
-        SettingConfiguration = new ClassInstance(setting.Value, new ClassDescription(setting.Value.GetType()));
+        SettingConfiguration = new ClassInstance(setting, new ClassDescription(setting.GetType()));
     }
 }

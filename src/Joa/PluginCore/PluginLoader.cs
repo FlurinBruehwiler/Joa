@@ -41,7 +41,7 @@ public class PluginLoader
 
         foreach (var pluginType in pluginTypes)
         {
-            var setting = pluginType.Setting is null ? new Options<ISetting>(new EmptySetting()) : InstantiateSettings(pluginType.Setting);
+            var setting = pluginType.Setting is null ? new EmptySetting() : InstantiateSettings(pluginType.Setting);
             var caches = InstantiateCaches(pluginType.Caches).ToList();
             var asyncCaches = InstantiateAsyncCaches(pluginType.AsyncCaches).ToList();
             var plugin = InstantiatePlugin(pluginType.Plugin!);
@@ -105,28 +105,23 @@ public class PluginLoader
         }
     }
 
-    private Options<ISetting> InstantiateSettings(Type settingType)
+    private ISetting InstantiateSettings(Type settingType)
     {
         if (TryGetExistingObject<ISetting>(settingType, out var s))
-            return new Options<ISetting>(s!);
+            return s!;
 
         if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, settingType) is not ISetting
             setting)
         {
             _logger.Error($"{settingType.Name} does not inherit from {nameof(ISetting)}");
-            return new Options<ISetting>(new EmptySetting());
+            return new EmptySetting();
         }
-
-        var settingOptionsType = typeof(IOptions<>).MakeGenericType(setting.GetType());
-        var settingInstanceOptionsType = typeof(Options<>).MakeGenericType(setting.GetType());
-
-        var instance = Activator.CreateInstance(settingInstanceOptionsType, setting);
-
+        
         _instantiatedTypes.Add(settingType, setting);
-        _pluginServiceProvider.ServiceCollection.AddSingleton(settingOptionsType, instance);
+        _pluginServiceProvider.ServiceCollection.AddSingleton(setting.GetType(), setting);
         _pluginServiceProvider.BuildServiceProvider();
 
-        return new Options<ISetting>(setting);
+        return setting;
     }
 
 

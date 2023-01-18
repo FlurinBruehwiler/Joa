@@ -43,7 +43,7 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
-    public PluginDefinition BuildPluginDefinition(IPlugin plugin, Options<ISetting> setting, List<ICache> caches, List<IAsyncCache> asyncCaches)
+    public PluginDefinition BuildPluginDefinition(IPlugin plugin, ISetting setting, List<ICache> caches, List<IAsyncCache> asyncCaches)
     {
         var pluginInfos = GetPluginInfos(plugin.GetType());
 
