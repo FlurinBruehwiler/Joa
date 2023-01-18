@@ -47,6 +47,7 @@ Planned release date is the 29. April 2023
 | Wox           | Windows         | Yes                   | Yes             | Yes         |                 |                       |
 | Keypirinha    | Windows         | Yes                   | Yes             | No          |                 |                       |
 | Ueli          | Windows, MacOS  | Yes                   | No              | Yes         | Yes                | No                       |
+| Script Kit    |          |                    |              |           |                 |                       |
 | Joa           | Yes             | Yes                   | Yes             | Yes         | Yes             | Yes                   |
 
 ### Development
