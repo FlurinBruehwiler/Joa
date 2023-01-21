@@ -15,7 +15,7 @@ For a detailed comparison on what makes Joa better than the alternatives, see [h
 ### Features
 - Cross-platform (Windows, Mac, Linux)
 - Extensible via Plugins (C#)
-- UI can be replaced (The UI is also a plugin)
+- UI can be customized
 - Search Results can act as "directories"
 - Completly free of charge and open source (MIT Licence)
 
