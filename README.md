@@ -30,7 +30,7 @@ Planned release date is the 29. April 2023
 - Create more default plugins
 - Implement a way to specify a Github repository as a plugin source and add automatic updates
 - Create release process
-- Implement settings ui
+- Implement settings UI
 
 ### Comparison to alternatives
 |               | Cross platform | Free of charge        | Plugin support  | Open source | Customizable UI | Nested Search Results |
@@ -76,5 +76,5 @@ Joa relies on the nuget package JoaLauncher.Api, which is hosted on two differen
         </packageSourceMapping>
     </configuration>
     ```
-    4. Replace USERNAME with your username
+    4. Replace USERNAME with your Github username
     5. Replace TOKEN with the token from step 1
