@@ -22,8 +22,6 @@ For a detailed comparison on what makes Joa better than the alternatives, see [h
 ### Plugins
 Joa offers a bunch a default plugins which cover the most common use cases. But you can also import plugins other people have created or even create your own. The Joa plugin api is very flexible and easy to use.
 
-The main purpose of plugins is to provide search result, but it is important to know that the ui itself is also a plugin. So if you dont like the default UI, you could theoretically create your own.
-
 ### ToDo for 1.0 release
 Planned release date is the 29. April 2023
 
