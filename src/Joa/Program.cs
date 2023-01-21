@@ -64,6 +64,7 @@ public class Program
             .SetSize(600, 90)
             .SetUseOsDefaultSize(false)
             .SetResizable(false)
+            .SetMinimized(true)
             .SetChromeless(true);
 
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>

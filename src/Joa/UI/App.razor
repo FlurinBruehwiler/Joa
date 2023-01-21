@@ -3,6 +3,7 @@
 @using Joa.Step
 @using JoaLauncher.Api
 @using Photino.Blazor
+@using Joa.Hotkey
 @inject JoaManager JoaManager
 @inject PhotinoBlazorApp PhotinoBlazorApp 
 
@@ -53,6 +54,9 @@
             Name = "Global Step",
             Options = new StepOptions()
         });
+
+        HotKeyHelper.RegisterHotKey(() => PhotinoBlazorApp.MainWindow.SetMaximized(true), Key.P, Modifier.Alt);
+        
         base.OnInitialized();
     }
 
@@ -66,7 +70,7 @@
         _input = args.Value?.ToString() ?? string.Empty;
 
         var results = await GetRequiredService<Search>().UpdateSearchResults(_steps.Peek(), _input);
-        
+
         _searchResults = results;
         _activeIndex = 0;
         SearchResultsHaveChanged();
@@ -104,7 +108,7 @@
             foreach (var action in _searchResults[_activeIndex].SearchResult.Actions!.Where(action => action.Id == args.Key))
             {
                 var newStep = await GetRequiredService<Search>().ExecuteCommand(_searchResults[_activeIndex].SearchResult, action);
-                if(newStep is not null)
+                if (newStep is not null)
                     _steps.Push(newStep);
                 else
                     ClearSteps();

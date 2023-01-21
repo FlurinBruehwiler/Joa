@@ -31,7 +31,7 @@ public class SettingsManager
     private void Sync()
     {
         _logger.Log("Synchronizing the settings.", LogLevel.Info);
-        //UpdateSettingsFromJson();
+        UpdateSettingsFromJson();
         SaveSettingsToJson();
     }
 
@@ -90,7 +90,6 @@ public class SettingsManager
         if (!newDtoSettings.Plugins.TryGetValue(pluginDefinition.PluginInfo.Name, out var newPlugin))
             return;
 
-        JsonSerializerExt.PopulateObject(newPlugin.Setting, pluginDefinition.Setting.GetType(),
-            pluginDefinition.Setting);
+        JsonUtilities.PopulateObject(newPlugin.Setting, pluginDefinition.Setting);
     }
 }
