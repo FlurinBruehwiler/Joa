@@ -10,14 +10,14 @@ public class HotKeyHelper
 
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint virtualKeyCode);
+    private static extern bool RegisterHotKey(nint hWnd, int id, uint fsModifiers, uint virtualKeyCode);
 
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+    private static extern bool UnregisterHotKey(nint hWnd, int id);
 
     [DllImport("user32.dll", SetLastError = true)]
-    private static extern int GetMessage(out Msg lpMsg, IntPtr hWnd, uint wMsgFilterMin,
+    private static extern int GetMessage(out Msg lpMsg, nint hWnd, uint wMsgFilterMin,
         uint wMsgFilterMax);
 
     public static void RegisterHotKey(Action callback, Key key, params Modifier[] modifierList)
@@ -29,7 +29,7 @@ public class HotKeyHelper
 
     private static void ListenForHotKey(HotKeyThreadParameter parameter)
     {
-        if (!RegisterHotKey(IntPtr.Zero, HotKeyId, parameter.Modifiers, parameter.Key))
+        if (!RegisterHotKey(nint.Zero, HotKeyId, parameter.Modifiers, parameter.Key))
         {
             JoaLogger.GetInstance().Info("Error while registering hotkeys");
             return;
@@ -37,7 +37,7 @@ public class HotKeyHelper
         JoaLogger.GetInstance().Info("Registered Hotkey");
 
         int status;
-        while ((status = GetMessage(out var msg, IntPtr.Zero, 0, 0)) != 0)
+        while ((status = GetMessage(out var msg, nint.Zero, 0, 0)) != 0)
         {
             if (status == -1)
             {

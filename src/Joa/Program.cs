@@ -54,7 +54,7 @@ public class Program
         //ToDo
         newAppBuilder.Services.AddLogging();
 
-        newAppBuilder.RootComponents.Add<App>("app");
+        newAppBuilder.RootComponents.Add<SearchWrapper>("app");
 
         var photinoBlazorApp = newAppBuilder.Build();
 

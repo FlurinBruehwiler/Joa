@@ -4,8 +4,11 @@
 @using JoaLauncher.Api
 @using Photino.Blazor
 @using Joa.Hotkey
+@using Joa.Injectables
+@using JoaLauncher.Api.Injectables
 @inject JoaManager JoaManager
 @inject PhotinoBlazorApp PhotinoBlazorApp 
+@implements IDisposable
 
 <div class="searchBox">
     <svg class="searchIcon" xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +47,7 @@
     private string _input = string.Empty;
     private int _activeIndex;
     private List<PluginSearchResult> _searchResults = new();
-    private readonly Stack<Step> _steps = new();
+    private Stack<Step> _steps = new();
 
     protected override void OnInitialized()
     {
@@ -55,10 +58,12 @@
             Options = new StepOptions()
         });
 
-        HotKeyHelper.RegisterHotKey(() => PhotinoBlazorApp.MainWindow.SetMaximized(true), Key.P, Modifier.Alt);
+        // HotKeyHelper.RegisterHotKey(() => PhotinoBlazorApp.MainWindow.SetMaximized(true), Key.P, Modifier.Alt);
         
         base.OnInitialized();
     }
+    
+    
 
     private T GetRequiredService<T>()
     {
@@ -131,5 +136,13 @@
         {
             _steps.Pop();
         }
+    }
+
+    public void Dispose()
+    {
+        JoaLogger.GetInstance().Info("disposing ui");
+        _input = string.Empty;
+        _searchResults = null;
+        _steps = null;
     }
 }

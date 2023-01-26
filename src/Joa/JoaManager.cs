@@ -15,9 +15,12 @@ public class JoaManager : IDisposable
     public IServiceScope? CurrentScope { get; set; }
     private FileWatcher _fileWatcher;
 
-    private const string AssemblyType = "System.Text.Json.JsonSerializerOptionsUpdateHandle";
+    private const string AssemblyType = "System.Text.Json.JsonSerializerOptionsUpdateHandler";
     private const string ClearCache = "ClearCache";
 
+    public Action? HideUi { get; set; }
+    public Action? ShowUi { get; set; }
+    
     public JoaManager(IServiceProvider serviceProvider, IJoaLogger joaLogger, FileSystemManager fileSystemManager)
     {
         joaLogger.Info(nameof(JoaManager));
@@ -50,6 +53,8 @@ public class JoaManager : IDisposable
 
         CurrentScope = _serviceProvider.CreateScope();
 
+        ShowUi?.Invoke();
+
         CurrentScope.ServiceProvider.GetService<Search>();
         _fileWatcher.Enable();
     }
@@ -74,6 +79,8 @@ public class JoaManager : IDisposable
 
         CurrentScope.Dispose();
         CurrentScope = null;
+
+        HideUi?.Invoke();
 
         asmLoadContext.Unload();
         return alcWeakRef;
