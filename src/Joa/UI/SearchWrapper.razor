@@ -15,20 +15,26 @@ else
 
     protected override void OnInitialized()
     {
-        JoaManager.ShowUi = () =>
+        JoaManager.ShowUi = async () =>
         {
-            _showSearch = true;
-            JoaLogger.GetInstance().Info("showing ui");
-            InvokeAsync(StateHasChanged);
+            await InvokeAsync(() =>
+            {
+                _showSearch = true;
+                JoaLogger.GetInstance().Info("hiding ui");
+                StateHasChanged();
+            });
         };
 
-        JoaManager.HideUi = () =>
+        JoaManager.HideUi = async () =>
         {
-            _showSearch = false;
-            JoaLogger.GetInstance().Info("hiding ui");
-            InvokeAsync(StateHasChanged);
+            await InvokeAsync(() =>
+            {
+                _showSearch = false;
+                JoaLogger.GetInstance().Info("hiding ui");
+                StateHasChanged();
+            });
         };
-        
+
         base.OnInitialized();
     }
 
