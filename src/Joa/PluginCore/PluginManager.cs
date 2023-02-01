@@ -11,12 +11,14 @@ public class PluginManager
 
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
+    private readonly BuiltInProvider _builtInProvider;
 
-    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger)
+    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, BuiltInProvider builtInProvider)
     {
         logger.Info(nameof(PluginManager));
         _pluginLoader = pluginLoader;
         _logger = logger;
+        _builtInProvider = builtInProvider;
         ReloadPlugins().GetAwaiter().GetResult();
     }
 
@@ -34,6 +36,10 @@ public class PluginManager
     {
         Plugins = _pluginLoader.ReloadPlugins();
         GlobalProviders = Plugins.SelectMany(x => x.GlobalProviders).ToList();
+        GlobalProviders.Add(new ProviderWrapper
+        {
+            Provider = _builtInProvider
+        });
         await UpdateIndexesAsync();
     }
 

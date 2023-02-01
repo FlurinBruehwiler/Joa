@@ -22,7 +22,7 @@ public class HotKeyHelper
 
     public static void RegisterHotKey(Action callback, Key key, params Modifier[] modifierList)
     {
-        var modifiers = modifierList.Aggregate<Modifier, uint>(0, (current, modifier) => current | (uint) modifier);
+        var modifiers = modifierList.Aggregate<Modifier, uint>(0, (current, modifier) => current | (uint)modifier);
 
         Task.Run(() => ListenForHotKey(new HotKeyThreadParameter(callback, modifiers, (uint)key)));
     }
@@ -48,7 +48,7 @@ public class HotKeyHelper
             if (msg.Message != WmHotkey)
                 continue;
 
-            if((int)msg.WParam != HotKeyId)
+            if ((int)msg.WParam != HotKeyId)
                 continue;
 
             JoaLogger.GetInstance().Info("Received Hotkey");

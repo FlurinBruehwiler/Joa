@@ -18,9 +18,9 @@ public class JoaManager : IDisposable
     private const string AssemblyType = "System.Text.Json.JsonSerializerOptionsUpdateHandler";
     private const string ClearCache = "ClearCache";
 
-    public Func<Task>? HideUi { get; set; }
-    public Func<Task>? ShowUi { get; set; }
-    
+    public Func<bool, Task>? ShowUi { get; set; }
+    public Func<Action, Task> ExecuteOnUiThread { get; set; }
+
     public JoaManager(IServiceProvider serviceProvider, IJoaLogger joaLogger, FileSystemManager fileSystemManager)
     {
         joaLogger.Info(nameof(JoaManager));
@@ -52,12 +52,12 @@ public class JoaManager : IDisposable
         }
 
         CurrentScope = _serviceProvider.CreateScope();
-        
+
         CurrentScope.ServiceProvider.GetService<Search>();
 
         _fileWatcher.Enable();
-        
-        ShowUi?.Invoke().GetAwaiter().GetResult();
+
+        ShowUi?.Invoke(true).GetAwaiter().GetResult();
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
@@ -81,7 +81,7 @@ public class JoaManager : IDisposable
         CurrentScope.Dispose();
         CurrentScope = null;
 
-        HideUi?.Invoke().GetAwaiter().GetResult();
+        ShowUi?.Invoke(false).GetAwaiter().GetResult();
 
         asmLoadContext.Unload();
         return alcWeakRef;

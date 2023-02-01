@@ -27,9 +27,9 @@ public static class JsonUtilities
             {
                 typeInfo.CreateObject = () =>
                 {
-                    if (_isRootResolved) 
+                    if (_isRootResolved)
                         return Activator.CreateInstance(type)!;
-                    
+
                     _isRootResolved = true;
                     return _rootObject;
                 };

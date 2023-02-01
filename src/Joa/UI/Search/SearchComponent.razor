@@ -6,6 +6,7 @@
 @using Joa.Hotkey
 @using Joa.Injectables
 @using JoaLauncher.Api.Injectables
+@using Search = Joa.Search
 @inject JoaManager JoaManager
 @inject PhotinoBlazorApp PhotinoBlazorApp 
 @implements IDisposable
@@ -58,13 +59,16 @@
             Options = new StepOptions()
         });
 
+        JoaManager.ExecuteOnUiThread = async action =>
+        {
+            await InvokeAsync(action);
+        };
+        
         // HotKeyHelper.RegisterHotKey(() => PhotinoBlazorApp.MainWindow.SetMaximized(true), Key.P, Modifier.Alt);
         
         base.OnInitialized();
     }
     
-    
-
     private T GetRequiredService<T>()
     {
         return (T)JoaManager.CurrentScope?.ServiceProvider.GetRequiredService(typeof(T))! ?? throw new InvalidOperationException();

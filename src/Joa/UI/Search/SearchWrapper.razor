@@ -1,0 +1,28 @@
+﻿@inject JoaManager JoaManager 
+
+@if (_showSearch)
+{
+    <SearchComponent></SearchComponent>
+}
+else
+{
+    <p>Search not availablefd</p>
+}
+
+@code {
+    private bool _showSearch = true;
+
+    protected override void OnInitialized()
+    {
+        JoaManager.ShowUi = async (showUi) =>
+        {
+            await InvokeAsync(() =>
+            {
+                _showSearch = showUi;
+                StateHasChanged();
+            });
+        };
+
+        base.OnInitialized();
+    }
+}

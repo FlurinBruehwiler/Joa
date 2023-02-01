@@ -1,7 +1,8 @@
 ﻿using Joa.Injectables;
 using Joa.PluginCore;
 using Joa.Settings;
-using Joa.UI;
+using Joa.UI.Search;
+using Joa.UI.Settings;
 using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,7 @@ public class Program
         serviceCollection.AddScoped<PluginLoader>();
         serviceCollection.AddScoped<SettingsManager>();
         serviceCollection.AddScoped<PluginServiceProvider>();
+        serviceCollection.AddScoped<BuiltInProvider>();
 
         serviceCollection.Configure<PathsConfiguration>(configuration.GetSection("Paths"));
 
@@ -40,25 +42,22 @@ public class Program
         var joaManager = serviceProvider.GetRequiredService<JoaManager>();
         joaManager.NewScope();
 
-        CreateWindow(serviceProvider);
+        CreateSearchWindow(serviceProvider);
     }
 
-    private static void CreateWindow(IServiceProvider serviceProvider)
+    private static void CreateSearchWindow(IServiceProvider serviceProvider)
     {
-        var newAppBuilder = PhotinoBlazorAppBuilder.CreateDefault();
+        var searchWindowBuilder = PhotinoBlazorAppBuilder.CreateDefault();
 
-        newAppBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<IJoaLogger>());
-        newAppBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<JoaManager>());
-        newAppBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<FileSystemManager>());
+        searchWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<IJoaLogger>());
+        searchWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<JoaManager>());
+        searchWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<FileSystemManager>());
 
-        //ToDo
-        newAppBuilder.Services.AddLogging();
+        searchWindowBuilder.RootComponents.Add<SearchWrapper>("app");
 
-        newAppBuilder.RootComponents.Add<SearchWrapper>("app");
+        var searchWindow = searchWindowBuilder.Build();
 
-        var photinoBlazorApp = newAppBuilder.Build();
-
-        photinoBlazorApp.MainWindow
+        searchWindow.MainWindow
             .SetIconFile("favicon.ico")
             .SetTitle("Joa")
             .SetSize(600, 90)
@@ -72,7 +71,32 @@ public class Program
             JoaLogger.GetInstance().Error(args.ExceptionObject.ToString());
         };
 
-        photinoBlazorApp.Run();
+        searchWindow.Run();
+    }
+    
+    public static void CreateSettingsWindow(IServiceProvider serviceProvider)
+    {
+        var settingsWindowBuilder = PhotinoBlazorAppBuilder.CreateDefault();
+
+        settingsWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<IJoaLogger>());
+        settingsWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<JoaManager>());
+        settingsWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<FileSystemManager>());
+
+        settingsWindowBuilder.RootComponents.Add<SettingsComponent>("app");
+
+        var settingsWindow = settingsWindowBuilder.Build();
+
+        settingsWindow.MainWindow
+            .SetIconFile("favicon.ico")
+            .SetTitle("Joa")
+            .SetSize(1000, 1000);
+
+        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+        {
+            JoaLogger.GetInstance().Error(args.ExceptionObject.ToString());
+        };
+
+        settingsWindow.Run();
     }
 }
 

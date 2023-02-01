@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using Joa.PluginCore;
-using JoaLauncher.Api;
 using JoaLauncher.Api.Injectables;
 using LogLevel = JoaLauncher.Api.Injectables.LogLevel;
 
@@ -67,7 +66,7 @@ public class SettingsManager
             var jsonString = File.ReadAllText(_fileSystemManager.GetSettingsLocation());
             if (string.IsNullOrEmpty(jsonString))
                 return;
-            
+
             var result = JsonSerializer.Deserialize<DtoSettings>(jsonString);
             if (result is null)
                 throw new JsonException();

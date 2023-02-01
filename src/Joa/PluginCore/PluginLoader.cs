@@ -116,7 +116,7 @@ public class PluginLoader
             _logger.Error($"{settingType.Name} does not inherit from {nameof(ISetting)}");
             return new EmptySetting();
         }
-        
+
         _instantiatedTypes.Add(settingType, setting);
         _pluginServiceProvider.ServiceCollection.AddSingleton(setting.GetType(), setting);
         _pluginServiceProvider.BuildServiceProvider();
