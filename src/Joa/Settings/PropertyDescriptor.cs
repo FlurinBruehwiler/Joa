@@ -26,7 +26,7 @@ public class ClassDescription
         }).ToList();
     }
 
-    public List<PropertyDescription> PropertyDescriptions { get; set; }
+    public List<PropertyDescription> PropertyDescriptions { get; }
 }
 
 public class PropertyInstance
@@ -39,7 +39,7 @@ public class PropertyInstance
         PropertyDescription = propertyDescription;
     }
 
-    public PropertyDescription PropertyDescription { get; set; }
+    public PropertyDescription PropertyDescription { get; }
 
     public void SetValue(object value)
     {
@@ -57,7 +57,7 @@ public class ListPropertyInstance : PropertyInstance
     private readonly object _instance;
     private readonly ListPropertyDescription _propertyDescription;
 
-    public List<ClassInstance> Items { get; set; } = new();
+    public List<ClassInstance> Items { get; } = new();
 
     public ListPropertyInstance(object instance, ListPropertyDescription propertyDescription) : base(instance, propertyDescription)
     {
@@ -88,8 +88,8 @@ public class ListPropertyInstance : PropertyInstance
 
 public class ClassInstance
 {
-    public ClassDescription ClassDescription { get; set; }
-    public List<PropertyInstance> PropertyInstances { get; set; } = new();
+    public ClassDescription ClassDescription { get; }
+    public List<PropertyInstance> PropertyInstances { get; } = new();
 
     public ClassInstance(object instance, ClassDescription classDescription)
     {
