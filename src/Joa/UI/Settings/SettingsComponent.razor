@@ -1,45 +1,7 @@
-﻿
-<div>
-    @* <div> *@
-    @*     @foreach (var pluginDefinition in PluginManager.Plugins) *@
-    @*     { *@
-    @*         <button>@pluginDefinition.PluginInfo.Name</button> *@
-    @*     } *@
-    @* </div> *@
-    @* <div> *@
-    @*     <div> *@
-    @*         <p>@activePluginDefinition.PluginInfo.Name</p> *@
-    @*     </div> *@
-    @*     @foreach (var propertyInstance in activePluginDefinition.SettingConfiguration.PropertyInstances) *@
-    @*     { *@
-    @*         var x = propertyInstance.PropertyDescription.PropertyInfo.PropertyType; *@
-    @*         if (x == typeof(int) || x == typeof(float)) *@
-    @*         { *@
-    @*             <div> *@
-    @*                 <p>@propertyInstance.PropertyDescription.PropertyInfo.Name</p> *@
-    @*                 <input/> *@
-    @*             </div> *@
-    @*         } *@
-    @*         else if (x == typeof(string)) *@
-    @*         { *@
-    @*             <div> *@
-    @*                 <p>@propertyInstance.PropertyDescription.PropertyInfo.Name</p> *@
-    @*                 <input/> *@
-    @*             </div> *@
-    @*         }else if (x == typeof(bool)) *@
-    @*         { *@
-    @*             <div> *@
-    @*                 <p>@propertyInstance.PropertyDescription.PropertyInfo.Name</p> *@
-    @*                 <input type="checkbox"/> *@
-    @*             </div> *@
-    @*         }else if (x == typeof(List<>)) *@
-    @*         { *@
-    @*              *@
-    @*         } *@
-    @* *@
-    @*     } *@
-    @* </div> *@
+﻿<div class="flex text-red-900">
+    Test
 </div>
+
 
 @code {
 
