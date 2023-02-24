@@ -16,6 +16,7 @@ html, body {
     margin: 0;
     overflow: hidden;
     font-family: Roboto;
+    height: 100%;
 }
 
 .searchIcon {

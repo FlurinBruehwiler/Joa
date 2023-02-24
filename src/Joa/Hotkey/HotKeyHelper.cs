@@ -39,6 +39,8 @@ public class HotKeyHelper
         int status;
         while ((status = GetMessage(out var msg, nint.Zero, 0, 0)) != 0)
         {
+            Thread.Sleep(1);
+            
             if (status == -1)
             {
                 JoaLogger.GetInstance().Info("Error while getting Hotkey message");

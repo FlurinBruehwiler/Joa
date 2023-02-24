@@ -15,7 +15,7 @@
 
     <ItemGroup>
       <PackageReference Include="JoaLauncher.Api" Version="1.0.15-g7316ff1b48" />
-      <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+      <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
         <PackageReference Include="Photino.Blazor" Version="2.4.0" />
     </ItemGroup>
 

@@ -1,0 +1,13 @@
+﻿<button
+    class="text-[15px] text-white @Color px-[15px] h-[35px] rounded-[4px]">
+    @Text
+</button>
+
+@code
+{
+    [Parameter]
+    public string? Color { get; set; } = "bg-c-300";    
+    
+    [Parameter]
+    public string? Text { get; set; }
+}

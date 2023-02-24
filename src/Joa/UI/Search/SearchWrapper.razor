@@ -1,4 +1,7 @@
-﻿@inject JoaManager JoaManager 
+﻿@using Joa.Hotkey
+@using Photino.Blazor
+@inject JoaManager JoaManager 
+@inject PhotinoBlazorApp PhotinoBlazorApp 
 
 @if (_showSearch)
 {
@@ -14,7 +17,9 @@ else
 
     protected override void OnInitialized()
     {
-        JoaManager.ShowUi = async (showUi) =>
+        HotKeyHelper.RegisterHotKey(() => PhotinoBlazorApp.MainWindow.SetMaximized(true), Key.P, Modifier.Alt);
+
+        JoaManager.ShowUi = async showUi =>
         {
             await InvokeAsync(() =>
             {

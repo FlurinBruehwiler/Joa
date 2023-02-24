@@ -1,48 +1,63 @@
-﻿
-<div>
-    @* <div> *@
-    @*     @foreach (var pluginDefinition in PluginManager.Plugins) *@
-    @*     { *@
-    @*         <button>@pluginDefinition.PluginInfo.Name</button> *@
-    @*     } *@
-    @* </div> *@
-    @* <div> *@
-    @*     <div> *@
-    @*         <p>@activePluginDefinition.PluginInfo.Name</p> *@
-    @*     </div> *@
-    @*     @foreach (var propertyInstance in activePluginDefinition.SettingConfiguration.PropertyInstances) *@
-    @*     { *@
-    @*         var x = propertyInstance.PropertyDescription.PropertyInfo.PropertyType; *@
-    @*         if (x == typeof(int) || x == typeof(float)) *@
-    @*         { *@
-    @*             <div> *@
-    @*                 <p>@propertyInstance.PropertyDescription.PropertyInfo.Name</p> *@
-    @*                 <input/> *@
-    @*             </div> *@
-    @*         } *@
-    @*         else if (x == typeof(string)) *@
-    @*         { *@
-    @*             <div> *@
-    @*                 <p>@propertyInstance.PropertyDescription.PropertyInfo.Name</p> *@
-    @*                 <input/> *@
-    @*             </div> *@
-    @*         }else if (x == typeof(bool)) *@
-    @*         { *@
-    @*             <div> *@
-    @*                 <p>@propertyInstance.PropertyDescription.PropertyInfo.Name</p> *@
-    @*                 <input type="checkbox"/> *@
-    @*             </div> *@
-    @*         }else if (x == typeof(List<>)) *@
-    @*         { *@
-    @*              *@
-    @*         } *@
-    @* *@
-    @*     } *@
-    @* </div> *@
-</div>
+﻿<div class="w-full h-full flex">
+        <div class="bg-c-100 w-[300px] h-full flex flex-col border-c-200 border-r-[1px]">
+            <div class="h-[93px] w-full"></div>
+            <div class="h-full w-full flex flex-col p-[15px] gap-[6px] border-c-200 border-y-[1px]">
+                <SideBarItem text="Application Search"></SideBarItem>
+                <SideBarItem></SideBarItem>
+                <SideBarItem></SideBarItem>
+                <SideBarItem></SideBarItem>
+                <SideBarItem></SideBarItem>
+                <SideBarItem></SideBarItem>
+            </div>
+            <div class="h-[93px] w-full"></div>
+        </div>
+        <div class="bg-c-50 w-full h-full flex flex-col">
+            <div class="w-full flex flex-col justify-between h-[193px] border-c-200 border-b-[1px] p-[35px] pb-[10px]">
+                <div class="w-full text-white flex justify-between">
+                    <p class="text-[30px]">Application Search</p>
+                    <Button text="Enable"></Button>
+                </div>
+                <div class="w-full text-white">
+                    <p>This plugin is searching for applications on your computer. You can specify the folders where your applications are installed and which file extension should be used to recognize an application.</p>
+                </div>
+            </div>
+            <div class="w-full h-full flex flex-col gap-[10px] p-[35px]">
+                <div class="w-full h-[50px] bg-c-100 flex items-center px-[8px] justify-between text-white rounded-[4px]">
+                    <p>Test</p>
+                    <TextBox></TextBox>
+                </div>
+                <div class="w-full h-[50px] bg-c-100 flex items-center px-[8px] justify-between text-white rounded-[4px]">
+                    <p>Test</p>
+                    <Toggle></Toggle>
+                </div>
+                <div class="p-[8px] w-full bg-c-100  justify-between text-white rounded-[4px]">
+                    <div class="w-full pb-[8px] bg-c-100 flex items-center  justify-between text-white rounded-[4px]">
+                        <p class="font-bold">Application file extensions</p>
+                        <div class="flex gap-[8px]">
+                            <Button text="Add file extension"></Button>
+                            <IconButton></IconButton>
+                        </div>
 
-@code {
-
-
-
-}
+                    </div>
+                    <div class="w-full flex flex-col gap-[5px]">
+                        <div class="flex justify-between hover:bg-c-400">
+                            <p>.Ink</p>
+                            <IconButton icon="trash" color="bg-c-500"></IconButton>
+                        </div>
+                        <div class="flex justify-between hover:bg-c-400">
+                            <p>.Ink</p>
+                            <IconButton icon="trash" color="bg-c-500"></IconButton>
+                        </div>
+                        <div class="flex justify-between hover:bg-c-400">
+                            <p>.Ink</p>
+                            <IconButton icon="trash" color="bg-c-500"></IconButton>
+                        </div>
+                        <div class="flex justify-between hover:bg-c-400">
+                            <p>.Ink</p>
+                            <IconButton icon="trash" color="bg-c-500"></IconButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
