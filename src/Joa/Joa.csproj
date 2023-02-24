@@ -14,27 +14,24 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="JoaLauncher.Api" Version="1.0.15-g7316ff1b48" />
-        <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-        <PackageReference Include="Photino.Blazor" Version="2.5.0" />
+      <PackageReference Include="JoaLauncher.Api" Version="1.0.15-g7316ff1b48" />
+      <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+        <PackageReference Include="Photino.Blazor" Version="2.4.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="appsettings.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="appsettings.Development.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="appsettings.Development.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
         <None Update="favicon.ico">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <Content Update="wwwroot\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Watch Include="wwwroot\**\*.css" />
-        <Watch Include="wwwroot\**\*.html" />
-        <Watch Include="UI\**\*.razor" />
     </ItemGroup>
 
 </Project>
