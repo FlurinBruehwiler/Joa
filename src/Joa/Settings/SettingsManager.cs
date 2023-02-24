@@ -13,6 +13,8 @@ public class SettingsManager
     private readonly JsonSerializerOptions _options;
     private readonly FileWatcher _fileWatcher;
 
+    public Action SettingsChangedOutsideOfUi { get; set; }
+
     public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager)
     {
         logger.Info(nameof(SettingsManager));
@@ -23,7 +25,11 @@ public class SettingsManager
         {
             WriteIndented = true
         };
-        _fileWatcher = new FileWatcher(fileSystemManager.GetSettingsLocation(), Sync);
+        _fileWatcher = new FileWatcher(fileSystemManager.GetSettingsLocation(), () =>
+        {
+            Sync();
+            SettingsChangedOutsideOfUi();
+        }, 10);
         Sync();
     }
 
@@ -34,7 +40,7 @@ public class SettingsManager
         SaveSettingsToJson();
     }
 
-    private void SaveSettingsToJson()
+    public void SaveSettingsToJson()
     {
         _fileWatcher.Disable();
         using var _ = _logger.TimedOperation(nameof(SaveSettingsToJson));

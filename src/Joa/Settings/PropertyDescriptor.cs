@@ -102,7 +102,8 @@ public class ClassInstance
 
         foreach (var propertyInfo in instance.GetType().GetProperties())
         {
-            if (propertyInfo.PropertyType.IsAssignableTo(typeof(List<>)))
+            var type = propertyInfo.PropertyType;
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
             {
                 var pd = new ListPropertyDescription
                 {
@@ -114,7 +115,7 @@ public class ClassInstance
                 PropertyInstances.Add(new ListPropertyInstance(instance, pd));
             }
 
-            if (propertyInfo.PropertyType.IsPrimitive || propertyInfo.PropertyType == typeof(decimal) || propertyInfo.PropertyType == typeof(string))
+            if (type.IsPrimitive || propertyInfo.PropertyType == typeof(decimal) || propertyInfo.PropertyType == typeof(string))
             {
                 var pd = new PropertyDescription
                 {
