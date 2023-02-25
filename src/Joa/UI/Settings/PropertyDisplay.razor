@@ -30,13 +30,12 @@ else if (Property is ListPropertyInstance listProperty)
             <p class="font-bold">@listProperty.PropertyDescription.PropertyInfo.Name</p>
             <div class="flex gap-[8px]">
                 <Button OnClick="AddListItem" text="Add"></Button>
-                <IconButton></IconButton>
             </div>
         </div>
         <div class="w-full flex flex-col gap-[5px]">
             @foreach (var item in listProperty.GetItems())
             {
-                <div class="flex justify-between hover:bg-c-400">
+                <div class="flex justify-between items-center">
                     <p>@item.PropertyInstances.First().GetValue()</p>
                     <IconButton OnClick="async () => await DeleteListItem(item)" icon="trash" color="bg-c-500"></IconButton>
                 </div>

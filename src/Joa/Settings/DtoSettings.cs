@@ -6,9 +6,11 @@ namespace Joa.Settings;
 public class DtoSettings
 {
     public Dictionary<string, DtoPluginSettings> Plugins { get; set; } = null!;
+    public GeneralSettings GeneralSettings { get; set; }
 
-    public DtoSettings(List<PluginDefinition> pluginDefinitions)
+    public DtoSettings(List<PluginDefinition> pluginDefinitions, GeneralSettings generalSettings)
     {
+        GeneralSettings = generalSettings;
         Plugins = pluginDefinitions.ToDictionary(
             pluginDefinition => pluginDefinition.PluginInfo.Name,
             pluginDefinition => new DtoPluginSettings

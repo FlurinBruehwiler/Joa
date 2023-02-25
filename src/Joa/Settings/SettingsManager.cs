@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Joa.Hotkey;
 using Joa.PluginCore;
 using JoaLauncher.Api.Injectables;
 using LogLevel = JoaLauncher.Api.Injectables.LogLevel;
@@ -10,17 +11,20 @@ public class SettingsManager
     private readonly PluginManager _pluginManager;
     private readonly IJoaLogger _logger;
     private readonly FileSystemManager _fileSystemManager;
+    private readonly HotKeyService _hotKeyService;
     private readonly JsonSerializerOptions _options;
     private readonly FileWatcher _fileWatcher;
 
     public Action SettingsChangedOutsideOfUi { get; set; }
+    public GeneralSettings GeneralSettings { get; set; } = new();
 
-    public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager)
+    public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager, HotKeyService hotKeyService)
     {
         logger.Info(nameof(SettingsManager));
         _pluginManager = pluginManager;
         _logger = logger;
         _fileSystemManager = fileSystemManager;
+        _hotKeyService = hotKeyService;
         _options = new JsonSerializerOptions
         {
             WriteIndented = true
@@ -45,9 +49,11 @@ public class SettingsManager
         _fileWatcher.Disable();
         using var _ = _logger.TimedOperation(nameof(SaveSettingsToJsonAsync));
 
+        _hotKeyService.RegisterUiHotKey();
+        
         try
         {
-            var dtoSetting = new DtoSettings(_pluginManager.Plugins);
+            var dtoSetting = new DtoSettings(_pluginManager.Plugins, GeneralSettings);
             var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
             await File.WriteAllTextAsync(_fileSystemManager.GetSettingsLocation(), jsonString);
         }
@@ -77,6 +83,8 @@ public class SettingsManager
             if (result is null)
                 throw new JsonException();
 
+            JsonUtilities.PopulateObject(jsonString, GeneralSettings);
+            
             foreach (var pluginDefinition in _pluginManager.Plugins)
             {
                 UpdatePluginDefinition(pluginDefinition, result);

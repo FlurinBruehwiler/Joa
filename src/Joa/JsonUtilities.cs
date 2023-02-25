@@ -41,17 +41,27 @@ public static class JsonUtilities
 
     public static void PopulateObject(JsonElement json, object obj, JsonSerializerOptions? options = null)
     {
-        var modifiedOptions = options != null
-            ? new JsonSerializerOptions(options)
+        var modifiedOptions = GetJsonSerializerOptions(obj, options);
+        json.Deserialize(obj.GetType(), modifiedOptions);
+    }
+
+    public static void PopulateObject(string json, object obj, JsonSerializerOptions? options = null)
+    {
+        var modifiedOptions = GetJsonSerializerOptions(obj, options);
+        JsonSerializer.Deserialize(json, obj.GetType(), modifiedOptions);
+    }
+
+    private static JsonSerializerOptions GetJsonSerializerOptions(object obj, JsonSerializerOptions? options)
+    {
+        if (options != null)
+            return new JsonSerializerOptions(options)
             {
                 TypeInfoResolver =
                     new PopulateTypeInfoResolver(obj, options.TypeInfoResolver ?? new DefaultJsonTypeInfoResolver()),
-            }
-            : new JsonSerializerOptions
-            {
-                TypeInfoResolver = new PopulateTypeInfoResolver(obj, new DefaultJsonTypeInfoResolver()),
             };
-
-        json.Deserialize(obj.GetType(), modifiedOptions);
+        return new JsonSerializerOptions
+        {
+            TypeInfoResolver = new PopulateTypeInfoResolver(obj, new DefaultJsonTypeInfoResolver()),
+        };
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using Joa.Hotkey
+@using Microsoft.Extensions.DependencyInjection
 @using Photino.Blazor
 @inject JoaManager JoaManager 
 @inject PhotinoBlazorApp PhotinoBlazorApp 
@@ -17,7 +18,9 @@ else
 
     protected override void OnInitialized()
     {
-        HotKeyHelper.RegisterHotKey(() => PhotinoBlazorApp.MainWindow.SetMaximized(true), Key.P, Modifier.Alt);
+        JoaManager.CurrentScope?.ServiceProvider
+            .GetRequiredService<HotKeyService>()
+            .InitialHotKeyRegistration(() => PhotinoBlazorApp.MainWindow.SetMaximized(true));
 
         JoaManager.ShowUi = async showUi =>
         {

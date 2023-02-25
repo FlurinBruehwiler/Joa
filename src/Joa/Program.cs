@@ -1,4 +1,5 @@
-﻿using Joa.Injectables;
+﻿using Joa.Hotkey;
+using Joa.Injectables;
 using Joa.PluginCore;
 using Joa.Settings;
 using Joa.UI.Search;
@@ -34,6 +35,7 @@ public class Program
         serviceCollection.AddScoped<SettingsManager>();
         serviceCollection.AddScoped<PluginServiceProvider>();
         serviceCollection.AddScoped<BuiltInProvider>();
+        serviceCollection.AddScoped<HotKeyService>();
 
         serviceCollection.Configure<PathsConfiguration>(configuration.GetSection("Paths"));
 

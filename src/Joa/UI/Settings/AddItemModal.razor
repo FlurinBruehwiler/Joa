@@ -1,12 +1,9 @@
 ﻿@using Joa.Settings
 @using Microsoft.Extensions.DependencyInjection
 @inject JoaManager JoaManager
-<div class="flex justify-center items-center fixed left-0 top-0 right-0 bottom-0 bg-[rgba(0,0,0,0.5)]">
-    <div class="w-[600px] bg-c-50 border-c-200 border-[1px] rounded-[4px] p-[30px] flex flex-col gap-[6px]">
-        <div class="flex justify-between">
-            <p>Add Folder</p>
-            <IconButton Icon="trash"></IconButton>
-        </div>
+<div @onclick="Close" class="flex justify-center items-center fixed left-0 top-0 right-0 bottom-0 bg-[rgba(0,0,0,0.5)]">
+    <div @onclick:stopPropagation="true" class="w-[600px] bg-c-50 border-c-200 border-[1px] rounded-[4px] p-[30px] flex flex-col gap-[6px]">
+        <p>Add</p>
         @foreach (var property in _classInstance.PropertyInstances)
         {
             var type = property.PropertyDescription.PropertyInfo.PropertyType;
@@ -32,7 +29,7 @@
             }
         }
         <div class="flex justify-end gap-[6px]">
-            <Button Text="Cancel" OnClick="Close"></Button>
+            <Button Text="Cancel" Color="bg-c-500" OnClick="Close"></Button>
             <Button Text="Save" OnClickAsync="SaveAndCloseAsync"></Button>
         </div>
     </div>
