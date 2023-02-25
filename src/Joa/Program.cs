@@ -11,7 +11,7 @@ using Photino.Blazor;
 
 namespace Joa;
 
-public class Program
+public static class Program
 {
     [STAThread]
     public static void Main(string[] args)
@@ -35,6 +35,7 @@ public class Program
         serviceCollection.AddScoped<SettingsManager>();
         serviceCollection.AddScoped<PluginServiceProvider>();
         serviceCollection.AddScoped<BuiltInProvider>();
+        serviceCollection.AddScoped<GlobalHotKey>();
         serviceCollection.AddScoped<HotKeyService>();
 
         serviceCollection.Configure<PathsConfiguration>(configuration.GetSection("Paths"));

@@ -2,11 +2,9 @@
 
 namespace Joa.Hotkey;
 
-public class HotKeyHelper
+public static class External
 {
     public const uint WmHotkey = 0x312;
-
-    private static List<int> _hotKeys = new();
 
     [DllImport("user32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]

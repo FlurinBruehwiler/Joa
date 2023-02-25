@@ -1,47 +1,129 @@
-﻿using Joa.Settings;
+﻿using JoaLauncher.Api.Injectables;
 
 namespace Joa.Hotkey;
 
-public class HotKeyService
+public class HotKeyService : IDisposable
 {
-    private readonly SettingsManager _settingsManager;
-    private Action? _uiHotKeyAction;
-    private Key _currentKey;
-    private Modifier _currentModifier1;
-    private Modifier _currentModifier2;
-    private int _currentHotKeyId;
+    private readonly IJoaLogger _joaLogger;
+    private readonly Dictionary<int, HotKey> _registerdHotkeys = new();
+    private readonly Dictionary<int, HotKey> _hotKeysToRegister = new();
+    private readonly List<int> _hotKeysToUnregister = new();
+    private readonly CancellationTokenSource _cancellationTokenSource;
+    private readonly CancellationToken _cancellationToken;
 
-    public HotKeyService(SettingsManager settingsManager)
+    public HotKeyService(IJoaLogger joaLogger)
     {
-        _settingsManager = settingsManager;
+        _cancellationTokenSource = new CancellationTokenSource();
+        _cancellationToken = _cancellationTokenSource.Token;
+        _joaLogger = joaLogger;
+        Task.Run(ListenForHotKey, _cancellationToken);
     }
     
-    public void InitialHotKeyRegistration(Action callback)
+    public int RegisterHotKey(Action callback, Key key, params Modifier[] modifiers)
     {
-        _uiHotKeyAction = callback;
-        RegisterUiHotKey();
+        var id = GetUniqueHotKeyId();
+        _hotKeysToRegister.Add(id, new HotKey(key, modifiers, callback));
+        return id;
+    }
+    
+    public void UnregisterHotKey(int hotKeyId)
+    {
+        if (_hotKeysToRegister.Remove(hotKeyId))
+            return;
+        
+        if(_registerdHotkeys.ContainsKey(hotKeyId))
+            _hotKeysToUnregister.Add(hotKeyId);
     }
 
-    public void RegisterUiHotKey()
+    private void ListenForHotKey()
     {
-        var generalSettings = _settingsManager.GeneralSettings;
-        
-        if ((_currentKey != generalSettings.HotKeyKey ||
-             _currentModifier1 != generalSettings.HotKeyModifier1 ||
-             _currentModifier2 != generalSettings.HotKeyModifier2) && _uiHotKeyAction is not null)
+        int status;
+        while ((status = External.GetMessage(out var msg, nint.Zero, 0, 0)) != 0)
         {
-            _currentKey = generalSettings.HotKeyKey;
-            _currentModifier1 = generalSettings.HotKeyModifier1;
-            _currentModifier2 = generalSettings.HotKeyModifier2;
+            RegisterHotkeys();
+            UnregisterHotKeys();
+            
+            Thread.Sleep(1);
+            
+            if (status == -1)
+            {
+                _joaLogger.Info("Error while getting Hotkey message");
+                continue;
+            }
 
-            var modifiers = new List<Modifier>();
+            if (msg.Message != External.WmHotkey)
+                continue;
+
+            var hotKeyId = (int)msg.WParam;
             
-            if(_currentModifier1 != Modifier.None)
-                modifiers.Add(_currentModifier1);
-            if(_currentModifier2 != Modifier.None)
-                modifiers.Add(_currentModifier2);
+            if(!_registerdHotkeys.TryGetValue(hotKeyId, out var hotkey))
+                continue;
+
+            _joaLogger.Info($"Received Hotkey: {hotkey}");
+
+            // ReSharper disable once MethodSupportsCancellation
+            Task.Run(hotkey.Callback);
             
-            
+            if (_cancellationToken.IsCancellationRequested)
+            {
+                _hotKeysToUnregister.AddRange(_registerdHotkeys.Select(x => x.Key));
+                UnregisterHotKeys();
+                break;
+            }
+        }
+        _joaLogger.Info("Stop listening for Hotkeys");
+    }
+
+    private void UnregisterHotKeys()
+    {
+        foreach (var id in _hotKeysToUnregister)
+        {
+            if (!External.UnregisterHotKey(nint.Zero, id))
+            {
+                _joaLogger.Error($"Failed to unregister hot key with id {id}");
+                continue;
+            }
+
+            _registerdHotkeys.Remove(id);
         }
     }
+
+    private void RegisterHotkeys()
+    {
+        foreach (var (id, hotKey) in _hotKeysToRegister)
+        {
+            var modifiers = hotKey.Modifiers.Aggregate<Modifier, uint>(0, (current, modifier) => current | (uint)modifier);
+            
+            if (!External.RegisterHotKey(nint.Zero, id, modifiers, (uint)hotKey.Key))
+            {
+                _joaLogger.Info($"Error while registering hotkey: {hotKey}");
+                continue;
+            }
+            
+            _registerdHotkeys.Add(id, hotKey);
+            _joaLogger.Info($"Registered Hotkey: {hotKey}");
+        }
+        
+        _hotKeysToRegister.Clear();
+    }
+
+    private int GetUniqueHotKeyId()
+    {
+        var rand = new Random();
+        int hotKeyId;
+
+        do
+        {
+            hotKeyId = rand.Next();
+        } while (_registerdHotkeys.ContainsKey(hotKeyId) || _hotKeysToRegister.ContainsKey(hotKeyId));
+
+        return hotKeyId;
+    }
+
+    public void Dispose()
+    {
+        _cancellationTokenSource.Cancel();
+    }
 }
+
+public record HotKey(Key Key, Modifier[] Modifiers, Action Callback);

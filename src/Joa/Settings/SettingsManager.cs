@@ -11,20 +11,20 @@ public class SettingsManager
     private readonly PluginManager _pluginManager;
     private readonly IJoaLogger _logger;
     private readonly FileSystemManager _fileSystemManager;
-    private readonly HotKeyService _hotKeyService;
+    private readonly GlobalHotKey _globalHotKey;
     private readonly JsonSerializerOptions _options;
     private readonly FileWatcher _fileWatcher;
 
     public Action SettingsChangedOutsideOfUi { get; set; }
     public GeneralSettings GeneralSettings { get; set; } = new();
 
-    public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager, HotKeyService hotKeyService)
+    public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager, GlobalHotKey globalHotKey)
     {
         logger.Info(nameof(SettingsManager));
         _pluginManager = pluginManager;
         _logger = logger;
         _fileSystemManager = fileSystemManager;
-        _hotKeyService = hotKeyService;
+        _globalHotKey = globalHotKey;
         _options = new JsonSerializerOptions
         {
             WriteIndented = true
@@ -49,7 +49,7 @@ public class SettingsManager
         _fileWatcher.Disable();
         using var _ = _logger.TimedOperation(nameof(SaveSettingsToJsonAsync));
 
-        _hotKeyService.RegisterUiHotKey();
+        _globalHotKey.RegisterUiHotKey();
         
         try
         {
