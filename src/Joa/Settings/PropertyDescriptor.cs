@@ -12,14 +12,26 @@ public class PropertyDescription
 
 public class ListPropertyDescription : PropertyDescription
 {
+    public Type Type { get; set; }
     public required Type GenericType { get; set; }
-    public required MethodInfo AddMethod { get; set; }
+    public MethodInfo AddMethod { get; set; }
+    public MethodInfo RemoveMethod { get; set; }
+
+    public ListPropertyDescription(Type type)
+    {
+        Type = type;
+        AddMethod = Type.GetMethod("Add");
+        RemoveMethod = Type.GetMethod("Remove");
+    }
 }
 
 public class ClassDescription
 {
+    private readonly Type _type;
+    
     public ClassDescription(Type type)
     {
+        _type = type;
         PropertyDescriptions = type.GetProperties().Select(x => new PropertyDescription
         {
             PropertyInfo = x
@@ -27,6 +39,11 @@ public class ClassDescription
     }
 
     public List<PropertyDescription> PropertyDescriptions { get; }
+
+    public object CreateInstance()
+    {
+        return Activator.CreateInstance(_type) ?? throw new Exception("Could not create Instance");
+    }
 }
 
 public class PropertyInstance
@@ -56,33 +73,28 @@ public class ListPropertyInstance : PropertyInstance
 {
     private readonly object _instance;
     private readonly ListPropertyDescription _propertyDescription;
-
-    public List<ClassInstance> Items { get; } = new();
+    public ClassDescription ClassDescription { get; }
 
     public ListPropertyInstance(object instance, ListPropertyDescription propertyDescription) : base(instance, propertyDescription)
     {
         _instance = instance;
         _propertyDescription = propertyDescription;
-
-        var list = GetListValue();
-        var classDescription = new ClassDescription(list.GetType().GetGenericArguments().First());
-
-        foreach (var item in list)
-        {
-            Items.Add(new ClassInstance(item, classDescription));
-        }
+        ClassDescription = new ClassDescription(((IList)GetValue()).GetType().GetGenericArguments().First());
     }
 
-    public IList GetListValue()
+    public List<ClassInstance> GetItems()
     {
-        return (IList)GetValue();
+        return ((IList)GetValue()).Cast<object>().Select(x => new ClassInstance(x, ClassDescription)).ToList();
     }
-
-    public object AddItem()
+    
+    public void AddItem(object item)
     {
-        var newItem = Activator.CreateInstance(_propertyDescription.GenericType) ?? throw new Exception("Could not create Instance");
-        _propertyDescription.AddMethod.Invoke(_propertyDescription.PropertyInfo.GetValue(_instance), new[] { newItem });
-        return newItem;
+        _propertyDescription.AddMethod.Invoke(_propertyDescription.PropertyInfo.GetValue(_instance), new[] { item });
+    }
+    
+    public void RemoveItem(ClassInstance item)
+    {
+        _propertyDescription.RemoveMethod.Invoke(_propertyDescription.PropertyInfo.GetValue(_instance), new[] { item.Instance });
     }
 }
 
@@ -91,24 +103,21 @@ public class ClassInstance
     public ClassDescription ClassDescription { get; }
     public List<PropertyInstance> PropertyInstances { get; } = new();
 
+    public object Instance { get; }
+
     public ClassInstance(object instance, ClassDescription classDescription)
     {
         ClassDescription = classDescription;
-
-        var addMethod = typeof(List<>).GetMethod("Add");
-
-        if (addMethod is null)
-            throw new UnreachableException();
-
+        Instance = instance;
+        
         foreach (var propertyInfo in instance.GetType().GetProperties())
         {
             var type = propertyInfo.PropertyType;
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(List<>))
             {
-                var pd = new ListPropertyDescription
+                var pd = new ListPropertyDescription(type)
                 {
                     PropertyInfo = propertyInfo,
-                    AddMethod = addMethod,
                     GenericType = propertyInfo.PropertyType.GetGenericArguments().First()
                 };
                 ClassDescription.PropertyDescriptions.Add(pd);

@@ -25,7 +25,7 @@ public class SettingsManager
         {
             WriteIndented = true
         };
-        _fileWatcher = new FileWatcher(fileSystemManager.GetSettingsLocation(), () =>
+        _fileWatcher = new FileWatcher(fileSystemManager.GetSettingsLocation(),  () =>
         {
             Sync();
             SettingsChangedOutsideOfUi();
@@ -37,19 +37,19 @@ public class SettingsManager
     {
         _logger.Log("Synchronizing the settings.", LogLevel.Info);
         UpdateSettingsFromJson();
-        SaveSettingsToJson();
+        SaveSettingsToJsonAsync().GetAwaiter().GetResult();
     }
 
-    public void SaveSettingsToJson()
+    public async Task SaveSettingsToJsonAsync()
     {
         _fileWatcher.Disable();
-        using var _ = _logger.TimedOperation(nameof(SaveSettingsToJson));
+        using var _ = _logger.TimedOperation(nameof(SaveSettingsToJsonAsync));
 
         try
         {
             var dtoSetting = new DtoSettings(_pluginManager.Plugins);
             var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
-            File.WriteAllText(_fileSystemManager.GetSettingsLocation(), jsonString);
+            await File.WriteAllTextAsync(_fileSystemManager.GetSettingsLocation(), jsonString);
         }
         catch (Exception e)
         {

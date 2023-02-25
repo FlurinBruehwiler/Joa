@@ -18,7 +18,8 @@ else if (_propertyType == typeof(bool))
         <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" checked=@Property.GetValue() @onchange="PropertyChanged" class="sr-only peer"/>
             <div
-                class="w-11 h-6 bg-c-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-c-300"></div>
+                class="w-11 h-6 bg-c-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-c-300">
+            </div>
         </label>
     </div>
 }
@@ -28,19 +29,23 @@ else if (Property is ListPropertyInstance listProperty)
         <div class="w-full pb-[8px] bg-c-100 flex items-center  justify-between text-white rounded-[4px]">
             <p class="font-bold">@listProperty.PropertyDescription.PropertyInfo.Name</p>
             <div class="flex gap-[8px]">
-                <Button text="Add"></Button>
+                <Button OnClick="AddListItem" text="Add"></Button>
                 <IconButton></IconButton>
             </div>
         </div>
         <div class="w-full flex flex-col gap-[5px]">
-            @foreach (var item in listProperty.Items)
+            @foreach (var item in listProperty.GetItems())
             {
                 <div class="flex justify-between hover:bg-c-400">
-                    <p>Item</p>
-                    <IconButton icon="trash" color="bg-c-500"></IconButton>
+                    <p>@item.PropertyInstances.First().GetValue()</p>
+                    <IconButton OnClick="async () => await DeleteListItem(item)" icon="trash" color="bg-c-500"></IconButton>
                 </div>
             }
         </div>
+        @if (_showAddDialog)
+        {
+            <AddItemModal Close="CloseModal" ListProperty="listProperty"></AddItemModal>
+        }
     </div>
 }
 
@@ -51,21 +56,41 @@ else if (Property is ListPropertyInstance listProperty)
 
     private Type _propertyType;
     private SettingsManager _settingsManager;
+    private bool _showAddDialog;
 
     protected override void OnInitialized()
     {
         if (JoaManager.CurrentScope is null)
             throw new Exception();
-        
+
         _settingsManager = JoaManager.CurrentScope.ServiceProvider.GetRequiredService<SettingsManager>();
         _propertyType = Property.PropertyDescription.PropertyInfo.PropertyType;
 
         base.OnInitialized();
     }
 
-    private void PropertyChanged(ChangeEventArgs args)
+    private async Task PropertyChanged(ChangeEventArgs args)
     {
         Property.SetValue(args.Value);
-        _settingsManager.SaveSettingsToJson();
+        await _settingsManager.SaveSettingsToJsonAsync();
+    }
+
+    private async Task DeleteListItem(ClassInstance item)
+    {
+        var listProperty = (ListPropertyInstance)Property;
+        listProperty.RemoveItem(item);
+        await _settingsManager.SaveSettingsToJsonAsync();
+        StateHasChanged();
+    }
+    private void AddListItem()
+    {
+        _showAddDialog = true;
+        StateHasChanged();
+    }
+
+    private void CloseModal()
+    {
+        _showAddDialog = false;
+        StateHasChanged();
     }
 }

@@ -1,5 +1,5 @@
 ﻿<button
-    class="text-[15px] text-white @Color h-[35px] w-[35px] rounded-[4px] flex justify-center items-center">
+    @onclick="OnClickAsync" class="text-[15px] text-white @Color h-[35px] w-[35px] rounded-[4px] flex justify-center items-center">
     @if (Icon == "trash")
     {
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -24,4 +24,21 @@
 
     [Parameter]
     public string? Icon { get; set; }
+    
+    [Parameter]
+    public Action? OnClick { get; set; }
+    
+    [Parameter]
+    public Func<Task>? OnClickAsync { get; set; }
+
+    protected override void OnInitialized()
+    {
+        OnClickAsync ??= () =>
+        {
+            OnClick?.Invoke();
+            return Task.CompletedTask;
+        };
+
+        base.OnInitialized();
+    }
 }

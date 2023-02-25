@@ -1,0 +1,75 @@
+﻿@using Joa.Settings
+@using Microsoft.Extensions.DependencyInjection
+@inject JoaManager JoaManager
+<div class="flex justify-center items-center fixed left-0 top-0 right-0 bottom-0 bg-[rgba(0,0,0,0.5)]">
+    <div class="w-[600px] bg-c-50 border-c-200 border-[1px] rounded-[4px] p-[30px] flex flex-col gap-[6px]">
+        <div class="flex justify-between">
+            <p>Add Folder</p>
+            <IconButton Icon="trash"></IconButton>
+        </div>
+        @foreach (var property in _classInstance.PropertyInstances)
+        {
+            var type = property.PropertyDescription.PropertyInfo.PropertyType;
+            @if (type == typeof(int) || type == typeof(float) || type == typeof(string))
+            {
+                <div class="w-full h-[50px] bg-c-100 flex items-center px-[8px] justify-between text-white rounded-[4px]">
+                    <p>@property.PropertyDescription.PropertyInfo.Name</p>
+                    <input value="@property.GetValue()" @onchange="args => property.SetValue(args.Value)" type="text" spellCheck="false" placeholder="Search..."
+                           class="focus:bg-c-400 text-white h-[35px] bg-transparent border-c-200 border-[1px] rounded-[4px] px-[10px] focus:outline-none"/>
+                </div>
+            }
+            else if (type == typeof(bool))
+            {
+                <div class="w-full h-[50px] bg-c-100 flex items-center px-[8px] justify-between text-white rounded-[4px]">
+                    <p>@property.PropertyDescription.PropertyInfo.Name</p>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked=@property.GetValue() @onchange="args => property.SetValue(args.Value)" class="sr-only peer"/>
+                        <div
+                            class="w-11 h-6 bg-c-400 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-c-300">
+                        </div>
+                    </label>
+                </div>
+            }
+        }
+        <div class="flex justify-end gap-[6px]">
+            <Button Text="Cancel" OnClick="Close"></Button>
+            <Button Text="Save" OnClickAsync="SaveAndCloseAsync"></Button>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public ListPropertyInstance ListProperty { get; set; }
+    
+    [Parameter]
+    public Action Close { get; set; }
+
+    private ClassInstance _classInstance;
+    private SettingsManager _settingsManager;
+
+    protected override void OnInitialized()
+    {
+        _settingsManager = JoaManager.CurrentScope.ServiceProvider.GetRequiredService<SettingsManager>();
+        
+        var newInstance = ListProperty.ClassDescription.CreateInstance();
+
+        _classInstance = new ClassInstance(newInstance, ListProperty.ClassDescription);
+
+        foreach (var property in _classInstance.PropertyInstances)
+        {
+            if(property.PropertyDescription.PropertyInfo.PropertyType == typeof(string))
+                property.SetValue(string.Empty);
+        }
+        
+        base.OnInitialized();
+    }
+
+    private async Task SaveAndCloseAsync()
+    {
+        ListProperty.AddItem(_classInstance.Instance);
+        Close();
+        await _settingsManager.SaveSettingsToJsonAsync();
+    }
+}
