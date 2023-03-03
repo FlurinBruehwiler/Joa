@@ -16,7 +16,6 @@
     <ItemGroup>
       <PackageReference Include="JoaLauncher.Api" Version="1.0.15-g7316ff1b48" />
       <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-        <PackageReference Include="Photino.Blazor" Version="2.5.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -32,6 +31,10 @@
         <Content Update="wwwroot\**">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Photino.Blazor\Photino.Blazor.csproj" />
     </ItemGroup>
 
 </Project>

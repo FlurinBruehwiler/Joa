@@ -76,7 +76,7 @@ public static class Program
 
         searchWindow.Run();
     }
-    
+
     public static void CreateSettingsWindow(IServiceProvider serviceProvider)
     {
         var settingsWindowBuilder = PhotinoBlazorAppBuilder.CreateDefault();

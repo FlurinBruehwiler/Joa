@@ -17,7 +17,7 @@ public class GlobalHotKey
         _settingsManager = settingsManager;
         _hotKeyService = hotKeyService;
     }
-    
+
     public void InitialHotKeyRegistration(Action callback)
     {
         _uiHotKeyAction = callback;
@@ -28,9 +28,9 @@ public class GlobalHotKey
     {
         if (_uiHotKeyAction is null)
             return;
-        
+
         var generalSettings = _settingsManager.GeneralSettings;
-        
+
         if (HotKeyHasChanged())
         {
             _currentKey = generalSettings.HotKeyKey;
@@ -38,13 +38,13 @@ public class GlobalHotKey
             _currentModifier2 = generalSettings.HotKeyModifier2;
 
             var modifiers = new List<Modifier>();
-            
-            if(_currentModifier1 != Modifier.None)
+
+            if (_currentModifier1 != Modifier.None)
                 modifiers.Add(_currentModifier1);
-            if(_currentModifier2 != Modifier.None)
+            if (_currentModifier2 != Modifier.None)
                 modifiers.Add(_currentModifier2);
-            
-            if(_currentHotKeyId is not null)
+
+            if (_currentHotKeyId is not null)
                 _hotKeyService.UnregisterHotKey(_currentHotKeyId.Value);
 
             _currentHotKeyId =
@@ -55,7 +55,7 @@ public class GlobalHotKey
     public bool HotKeyHasChanged()
     {
         var generalSettings = _settingsManager.GeneralSettings;
-        
+
         return _currentKey != generalSettings.HotKeyKey ||
                _currentModifier1 != generalSettings.HotKeyModifier1 ||
                _currentModifier2 != generalSettings.HotKeyModifier2;

@@ -18,9 +18,9 @@ else
 
     protected override void OnInitialized()
     {
-        JoaManager.CurrentScope?.ServiceProvider
-            .GetRequiredService<GlobalHotKey>()
-            .InitialHotKeyRegistration(() => PhotinoBlazorApp.MainWindow.SetMaximized(true));
+        // JoaManager.CurrentScope?.ServiceProvider
+        //     .GetRequiredService<GlobalHotKey>()
+        //     .InitialHotKeyRegistration(() => PhotinoBlazorApp.MainWindow.SetMaximized(true));
 
         JoaManager.ShowUi = async showUi =>
         {

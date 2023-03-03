@@ -18,20 +18,20 @@ public class HotKeyService : IDisposable
         _joaLogger = joaLogger;
         Task.Run(ListenForHotKey, _cancellationToken);
     }
-    
+
     public int RegisterHotKey(Action callback, Key key, params Modifier[] modifiers)
     {
         var id = GetUniqueHotKeyId();
         _hotKeysToRegister.Add(id, new HotKey(key, modifiers, callback));
         return id;
     }
-    
+
     public void UnregisterHotKey(int hotKeyId)
     {
         if (_hotKeysToRegister.Remove(hotKeyId))
             return;
-        
-        if(_registerdHotkeys.ContainsKey(hotKeyId))
+
+        if (_registerdHotkeys.ContainsKey(hotKeyId))
             _hotKeysToUnregister.Add(hotKeyId);
     }
 
@@ -42,9 +42,9 @@ public class HotKeyService : IDisposable
         {
             RegisterHotkeys();
             UnregisterHotKeys();
-            
+
             Thread.Sleep(1);
-            
+
             if (status == -1)
             {
                 _joaLogger.Info("Error while getting Hotkey message");
@@ -55,15 +55,15 @@ public class HotKeyService : IDisposable
                 continue;
 
             var hotKeyId = (int)msg.WParam;
-            
-            if(!_registerdHotkeys.TryGetValue(hotKeyId, out var hotkey))
+
+            if (!_registerdHotkeys.TryGetValue(hotKeyId, out var hotkey))
                 continue;
 
             _joaLogger.Info($"Received Hotkey: {hotkey}");
 
             // ReSharper disable once MethodSupportsCancellation
             Task.Run(hotkey.Callback);
-            
+
             if (_cancellationToken.IsCancellationRequested)
             {
                 _hotKeysToUnregister.AddRange(_registerdHotkeys.Select(x => x.Key));
@@ -93,17 +93,17 @@ public class HotKeyService : IDisposable
         foreach (var (id, hotKey) in _hotKeysToRegister)
         {
             var modifiers = hotKey.Modifiers.Aggregate<Modifier, uint>(0, (current, modifier) => current | (uint)modifier);
-            
+
             if (!External.RegisterHotKey(nint.Zero, id, modifiers, (uint)hotKey.Key))
             {
                 _joaLogger.Info($"Error while registering hotkey: {hotKey}");
                 continue;
             }
-            
+
             _registerdHotkeys.Add(id, hotKey);
             _joaLogger.Info($"Registered Hotkey: {hotKey}");
         }
-        
+
         _hotKeysToRegister.Clear();
     }
 

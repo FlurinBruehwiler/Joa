@@ -28,7 +28,7 @@ public class ListPropertyDescription : PropertyDescription
 public class ClassDescription
 {
     private readonly Type _type;
-    
+
     public ClassDescription(Type type)
     {
         _type = type;
@@ -86,12 +86,12 @@ public class ListPropertyInstance : PropertyInstance
     {
         return ((IList)GetValue()).Cast<object>().Select(x => new ClassInstance(x, ClassDescription)).ToList();
     }
-    
+
     public void AddItem(object item)
     {
         _propertyDescription.AddMethod.Invoke(_propertyDescription.PropertyInfo.GetValue(_instance), new[] { item });
     }
-    
+
     public void RemoveItem(ClassInstance item)
     {
         _propertyDescription.RemoveMethod.Invoke(_propertyDescription.PropertyInfo.GetValue(_instance), new[] { item.Instance });
@@ -109,7 +109,7 @@ public class ClassInstance
     {
         ClassDescription = classDescription;
         Instance = instance;
-        
+
         foreach (var propertyInfo in instance.GetType().GetProperties())
         {
             var type = propertyInfo.PropertyType;

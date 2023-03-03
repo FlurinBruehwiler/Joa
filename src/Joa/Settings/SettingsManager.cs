@@ -11,25 +11,23 @@ public class SettingsManager
     private readonly PluginManager _pluginManager;
     private readonly IJoaLogger _logger;
     private readonly FileSystemManager _fileSystemManager;
-    private readonly GlobalHotKey _globalHotKey;
     private readonly JsonSerializerOptions _options;
     private readonly FileWatcher _fileWatcher;
 
     public Action SettingsChangedOutsideOfUi { get; set; }
     public GeneralSettings GeneralSettings { get; set; } = new();
 
-    public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager, GlobalHotKey globalHotKey)
+    public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager)
     {
         logger.Info(nameof(SettingsManager));
         _pluginManager = pluginManager;
         _logger = logger;
         _fileSystemManager = fileSystemManager;
-        _globalHotKey = globalHotKey;
         _options = new JsonSerializerOptions
         {
             WriteIndented = true
         };
-        _fileWatcher = new FileWatcher(fileSystemManager.GetSettingsLocation(),  () =>
+        _fileWatcher = new FileWatcher(fileSystemManager.GetSettingsLocation(), () =>
         {
             Sync();
             SettingsChangedOutsideOfUi();
@@ -49,8 +47,8 @@ public class SettingsManager
         _fileWatcher.Disable();
         using var _ = _logger.TimedOperation(nameof(SaveSettingsToJsonAsync));
 
-        _globalHotKey.RegisterUiHotKey();
-        
+        // _globalHotKey.RegisterUiHotKey();
+
         try
         {
             var dtoSetting = new DtoSettings(_pluginManager.Plugins, GeneralSettings);
@@ -84,7 +82,7 @@ public class SettingsManager
                 throw new JsonException();
 
             JsonUtilities.PopulateObject(jsonString, GeneralSettings);
-            
+
             foreach (var pluginDefinition in _pluginManager.Plugins)
             {
                 UpdatePluginDefinition(pluginDefinition, result);
