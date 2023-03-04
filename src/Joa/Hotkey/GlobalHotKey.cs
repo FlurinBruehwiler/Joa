@@ -31,7 +31,7 @@ public class GlobalHotKey
 
         var generalSettings = _settingsManager.GeneralSettings;
 
-        if (HotKeyHasChanged())
+        if (HotKeyHasChanged() || _currentHotKeyId is null)
         {
             _currentKey = generalSettings.HotKeyKey;
             _currentModifier1 = generalSettings.HotKeyModifier1;

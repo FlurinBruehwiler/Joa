@@ -18,9 +18,18 @@ else
 
     protected override void OnInitialized()
     {
-        // JoaManager.CurrentScope?.ServiceProvider
-        //     .GetRequiredService<GlobalHotKey>()
-        //     .InitialHotKeyRegistration(() => PhotinoBlazorApp.MainWindow.SetMaximized(true));
+        Program.MainWindow = PhotinoBlazorApp.MainWindow;
+
+        PhotinoBlazorApp.MainWindow.SetSkipTaskbar(true);
+        
+        JoaManager.CurrentScope?.ServiceProvider
+            .GetRequiredService<GlobalHotKey>()
+            .InitialHotKeyRegistration(() =>
+            {
+                PhotinoBlazorApp.MainWindow.SetHidden(false);
+                // PhotinoBlazorApp.MainWindow.SetWindowFocus(true);
+                // PhotinoBlazorApp.MainWindow.SetTopZ(true);
+            });
 
         JoaManager.ShowUi = async showUi =>
         {

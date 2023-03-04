@@ -37,14 +37,18 @@ public class HotKeyService : IDisposable
 
     private void ListenForHotKey()
     {
-        int status;
-        while ((status = External.GetMessage(out var msg, nint.Zero, 0, 0)) != 0)
+        while (!_cancellationToken.IsCancellationRequested)
         {
+            var status = External.PeekMessageA(out var msg, nint.Zero, 0, 0, External.PM_REMOVE);
+            
             RegisterHotkeys();
             UnregisterHotKeys();
 
             Thread.Sleep(1);
 
+            if(status == 0)
+                continue;
+            
             if (status == -1)
             {
                 _joaLogger.Info("Error while getting Hotkey message");
@@ -63,14 +67,9 @@ public class HotKeyService : IDisposable
 
             // ReSharper disable once MethodSupportsCancellation
             Task.Run(hotkey.Callback);
-
-            if (_cancellationToken.IsCancellationRequested)
-            {
-                _hotKeysToUnregister.AddRange(_registerdHotkeys.Select(x => x.Key));
-                UnregisterHotKeys();
-                break;
-            }
         }
+        _hotKeysToUnregister.AddRange(_registerdHotkeys.Select(x => x.Key));
+        UnregisterHotKeys();
         _joaLogger.Info("Stop listening for Hotkeys");
     }
 

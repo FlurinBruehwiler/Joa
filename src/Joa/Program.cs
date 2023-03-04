@@ -8,11 +8,14 @@ using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
+using PhotinoNET;
 
 namespace Joa;
 
 public static class Program
 {
+    public static PhotinoWindow MainWindow;
+    
     [STAThread]
     public static void Main(string[] args)
     {
@@ -66,8 +69,13 @@ public static class Program
             .SetSize(600, 90)
             .SetUseOsDefaultSize(false)
             .SetResizable(false)
-            .SetMinimized(true)
-            .SetChromeless(true);
+            .SetChromeless(true)
+            .SetHidden(true)
+            .SetSkipTaskbar(true)
+            .RegisterFocusOutHandler((_, _) =>
+            {
+                searchWindow.MainWindow.SetHidden(true);
+            });
 
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
         {
