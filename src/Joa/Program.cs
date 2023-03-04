@@ -15,7 +15,7 @@ namespace Joa;
 public static class Program
 {
     public static PhotinoWindow MainWindow;
-    
+
     [STAThread]
     public static void Main(string[] args)
     {

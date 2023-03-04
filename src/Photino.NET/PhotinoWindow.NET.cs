@@ -1151,7 +1151,7 @@ public partial class PhotinoWindow
             Invoke(() => Photino_SetSkipTaskbar(_nativeInstance, skipTaskbar));
         return this;
     }
-    
+
     ///<summary>When true, the native window is hidden. Default is false.</summary>
     public PhotinoWindow SetHidden(bool hidden)
     {
@@ -1159,7 +1159,7 @@ public partial class PhotinoWindow
         Hidden = hidden;
         return this;
     }
-    
+
     ///<summary>When true, the native window is maximized. Default is false.</summary>
     public PhotinoWindow SetMaximized(bool maximized)
     {

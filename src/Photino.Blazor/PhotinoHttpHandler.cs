@@ -30,7 +30,7 @@ namespace Photino.Blazor
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             Stream content = app.HandleWebRequest(null, null, request.RequestUri.AbsoluteUri, out string contentType);
-            if(content != null)
+            if (content != null)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK);
                 response.Content = new StreamContent(content);

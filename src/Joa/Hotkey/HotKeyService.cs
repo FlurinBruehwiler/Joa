@@ -40,15 +40,15 @@ public class HotKeyService : IDisposable
         while (!_cancellationToken.IsCancellationRequested)
         {
             var status = External.PeekMessageA(out var msg, nint.Zero, 0, 0, External.PM_REMOVE);
-            
+
             RegisterHotkeys();
             UnregisterHotKeys();
 
             Thread.Sleep(1);
 
-            if(status == 0)
+            if (status == 0)
                 continue;
-            
+
             if (status == -1)
             {
                 _joaLogger.Info("Error while getting Hotkey message");

@@ -20,7 +20,7 @@
             </path>
         </g>
     </svg>
-    <input class="searchInput" type="text" value="@_input" @oninput="InputChanged" @onkeydown="HandleKeyInput">
+    <input autofocus class="searchInput" type="text" value="@_input" @oninput="InputChanged" @onkeydown="HandleKeyInput">
 </div>
 <div class="steps">
     @foreach (var step in _steps.Reverse())
@@ -107,6 +107,7 @@
                     _steps.Pop();
                 break;
             case "Escape":
+                PhotinoBlazorApp.MainWindow.SetHidden(true);
                 break;
         }
 

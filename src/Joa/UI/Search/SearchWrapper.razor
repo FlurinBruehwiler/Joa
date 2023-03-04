@@ -1,4 +1,5 @@
 ﻿@using Joa.Hotkey
+@using Joa.Injectables
 @using Microsoft.Extensions.DependencyInjection
 @using Photino.Blazor
 @inject JoaManager JoaManager 
@@ -21,14 +22,19 @@ else
         Program.MainWindow = PhotinoBlazorApp.MainWindow;
 
         PhotinoBlazorApp.MainWindow.SetSkipTaskbar(true);
-        
+
         JoaManager.CurrentScope?.ServiceProvider
             .GetRequiredService<GlobalHotKey>()
             .InitialHotKeyRegistration(() =>
             {
-                PhotinoBlazorApp.MainWindow.SetHidden(false);
-                // PhotinoBlazorApp.MainWindow.SetWindowFocus(true);
-                // PhotinoBlazorApp.MainWindow.SetTopZ(true);
+
+                PhotinoBlazorApp.MainWindow.Invoke(() =>
+                {
+                    var handle = PhotinoBlazorApp.MainWindow.WindowHandle;
+                    External.ShowWindow(handle, 1);
+                    External.SetForegroundWindow(handle);
+
+                });
             });
 
         JoaManager.ShowUi = async showUi =>
@@ -42,4 +48,5 @@ else
 
         base.OnInitialized();
     }
+
 }
