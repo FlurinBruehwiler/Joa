@@ -70,7 +70,7 @@ public static class Program
             .SetUseOsDefaultSize(false)
             .SetResizable(false)
             .SetChromeless(true)
-            .SetHidden(true)
+            // .SetHidden(true)
             .SetSkipTaskbar(true)
             .RegisterFocusOutHandler((_, _) =>
             {

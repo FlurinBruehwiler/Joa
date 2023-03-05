@@ -344,7 +344,7 @@ public partial class PhotinoWindow
             if (_nativeInstance == IntPtr.Zero)
                 return _startupParameters.Hidden;
 
-            bool hidden = false;
+            var hidden = false;
             Invoke(() => Photino_GetHidden(_nativeInstance, out hidden));
             return hidden;
         }

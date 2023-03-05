@@ -20,9 +20,7 @@ else
     protected override void OnInitialized()
     {
         Program.MainWindow = PhotinoBlazorApp.MainWindow;
-
-        PhotinoBlazorApp.MainWindow.SetSkipTaskbar(true);
-
+        
         JoaManager.CurrentScope?.ServiceProvider
             .GetRequiredService<GlobalHotKey>()
             .InitialHotKeyRegistration(() =>
@@ -33,7 +31,6 @@ else
                     var handle = PhotinoBlazorApp.MainWindow.WindowHandle;
                     External.ShowWindow(handle, 1);
                     External.SetForegroundWindow(handle);
-
                 });
             });
 
