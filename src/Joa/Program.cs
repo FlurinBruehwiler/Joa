@@ -77,7 +77,7 @@ public static class Program
                 searchWindow.MainWindow.SetHidden(true);
             });
 
-        //searchWindow.MainWindow.Centered = true;
+        searchWindow.MainWindow.Centered = true;
 
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
         {
@@ -102,9 +102,9 @@ public static class Program
         settingsWindow.MainWindow
             .SetIconFile("favicon.ico")
             .SetTitle("Joa")
+            .SetUseOsDefaultSize(false)
             .SetSize(1000, 800);
-            // .SetTopMost(false);
-
+        
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
         {
             JoaLogger.GetInstance().Error(args.ExceptionObject.ToString());

@@ -1,4 +1,5 @@
-﻿using Joa.SearchEngine;
+﻿using Joa.Injectables;
+using Joa.SearchEngine;
 using JoaLauncher.Api;
 
 namespace Joa.PluginCore;
@@ -21,7 +22,10 @@ public static class PluginExtensions
     public static List<PluginSearchResult> Sort(this List<PluginSearchResult> input, string searchString)
     {
         var sortValues = input.Select(x =>
-            (x, StringMatcher.FuzzySearch(searchString, x.SearchResult.Title).Score)).ToList();
+                (x, StringMatcher.FuzzySearch(searchString, x.SearchResult.Title).Score))
+            .Where(tuple => tuple.Score > 10)
+            .ToList();
+
 
         sortValues.Sort((x, y) =>
         {

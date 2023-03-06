@@ -20,7 +20,7 @@
             </path>
         </g>
     </svg>
-    <input autofocus class="searchInput" type="text" value="@_input" @oninput="InputChanged" @onkeydown="HandleKeyInput">
+    <input autofocus spellcheck="false" class="searchInput" type="text" value="@_input" @oninput="InputChanged" @onkeydown="HandleKeyInput">
 </div>
 <div class="steps">
     @foreach (var step in _steps.Reverse())
@@ -37,8 +37,8 @@
             <img src="@_searchResults[i].SearchResult.Icon" alt="">
         </div>
         <div>
-            <p class="searchResultTitle">@_searchResults[i].SearchResult.Title</p>
-            <p class="searchResultDescription">@_searchResults[i].SearchResult.Description</p>
+            <p class="searchResultTitle whitespace-nowrap">@_searchResults[i].SearchResult.Title</p>
+            <p class="searchResultDescription whitespace-nowrap">@_searchResults[i].SearchResult.Description</p>
         </div>
     </div>
 }
