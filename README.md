@@ -49,6 +49,10 @@ Planned release date is the 29. April 2023
 |paletro |          |                    |              |           |                 |                       |
 | Joa           | Yes             | Yes                   | Yes             | Yes         | Yes             | Yes                   |
 
+### Tech
+Joa uses a fork of the [Photino](https://www.tryphotino.io/) framework in combination with [Blazor](https://github.com/tryphotino/photino.Blazor).
+But in the future we want to switch to a custom UI framework which uses Skia for rendering.
+
 ### Development
 Joa relies on the nuget package JoaLauncher.Api, which is hosted on two different platforms:
 
