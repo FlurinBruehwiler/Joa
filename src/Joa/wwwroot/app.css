@@ -1,8 +1,8 @@
 :root {
-    --userInputBackground: #20252b;
+    --userInputBackground: #141414;
     --userInputText: #fff;
-    --searchResultBackground : #272c34;
-    --searchResultActiveBackground: #3d4452;
+    --searchResultBackground : #141414;
+    --searchResultActiveBackground: #242424;
     --searchResultNameText : #aab2c0;
     --searchResultDescriptionText : #ccc;
 }

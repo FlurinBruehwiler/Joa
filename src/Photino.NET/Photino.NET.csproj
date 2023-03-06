@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <Content Include="Photino.Native\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   

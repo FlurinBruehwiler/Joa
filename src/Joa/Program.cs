@@ -70,12 +70,14 @@ public static class Program
             .SetUseOsDefaultSize(false)
             .SetResizable(false)
             .SetChromeless(true)
-            // .SetHidden(true)
             .SetSkipTaskbar(true)
+            .SetHidden(true)
             .RegisterFocusOutHandler((_, _) =>
             {
                 searchWindow.MainWindow.SetHidden(true);
             });
+
+        //searchWindow.MainWindow.Centered = true;
 
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
         {
@@ -100,7 +102,8 @@ public static class Program
         settingsWindow.MainWindow
             .SetIconFile("favicon.ico")
             .SetTitle("Joa")
-            .SetSize(1000, 1000);
+            .SetSize(1000, 800);
+            // .SetTopMost(false);
 
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
         {
