@@ -69,16 +69,17 @@ html, body {
 .searchResultTitle{
     font-size: 17px;
     color: var(--searchResultNameText);
-    margin-top: 8px;
+    margin-top: 6px;
     margin-bottom: 0;
+
 }
 
 .searchResultDescription{
     font-size: 12px;
     color: var(--searchResultDescriptionText);
     white-space: nowrap;
-    margin-top: 5px;
     margin-bottom: 0;
+    margin-top: 0;
 }
 
 .steps{

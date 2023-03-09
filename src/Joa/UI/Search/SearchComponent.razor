@@ -7,6 +7,7 @@
 @using Joa.Injectables
 @using JoaLauncher.Api.Injectables
 @using Search = Joa.Search
+@using System.Web
 @inject JoaManager JoaManager
 @inject PhotinoBlazorApp PhotinoBlazorApp 
 @implements IDisposable
@@ -22,7 +23,7 @@
     </svg>
     <input autofocus spellcheck="false" class="searchInput" type="text" value="@_input" @oninput="InputChanged" @onkeydown="HandleKeyInput">
 </div>
-<div class="steps">
+<div class="steps cursor-default select-none">
     @foreach (var step in _steps.Reverse())
     {
         <div class="step">
@@ -32,11 +33,11 @@
 </div>
 @for (var i = 0; i < _searchResults.Count; i++)
 {
-    <div class="searchResult" style="@SearchResultBackgroundStyle(i)">
+    <div class="searchResult cursor-default select-none leading-[20px]" style="@SearchResultBackgroundStyle(i)">
         <div class="searchResultIcon">
-            <img src="@_searchResults[i].SearchResult.Icon" alt="">
+            <img class="w-[28px] h-[28px]" src="@("Icons/" + _searchResults[i].SearchResult.Icon.Replace("wwwroot\\Icons\\", ""))" alt="">
         </div>
-        <div>
+        <div class="overflow-clip">
             <p class="searchResultTitle whitespace-nowrap">@_searchResults[i].SearchResult.Title</p>
             <p class="searchResultDescription whitespace-nowrap">@_searchResults[i].SearchResult.Description</p>
         </div>
