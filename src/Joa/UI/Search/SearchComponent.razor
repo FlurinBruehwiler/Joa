@@ -50,7 +50,7 @@
     private int _activeIndex;
     private List<PluginSearchResult> _searchResults = new();
     private Stack<Step> _steps = new();
-
+    
     protected override void OnInitialized()
     {
         _steps.Push(new Step
@@ -129,11 +129,12 @@
         }
     }
 
-    private void HideWindow()
+    public void HideWindow()
     {
         PhotinoBlazorApp.MainWindow.SetHidden(true);
         _input = string.Empty;
         _searchResults.Clear();
+        InvokeAsync(StateHasChanged);
         SearchResultsHaveChanged();
     }
 

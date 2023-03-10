@@ -7,7 +7,7 @@
 
 @if (_showSearch)
 {
-    <SearchComponent></SearchComponent>
+    <SearchComponent @ref="_searchComponent"></SearchComponent>
 }
 else
 {
@@ -16,10 +16,14 @@ else
 
 @code {
     private bool _showSearch = true;
-
+    private SearchComponent? _searchComponent;
+    
     protected override void OnInitialized()
     {
-        Program.MainWindow = PhotinoBlazorApp.MainWindow;
+        PhotinoBlazorApp.MainWindow.RegisterFocusOutHandler((sender, args) =>
+        {
+            _searchComponent?.HideWindow();
+        });
         
         JoaManager.CurrentScope?.ServiceProvider
             .GetRequiredService<GlobalHotKey>()
@@ -45,5 +49,4 @@ else
 
         base.OnInitialized();
     }
-
 }

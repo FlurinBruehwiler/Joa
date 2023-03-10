@@ -8,14 +8,11 @@ using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
-using PhotinoNET;
 
 namespace Joa;
 
 public static class Program
 {
-    public static PhotinoWindow MainWindow;
-
     [STAThread]
     public static void Main(string[] args)
     {
