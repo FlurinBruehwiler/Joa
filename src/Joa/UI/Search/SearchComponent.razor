@@ -35,7 +35,7 @@
 {
     <div class="searchResult cursor-default select-none leading-[20px]" style="@SearchResultBackgroundStyle(i)">
         <div class="searchResultIcon">
-            <img class="w-[28px] h-[28px]" src="@("Icons/" + _searchResults[i].SearchResult.Icon.Replace("wwwroot\\Icons\\", ""))" alt="">
+            <img class="w-[28px] h-[28px]" src="@("Icons/" + _searchResults[i].SearchResult.Icon)" alt="">
         </div>
         <div class="overflow-clip">
             <p class="searchResultTitle whitespace-nowrap">@_searchResults[i].SearchResult.Title</p>
@@ -108,7 +108,7 @@
                     _steps.Pop();
                 break;
             case "Escape":
-                PhotinoBlazorApp.MainWindow.SetHidden(true);
+                HideWindow();
                 break;
         }
 
@@ -127,6 +127,14 @@
                 break;
             }
         }
+    }
+
+    private void HideWindow()
+    {
+        PhotinoBlazorApp.MainWindow.SetHidden(true);
+        _input = string.Empty;
+        _searchResults.Clear();
+        SearchResultsHaveChanged();
     }
 
     private void SearchResultsHaveChanged()

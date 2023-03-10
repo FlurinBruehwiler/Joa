@@ -74,7 +74,7 @@ public static class Program
             .SetHidden(true)
             .RegisterFocusOutHandler((_, _) =>
             {
-                searchWindow.MainWindow.SetHidden(true);
+                // searchWindow.MainWindow.SetHidden(true);
             });
 
         searchWindow.MainWindow.Centered = true;
