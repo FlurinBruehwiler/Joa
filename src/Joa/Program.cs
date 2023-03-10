@@ -101,7 +101,7 @@ public static class Program
             .SetTitle("Joa")
             .SetUseOsDefaultSize(false)
             .SetSize(1000, 800);
-        
+
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
         {
             JoaLogger.GetInstance().Error(args.ExceptionObject.ToString());

@@ -27,7 +27,7 @@ public class IconHelper : IIconHelper
             throw new NotImplementedException();
 
         var originalLocation = fileLocation;
-        
+
         if (fileLocation.EndsWith(".lnk"))
             fileLocation = GetShortcutTargetFile(fileLocation);
 
@@ -35,15 +35,15 @@ public class IconHelper : IIconHelper
             return string.Empty;
 
         var iconName = fileLocation.GetHashCode() + ".png";
-        
+
         var iconLocation = Path
             .Combine(GetIconsDirectory(typeof(T)), iconName);
-        
+
         if (File.Exists(iconLocation))
             return iconName;
-        
+
         var icon = Icon.ExtractAssociatedIcon(fileLocation);
-        
+
         if (icon is null)
             throw new Exception($"Extraction of Icon for the following file failed: {fileLocation}");
 
@@ -52,15 +52,15 @@ public class IconHelper : IIconHelper
         if (IsDefaultIcon(bitmapIcon))
         {
             JoaLogger.GetInstance().Info("defaultIcon: " + fileLocation);
-            
+
             var originalIcon = Icon.ExtractAssociatedIcon(originalLocation);
-        
+
             if (originalIcon is null)
                 throw new Exception($"Extraction of Icon for the following file failed: {originalLocation}");
-        
+
             bitmapIcon = originalIcon.ToBitmap();
         }
-        
+
         bitmapIcon.Save(iconLocation, ImageFormat.Png);
 
         return iconName;
@@ -68,22 +68,22 @@ public class IconHelper : IIconHelper
 
     [DllImport("msvcrt.dll")]
     private static extern int memcmp(nint b1, nint b2, long count);
-    
+
     private bool IsDefaultIcon(Bitmap bitmap)
     {
         if (bitmap.Size != _defaultIcon.Size) return false;
-    
+
         var bd1 = bitmap.LockBits(new Rectangle(new Point(0, 0), bitmap.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
         var bd2 = _defaultIcon.LockBits(new Rectangle(new Point(0, 0), _defaultIcon.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-    
+
         try
         {
             var bd1Scan0 = bd1.Scan0;
             var bd2Scan0 = bd2.Scan0;
-    
+
             var stride = bd1.Stride;
             var len = stride * bitmap.Height;
-    
+
             return memcmp(bd1Scan0, bd2Scan0, len) == 0;
         }
         finally
@@ -103,8 +103,8 @@ public class IconHelper : IIconHelper
             var sb = new StringBuilder(External.MAX_PATH);
             // ReSharper disable once SuspiciousTypeConversion.Global
             ((IShellLinkW)link).GetPath(sb, sb.Capacity, out _, 0);
-            
-            return sb.ToString(); 
+
+            return sb.ToString();
         }
         catch (Exception e)
         {
