@@ -68,11 +68,7 @@ public static class Program
             .SetResizable(false)
             .SetChromeless(true)
             .SetSkipTaskbar(true)
-            .SetHidden(true)
-            .RegisterFocusOutHandler((_, _) =>
-            {
-                // searchWindow.MainWindow.SetHidden(true);
-            });
+            .SetHidden(true);
 
         searchWindow.MainWindow.Centered = true;
 
@@ -92,7 +88,7 @@ public static class Program
         settingsWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<JoaManager>());
         settingsWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<FileSystemManager>());
 
-        settingsWindowBuilder.RootComponents.Add<SettingsComponent>("app");
+        settingsWindowBuilder.RootComponents.Add<SettingsWrapper>("app");
 
         var settingsWindow = settingsWindowBuilder.Build();
 

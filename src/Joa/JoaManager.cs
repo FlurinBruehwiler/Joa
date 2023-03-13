@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Joa.PluginCore;
@@ -23,7 +24,6 @@ public class JoaManager : IDisposable
 
     public JoaManager(IServiceProvider serviceProvider, IJoaLogger joaLogger, FileSystemManager fileSystemManager)
     {
-        joaLogger.Info(nameof(JoaManager));
         _serviceProvider = serviceProvider;
         _joaLogger = joaLogger;
         _fileSystemManager = fileSystemManager;
@@ -46,7 +46,10 @@ public class JoaManager : IDisposable
             if (alcWeakRef.IsAlive)
                 _joaLogger.Error("Unloading failed");
             else
+            {
                 _joaLogger.Info("Unloading succeeded");
+                Debugger.Break();                
+            }
 
             _fileWatcher = new FileWatcher(_fileSystemManager.GetPluginsLocation(), NewScope, 500);
         }

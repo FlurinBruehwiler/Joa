@@ -1,4 +1,7 @@
-﻿<button
+﻿@using Joa.Injectables
+@implements IDisposable
+
+<button
     @onclick="OnClickAsync" class="text-[15px] text-white @Color h-[35px] w-[35px] rounded-[4px] flex justify-center items-center">
     @if (Icon == "trash")
     {
@@ -41,4 +44,14 @@
 
         base.OnInitialized();
     }
+
+    public void Dispose()
+    {
+        JoaLogger.GetInstance().Info("Disposing IconButton");
+        Color = null;
+        Icon = null;
+        OnClick = null;
+        OnClickAsync = null;
+    }
+
 }

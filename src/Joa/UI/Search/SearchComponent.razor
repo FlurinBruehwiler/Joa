@@ -51,8 +51,28 @@
     private List<PluginSearchResult> _searchResults = new();
     private Stack<Step> _steps = new();
     
+    public void Dispose()
+    {
+        JoaLogger.GetInstance().Info("disposing search ui");
+        _input = string.Empty;
+        _searchResults = null;
+        _steps = null;
+    }
+    
     protected override void OnInitialized()
     {
+        JoaManager.CurrentScope?.ServiceProvider
+            .GetRequiredService<GlobalHotKey>()
+            .InitialHotKeyRegistration(() =>
+            {
+                PhotinoBlazorApp.MainWindow.Invoke(() =>
+                {
+                    var handle = PhotinoBlazorApp.MainWindow.WindowHandle;
+                    PhotinoBlazorApp.MainWindow.SetHidden(false);
+                    External.SetForegroundWindow(handle);
+                });
+            });
+        
         _steps.Push(new Step
         {
             Providers = GetRequiredService<PluginManager>().GlobalProviders,
@@ -149,13 +169,5 @@
         {
             _steps.Pop();
         }
-    }
-
-    public void Dispose()
-    {
-        JoaLogger.GetInstance().Info("disposing ui");
-        _input = string.Empty;
-        _searchResults = null;
-        _steps = null;
     }
 }

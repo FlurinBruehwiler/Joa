@@ -15,7 +15,6 @@ public class PluginManager
 
     public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, BuiltInProvider builtInProvider)
     {
-        logger.Info(nameof(PluginManager));
         _pluginLoader = pluginLoader;
         _logger = logger;
         _builtInProvider = builtInProvider;

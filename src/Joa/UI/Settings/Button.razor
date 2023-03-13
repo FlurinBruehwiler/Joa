@@ -1,4 +1,7 @@
-﻿<button
+﻿@using Joa.Injectables
+@implements IDisposable
+
+<button
     @onclick="OnClickAsync" class="text-[15px] text-white @Color px-[15px] h-[35px] rounded-[4px]">
     @Text
 </button>
@@ -26,5 +29,14 @@
         };
 
         base.OnInitialized();
+    }
+
+    public void Dispose()
+    {
+        JoaLogger.GetInstance().Info("Disposing Button");
+        Color = null;
+        Text = null;
+        OnClick = null;
+        OnClickAsync = null;
     }
 }

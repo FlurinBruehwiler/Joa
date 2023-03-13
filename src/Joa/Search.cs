@@ -15,7 +15,6 @@ public class Search
 
     public Search(IJoaLogger logger, PluginServiceProvider pluginServiceProvider, SettingsManager settingsManager)
     {
-        logger.Info(nameof(Search));
         _logger = logger;
         _pluginServiceProvider = pluginServiceProvider;
         _settingsManager = settingsManager;

@@ -19,7 +19,6 @@ public class PluginLoader
     public PluginLoader(IJoaLogger logger, PluginServiceProvider pluginServiceProvider,
         FileSystemManager fileSystemManager)
     {
-        logger.Info(nameof(PluginLoader));
         _logger = logger;
         _pluginServiceProvider = pluginServiceProvider;
         _fileSystemManager = fileSystemManager;

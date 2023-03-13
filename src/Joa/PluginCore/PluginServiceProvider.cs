@@ -12,7 +12,6 @@ public class PluginServiceProvider
 
     public PluginServiceProvider(IJoaLogger joaLogger)
     {
-        joaLogger.Info(nameof(PluginServiceProvider));
         ServiceCollection = new ServiceCollection();
         ServiceCollection.AddSingleton(joaLogger);
         ServiceCollection.AddSingleton<IBrowserHelper, BrowserHelper>();

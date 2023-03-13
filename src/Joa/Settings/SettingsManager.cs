@@ -19,7 +19,6 @@ public class SettingsManager
 
     public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager)
     {
-        logger.Info(nameof(SettingsManager));
         _pluginManager = pluginManager;
         _logger = logger;
         _fileSystemManager = fileSystemManager;

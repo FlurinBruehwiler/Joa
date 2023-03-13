@@ -1,6 +1,8 @@
 ﻿@using Joa.Settings
 @using Microsoft.Extensions.DependencyInjection
+@using Joa.Injectables
 @inject JoaManager JoaManager
+@implements IDisposable
 <div @onclick="Close" class="flex justify-center items-center fixed left-0 top-0 right-0 bottom-0 bg-[rgba(0,0,0,0.5)]">
     <div @onclick:stopPropagation="true" class="w-[600px] bg-c-50 border-c-200 border-[1px] rounded-[4px] p-[30px] flex flex-col gap-[6px]">
         <p>Add</p>
@@ -46,6 +48,16 @@
     private ClassInstance _classInstance;
     private SettingsManager _settingsManager;
 
+    
+    public void Dispose()
+    {
+        JoaLogger.GetInstance().Info("Disposing AddItemModal");
+        ListProperty = null;
+        Close = null;
+        _classInstance = null;
+        _settingsManager = null;
+    }
+    
     protected override void OnInitialized()
     {
         _settingsManager = JoaManager.CurrentScope.ServiceProvider.GetRequiredService<SettingsManager>();

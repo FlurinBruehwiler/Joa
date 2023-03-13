@@ -51,8 +51,6 @@ public class IconHelper : IIconHelper
 
         if (IsDefaultIcon(bitmapIcon))
         {
-            JoaLogger.GetInstance().Info("defaultIcon: " + fileLocation);
-
             var originalIcon = Icon.ExtractAssociatedIcon(originalLocation);
 
             if (originalIcon is null)

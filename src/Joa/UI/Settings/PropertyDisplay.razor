@@ -1,7 +1,9 @@
 ﻿@using Joa.Settings
 @using System.Runtime.CompilerServices
+@using Joa.Injectables
 @using Microsoft.Extensions.DependencyInjection
 @inject JoaManager JoaManager
+@implements IDisposable
 
 @if (_propertyType == typeof(int) || _propertyType == typeof(float) || _propertyType == typeof(string))
 {
@@ -57,6 +59,14 @@ else if (Property is ListPropertyInstance listProperty)
     private SettingsManager _settingsManager;
     private bool _showAddDialog;
 
+    public void Dispose()
+    {
+        JoaLogger.GetInstance().Info("Disposing PropertyDisplay");
+        _propertyType = null;
+        Property = null;
+        _settingsManager = null;
+    }
+    
     protected override void OnInitialized()
     {
         if (JoaManager.CurrentScope is null)
