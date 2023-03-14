@@ -32,6 +32,7 @@ public class SettingsManager
             SettingsChangedOutsideOfUi();
         }, 10);
         Sync();
+        pluginManager.UpdateIndexesAsync().GetAwaiter().GetResult();
     }
 
     private void Sync()

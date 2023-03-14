@@ -21,16 +21,6 @@ public class PluginManager
         ReloadPlugins().GetAwaiter().GetResult();
     }
 
-    public List<T> GetPluginsOfType<T>() where T : IPlugin
-    {
-        return GetPluginDefinitionsOfType<T>().Select(x => (T)x.Plugin).ToList();
-    }
-
-    private List<PluginDefinition> GetPluginDefinitionsOfType<T>() where T : IPlugin
-    {
-        return Plugins.Where(x => x.Plugin is T).ToList();
-    }
-
     public async Task ReloadPlugins()
     {
         Plugins = _pluginLoader.ReloadPlugins();
@@ -39,10 +29,9 @@ public class PluginManager
         {
             Provider = _builtInProvider
         });
-        await UpdateIndexesAsync();
     }
 
-    private async Task UpdateIndexesAsync()
+    public async Task UpdateIndexesAsync()
     {
         foreach (var cache in Plugins.SelectMany(x => x.Caches))
         {
