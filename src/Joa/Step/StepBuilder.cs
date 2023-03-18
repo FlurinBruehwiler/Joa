@@ -15,7 +15,7 @@ public class StepBuilder : IStepBuilder
         _pluginSearchResult = pluginSearchResult;
     }
 
-    private List<IGenericProvider> Providers { get; set; } = new();
+    private List<IProvider> Providers { get; set; } = new();
     private StepOptions StepOptions { get; set; } = new();
 
     public Step Build()

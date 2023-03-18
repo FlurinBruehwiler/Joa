@@ -4,6 +4,6 @@ namespace Joa.Step;
 
 public class ProviderWrapper
 {
-    public required IGenericProvider Provider { get; set; }
+    public required IProvider Provider { get; set; }
     public Func<string, bool>? Condition { get; set; }
 }

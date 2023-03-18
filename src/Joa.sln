@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photino.NET", "Photino.NET\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photino.Blazor", "Photino.Blazor\Photino.Blazor.csproj", "{87020904-B041-4C14-8D0E-7EC51FAE1DE4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{7BFD5638-12D0-476E-BE3F-EEF03DD68F6A}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
