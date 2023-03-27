@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="JoaLauncher.Api" Version="1.0.19-gc95a6e2be1" />
+      <PackageReference Include="JoaLauncher.Api" Version="1.0.23-gbb3b47926c" />
       <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     </ItemGroup>
 

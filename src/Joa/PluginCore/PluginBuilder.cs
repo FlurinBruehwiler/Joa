@@ -43,13 +43,27 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
+    public IPluginBuilder AddSaveAction<T>(string nameOfProperty, Action<T> callback) where T : class, ISetting
+    {
+        throw new NotImplementedException();
+    }
+
+    public IPluginBuilder AddSaveAction<T>(Action<T> callback) where T : class, ISetting
+    {
+        throw new NotImplementedException();
+    }
+
     public PluginDefinition BuildPluginDefinition(IPlugin plugin, ISetting setting, List<ICache> caches, List<IAsyncCache> asyncCaches)
     {
-        var pluginInfos = GetPluginInfos(plugin.GetType());
+        // var pluginInfos = GetPluginInfos(plugin.GetType());
 
-        if (pluginInfos is null)
-            throw new Exception("Error while Building Plugin Definition");
+        // if (pluginInfos is null)
+        //     throw new Exception("Error while Building Plugin Definition");
+        //
+        //
 
+        // var pluginInfos = new 
+        
         plugin.ConfigurePlugin(this);
 
         var globalProviders = InstantiateGlobalProviders().ToList();
@@ -59,7 +73,7 @@ public class PluginBuilder : IPluginBuilder
         return new PluginDefinition(setting)
         {
             Plugin = plugin,
-            PluginInfo = pluginInfos,
+            // PluginInfo = pluginInfos,
             GlobalProviders = globalProviders,
             Caches = caches,
             AsyncCaches = asyncCaches
@@ -101,13 +115,13 @@ public class PluginBuilder : IPluginBuilder
     }
 
 
-    //ToDo should throw Exception
-    private PluginAttribute? GetPluginInfos(MemberInfo pluginType)
-    {
-        if (Attribute.GetCustomAttributes(pluginType).FirstOrDefault(x => x is PluginAttribute) is PluginAttribute pluginAttribute)
-            return pluginAttribute;
-
-        _joaLogger.Log($"The plugin {pluginType.Name} does not have the PluginAttribute", LogLevel.Error);
-        return null;
-    }
+    // //ToDo should throw Exception
+    // private PluginAttribute? GetPluginInfos(MemberInfo pluginType)
+    // {
+    //     if (Attribute.GetCustomAttributes(pluginType).FirstOrDefault(x => x is PluginAttribute) is PluginAttribute pluginAttribute)
+    //         return pluginAttribute;
+    //
+    //     _joaLogger.Log($"The plugin {pluginType.Name} does not have the PluginAttribute", LogLevel.Error);
+    //     return null;
+    // }
 }

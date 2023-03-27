@@ -10,7 +10,7 @@ public class PluginDefinition
 {
     public Guid Id { get; }
     public required IPlugin Plugin { get; set; }
-    public required PluginAttribute PluginInfo { get; set; }
+    // public required PluginAttribute PluginInfo { get; set; }
     public required List<ProviderWrapper> GlobalProviders { get; set; }
     public ISetting Setting { get; set; }
     public required List<ICache> Caches { get; set; }
