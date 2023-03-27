@@ -1,5 +1,4 @@
-﻿using JoaLauncher.Api;
-using JoaLauncher.Api.Plugin;
+﻿using JoaLauncher.Api.Plugin;
 
 namespace Joa;
 

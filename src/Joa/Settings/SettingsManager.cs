@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using Joa.Hotkey;
 using Joa.PluginCore;
 using JoaLauncher.Api.Injectables;
 using LogLevel = JoaLauncher.Api.Injectables.LogLevel;
@@ -98,7 +97,7 @@ public class SettingsManager
 
     private void UpdatePluginDefinition(PluginDefinition pluginDefinition, DtoSettings newDtoSettings)
     {
-        if (!newDtoSettings.Plugins.TryGetValue(pluginDefinition.Id.ToString("N"), out var newPlugin))
+        if (!newDtoSettings.Plugins.TryGetValue(pluginDefinition.Manifest.Id, out var newPlugin))
             return;
 
         JsonUtilities.PopulateObject(newPlugin.Setting, pluginDefinition.Setting);

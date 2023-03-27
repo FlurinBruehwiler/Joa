@@ -1,6 +1,5 @@
 ﻿using Joa.Step;
 using JoaLauncher.Api.Injectables;
-using JoaLauncher.Api.Plugin;
 
 namespace Joa.PluginCore;
 

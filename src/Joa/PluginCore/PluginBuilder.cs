@@ -1,7 +1,5 @@
-﻿using System.Reflection;
-using Joa.Step;
+﻿using Joa.Step;
 using JoaLauncher.Api;
-using JoaLauncher.Api.Attributes;
 using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
 using JoaLauncher.Api.Providers;
@@ -53,17 +51,8 @@ public class PluginBuilder : IPluginBuilder
         throw new NotImplementedException();
     }
 
-    public PluginDefinition BuildPluginDefinition(IPlugin plugin, ISetting setting, List<ICache> caches, List<IAsyncCache> asyncCaches)
+    public PluginDefinition BuildPluginDefinition(IPlugin plugin, ISetting setting, List<ICache> caches, List<IAsyncCache> asyncCaches, PluginManifest pluginManifest)
     {
-        // var pluginInfos = GetPluginInfos(plugin.GetType());
-
-        // if (pluginInfos is null)
-        //     throw new Exception("Error while Building Plugin Definition");
-        //
-        //
-
-        // var pluginInfos = new 
-        
         plugin.ConfigurePlugin(this);
 
         var globalProviders = InstantiateGlobalProviders().ToList();
@@ -73,7 +62,7 @@ public class PluginBuilder : IPluginBuilder
         return new PluginDefinition(setting)
         {
             Plugin = plugin,
-            // PluginInfo = pluginInfos,
+            Manifest = pluginManifest,
             GlobalProviders = globalProviders,
             Caches = caches,
             AsyncCaches = asyncCaches

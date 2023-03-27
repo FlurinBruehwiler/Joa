@@ -12,7 +12,7 @@ public class DtoSettings
     {
         GeneralSettings = generalSettings;
         Plugins = pluginDefinitions.ToDictionary(
-            pluginDefinition => pluginDefinition.Id.ToString("N"),
+            pluginDefinition => pluginDefinition.Manifest.Id,
             pluginDefinition => new DtoPluginSettings
             {
                 IsEnabled = true,

@@ -1,5 +1,4 @@
-﻿using Joa.Injectables;
-using Joa.SearchEngine;
+﻿using Joa.SearchEngine;
 using JoaLauncher.Api;
 
 namespace Joa.PluginCore;

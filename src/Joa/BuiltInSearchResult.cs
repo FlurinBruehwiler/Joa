@@ -1,5 +1,4 @@
 ﻿using JoaLauncher.Api;
-using JoaLauncher.Api.Providers;
 
 namespace Joa;
 

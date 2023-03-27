@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
-using JoaLauncher.Api;
+using System.Text.Json;
 using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,7 +47,7 @@ public class PluginLoader
             if (plugin is null)
                 continue;
             var pluginBuilder = new PluginBuilder(this, _logger, _pluginServiceProvider);
-            pluginDefinitions.Add(pluginBuilder.BuildPluginDefinition(plugin, setting, caches, asyncCaches));
+            pluginDefinitions.Add(pluginBuilder.BuildPluginDefinition(plugin, setting, caches, asyncCaches, pluginType.PluginManifest));
         }
 
         return pluginDefinitions;
@@ -183,14 +183,19 @@ public class PluginLoader
         return plugin;
     }
 
-    private List<PluginTypes> LoadTypes(List<Assembly> assemblies)
+    private List<PluginTypes> LoadTypes(List<PluginAssembly> assemblies)
     {
         return assemblies.Select(LoadType).Where(type => type is not null).ToList()!;
     }
 
-    private PluginTypes? LoadType(Assembly assembly)
+    private PluginTypes? LoadType(PluginAssembly pluginAssembly)
     {
-        PluginTypes pluginTypes = new();
+        var assembly = pluginAssembly.Assembly;
+        
+        PluginTypes pluginTypes = new()
+        {
+            PluginManifest = pluginAssembly.PluginManifest
+        };
 
         foreach (var type in assembly.GetTypes())
         {
@@ -223,15 +228,26 @@ public class PluginLoader
                     $"Available types: \n{availableTypes}", LogLevel.Warning);
         return null;
     }
-
-    private List<string> GetPluginDllPaths(string pluginsFinalLocation)
+    
+    private List<PluginFiles> GetPluginDllPaths(string pluginsFinalLocation)
     {
         _logger.Log($"Searching for Plugins in {pluginsFinalLocation}", LogLevel.Info);
 
         var pluginFolders = Directory.GetDirectories(pluginsFinalLocation);
+        
+        var plugins = pluginFolders.Select(pluginfolder =>
+            {
+                var filesInFolder = Directory.GetFiles(pluginfolder);
 
-        var plugins = pluginFolders.Select(x => Directory.GetFiles(x)
-                .FirstOrDefault(file => file.EndsWith($"{Directory.GetParent(file)?.Name}.dll"))).Where(x => x != null)
+                var manifest = filesInFolder.FirstOrDefault(file => file == "manifest.json");
+
+                var dll = filesInFolder.FirstOrDefault(file => file.EndsWith($"{Directory.GetParent(file)?.Name}.dll"));
+
+                if (dll is null)
+                    return null;
+
+                return new PluginFiles(dll, manifest);
+            }).Where(x => x is not null)
             .ToList();
 
         var pluginsToLog = plugins.Aggregate("", (current, plugin) => current + Environment.NewLine + plugin);
@@ -239,10 +255,44 @@ public class PluginLoader
 
         return plugins!;
     }
+    
 
-    private List<Assembly> LoadAssemblies(List<string> dllPaths)
+    private List<PluginAssembly> LoadAssemblies(List<PluginFiles> pluginFiles)
     {
-        return dllPaths.Select(LoadAssembly).ToList();
+        return pluginFiles.Select(s =>
+        {
+            var assembly = LoadAssembly(s.Dll);
+            if (s.Manifest is not null)
+            {
+                var manifestString = File.ReadAllText(s.Manifest);
+                try
+                {
+                    var manifest = JsonSerializer.Deserialize<PluginManifest>(manifestString);
+                    if (manifest is null)
+                        throw new Exception();
+                    
+                    return new PluginAssembly(assembly, manifest);
+                }
+                catch
+                {
+                    _logger.Error($"Error parsing the manifest file '{s.Manifest}'");
+                }
+            }
+
+            var assemblyName = assembly.GetName().Name;
+
+            if (assemblyName is null)
+                throw new Exception($"Could not read assembly name from name from {s.Dll}");
+            
+            var beautifiedName = BeautifyString(assemblyName);
+            var generatedManifest = new PluginManifest
+            {
+                Id = assemblyName,
+                Name = beautifiedName
+            };
+
+            return new PluginAssembly(assembly, generatedManifest);
+        }).ToList();
     }
 
     private Assembly LoadAssembly(string pluginLocation)
@@ -251,4 +301,25 @@ public class PluginLoader
         return AssemblyLoadContext.LoadFromAssemblyName(
             new AssemblyName(Path.GetFileNameWithoutExtension(pluginLocation)));
     }
+
+    private string BeautifyString(string inputString)
+    {
+        var outputString = string.Empty;
+
+        for (var i = 0; i < inputString.Length; i++)
+        {
+            if (i > 0 && char.IsUpper(inputString[i]))
+            {
+                outputString += " ";
+            }
+            outputString += inputString[i];
+        }
+
+        return outputString;
+    }
 }
+
+
+record PluginFiles(string Dll, string? Manifest);
+
+record PluginAssembly(Assembly Assembly, PluginManifest PluginManifest);
