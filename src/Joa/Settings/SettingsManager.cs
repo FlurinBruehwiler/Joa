@@ -99,7 +99,7 @@ public class SettingsManager
     {
         if (!newDtoSettings.Plugins.TryGetValue(pluginDefinition.Manifest.Id, out var newPlugin))
             return;
-
+                            
         JsonUtilities.PopulateObject(newPlugin.Setting, pluginDefinition.Setting);
     }
 }

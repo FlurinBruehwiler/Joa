@@ -94,7 +94,7 @@ public static class Program
 
         settingsWindow.MainWindow
             .SetIconFile("favicon.ico")
-            .SetTitle("Joa")
+            .SetTitle("Joa Settings")
             .SetUseOsDefaultSize(false)
             .SetSize(1000, 800);
 

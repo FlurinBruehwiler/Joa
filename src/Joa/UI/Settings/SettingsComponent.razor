@@ -7,12 +7,14 @@
 
 <div class="w-full h-full flex">
     <div class="bg-c-100 w-[300px] h-full flex flex-col border-c-200 border-r-[1px]">
-        <div class="h-[93px] w-full"></div>
+        <div class="h-[70px] w-full">
+            <img class="h-full" src="joa_dark.png" alt="">
+        </div>
         <div class="h-full w-full flex flex-col p-[15px] gap-[6px] border-c-200 border-y-[1px]">
             @for (var i = 0; i < _pluginManager.Plugins.Count; i++)
             {
                 var plugin = _pluginManager.Plugins[i];
-                var i1 = i; //very scuffed, but we need it for hot reload
+                var i1 = i; //very scuffed, but it has to be a for loop because a foreach doesnt work for hot reload
                 <button @onclick="@(() => _selectedPlugin = _pluginManager.Plugins[i1])" class="w-full h-[40px] @(plugin == _selectedPlugin ? "bg-c-400" : "bg-transparent") rounded-[4px] cursor-pointer text-left pl-[10px] text-white">
                     @plugin.Manifest.Name
                 </button>

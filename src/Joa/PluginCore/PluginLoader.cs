@@ -304,6 +304,8 @@ public class PluginLoader
 
     private string BeautifyString(string inputString)
     {
+        inputString = inputString.Replace("Plugin.", "");
+        
         var outputString = string.Empty;
 
         for (var i = 0; i < inputString.Length; i++)
