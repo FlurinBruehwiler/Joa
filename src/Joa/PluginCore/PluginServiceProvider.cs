@@ -16,6 +16,7 @@ public class PluginServiceProvider
         ServiceCollection.AddSingleton(joaLogger);
         ServiceCollection.AddSingleton<IBrowserHelper, BrowserHelper>();
         ServiceCollection.AddSingleton<IIconHelper, IconHelper>();
+        ServiceCollection.AddSingleton<IClipboardHelper, ClipboardHelper>();
         ServiceProvider = ServiceCollection.BuildServiceProvider();
     }
 

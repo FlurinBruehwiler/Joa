@@ -34,7 +34,7 @@ public class Step
         }
         else
         {
-            _lastSearchResults = Providers
+            _lastSearchResults = Providers.Where(x => x.Condition is null)
                 .SelectMany(x => x.Provider
                     .GetSearchResults(searchString))
                 .ToList()
