@@ -93,11 +93,11 @@
         return (T)JoaManager.CurrentScope?.ServiceProvider.GetRequiredService(typeof(T))! ?? throw new InvalidOperationException();
     }
 
-    private async Task InputChanged(ChangeEventArgs args)
+    private void InputChanged(ChangeEventArgs args)
     {
         _input = args.Value?.ToString() ?? string.Empty;
 
-        var results = await GetRequiredService<Search>().UpdateSearchResults(_steps.Peek(), _input);
+        var results = GetRequiredService<Search>().UpdateSearchResults(_steps.Peek(), _input);
 
         _searchResults = results;
         _activeIndex = 0;

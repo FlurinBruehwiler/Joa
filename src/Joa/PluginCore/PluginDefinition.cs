@@ -13,6 +13,7 @@ public class PluginDefinition
     public required List<ICache> Caches { get; set; }
     public required List<IAsyncCache> AsyncCaches { get; set; }
     public ClassInstance SettingConfiguration { get; set; }
+    public required List<SaveAction> SaveActions { get; set; }
 
     public PluginDefinition(ISetting setting)
     {

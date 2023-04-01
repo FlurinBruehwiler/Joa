@@ -1,6 +1,7 @@
 ﻿@using Joa.Settings
 @using System.Runtime.CompilerServices
 @using Joa.Injectables
+@using Joa.PluginCore
 @using Microsoft.Extensions.DependencyInjection
 @inject JoaManager JoaManager
 @implements IDisposable
@@ -45,7 +46,7 @@ else if (Property is ListPropertyInstance listProperty)
         </div>
         @if (_showAddDialog)
         {
-            <AddItemModal Close="CloseModal" ListProperty="listProperty"></AddItemModal>
+            <AddItemModal PluginDefinition="PluginDefinition" Close="CloseModal" ListProperty="listProperty"></AddItemModal>
         }
     </div>
 }
@@ -55,6 +56,9 @@ else if (Property is ListPropertyInstance listProperty)
     [Parameter]
     public PropertyInstance Property { get; set; }
 
+    [Parameter]
+    public PluginDefinition PluginDefinition { get; set; }
+    
     private Type _propertyType;
     private SettingsManager _settingsManager;
     private bool _showAddDialog;

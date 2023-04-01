@@ -1,6 +1,6 @@
-﻿using Joa.Step;
+﻿using Joa.Settings;
+using Joa.Step;
 using JoaLauncher.Api;
-using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
 using JoaLauncher.Api.Providers;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,18 +10,17 @@ namespace Joa.PluginCore;
 public class PluginBuilder : IPluginBuilder
 {
     private readonly PluginLoader _pluginLoader;
-    private readonly IJoaLogger _joaLogger;
     private readonly PluginServiceProvider _pluginServiceProvider;
 
-    public PluginBuilder(PluginLoader pluginLoader, IJoaLogger joaLogger, PluginServiceProvider pluginServiceProvider)
+    public PluginBuilder(PluginLoader pluginLoader, PluginServiceProvider pluginServiceProvider)
     {
         _pluginLoader = pluginLoader;
-        _joaLogger = joaLogger;
         _pluginServiceProvider = pluginServiceProvider;
     }
 
     private readonly List<(Type, Func<string, bool>?)> _providers = new();
     private readonly List<SearchResult> _searchResults = new();
+    private readonly List<SaveAction> _saveActions = new();
 
     public IPluginBuilder AddGlobalProvider<T>() where T : IProvider
     {
@@ -41,14 +40,16 @@ public class PluginBuilder : IPluginBuilder
         return this;
     }
 
-    public IPluginBuilder AddSaveAction<T>(string nameOfProperty, Action<T> callback) where T : class, ISetting
+    public IPluginBuilder AddSaveAction<T>(string nameOfProperty, Action<T> callback) where T : class
     {
-        throw new NotImplementedException();
+        _saveActions.Add(new SaveAction(o => callback((T)o), null, typeof(T), nameOfProperty, false));
+        return this;
     }
-
-    public IPluginBuilder AddSaveAction<T>(Action<T> callback) where T : class, ISetting
+    
+    public IPluginBuilder AddSaveAction<T>(string nameOfProperty, Func<T, Task> callback) where T : class
     {
-        throw new NotImplementedException();
+        _saveActions.Add(new SaveAction(null, o => callback((T)o), typeof(T), nameOfProperty, true));
+        return this;
     }
 
     public PluginDefinition BuildPluginDefinition(IPlugin plugin, ISetting setting, List<ICache> caches, List<IAsyncCache> asyncCaches, PluginManifest pluginManifest)
@@ -65,7 +66,8 @@ public class PluginBuilder : IPluginBuilder
             Manifest = pluginManifest,
             GlobalProviders = globalProviders,
             Caches = caches,
-            AsyncCaches = asyncCaches
+            AsyncCaches = asyncCaches,
+            SaveActions = _saveActions
         };
     }
 
@@ -102,15 +104,4 @@ public class PluginBuilder : IPluginBuilder
             Provider = genericSearchResultProvider
         });
     }
-
-
-    // //ToDo should throw Exception
-    // private PluginAttribute? GetPluginInfos(MemberInfo pluginType)
-    // {
-    //     if (Attribute.GetCustomAttributes(pluginType).FirstOrDefault(x => x is PluginAttribute) is PluginAttribute pluginAttribute)
-    //         return pluginAttribute;
-    //
-    //     _joaLogger.Log($"The plugin {pluginType.Name} does not have the PluginAttribute", LogLevel.Error);
-    //     return null;
-    // }
 }

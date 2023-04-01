@@ -46,7 +46,7 @@ public class PluginLoader
             var plugin = InstantiatePlugin(pluginType.Plugin!);
             if (plugin is null)
                 continue;
-            var pluginBuilder = new PluginBuilder(this, _logger, _pluginServiceProvider);
+            var pluginBuilder = new PluginBuilder(this, _pluginServiceProvider);
             pluginDefinitions.Add(pluginBuilder.BuildPluginDefinition(plugin, setting, caches, asyncCaches, pluginType.PluginManifest));
         }
 

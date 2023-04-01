@@ -35,7 +35,7 @@
         <div class="w-full h-full flex flex-col gap-[10px] p-[35px]">
             @foreach(var property in _selectedPlugin.SettingConfiguration.PropertyInstances)
             {
-                <PropertyDisplay Property="property"></PropertyDisplay>
+                <PropertyDisplay PluginDefinition="_selectedPlugin" Property="property"></PropertyDisplay>
             }
         </div>
     </div>

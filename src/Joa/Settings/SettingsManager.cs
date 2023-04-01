@@ -41,6 +41,25 @@ public class SettingsManager
         SaveSettingsToJsonAsync().GetAwaiter().GetResult();
     }
 
+    public async Task PropertyHasChanged(PluginDefinition pluginDefinition, string property)
+    {
+        var saveAction = pluginDefinition.SaveActions.FirstOrDefault(x =>
+            x.Type == pluginDefinition.Setting.GetType() && x.Property == property);
+
+        if (saveAction is null)
+            return;
+
+        if (saveAction.Callback is not null)
+        {
+            saveAction.Callback(pluginDefinition.Setting);
+        }
+
+        if (saveAction.AsyncCallback is not null)
+        {
+            await saveAction.AsyncCallback(pluginDefinition.Setting);
+        }
+    }
+
     public async Task SaveSettingsToJsonAsync()
     {
         _fileWatcher.Disable();
@@ -99,7 +118,7 @@ public class SettingsManager
     {
         if (!newDtoSettings.Plugins.TryGetValue(pluginDefinition.Manifest.Id, out var newPlugin))
             return;
-                            
+
         JsonUtilities.PopulateObject(newPlugin.Setting, pluginDefinition.Setting);
     }
 }

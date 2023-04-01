@@ -33,8 +33,7 @@ public class Search
         return executionContext.StepBuilder?.Build();
     }
 
-    //ToDo
-    public async Task<List<PluginSearchResult>> UpdateSearchResults(Step.Step step, string searchString)
+    public List<PluginSearchResult> UpdateSearchResults(Step.Step step, string searchString)
     {
         using var _ = _logger.TimedOperation(nameof(UpdateSearchResults));
 

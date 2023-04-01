@@ -1,6 +1,7 @@
 ﻿@using Joa.Settings
 @using Microsoft.Extensions.DependencyInjection
 @using Joa.Injectables
+@using Joa.PluginCore
 @inject JoaManager JoaManager
 @implements IDisposable
 <div @onclick="Close" class="flex justify-center items-center fixed left-0 top-0 right-0 bottom-0 bg-[rgba(0,0,0,0.5)]">
@@ -45,6 +46,9 @@
     [Parameter]
     public Action Close { get; set; }
 
+    [Parameter]
+    public PluginDefinition PluginDefinition { get; set; }
+
     private ClassInstance _classInstance;
     private SettingsManager _settingsManager;
 
@@ -79,6 +83,7 @@
     {
         ListProperty.AddItem(_classInstance.Instance);
         Close();
+        _settingsManager.PropertyHasChanged(PluginDefinition, ListProperty.PropertyDescription.PropertyInfo.Name);
         await _settingsManager.SaveSettingsToJsonAsync();
     }
 }

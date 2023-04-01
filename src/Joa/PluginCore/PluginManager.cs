@@ -1,5 +1,6 @@
 ﻿using Joa.Step;
 using JoaLauncher.Api.Injectables;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Joa.PluginCore;
 
@@ -10,23 +11,27 @@ public class PluginManager
 
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
-    private readonly BuiltInProvider _builtInProvider;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly JoaManager _joaManager;
 
-    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, BuiltInProvider builtInProvider)
+    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, IServiceProvider serviceProvider, JoaManager joaManager)
     {
         _pluginLoader = pluginLoader;
         _logger = logger;
-        _builtInProvider = builtInProvider;
-        ReloadPlugins().GetAwaiter().GetResult();
+        _serviceProvider = serviceProvider;
+        _joaManager = joaManager;
+        ReloadPlugins();
     }
 
-    public async Task ReloadPlugins()
+    private void ReloadPlugins()
     {
+        var builtInProvider = new BuiltInProvider(_serviceProvider, _joaManager, this);
+        
         Plugins = _pluginLoader.ReloadPlugins();
         GlobalProviders = Plugins.SelectMany(x => x.GlobalProviders).ToList();
         GlobalProviders.Add(new ProviderWrapper
         {
-            Provider = _builtInProvider
+            Provider = builtInProvider
         });
     }
 

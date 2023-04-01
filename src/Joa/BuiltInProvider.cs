@@ -1,4 +1,5 @@
-﻿using JoaLauncher.Api;
+﻿using Joa.PluginCore;
+using JoaLauncher.Api;
 using JoaLauncher.Api.Providers;
 
 namespace Joa;
@@ -7,7 +8,7 @@ public class BuiltInProvider : IProvider
 {
     private readonly List<SearchResult> _searchResults;
 
-    public BuiltInProvider(IServiceProvider serviceProvider, JoaManager joaManager)
+    public BuiltInProvider(IServiceProvider serviceProvider, JoaManager joaManager, PluginManager pluginManager)
     {
         _searchResults = new List<SearchResult>
         {
@@ -26,7 +27,7 @@ public class BuiltInProvider : IProvider
                 Title = "Refresh indexes",
                 Description = "Refresh all indexes of all plugins",
                 Icon = string.Empty,
-                ExecutionAction = context => { Console.WriteLine(context); }
+                ExecutionAction = context => Task.Run(pluginManager.UpdateIndexesAsync)
             }
         };
     }
