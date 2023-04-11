@@ -29,7 +29,7 @@ public class GlobalHotKey
         if (_uiHotKeyAction is null)
             return;
 
-        var generalSettings = _settingsManager.GeneralSettings;
+        var generalSettings = _settingsManager.BuiltInSettings;
 
         if (HotKeyHasChanged() || _currentHotKeyId is null)
         {
@@ -54,7 +54,7 @@ public class GlobalHotKey
 
     public bool HotKeyHasChanged()
     {
-        var generalSettings = _settingsManager.GeneralSettings;
+        var generalSettings = _settingsManager.BuiltInSettings;
 
         return _currentKey != generalSettings.HotKeyKey ||
                _currentModifier1 != generalSettings.HotKeyModifier1 ||

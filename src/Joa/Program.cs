@@ -1,4 +1,5 @@
-﻿using Joa.Hotkey;
+﻿using Joa.BuiltInPlugin;
+using Joa.Hotkey;
 using Joa.Injectables;
 using Joa.PluginCore;
 using Joa.Settings;
@@ -16,6 +17,11 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+        {
+            JoaLogger.GetInstance().Error(args.ExceptionObject.ToString());
+        };
+        
         IConfiguration configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
@@ -72,11 +78,6 @@ public static class Program
 
         searchWindow.MainWindow.Centered = true;
 
-        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-        {
-            JoaLogger.GetInstance().Error(args.ExceptionObject.ToString());
-        };
-
         searchWindow.Run();
     }
 
@@ -97,11 +98,6 @@ public static class Program
             .SetTitle("Joa Settings")
             .SetUseOsDefaultSize(false)
             .SetSize(1000, 800);
-
-        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-        {
-            JoaLogger.GetInstance().Error(args.ExceptionObject.ToString());
-        };
 
         settingsWindow.Run();
     }

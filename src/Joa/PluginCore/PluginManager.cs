@@ -1,6 +1,6 @@
-﻿using Joa.Step;
+﻿using Joa.BuiltInPlugin;
+using Joa.Step;
 using JoaLauncher.Api.Injectables;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Joa.PluginCore;
 
@@ -21,6 +21,15 @@ public class PluginManager
         _serviceProvider = serviceProvider;
         _joaManager = joaManager;
         ReloadPlugins();
+        
+        Task.Run(async () =>
+        {
+            var periodicTimer= new PeriodicTimer(TimeSpan.FromMinutes(5));
+            while (await periodicTimer.WaitForNextTickAsync())
+            {
+                await UpdateIndexesAsync();
+            }
+        });
     }
 
     private void ReloadPlugins()
@@ -37,6 +46,8 @@ public class PluginManager
 
     public async Task UpdateIndexesAsync()
     {
+        _logger.TimedOperation(nameof(UpdateIndexesAsync));
+        
         foreach (var cache in Plugins.SelectMany(x => x.Caches))
         {
             try

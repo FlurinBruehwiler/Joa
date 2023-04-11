@@ -1,8 +1,9 @@
 ﻿using Joa.Hotkey;
+using JoaLauncher.Api.Plugin;
 
-namespace Joa.Settings;
+namespace Joa.BuiltInPlugin;
 
-public class GeneralSettings
+public class BuiltInSettings : ISetting
 {
     public bool Autostart { get; set; }
     public Modifier HotKeyModifier1 { get; set; } = Modifier.Alt;

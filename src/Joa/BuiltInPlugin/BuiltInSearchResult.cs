@@ -1,6 +1,6 @@
 ﻿using JoaLauncher.Api;
 
-namespace Joa;
+namespace Joa.BuiltInPlugin;
 
 public class BuiltInSearchResult : SearchResult
 {

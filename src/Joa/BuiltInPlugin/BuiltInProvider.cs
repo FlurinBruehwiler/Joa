@@ -2,7 +2,7 @@
 using JoaLauncher.Api;
 using JoaLauncher.Api.Providers;
 
-namespace Joa;
+namespace Joa.BuiltInPlugin;
 
 public class BuiltInProvider : IProvider
 {

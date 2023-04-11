@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Joa.BuiltInPlugin;
 using Joa.PluginCore;
 using JoaLauncher.Api.Injectables;
 using LogLevel = JoaLauncher.Api.Injectables.LogLevel;
@@ -14,7 +15,7 @@ public class SettingsManager
     private readonly FileWatcher _fileWatcher;
 
     public Action SettingsChangedOutsideOfUi { get; set; }
-    public GeneralSettings GeneralSettings { get; set; } = new();
+    public BuiltInSettings BuiltInSettings { get; set; } = new();
 
     public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager)
     {
@@ -69,7 +70,7 @@ public class SettingsManager
 
         try
         {
-            var dtoSetting = new DtoSettings(_pluginManager.Plugins, GeneralSettings);
+            var dtoSetting = new DtoSettings(_pluginManager.Plugins, BuiltInSettings);
             var jsonString = JsonSerializer.Serialize(dtoSetting, _options);
             await File.WriteAllTextAsync(_fileSystemManager.GetSettingsLocation(), jsonString);
         }
@@ -99,7 +100,7 @@ public class SettingsManager
             if (result is null)
                 throw new JsonException();
 
-            JsonUtilities.PopulateObject(jsonString, GeneralSettings);
+            JsonUtilities.PopulateObject(jsonString, BuiltInSettings);
 
             foreach (var pluginDefinition in _pluginManager.Plugins)
             {

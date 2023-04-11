@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Joa.BuiltInPlugin;
 using Joa.PluginCore;
 
 namespace Joa.Settings;
@@ -6,11 +7,11 @@ namespace Joa.Settings;
 public class DtoSettings
 {
     public Dictionary<string, DtoPluginSettings> Plugins { get; set; } = null!;
-    public GeneralSettings GeneralSettings { get; set; }
+    public BuiltInSettings BuiltInSettings { get; set; }
 
-    public DtoSettings(List<PluginDefinition> pluginDefinitions, GeneralSettings generalSettings)
+    public DtoSettings(List<PluginDefinition> pluginDefinitions, BuiltInSettings builtInSettings)
     {
-        GeneralSettings = generalSettings;
+        BuiltInSettings = builtInSettings;
         Plugins = pluginDefinitions.ToDictionary(
             pluginDefinition => pluginDefinition.Manifest.Id,
             pluginDefinition => new DtoPluginSettings
