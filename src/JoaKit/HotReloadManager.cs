@@ -11,7 +11,7 @@ public static class HotReloadManager
 
     public static void UpdateApplication(Type[]? updatedTypes)
     {
-        foreach (var manager in JoaKitApp.Managers)
+        foreach (var manager in JoaKitApp.WindowManagers)
         {
             manager._renderer.Build(manager.RootComponent);
             manager.DoPaint(new Rect());

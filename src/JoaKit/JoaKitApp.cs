@@ -1,4 +1,5 @@
 ﻿using Modern.WindowKit.Platform;
+using Modern.WindowKit.Threading;
 
 namespace JoaKit;
 
@@ -6,10 +7,10 @@ public class JoaKitApp
 {
     public IServiceProvider Services { get; set; }
     
-    private readonly Dictionary<Type, IWindowImpl> _windows;
-    internal static List<WindowManager> Managers = new();
+    private readonly List<WindowDefinition> _windows;
+    internal static List<WindowManager> WindowManagers = new();
 
-    internal JoaKitApp(IServiceProvider services, Dictionary<Type, IWindowImpl> windows)
+    internal JoaKitApp(IServiceProvider services, List<WindowDefinition> windows)
     {
         _windows = windows;
         Services = services;
@@ -22,11 +23,11 @@ public class JoaKitApp
 
     public void Run()
     {
-        Managers = _windows.Select(x => new WindowManager(x.Value, x.Key, Services)).ToList();
-            
-        Parallel.ForEach(Managers, window =>
-        {
-            window.StartMainLoop();
-        });
+        var cancellationTokenSource = new CancellationTokenSource();
+
+        WindowManagers = _windows.Select(x => 
+            new WindowManager(x.WindowImpl, x.RootComponent, Services, cancellationTokenSource)).ToList();
+        
+        Dispatcher.UIThread.MainLoop(cancellationTokenSource.Token);
     }
 }

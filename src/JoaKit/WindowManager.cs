@@ -18,17 +18,15 @@ public class WindowManager
     private SKSurface? _surface;
     public SKImageInfo ImageInfo;
     public SKCanvas? Canvas { get; set; }
-    private readonly CancellationTokenSource _cancellationTokenSource;
-    
-    public WindowManager(IWindowImpl window, Type rootType, IServiceProvider serviceProvider)
+
+    public WindowManager(IWindowImpl window, Type rootType, IServiceProvider serviceProvider, CancellationTokenSource cancellationTokenSource)
     {
         _window = window;
-        RootComponent = (UiComponent)serviceProvider.GetRequiredService(rootType);
+        RootComponent = (UiComponent)ActivatorUtilities.CreateInstance(serviceProvider, rootType);
         _renderer = new Renderer(this);
         _inputManager = new InputManager(_renderer, this);
         
-        _cancellationTokenSource = new CancellationTokenSource();
-        window.Closed = () => _cancellationTokenSource.Cancel();
+        window.Closed = cancellationTokenSource.Cancel;
         
         window.Resized = (_, _) =>
         {
@@ -43,12 +41,6 @@ public class WindowManager
         window.Show(true, false);
 
         _renderer.Build(RootComponent);
-
-    }
-
-    public void StartMainLoop()
-    {
-        Dispatcher.UIThread.MainLoop(_cancellationTokenSource.Token);
     }
     
     public void DoPaint(Rect bounds)

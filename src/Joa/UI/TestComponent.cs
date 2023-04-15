@@ -19,10 +19,17 @@ public class TestComponent : UiComponent
             }.Color(40,40, 40)
             .OnKeyDown(key =>
             {
-                if (key != Key.Back) return;
-                if (_text.Length != 0)
+                if (key == Key.Back)
                 {
-                    _text = _text.Remove(_text.Length - 1);
+                    if (_text.Length != 0)
+                    {
+                        _text = _text.Remove(_text.Length - 1);
+                    }    
+                }
+
+                if (key == Key.Escape)
+                {
+                    
                 }
             })
             .OnTextInput(s =>

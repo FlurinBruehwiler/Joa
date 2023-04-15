@@ -30,11 +30,10 @@ public static class Program
             window.SetExtendClientAreaToDecorationsHint(true);
             window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
             window.ShowTaskbarIcon(false);
-            window.LostFocus = () =>
-            {
-                window.Hide();
-            };
+            window.LostFocus = window.Hide;
         });
+
+        builder.AddWindow<TestComponent>(impl => {});
         
         builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
         builder.Services.AddSingleton<JoaManager>();
