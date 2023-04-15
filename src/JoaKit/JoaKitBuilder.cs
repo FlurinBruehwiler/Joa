@@ -25,6 +25,12 @@ public class JoaKitBuilder
         _windows.Add(new WindowDefinition(typeof(T), window));
         return this;
     }
+    
+    public JoaKitBuilder AddWindow<T>() where T : UiComponent
+    {
+        AddWindow<T>(_ => {});
+        return this;
+    }
 
     public JoaKitApp Build()
     {

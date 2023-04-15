@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Modern.WindowKit;
+using Modern.WindowKit.Controls;
 using Modern.WindowKit.Controls.Platform.Surfaces;
 using Modern.WindowKit.Platform;
 using Modern.WindowKit.Skia;
-using Modern.WindowKit.Threading;
 using SkiaSharp;
 
 namespace JoaKit;
@@ -14,7 +14,6 @@ public class WindowManager
     private readonly IWindowImpl _window;
     public readonly UiComponent RootComponent;
     public readonly Renderer _renderer;
-    private readonly InputManager _inputManager;
     private SKSurface? _surface;
     public SKImageInfo ImageInfo;
     public SKCanvas? Canvas { get; set; }
@@ -24,7 +23,7 @@ public class WindowManager
         _window = window;
         RootComponent = (UiComponent)ActivatorUtilities.CreateInstance(serviceProvider, rootType);
         _renderer = new Renderer(this);
-        _inputManager = new InputManager(_renderer, this);
+        var inputManager = new InputManager(_renderer, this);
         
         window.Closed = cancellationTokenSource.Cancel;
         
@@ -34,7 +33,7 @@ public class WindowManager
             Canvas = null;
         };
 
-        window.Input = _inputManager.Input;
+        window.Input = inputManager.Input;
 
         window.Paint = DoPaint;
 

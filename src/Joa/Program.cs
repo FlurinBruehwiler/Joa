@@ -8,6 +8,7 @@ using JoaKit;
 using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
 using Modern.WindowKit;
+using Modern.WindowKit.Controls;
 using Modern.WindowKit.Platform;
 using SkiaSharp;
 
@@ -31,10 +32,10 @@ public static class Program
             window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
             window.ShowTaskbarIcon(false);
             window.LostFocus = window.Hide;
+            
+            CenterWindow(window);
         });
 
-        builder.AddWindow<TestComponent>(impl => {});
-        
         builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
         builder.Services.AddSingleton<JoaManager>();
         builder.Services.AddSingleton<FileSystemManager>();
@@ -56,6 +57,18 @@ public static class Program
         joaManager.NewScope();
         
         app.Run();
+    }
+
+    private static void CenterWindow(IWindowImpl window)
+    {
+        var screens = new Screens(window.Screen);
+        var screen = screens.Primary ?? screens.All[0];
+
+        var rect = window.FrameSize.HasValue
+            ? new PixelRect(PixelSize.FromSize(window.FrameSize.Value, window.DesktopScaling))
+            : new PixelRect(PixelSize.FromSize(window.ClientSize, window.DesktopScaling));
+        
+        window.Move(screen.WorkingArea.CenterRect(rect).Position);
     }
 }
 
