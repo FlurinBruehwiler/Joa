@@ -50,8 +50,7 @@ Planned release date is the 29. April 2023
 | Joa           | Yes            | Yes                   | Yes             | Yes         | Yes             | Yes                   |
 
 ### Tech
-Joa uses a fork of the [Photino](https://www.tryphotino.io/) framework in combination with [Blazor](https://github.com/tryphotino/photino.Blazor).
-However, in the future, we intend to switch to a custom UI framework that uses Skia for rendering.
+We use a custom UI Framework that uses the [Skia](https://skia.org/) rendering engine. For windowing, the framwork uses [Modern.WindowKit](https://github.com/modern-forms/Modern.WindowKit) which intern is based upon the windowing system from [Avalonia](https://avaloniaui.net/)
 
 ### Development
 Joa relies on the NuGet package JoaLauncher.Api, which is hosted on two different platforms:
