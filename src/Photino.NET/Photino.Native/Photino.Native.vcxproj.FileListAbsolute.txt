@@ -1,2 +1,0 @@
-C:\Programming\Github\PhotinoNative\photino.Native\Photino.Native\x64\Release\WebView2Loader.dll
-C:\Programming\Github\PhotinoNative\photino.Native\Photino.Native\x64\Release\Photino.Native.dll

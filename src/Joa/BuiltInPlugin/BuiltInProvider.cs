@@ -19,7 +19,7 @@ public class BuiltInProvider : IProvider
                 Icon = string.Empty,
                 ExecutionAction = _ =>
                 {
-                    joaManager.ExecuteOnUiThread(() => Program.CreateSettingsWindow(serviceProvider));
+                    // joaManager.ExecuteOnUiThread(() => Program.CreateSettingsWindow(serviceProvider));
                 }
             },
             new BuiltInSearchResult

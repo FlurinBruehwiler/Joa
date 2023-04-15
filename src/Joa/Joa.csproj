@@ -25,19 +25,15 @@
       <None Update="appsettings.Development.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-        <None Update="favicon.ico">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <Content Update="wwwroot\**">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <None Update="defaultIcon.bmp">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
+      <None Update="battery.svg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="icon.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Photino.Blazor\Photino.Blazor.csproj" />
+      <ProjectReference Include="..\JoaKit\JoaKit.csproj" />
     </ItemGroup>
-
 </Project>

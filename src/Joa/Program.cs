@@ -3,103 +3,60 @@ using Joa.Hotkey;
 using Joa.Injectables;
 using Joa.PluginCore;
 using Joa.Settings;
-using Joa.UI.Search;
-using Joa.UI.Settings;
+using Joa.UI;
+using JoaKit;
 using JoaLauncher.Api.Injectables;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Photino.Blazor;
+using Modern.WindowKit;
+using Modern.WindowKit.Platform;
+using SkiaSharp;
 
 namespace Joa;
 
 public static class Program
 {
     [STAThread]
-    public static void Main(string[] args)
+    public static void Main()
     {
-        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+        var builder = JoaKitApp.CreateBuilder();
+
+        builder.AddWindow<TestComponent>(window =>
         {
-            JoaLogger.GetInstance().Error(args.ExceptionObject.ToString());
-        };
+            window.Resize(new Size(500, 20));
+            window.SetTitle("Modern.WindowKit Demo");
+            window.SetIcon(SKBitmap.Decode("icon.png"));
+            window.CanResize(false);
+            window.SetExtendClientAreaTitleBarHeightHint(0);
+            window.SetExtendClientAreaToDecorationsHint(true);
+            window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
+            window.ShowTaskbarIcon(false);
+            window.LostFocus = () =>
+            {
+                window.Hide();
+            };
+        });
         
-        IConfiguration configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
-            .AddEnvironmentVariables()
-            .AddCommandLine(args)
-            .Build();
+        builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
+        builder.Services.AddSingleton<JoaManager>();
+        builder.Services.AddSingleton<FileSystemManager>();
+    
+        builder.Services.AddScoped<Search>();
+        builder.Services.AddScoped<PluginManager>();
+        builder.Services.AddScoped<PluginLoader>();
+        builder.Services.AddScoped<SettingsManager>();
+        builder.Services.AddScoped<PluginServiceProvider>();
+        builder.Services.AddScoped<BuiltInProvider>();
+        builder.Services.AddScoped<GlobalHotKey>();
+        builder.Services.AddScoped<HotKeyService>();
+    
+        builder.Services.Configure<PathsConfiguration>(builder.Configuration.GetSection("Paths"));
 
-        var serviceCollection = new ServiceCollection();
-
-        serviceCollection.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
-        serviceCollection.AddSingleton<JoaManager>();
-        serviceCollection.AddSingleton<FileSystemManager>();
-
-        serviceCollection.AddScoped<Search>();
-        serviceCollection.AddScoped<PluginManager>();
-        serviceCollection.AddScoped<PluginLoader>();
-        serviceCollection.AddScoped<SettingsManager>();
-        serviceCollection.AddScoped<PluginServiceProvider>();
-        serviceCollection.AddScoped<BuiltInProvider>();
-        serviceCollection.AddScoped<GlobalHotKey>();
-        serviceCollection.AddScoped<HotKeyService>();
-
-        serviceCollection.Configure<PathsConfiguration>(configuration.GetSection("Paths"));
-
-        var serviceProvider = serviceCollection.BuildServiceProvider();
-
-        var joaManager = serviceProvider.GetRequiredService<JoaManager>();
+        var app = builder.Build();
+        
+        var joaManager = app.Services.GetRequiredService<JoaManager>();
         joaManager.NewScope();
-
-        CreateSearchWindow(serviceProvider);
-    }
-
-    private static void CreateSearchWindow(IServiceProvider serviceProvider)
-    {
-        var searchWindowBuilder = PhotinoBlazorAppBuilder.CreateDefault();
-
-        searchWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<IJoaLogger>());
-        searchWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<JoaManager>());
-        searchWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<FileSystemManager>());
-
-        searchWindowBuilder.RootComponents.Add<SearchWrapper>("app");
-
-        var searchWindow = searchWindowBuilder.Build();
-
-        searchWindow.MainWindow
-            .SetIconFile("favicon.ico")
-            .SetTitle("Joa")
-            .SetSize(600, 90)
-            .SetUseOsDefaultSize(false)
-            .SetResizable(false)
-            .SetChromeless(true)
-            .SetSkipTaskbar(true)
-            .SetHidden(true);
-
-        searchWindow.MainWindow.Centered = true;
-
-        searchWindow.Run();
-    }
-
-    public static void CreateSettingsWindow(IServiceProvider serviceProvider)
-    {
-        var settingsWindowBuilder = PhotinoBlazorAppBuilder.CreateDefault();
-
-        settingsWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<IJoaLogger>());
-        settingsWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<JoaManager>());
-        settingsWindowBuilder.Services.AddSingleton(serviceProvider.GetRequiredService<FileSystemManager>());
-
-        settingsWindowBuilder.RootComponents.Add<SettingsWrapper>("app");
-
-        var settingsWindow = settingsWindowBuilder.Build();
-
-        settingsWindow.MainWindow
-            .SetIconFile("favicon.ico")
-            .SetTitle("Joa Settings")
-            .SetUseOsDefaultSize(false)
-            .SetSize(1000, 800);
-
-        settingsWindow.Run();
+        
+        app.Run();
     }
 }
 

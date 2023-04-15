@@ -5,15 +5,13 @@ VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Joa", "Joa\Joa.csproj", "{444C2DC7-A3D6-4AB9-A902-3CD756FBE776}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photino.NET", "Photino.NET\Photino.NET.csproj", "{BE651290-CFC0-4A61-9C45-B2B1866289BD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photino.Blazor", "Photino.Blazor\Photino.Blazor.csproj", "{87020904-B041-4C14-8D0E-7EC51FAE1DE4}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{7BFD5638-12D0-476E-BE3F-EEF03DD68F6A}"
 	ProjectSection(SolutionItems) = preProject
 		global.json = global.json
 		nuget.config = nuget.config
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaKit", "JoaKit\JoaKit.csproj", "{9E9CDA23-B564-4F9B-88B1-21F8BEE772F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,14 +26,10 @@ Global
 		{444C2DC7-A3D6-4AB9-A902-3CD756FBE776}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{444C2DC7-A3D6-4AB9-A902-3CD756FBE776}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{444C2DC7-A3D6-4AB9-A902-3CD756FBE776}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE651290-CFC0-4A61-9C45-B2B1866289BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE651290-CFC0-4A61-9C45-B2B1866289BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE651290-CFC0-4A61-9C45-B2B1866289BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE651290-CFC0-4A61-9C45-B2B1866289BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87020904-B041-4C14-8D0E-7EC51FAE1DE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{87020904-B041-4C14-8D0E-7EC51FAE1DE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{87020904-B041-4C14-8D0E-7EC51FAE1DE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{87020904-B041-4C14-8D0E-7EC51FAE1DE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E9CDA23-B564-4F9B-88B1-21F8BEE772F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E9CDA23-B564-4F9B-88B1-21F8BEE772F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E9CDA23-B564-4F9B-88B1-21F8BEE772F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E9CDA23-B564-4F9B-88B1-21F8BEE772F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
