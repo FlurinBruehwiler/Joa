@@ -6,9 +6,6 @@ namespace Joa.UI;
 public class SearchBar : UiComponent
 {
     private string _text = string.Empty;
-
-    [Parameter]
-    public string Test { get; set; }
     
     public override RenderObject Render()
     {

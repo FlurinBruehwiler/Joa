@@ -8,13 +8,11 @@
         <RootNamespace>Joa</RootNamespace>
         <ApplicationIcon>favicon.ico</ApplicationIcon>
     </PropertyGroup>
-
-    <ItemGroup>
-        <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    </ItemGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="JoaLauncher.Api" Version="1.0.26-g2db09153f9" />
+        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
         <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     </ItemGroup>
 
