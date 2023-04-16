@@ -1,5 +1,4 @@
-﻿using JoaKitTypes;
-using SkiaSharp;
+﻿using SkiaSharp;
 
 namespace JoaKit;
 

@@ -4,6 +4,7 @@ using JoaKit;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
+using SkiaSharp;
 using Xunit.Abstractions;
 using VerifyCS = DemoSourceGenTest.CSharpSourceGeneratorVerifier<DemoSourceGen.DemoSourceGenerator>;
 
@@ -23,7 +24,6 @@ public class UnitTest1
     {
         var code = """
 using JoaKit;
-using JoaKit.RenderObjects;
 
 namespace Test;
 
@@ -40,8 +40,12 @@ public class TestComponent : UiComponent
 """;
         
         var generated = """
+#nullable enable
+
 using Test;
-using JoaKitTypes;
+using JoaKit;
+using SkiaSharp;
+using System;
 
 namespace Test
 {
@@ -49,7 +53,7 @@ namespace Test
     {
         private readonly String _test;
 
-        public required TestComponent UiComponent { get; init; }
+        public TestComponent UiComponent { get; init; } = null!;
         public RenderObject? RenderObject { get; private set; }
 
         public TestComponentComponent(String test)
@@ -57,7 +61,7 @@ namespace Test
             _test = test;
         }
 
-        public override void Render(SkiaSharp.SKCanvas canvas)
+        public override void Render(SKCanvas canvas)
         {
             UiComponent.Test = _test;
             RenderObject = UiComponent.Render();
@@ -84,6 +88,7 @@ namespace Test
         };
 
         test.TestState.AdditionalReferences.Add(typeof(UiComponent).Assembly);
+        test.TestState.AdditionalReferences.Add(typeof(SKCanvas).Assembly);
         
         await test.RunAsync();
     }

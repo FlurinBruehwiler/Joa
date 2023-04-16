@@ -37,8 +37,12 @@ public class DemoSourceGenerator : ISourceGenerator
             var parameters = GetParameters(type);
 
             var source = $$"""
+            #nullable enable
+
             using {{type.ContainingNamespace}};
-            using JoaKitTypes;
+            using JoaKit;
+            using SkiaSharp;
+            using System;
             
             namespace {{type.ContainingNamespace}}
             {
@@ -46,7 +50,7 @@ public class DemoSourceGenerator : ISourceGenerator
                 {
                     {{GetFields(parameters)}}
             
-                    public required {{type.Name}} UiComponent { get; init; }
+                    public {{type.Name}} UiComponent { get; init; } = null!;
                     public RenderObject? RenderObject { get; private set; }
             
                     public {{newTypeName}}({{GetConstructorArguments(parameters)}})
@@ -54,7 +58,7 @@ public class DemoSourceGenerator : ISourceGenerator
                         {{GetConstructorBody(parameters)}}
                     }
             
-                    public override void Render(SkiaSharp.SKCanvas canvas)
+                    public override void Render(SKCanvas canvas)
                     {
                         {{GetParameterUpdateCalls(parameters)}}
                         RenderObject = UiComponent.Render();

@@ -21,7 +21,7 @@ public static class Program
     {
         var builder = JoaKitApp.CreateBuilder();
 
-        builder.AddWindow<TestComponent>(window =>
+        builder.AddWindow<SearchBar>(window =>
         {
             window.Resize(new Size(500, 20));
             window.SetTitle("Modern.WindowKit Demo");

@@ -1,10 +1,9 @@
 ﻿using System.Collections;
 using System.ComponentModel;
-using JoaKitTypes;
 using Modern.WindowKit.Input;
 using SkiaSharp;
 
-namespace JoaKit.RenderObjects;
+namespace JoaKit;
 
 public class Div : RenderObject, IEnumerable<RenderObject>
 {

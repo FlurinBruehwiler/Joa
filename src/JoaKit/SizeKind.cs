@@ -1,4 +1,4 @@
-﻿namespace JoaKitTypes;
+﻿namespace JoaKit;
 
 public enum SizeKind
 {

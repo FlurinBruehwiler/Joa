@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
-using JoaKitTypes;
 using SkiaSharp;
 using Svg.Skia;
 
-namespace JoaKit.RenderObjects;
+namespace JoaKit;
 
 public class Img : RenderObject
 {

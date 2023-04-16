@@ -13,11 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaKit", "JoaKit\JoaKit.csproj", "{9E9CDA23-B564-4F9B-88B1-21F8BEE772F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoSourceGen", "DemoSourceGen\DemoSourceGen.csproj", "{DCE9675D-AF21-4362-B7D8-9A403B410AF2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaKitSourceGenerators", "JoaKitSourceGenerators\JoaKitSourceGenerators.csproj", "{DCE9675D-AF21-4362-B7D8-9A403B410AF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoSourceGenTest", "DemoSourceGenTest\DemoSourceGenTest.csproj", "{949B72FA-3A07-40F4-A4A3-24DDB168FCF5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaKitTypes", "JoaKitTypes\JoaKitTypes.csproj", "{9E47FAF6-9723-4182-AC28-38EC0F33F38E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JoaKitSourceGeneratorsTest", "JoaKitSourceGeneratorsTest\JoaKitSourceGeneratorsTest.csproj", "{949B72FA-3A07-40F4-A4A3-24DDB168FCF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,10 +42,6 @@ Global
 		{949B72FA-3A07-40F4-A4A3-24DDB168FCF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{949B72FA-3A07-40F4-A4A3-24DDB168FCF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{949B72FA-3A07-40F4-A4A3-24DDB168FCF5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9E47FAF6-9723-4182-AC28-38EC0F33F38E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E47FAF6-9723-4182-AC28-38EC0F33F38E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E47FAF6-9723-4182-AC28-38EC0F33F38E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E47FAF6-9723-4182-AC28-38EC0F33F38E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

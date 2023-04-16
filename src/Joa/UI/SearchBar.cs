@@ -1,11 +1,9 @@
 ﻿using JoaKit;
-using JoaKit.RenderObjects;
-using JoaKitTypes;
 using Modern.WindowKit.Input;
 
 namespace Joa.UI;
 
-public class TestComponent : UiComponent
+public class SearchBar : UiComponent
 {
     private string _text = string.Empty;
 
@@ -14,8 +12,6 @@ public class TestComponent : UiComponent
     
     public override RenderObject Render()
     {
-        
-        
         return new Div
             {
                 new Img("./battery.svg"),

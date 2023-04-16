@@ -1,6 +1,4 @@
-﻿using JoaKit.RenderObjects;
-using JoaKitTypes;
-using SkiaSharp;
+﻿using SkiaSharp;
 
 namespace JoaKit;
 

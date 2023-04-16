@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
-using JoaKitTypes;
 using SkiaSharp;
 
-namespace JoaKit.RenderObjects;
+namespace JoaKit;
 
 public class Txt : RenderObject
 {

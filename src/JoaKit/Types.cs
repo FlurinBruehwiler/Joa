@@ -1,6 +1,4 @@
-﻿using JoaKitTypes;
-
-namespace JoaKit;
+﻿namespace JoaKit;
 
 public enum MAlign
 {

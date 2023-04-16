@@ -1,7 +1,4 @@
-﻿using JoaKit.RenderObjects;
-using JoaKitTypes;
-
-namespace JoaKit;
+﻿namespace JoaKit;
 
 public class LayoutEngine
 {

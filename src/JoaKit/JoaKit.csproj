@@ -15,9 +15,5 @@
         <PackageReference Include="Modern.WindowKit" Version="0.1.2" />
         <PackageReference Include="Svg.Skia" Version="0.5.18" />
     </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\JoaKitTypes\JoaKitTypes.csproj" />
-    </ItemGroup>
     
 </Project>
