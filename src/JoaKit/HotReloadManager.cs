@@ -1,4 +1,9 @@
-﻿using Modern.WindowKit;
+﻿using JoaKit;
+using Modern.WindowKit;
+
+#pragma warning disable CS0657
+[assembly: System.Reflection.Metadata.MetadataUpdateHandler(typeof(HotReloadManager))]
+#pragma warning restore CS0657
 
 namespace JoaKit;
 

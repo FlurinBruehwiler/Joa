@@ -6,18 +6,21 @@ using Microsoft.CodeAnalysis;
 namespace DemoSourceGen;
 
 [Generator]
-public class DemoSourceGenerator : ISourceGenerator
+public class RenderObjectGenerator : ISourceGenerator
 {
     public void Initialize(GeneratorInitializationContext context)
     {
-        context.RegisterForSyntaxNotifications(() => new DemoSyntaxReceiver());
+        context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
     }
 
     public void Execute(GeneratorExecutionContext context)
     {
-        if (context.SyntaxReceiver is not DemoSyntaxReceiver receiver)
+        if (context.SyntaxReceiver is not SyntaxReceiver receiver)
             return;
 
+        var parameterAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ParameterAttribute");
+        var uiComponentType = context.Compilation.GetTypeByMetadataName("JoaKit.UiComponent");
+        
         foreach (var classDeclarationSyntax in receiver.Candidates)
         {
             var model = context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
@@ -27,14 +30,14 @@ public class DemoSourceGenerator : ISourceGenerator
 
             Console.WriteLine("Found Type: " + type.Name);
 
-            if (!IsUiComponent(type))
+            if (!IsUiComponent(type, uiComponentType))
                 continue;
 
             Console.WriteLine("Found UiComponent: " + type.Name);
 
             var newTypeName = type.Name + "Component";
 
-            var parameters = GetParameters(type);
+            var parameters = GetParameters(type, parameterAttributeType);
 
             var source = $$"""
             #nullable enable
@@ -93,12 +96,12 @@ public class DemoSourceGenerator : ISourceGenerator
         return string.Join(", ", parameters.Select(x => $"{x.Type.Name} {x.Name.ToLowerInvariant()}"));
     }
 
-    private static List<IPropertySymbol> GetParameters(ITypeSymbol type)
+    private static List<IPropertySymbol> GetParameters(ITypeSymbol type, INamedTypeSymbol parameterAttributeType)
     {
-        return type.GetMembers().Where(IsParameter).Select(x => (IPropertySymbol)x).ToList();
+        return type.GetMembers().Where(x => IsParameter(x, parameterAttributeType)).Select(x => (IPropertySymbol)x).ToList();
     }
 
-    private static bool IsParameter(ISymbol symbol)
+    private static bool IsParameter(ISymbol symbol, INamedTypeSymbol parameterAttributeType)
     {
         if (symbol.DeclaredAccessibility != Accessibility.Public)
             return false;
@@ -106,11 +109,14 @@ public class DemoSourceGenerator : ISourceGenerator
         if (symbol is not IPropertySymbol)
             return false;
 
+        if (!symbol.GetAttributes().Any(x => SymbolEqualityComparer.Default.Equals(x.AttributeClass, parameterAttributeType)))
+            return false;
+        
         return true;
     }
 
-    private static bool IsUiComponent(ITypeSymbol type)
+    private static bool IsUiComponent(ITypeSymbol type, INamedTypeSymbol uiComponentType)
     {
-        return type.BaseType?.MetadataName == "UiComponent";
+        return SymbolEqualityComparer.Default.Equals(type.BaseType, uiComponentType);
     }
 }

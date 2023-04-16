@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DemoSourceGen
 {
-    public class DemoSyntaxReceiver : ISyntaxReceiver
+    public class SyntaxReceiver : ISyntaxReceiver
     {
         public List<ClassDeclarationSyntax> Candidates { get; } = new();
         

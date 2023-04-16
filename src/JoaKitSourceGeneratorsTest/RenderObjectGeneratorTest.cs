@@ -6,15 +6,15 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 using SkiaSharp;
 using Xunit.Abstractions;
-using VerifyCS = DemoSourceGenTest.CSharpSourceGeneratorVerifier<DemoSourceGen.DemoSourceGenerator>;
+using VerifyCS = DemoSourceGenTest.SourceGeneratorVerifier<DemoSourceGen.RenderObjectGenerator>;
 
 namespace DemoSourceGenTest;
 
-public class UnitTest1
+public class RenderObjectGeneratorTest
 {
     private readonly ITestOutputHelper _output;
 
-    public UnitTest1(ITestOutputHelper output)
+    public RenderObjectGeneratorTest(ITestOutputHelper output)
     {
         _output = output;
     }
@@ -77,7 +77,7 @@ namespace Test
                 Sources = { code },
                 GeneratedSources =
                 {
-                    (typeof(DemoSourceGenerator),
+                    (typeof(RenderObjectGenerator),
                         "TestComponentComponent_generated.cs",
                         SourceText.From(generated, Encoding.UTF8)),
                 },

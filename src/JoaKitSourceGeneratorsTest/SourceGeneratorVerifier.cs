@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Testing.Verifiers;
 
 namespace DemoSourceGenTest;
 
-public static class CSharpSourceGeneratorVerifier<TSourceGenerator>
+public static class SourceGeneratorVerifier<TSourceGenerator>
     where TSourceGenerator : ISourceGenerator, new()
 {
     public class Test : CSharpSourceGeneratorTest<TSourceGenerator, XUnitVerifier>
