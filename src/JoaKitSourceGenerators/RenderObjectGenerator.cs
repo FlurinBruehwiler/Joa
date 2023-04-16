@@ -1,64 +1,61 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using System.Threading;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace DemoSourceGen;
 
 [Generator]
-public class RenderObjectGenerator : ISourceGenerator
+public class RenderObjectGenerator : IIncrementalGenerator
 {
-    public void Initialize(GeneratorInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
+        var components = context.SyntaxProvider.CreateSyntaxProvider(IsClass, GetClassInfo)
+            .Where(info => info is not null)
+            .Collect()
+            .SelectMany((infos, _) => infos.Distinct());
+        
+        context.RegisterSourceOutput(components, GenerateCode!);
     }
 
-    public void Execute(GeneratorExecutionContext context)
+    private void GenerateCode(SourceProductionContext ctx, ComponentInfo componentInfo)
     {
-        if (context.SyntaxReceiver is not SyntaxReceiver receiver)
-            return;
+        var code = GenerateCode(componentInfo);
+        ctx.AddSource($"{componentInfo.Name}Component_generated.cs", code);
+    }
 
-        var parameterAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ParameterAttribute");
-        var componentInterface = context.Compilation.GetTypeByMetadataName("JoaKit.IComponent");
+    private string GenerateCode(ComponentInfo componentInfo)
+    {
+        var newTypeName = componentInfo.Name + "Component";
         
-        foreach (var classDeclarationSyntax in receiver.Candidates)
-        {
-            var model = context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
-
-            if (model.GetDeclaredSymbol(classDeclarationSyntax) is not ITypeSymbol type)
-                continue;
-
-            if (!IsUiComponent(type, componentInterface))
-                continue;
-
-            var newTypeName = type.Name + "Component";
-
-            var parameters = GetParameters(type, parameterAttributeType);
-
-            var source = $$"""
+        return $$"""
             #nullable enable
 
-            using {{type.ContainingNamespace}};
+            using {{componentInfo.Namespace}};
             using JoaKit;
             using SkiaSharp;
             using System;
             
-            namespace {{type.ContainingNamespace}}
+            namespace {{componentInfo.Namespace}}
             {
                 public class {{newTypeName}} : RenderObject
                 {
-                    {{GetFields(parameters)}}
+                    {{GetFields(componentInfo.Parameters)}}
             
-                    public {{type.Name}} UiComponent { get; init; } = null!;
+                    public {{componentInfo.Name}} UiComponent { get; init; } = null!;
                     public RenderObject? RenderObject { get; private set; }
             
-                    public {{newTypeName}}({{GetConstructorArguments(parameters)}})
+                    public {{newTypeName}}({{GetConstructorArguments(componentInfo.Parameters)}})
                     {
-                        {{GetConstructorBody(parameters)}}
+                        {{GetConstructorBody(componentInfo.Parameters)}}
                     }
             
                     public override void Render(SKCanvas canvas)
                     {
-                        {{GetParameterUpdateCalls(parameters)}}
+                        {{GetParameterUpdateCalls(componentInfo.Parameters)}}
                         RenderObject = UiComponent.Render();
                     }
 
@@ -70,54 +67,61 @@ public class RenderObjectGenerator : ISourceGenerator
                 }
             }
             """;
-
-            context.AddSource($"{newTypeName}_generated.cs", source);
-        }
     }
 
-    private static string GetParameterUpdateCalls(List<IPropertySymbol> parameters)
+    private ComponentInfo? GetClassInfo(GeneratorSyntaxContext ctx, CancellationToken cancellationToken)
     {
-        return string.Join("\n", parameters.Select(x => $"UiComponent.{x.Name} = _{x.Name.ToLowerInvariant()};"));
-    }
+        if (ctx.Node is not ClassDeclarationSyntax classDeclarationSyntax)
+            return null;
 
-    private static string GetConstructorBody(List<IPropertySymbol> parameters)
-    {
-        return string.Join("\n",
-            parameters.Select(x => $"_{x.Name.ToLowerInvariant()} = {x.Name.ToLowerInvariant()};"));
-    }
+        var type = ctx.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) as ITypeSymbol;
 
-    private static string GetFields(List<IPropertySymbol> parameters)
-    {
-        return string.Join("\n",
-            parameters.Select(x => $"private readonly {x.Type.Name} _{x.Name.ToLowerInvariant()};"));
-    }
-
-    private static string GetConstructorArguments(List<IPropertySymbol> parameters)
-    {
-        return string.Join(", ", parameters.Select(x => $"{x.Type.Name} {x.Name.ToLowerInvariant()}"));
-    }
-
-    private static List<IPropertySymbol> GetParameters(ITypeSymbol type, INamedTypeSymbol parameterAttributeType)
-    {
-        return type.GetMembers().Where(x => IsParameter(x, parameterAttributeType)).Select(x => (IPropertySymbol)x).ToList();
-    }
-
-    private static bool IsParameter(ISymbol symbol, INamedTypeSymbol parameterAttributeType)
-    {
-        if (symbol.DeclaredAccessibility != Accessibility.Public)
-            return false;
-
-        if (symbol is not IPropertySymbol)
-            return false;
-
-        if (!symbol.GetAttributes().Any(x => SymbolEqualityComparer.Default.Equals(x.AttributeClass, parameterAttributeType)))
-            return false;
+        if (type is null)
+            return null;
         
-        return true;
+        if (!IsUiComponent(type))
+            return null;
+
+        return new ComponentInfo(type);
     }
 
-    private static bool IsUiComponent(ITypeSymbol type, INamedTypeSymbol componentInterface)
+    private bool IsClass(SyntaxNode syntaxNode, CancellationToken cancellationToken)
     {
-        return type.AllInterfaces.Any(x => SymbolEqualityComparer.Default.Equals(x, componentInterface));
+        return syntaxNode is ClassDeclarationSyntax;
+    }
+
+    private static bool IsUiComponent(ITypeSymbol type)
+    {
+        return type.AllInterfaces.Any(x => x is
+        {
+            Name: "IComponent",
+            ContainingNamespace:
+            {
+                Name: "JoaKit",
+                ContainingNamespace.IsGlobalNamespace: true
+            }
+        });
+    }
+
+    private static string GetParameterUpdateCalls(IReadOnlyList<(string name, string type)> parameters)
+    {
+        return string.Join("\n", parameters.Select(x => $"UiComponent.{x.name} = _{x.name.ToLowerInvariant()};"));
+    }
+
+    private static string GetConstructorBody(IReadOnlyList<(string name, string type)> parameters)
+    {
+        return string.Join("\n",
+            parameters.Select(x => $"_{x.name.ToLowerInvariant()} = {x.name.ToLowerInvariant()};"));
+    }
+
+    private static string GetFields(IReadOnlyList<(string name, string type)> parameters)
+    {
+        return string.Join("\n",
+            parameters.Select(x => $"private readonly {x.type} _{x.name.ToLowerInvariant()};"));
+    }
+
+    private static string GetConstructorArguments(IReadOnlyList<(string name, string type)> parameters)
+    {
+        return string.Join(", ", parameters.Select(x => $"{x.type} {x.name.ToLowerInvariant()}"));
     }
 }
