@@ -1,5 +1,5 @@
 ﻿using JoaKit;
-using JoaKit.RenderObject;
+using JoaKit.RenderObjects;
 using Modern.WindowKit.Input;
 
 namespace Joa.UI;
@@ -8,7 +8,10 @@ public class TestComponent : UiComponent
 {
     private string _text = string.Empty;
 
-    public override Div Render()
+    [Parameter]
+    public string Test { get; set; }
+    
+    public override RenderObject Render()
     {
         return new Div
             {

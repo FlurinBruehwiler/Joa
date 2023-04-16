@@ -1,4 +1,4 @@
-﻿using JoaKit.RenderObject;
+﻿using JoaKit.RenderObjects;
 using SkiaSharp;
 
 namespace JoaKit;
@@ -27,7 +27,7 @@ public class Renderer
 
     private readonly Div _oldRoot = new();
     
-    public Div NewRoot = null!;
+    public RenderObject NewRoot = null!;
 
     private Div? _clickedElement;
 

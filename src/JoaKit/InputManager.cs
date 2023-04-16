@@ -1,4 +1,4 @@
-﻿using JoaKit.RenderObject;
+﻿using JoaKit.RenderObjects;
 using Modern.WindowKit;
 using Modern.WindowKit.Input.Raw;
 
@@ -41,9 +41,9 @@ public class InputManager
             var x = _windowManager.Scale((int)pointer.Position.X);
             var y = _windowManager.Scale((int)pointer.Position.Y);
 
-            if (pointer.Type == RawPointerEventType.LeftButtonDown)
+            if (pointer.Type == RawPointerEventType.LeftButtonDown && _renderer.NewRoot is Div divRoot)
             {
-                var div = HitTest(_renderer.NewRoot, x, y);
+                var div = HitTest(divRoot, x, y);
 
                 if (div is null)
                     return;

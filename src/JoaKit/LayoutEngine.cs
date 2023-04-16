@@ -1,4 +1,4 @@
-﻿using JoaKit.RenderObject;
+﻿using JoaKit.RenderObjects;
 
 namespace JoaKit;
 
@@ -12,7 +12,7 @@ public class LayoutEngine
         }
     }
 
-    private void ComputeRenderObj(RenderObject.RenderObject renderObject)
+    private void ComputeRenderObj(RenderObject renderObject)
     {
         if (renderObject is Div div)
         {
@@ -74,7 +74,7 @@ public class LayoutEngine
         }
     }
 
-    private float GetCrossAxisOffset(Div div, RenderObject.RenderObject item)
+    private float GetCrossAxisOffset(Div div, RenderObject item)
     {
         return div.PxAlign switch
         {
@@ -105,7 +105,7 @@ public class LayoutEngine
         };
     }
 
-    private float GetItemMainAxisLength(Div div, RenderObject.RenderObject item)
+    private float GetItemMainAxisLength(Div div, RenderObject item)
     {
         return div.PDir switch
         {
@@ -115,7 +115,7 @@ public class LayoutEngine
         };
     }
 
-    private float GetItemMainAxisFixedLength(Div div, RenderObject.RenderObject item)
+    private float GetItemMainAxisFixedLength(Div div, RenderObject item)
     {
         return div.PDir switch
         {
@@ -129,7 +129,7 @@ public class LayoutEngine
         };
     }
 
-    private float GetItemCrossAxisLength(Div div, RenderObject.RenderObject item)
+    private float GetItemCrossAxisLength(Div div, RenderObject item)
     {
         return div.PDir switch
         {
@@ -332,7 +332,7 @@ public class LayoutEngine
         }
     }
 
-    private void DrawWithMainOffset(Div div, float mainOffset, RenderObject.RenderObject item)
+    private void DrawWithMainOffset(Div div, float mainOffset, RenderObject item)
     {
         switch (div.PDir)
         {

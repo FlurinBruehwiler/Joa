@@ -15,5 +15,9 @@
         <PackageReference Include="Modern.WindowKit" Version="0.1.2" />
         <PackageReference Include="Svg.Skia" Version="0.5.18" />
     </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\DemoSourceGen\DemoSourceGen.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+    </ItemGroup>
     
 </Project>

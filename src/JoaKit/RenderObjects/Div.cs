@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Modern.WindowKit.Input;
 using SkiaSharp;
 
-namespace JoaKit.RenderObject;
+namespace JoaKit.RenderObjects;
 
 public class Div : RenderObject, IEnumerable<RenderObject>
 {

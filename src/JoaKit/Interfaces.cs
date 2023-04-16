@@ -1,15 +1,8 @@
-﻿using JoaKit.RenderObject;
-using SkiaSharp;
+﻿using SkiaSharp;
 
 namespace JoaKit;
 
-public enum SizeKind
-{
-    Percentage,
-    Pixel
-}
 
-public record struct SizeDefinition(float Value, SizeKind Kind);
 
 public record struct ColorDefinition(float Red, float Gree, float Blue, float Transparency);
 
@@ -30,9 +23,4 @@ public class TextDefinition
 
 public interface IDefinition
 {
-}
-
-public abstract class UiComponent
-{
-    public abstract Div Render();
 }

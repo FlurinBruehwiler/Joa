@@ -2,7 +2,7 @@
 using SkiaSharp;
 using Svg.Skia;
 
-namespace JoaKit.RenderObject;
+namespace JoaKit.RenderObjects;
 
 public class Img : RenderObject
 {
