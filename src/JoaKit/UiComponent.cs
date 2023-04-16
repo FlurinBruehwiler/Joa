@@ -1,4 +1,6 @@
-﻿namespace JoaKit;
+﻿using JoaKitTypes;
+
+namespace JoaKit;
 
 public abstract class UiComponent
 {

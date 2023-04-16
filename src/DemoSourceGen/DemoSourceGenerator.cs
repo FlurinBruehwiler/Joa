@@ -38,22 +38,22 @@ public class DemoSourceGenerator : ISourceGenerator
 
             var source = $$"""
             using {{type.ContainingNamespace}};
-            using JoaKit;
-                
+            using JoaKitTypes;
+            
             namespace {{type.ContainingNamespace}}
             {
                 public class {{newTypeName}} : RenderObject
                 {
                     {{GetFields(parameters)}}
-
+            
                     public required {{type.Name}} UiComponent { get; init; }
                     public RenderObject? RenderObject { get; private set; }
-                    
+            
                     public {{newTypeName}}({{GetConstructorArguments(parameters)}})
                     {
                         {{GetConstructorBody(parameters)}}
                     }
-
+            
                     public override void Render(SkiaSharp.SKCanvas canvas)
                     {
                         {{GetParameterUpdateCalls(parameters)}}

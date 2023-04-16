@@ -1,5 +1,6 @@
 ﻿using JoaKit;
 using JoaKit.RenderObjects;
+using JoaKitTypes;
 using Modern.WindowKit.Input;
 
 namespace Joa.UI;
@@ -13,6 +14,8 @@ public class TestComponent : UiComponent
     
     public override RenderObject Render()
     {
+        
+        
         return new Div
             {
                 new Img("./battery.svg"),

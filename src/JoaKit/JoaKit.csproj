@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DemoSourceGen\DemoSourceGen.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+        <ProjectReference Include="..\JoaKitTypes\JoaKitTypes.csproj" />
     </ItemGroup>
     
 </Project>
