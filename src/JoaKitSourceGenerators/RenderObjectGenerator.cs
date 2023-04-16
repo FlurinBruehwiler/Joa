@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace DemoSourceGen;
+namespace JoaKitSourceGenerators;
 
 [Generator]
 public class RenderObjectGenerator : IIncrementalGenerator
@@ -21,13 +19,13 @@ public class RenderObjectGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(components, GenerateCode!);
     }
 
-    private void GenerateCode(SourceProductionContext ctx, ComponentInfo componentInfo)
+    private static void GenerateCode(SourceProductionContext ctx, ComponentInfo componentInfo)
     {
         var code = GenerateCode(componentInfo);
         ctx.AddSource($"{componentInfo.Name}Component_generated.cs", code);
     }
 
-    private string GenerateCode(ComponentInfo componentInfo)
+    private static string GenerateCode(ComponentInfo componentInfo)
     {
         var newTypeName = componentInfo.Name + "Component";
         
@@ -69,7 +67,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
             """;
     }
 
-    private ComponentInfo? GetClassInfo(GeneratorSyntaxContext ctx, CancellationToken cancellationToken)
+    private static ComponentInfo? GetClassInfo(GeneratorSyntaxContext ctx, CancellationToken cancellationToken)
     {
         if (ctx.Node is not ClassDeclarationSyntax classDeclarationSyntax)
             return null;
@@ -85,7 +83,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
         return new ComponentInfo(type);
     }
 
-    private bool IsClass(SyntaxNode syntaxNode, CancellationToken cancellationToken)
+    private static bool IsClass(SyntaxNode syntaxNode, CancellationToken cancellationToken)
     {
         return syntaxNode is ClassDeclarationSyntax;
     }

@@ -7,7 +7,7 @@
 
         <IsPackable>false</IsPackable>
 
-        <RootNamespace>DemoSourceGenTest</RootNamespace>
+        <RootNamespace>JoaKitSourceGeneratorsTest</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

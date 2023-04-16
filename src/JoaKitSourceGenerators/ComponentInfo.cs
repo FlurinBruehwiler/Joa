@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 
-namespace DemoSourceGen;
+namespace JoaKitSourceGenerators;
 
 internal class ComponentInfo : IEquatable<ComponentInfo>
 {
@@ -15,12 +15,34 @@ internal class ComponentInfo : IEquatable<ComponentInfo>
     {
         Name = type.Name;
         Parameters = GetParameters(type);
-        Namespace = type.ContainingNamespace.Name;
+        Namespace = GetFullNameSpace(type);
+    }
+
+    private static string GetFullNameSpace(ITypeSymbol typeSymbol)
+    {
+        var currentNamespace = typeSymbol.ContainingNamespace;
+        var output = string.Empty;
+        
+        while (!currentNamespace.IsGlobalNamespace)
+        {
+            if (output == string.Empty)
+            {
+                output = currentNamespace.Name;
+            }
+            else
+            {
+                output = $"{currentNamespace.Name}.{output}";
+            }
+
+            currentNamespace = currentNamespace.ContainingNamespace;
+        }
+
+        return output;
     }
     
     private static List<(string, string)> GetParameters(ITypeSymbol type)
     {
-        return type.GetMembers().Where(x => IsParameter(x)).Select(x => (((IPropertySymbol)x).Name, ((IPropertySymbol)x).Type.Name))
+        return type.GetMembers().Where(IsParameter).Select(x => (((IPropertySymbol)x).Name, ((IPropertySymbol)x).Type.Name))
             .ToList();
     }
     
@@ -58,7 +80,7 @@ internal class ComponentInfo : IEquatable<ComponentInfo>
         if (ReferenceEquals(this, other))
             return true;
         
-        return Name == other.Name && Namespace == other.Namespace;
+        return Name == other.Name && Namespace == other.Namespace && Parameters.SequenceEqual(Parameters);
     }
 
     public override bool Equals(object obj)

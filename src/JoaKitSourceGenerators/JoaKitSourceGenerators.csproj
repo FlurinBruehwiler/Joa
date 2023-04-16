@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>11</LangVersion>
-        <RootNamespace>DemoSourceGen</RootNamespace>
+        <RootNamespace>JoaKitSourceGenerators</RootNamespace>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 

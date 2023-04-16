@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Modern.WindowKit;
-using Modern.WindowKit.Controls;
 using Modern.WindowKit.Controls.Platform.Surfaces;
 using Modern.WindowKit.Platform;
 using Modern.WindowKit.Skia;

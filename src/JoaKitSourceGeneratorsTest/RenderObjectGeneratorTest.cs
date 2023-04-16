@@ -1,13 +1,6 @@
-using System.Text;
-using DemoSourceGen;
-using JoaKit;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Text;
-using SkiaSharp;
 using Xunit.Abstractions;
 
-namespace DemoSourceGenTest;
+namespace JoaKitSourceGeneratorsTest;
 
 public class RenderObjectGeneratorTest
 {

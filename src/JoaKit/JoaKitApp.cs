@@ -1,5 +1,4 @@
-﻿using Modern.WindowKit.Platform;
-using Modern.WindowKit.Threading;
+﻿using Modern.WindowKit.Threading;
 
 namespace JoaKit;
 
