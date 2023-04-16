@@ -18,7 +18,7 @@ public class JoaKitBuilder
             .Build();
     }
     
-    public JoaKitBuilder AddWindow<T>(Action<IWindowImpl> configureWindow) where T : UiComponent
+    public JoaKitBuilder AddWindow<T>(Action<IWindowImpl> configureWindow) where T : IComponent
     {
         var window = AvaloniaGlobals.GetRequiredService<IWindowingPlatform>().CreateWindow();
         configureWindow(window);
@@ -26,7 +26,7 @@ public class JoaKitBuilder
         return this;
     }
     
-    public JoaKitBuilder AddWindow<T>() where T : UiComponent
+    public JoaKitBuilder AddWindow<T>() where T : IComponent
     {
         AddWindow<T>(_ => {});
         return this;

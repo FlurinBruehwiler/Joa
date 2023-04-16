@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 
@@ -19,7 +18,7 @@ public class RenderObjectGenerator : ISourceGenerator
             return;
 
         var parameterAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ParameterAttribute");
-        var uiComponentType = context.Compilation.GetTypeByMetadataName("JoaKit.UiComponent");
+        var componentInterface = context.Compilation.GetTypeByMetadataName("JoaKit.IComponent");
         
         foreach (var classDeclarationSyntax in receiver.Candidates)
         {
@@ -28,12 +27,8 @@ public class RenderObjectGenerator : ISourceGenerator
             if (model.GetDeclaredSymbol(classDeclarationSyntax) is not ITypeSymbol type)
                 continue;
 
-            Console.WriteLine("Found Type: " + type.Name);
-
-            if (!IsUiComponent(type, uiComponentType))
+            if (!IsUiComponent(type, componentInterface))
                 continue;
-
-            Console.WriteLine("Found UiComponent: " + type.Name);
 
             var newTypeName = type.Name + "Component";
 
@@ -65,6 +60,12 @@ public class RenderObjectGenerator : ISourceGenerator
                     {
                         {{GetParameterUpdateCalls(parameters)}}
                         RenderObject = UiComponent.Render();
+                    }
+
+                    public {{newTypeName}} Key(string key)
+                    {
+                        PKey = key;
+                        return this;
                     }
                 }
             }
@@ -115,8 +116,8 @@ public class RenderObjectGenerator : ISourceGenerator
         return true;
     }
 
-    private static bool IsUiComponent(ITypeSymbol type, INamedTypeSymbol uiComponentType)
+    private static bool IsUiComponent(ITypeSymbol type, INamedTypeSymbol componentInterface)
     {
-        return SymbolEqualityComparer.Default.Equals(type.BaseType, uiComponentType);
+        return type.AllInterfaces.Any(x => SymbolEqualityComparer.Default.Equals(x, componentInterface));
     }
 }

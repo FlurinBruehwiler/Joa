@@ -30,7 +30,7 @@ public class Renderer
 
     private Div? _clickedElement;
 
-    public void Build(UiComponent rootComponent)
+    public void Build(IComponent rootComponent)
     {
         NewRoot = rootComponent.Render();
     }

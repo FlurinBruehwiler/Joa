@@ -27,12 +27,12 @@ using JoaKit;
 
 namespace Test;
 
-public class TestComponent : UiComponent
+public class TestComponent : IComponent
 {
     [Parameter]
     public string Test { get; set; }
     
-    public override RenderObject Render()
+    public RenderObject Render()
     {
         return new Div();
     }
@@ -87,7 +87,7 @@ namespace Test
             },
         };
 
-        test.TestState.AdditionalReferences.Add(typeof(UiComponent).Assembly);
+        test.TestState.AdditionalReferences.Add(typeof(IComponent).Assembly);
         test.TestState.AdditionalReferences.Add(typeof(SKCanvas).Assembly);
         
         await test.RunAsync();

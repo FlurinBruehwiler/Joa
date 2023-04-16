@@ -6,22 +6,25 @@
         <Nullable>enable</Nullable>
         <OutputType>WinExe</OutputType>
         <RootNamespace>Joa</RootNamespace>
-        <ApplicationIcon>favicon.ico</ApplicationIcon>
     </PropertyGroup>
     
     <ItemGroup>
         <PackageReference Include="JoaLauncher.Api" Version="1.0.26-g2db09153f9" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
         <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\JoaKit\JoaKit.csproj" />
+        <ProjectReference Include="..\JoaKitSourceGenerators\JoaKitSourceGenerators.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+    </ItemGroup>
+    
+    <ItemGroup>
         <None Update="appsettings.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="appsettings.Development.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="battery.svg">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -32,10 +35,5 @@
         <None Update="defaultIcon.bmp">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\JoaKit\JoaKit.csproj" />
-        <ProjectReference Include="..\JoaKitSourceGenerators\JoaKitSourceGenerators.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
     </ItemGroup>
 </Project>

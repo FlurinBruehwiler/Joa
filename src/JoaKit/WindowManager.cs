@@ -12,7 +12,7 @@ namespace JoaKit;
 public class WindowManager
 {
     private readonly IWindowImpl _window;
-    public readonly UiComponent RootComponent;
+    public readonly IComponent RootComponent;
     public readonly Renderer _renderer;
     private SKSurface? _surface;
     public SKImageInfo ImageInfo;
@@ -21,7 +21,7 @@ public class WindowManager
     public WindowManager(IWindowImpl window, Type rootType, IServiceProvider serviceProvider, CancellationTokenSource cancellationTokenSource)
     {
         _window = window;
-        RootComponent = (UiComponent)ActivatorUtilities.CreateInstance(serviceProvider, rootType);
+        RootComponent = (IComponent)ActivatorUtilities.CreateInstance(serviceProvider, rootType);
         _renderer = new Renderer(this);
         var inputManager = new InputManager(_renderer, this);
         

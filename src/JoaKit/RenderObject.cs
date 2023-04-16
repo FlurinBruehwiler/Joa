@@ -6,10 +6,10 @@ namespace JoaKit;
 public abstract class RenderObject
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public SizeDefinition PWidth { get; set; } = new SizeDefinition(100, SizeKind.Percentage);
+    public SizeDefinition PWidth { get; set; } = new(100, SizeKind.Percentage);
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public SizeDefinition PHeight { get; set; } = new SizeDefinition(100, SizeKind.Percentage);
+    public SizeDefinition PHeight { get; set; } = new(100, SizeKind.Percentage);
     
     [EditorBrowsable(EditorBrowsableState.Never)]
     public float PComputedHeight { get; set; }
@@ -22,6 +22,9 @@ public abstract class RenderObject
     
     [EditorBrowsable(EditorBrowsableState.Never)]
     public float PComputedY { get; set; }
+    
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public string? PKey { get; set; }
 
     public abstract void Render(SKCanvas canvas);
 }
