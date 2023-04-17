@@ -53,8 +53,8 @@ public static class Program
 
         var app = builder.Build();
         
-        var joaManager = app.Services.GetRequiredService<JoaManager>();
-        joaManager.NewScope();
+        // var joaManager = app.Services.GetRequiredService<JoaManager>();
+        // joaManager.NewScope();
         
         app.Run();
     }

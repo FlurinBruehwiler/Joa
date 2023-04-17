@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using SkiaSharp;
 
 namespace JoaKit;
@@ -16,10 +17,12 @@ public class Txt : RenderObject
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public TextAlign PvAlign { get; set; } = TextAlign.Start;
-    
-    public Txt(string content)
+
+    public Txt(string content, [CallerLineNumber] int lineNumer = -1, [CallerFilePath] string filePath = "")
     {
         PText = content;
+        PLineNumber = lineNumer;
+        PFilePath = filePath;
     }
 
     public Txt Width(float width, SizeKind sizeKind = SizeKind.Pixel)

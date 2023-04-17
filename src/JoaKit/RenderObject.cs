@@ -6,6 +6,12 @@ namespace JoaKit;
 public abstract class RenderObject
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
+    public string PFilePath { get; set; } = string.Empty;
+    
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public int PLineNumber { get; set; }
+    
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public SizeDefinition PWidth { get; set; } = new(100, SizeKind.Percentage);
 
     [EditorBrowsable(EditorBrowsableState.Never)]

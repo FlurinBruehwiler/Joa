@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using SkiaSharp;
 using Svg.Skia;
 
@@ -7,10 +8,12 @@ namespace JoaKit;
 public class Img : RenderObject
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public string PSrc { get; set; }
+    public string PSrc { get; }
 
-    public Img(string src)
+    public Img(string src, [CallerLineNumber] int lineNumer = -1, [CallerFilePath] string filePath = "")
     {
+        PLineNumber = lineNumer;
+        PFilePath = filePath;
         PSrc = src;
 
         if (!s_svgCache.TryGetValue(PSrc, out var svg))

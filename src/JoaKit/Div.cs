@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Modern.WindowKit.Input;
 using SkiaSharp;
 
@@ -7,6 +8,12 @@ namespace JoaKit;
 
 public class Div : RenderObject, IEnumerable<RenderObject>
 {
+    public Div([CallerLineNumber]int lineNumer = -1, [CallerFilePath]string filePath = "")
+    {
+        PLineNumber = lineNumer;
+        PFilePath = filePath;
+    }
+    
     [EditorBrowsable(EditorBrowsableState.Never)]
     public List<RenderObject>? Children { get; set; }
 

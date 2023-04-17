@@ -36,6 +36,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
             using JoaKit;
             using SkiaSharp;
             using System;
+            using System.Runtime.CompilerServices;
             
             namespace {{componentInfo.Namespace}}
             {
@@ -108,18 +109,28 @@ public class RenderObjectGenerator : IIncrementalGenerator
 
     private static string GetConstructorBody(IReadOnlyList<(string name, string type)> parameters)
     {
-        return string.Join("\n",
+        var defaultBody = "PLineNumber = lineNumer;\n            PFilePath = filePath;";
+
+        if (parameters.Count != 0)
+            defaultBody += "\n            ";
+        
+        return defaultBody + string.Join("\n            ",
             parameters.Select(x => $"_{x.name.ToLowerInvariant()} = {x.name.ToLowerInvariant()};"));
     }
 
     private static string GetFields(IReadOnlyList<(string name, string type)> parameters)
     {
-        return string.Join("\n",
+        return string.Join("\n        ",
             parameters.Select(x => $"private readonly {x.type} _{x.name.ToLowerInvariant()};"));
     }
 
     private static string GetConstructorArguments(IReadOnlyList<(string name, string type)> parameters)
     {
-        return string.Join(", ", parameters.Select(x => $"{x.type} {x.name.ToLowerInvariant()}"));
+        var defaultArguments = "[CallerLineNumber] int lineNumer = -1, [CallerFilePath] string filePath = \"\"";
+
+        if (parameters.Count != 0)
+            defaultArguments = ", " + defaultArguments;
+        
+        return string.Join(", ", parameters.Select(x => $"{x.type} {x.name.ToLowerInvariant()}")) + defaultArguments;
     }
 }
