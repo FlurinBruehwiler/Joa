@@ -140,9 +140,9 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
         if (Children is not null)
         {
-            foreach (var divDefinition in Children)
+            foreach (var renderObject in Children)
             {
-                divDefinition.Render(canvas);
+                renderObject.Render(canvas);
             }    
         }
     }

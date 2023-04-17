@@ -2,33 +2,37 @@
 
 public class LayoutEngine
 {
-    public void ApplyLayoutCalculations(Div newRoot, Div oldRoot)
+    public void ApplyLayoutCalculations(Div root)
     {
-        if (newRoot.LayoutHasChanged(oldRoot))
-        {
-            ComputeRenderObj(newRoot);
-        }
+        // if (newRoot.LayoutHasChanged(oldRoot))
+        // {
+        ComputeRenderObj(root);
+        // }
     }
 
     private void ComputeRenderObj(RenderObject renderObject)
     {
-        if (renderObject is Div div)
+        if (renderObject is CustomRenderObject { RenderObject: not null } customRenderObject)
         {
-            ComputedDiv(div);
+            customRenderObject.RenderObject.PComputedX = customRenderObject.PComputedX;
+            customRenderObject.RenderObject.PComputedY = customRenderObject.PComputedY;
+            customRenderObject.RenderObject.PComputedHeight = customRenderObject.PComputedHeight;
+            customRenderObject.RenderObject.PComputedWidth = customRenderObject.PComputedWidth;
+            ComputeRenderObj(customRenderObject.RenderObject);
         }
-    }
-    
-    private void ComputedDiv(Div div)
-    {
+
+        if (renderObject is not Div div)
+            return;
+
         if (div.Children is null)
             return;
-        
+
         ComputedSize(div);
         ComputePosition(div);
-        
+
         foreach (var child in div.Children)
         {
-            ComputeRenderObj(child);    
+            ComputeRenderObj(child);
         }
     }
 
@@ -44,7 +48,7 @@ public class LayoutEngine
                 break;
         }
     }
-    
+
     private void ComputePosition(Div div)
     {
         switch (div.PmAlign)
@@ -141,9 +145,9 @@ public class LayoutEngine
     private void ComputeColumnSize(Div div)
     {
         var remainingSize = RemainingMainAxisFixedSize(div);
-        
+
         var totalPercentage = 0f;
-        
+
         foreach (var child in div.Children)
         {
             if (child.PHeight.Kind == SizeKind.Percentage)
@@ -151,7 +155,7 @@ public class LayoutEngine
                 totalPercentage += child.PHeight.Value;
             }
         }
-        
+
         float sizePerPercent;
 
         if (totalPercentage > 100)
@@ -192,7 +196,7 @@ public class LayoutEngine
                 totalPercentage += child.PWidth.Value;
             }
         }
-        
+
         float sizePerPercent;
 
         if (totalPercentage > 100)
@@ -224,13 +228,13 @@ public class LayoutEngine
     private float RemainingMainAxisFixedSize(Div div)
     {
         var childSum = 0f;
-        
+
         foreach (var child in div.Children)
         {
             childSum += GetItemMainAxisFixedLength(div, child);
         }
-        
-        
+
+
         return GetMainAxisLength(div) - childSum - GetGapSize(div);
     }
 
@@ -245,12 +249,12 @@ public class LayoutEngine
     private float RemainingMainAxisSize(Div div)
     {
         var sum = 0f;
-        
+
         foreach (var child in div.Children)
         {
             sum += GetItemMainAxisLength(div, child);
         }
-        
+
         return GetMainAxisLength(div) - sum;
     }
 

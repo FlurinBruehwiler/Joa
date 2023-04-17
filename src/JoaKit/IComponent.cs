@@ -2,5 +2,5 @@
 
 public interface IComponent
 {
-    public RenderObject Render();
+    public RenderObject Build();
 }

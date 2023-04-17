@@ -40,7 +40,7 @@ public class InputManager
             var x = _windowManager.Scale((int)pointer.Position.X);
             var y = _windowManager.Scale((int)pointer.Position.Y);
 
-            if (pointer.Type == RawPointerEventType.LeftButtonDown && _renderer.NewRoot is Div divRoot)
+            if (pointer.Type == RawPointerEventType.LeftButtonDown && _renderer.Root is Div divRoot)
             {
                 var div = HitTest(divRoot, x, y);
 

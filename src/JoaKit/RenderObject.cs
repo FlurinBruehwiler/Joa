@@ -32,5 +32,15 @@ public abstract class RenderObject
     [EditorBrowsable(EditorBrowsableState.Never)]
     public string? PKey { get; set; }
 
+    public ComponentHash GetComponentHash()
+    {
+        return new ComponentHash
+        {
+            Key = PKey,
+            FilePath = PFilePath,
+            LineNumber = PLineNumber
+        };
+    }
+    
     public abstract void Render(SKCanvas canvas);
 }

@@ -34,7 +34,7 @@ public class JoaKitBuilder
 
     public JoaKitApp Build()
     {
-        return new JoaKitApp(Services.BuildServiceProvider(), _windows);
+        return new JoaKitApp(Services.BuildServiceProvider(), Services, _windows);
     }
 
     public IConfiguration Configuration { get; private set; }

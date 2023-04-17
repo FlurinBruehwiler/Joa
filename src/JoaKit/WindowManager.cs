@@ -15,12 +15,18 @@ public class WindowManager
     public readonly Renderer _renderer;
     private SKSurface? _surface;
     public SKImageInfo ImageInfo;
+    public ServiceProvider ServiceProvider { get; }
     public SKCanvas? Canvas { get; set; }
 
-    public WindowManager(IWindowImpl window, Type rootType, IServiceProvider serviceProvider, CancellationTokenSource cancellationTokenSource)
+    public WindowManager(IWindowImpl window, Type rootType, IServiceCollection serviceCollection, CancellationTokenSource cancellationTokenSource)
     {
         _window = window;
-        RootComponent = (IComponent)ActivatorUtilities.CreateInstance(serviceProvider, rootType);
+
+        serviceCollection.AddSingleton(window);
+
+        ServiceProvider = serviceCollection.BuildServiceProvider();
+        
+        RootComponent = (IComponent)ActivatorUtilities.CreateInstance(ServiceProvider, rootType);
         _renderer = new Renderer(this);
         var inputManager = new InputManager(_renderer, this);
         

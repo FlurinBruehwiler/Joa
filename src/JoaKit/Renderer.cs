@@ -10,7 +10,7 @@ public class Renderer
     {
         _windowManager = windowManager;
     }
-    
+
     private static readonly SKPaint s_paint = new()
     {
         IsAntialias = true
@@ -18,33 +18,65 @@ public class Renderer
 
     public static SKPaint GetColor(ColorDefinition colorDefinition)
     {
-        s_paint.Color = new SKColor((byte) colorDefinition.Red, (byte)colorDefinition.Gree, (byte)colorDefinition.Blue, (byte)colorDefinition.Transparency);
+        s_paint.Color = new SKColor((byte)colorDefinition.Red, (byte)colorDefinition.Gree, (byte)colorDefinition.Blue,
+            (byte)colorDefinition.Transparency);
         return s_paint;
     }
 
     private LayoutEngine _layoutEngine = new();
 
-    private readonly Div _oldRoot = new();
-    
-    public RenderObject NewRoot = null!;
+    public RenderObject Root = null!;
 
     private Div? _clickedElement;
 
+
     public void Build(IComponent rootComponent)
     {
-        NewRoot = rootComponent.Render();
+        var buildContext = new BuildContext(_windowManager.ServiceProvider);
+
+        Root = rootComponent.Build();
+        BuildTree(Root, buildContext);
     }
-    
+
+    public void BuildTree(RenderObject renderObject, BuildContext buildContext)
+    {
+        while (true)
+        {
+            switch (renderObject)
+            {
+                case CustomRenderObject customRenderObject:
+                {
+                    var componentHash = customRenderObject.GetComponentHash();
+                    var component = buildContext.GetComponent(componentHash, customRenderObject.ComponentType);
+                    var childRenderObject = customRenderObject.Build(component);
+                    renderObject = childRenderObject;
+                    continue;
+                }
+                case Div { Children.Count: > 0 } div:
+                {
+                    foreach (var divChild in div.Children)
+                    {
+                        BuildTree(divChild, buildContext);
+                    }
+
+                    break;
+                }
+            }
+
+            break;
+        }
+    }
+
     public void LayoutPaintComposite()
     {
         var wrapper = new Div
         {
-            NewRoot
+            Root
         }.Width(_windowManager.ImageInfo.Width).Height(_windowManager.ImageInfo.Height);
         wrapper.PComputedHeight = _windowManager.ImageInfo.Height;
         wrapper.PComputedWidth = _windowManager.ImageInfo.Width;
 
-        _layoutEngine.ApplyLayoutCalculations(wrapper, _oldRoot);
+        _layoutEngine.ApplyLayoutCalculations(wrapper);
 
         wrapper.Render(_windowManager.Canvas!);
 

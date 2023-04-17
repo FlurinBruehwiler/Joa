@@ -40,22 +40,29 @@ public class RenderObjectGenerator : IIncrementalGenerator
             
             namespace {{componentInfo.Namespace}}
             {
-                public class {{newTypeName}} : RenderObject
+                public class {{newTypeName}} : CustomRenderObject
                 {
                     {{GetFields(componentInfo.Parameters)}}
-            
-                    public {{componentInfo.Name}} UiComponent { get; init; } = null!;
-                    public RenderObject? RenderObject { get; private set; }
-            
+           
                     public {{newTypeName}}({{GetConstructorArguments(componentInfo.Parameters)}})
                     {
                         {{GetConstructorBody(componentInfo.Parameters)}}
+
+                        ComponentType = typeof({{componentInfo.Name}});
                     }
             
+                    public override RenderObject Build(IComponent component)
+                    {
+                        {{GetParameterUpdateCalls(componentInfo.Parameters, componentInfo.Name)}}
+                        RenderObject = component.Build();
+                        PWidth = RenderObject.PWidth;
+                        PHeight = RenderObject.PHeight;
+                        return RenderObject;
+                    }
+
                     public override void Render(SKCanvas canvas)
                     {
-                        {{GetParameterUpdateCalls(componentInfo.Parameters)}}
-                        RenderObject = UiComponent.Render();
+                        RenderObject.Render(canvas);
                     }
 
                     public {{newTypeName}} Key(string key)
@@ -102,9 +109,9 @@ public class RenderObjectGenerator : IIncrementalGenerator
         });
     }
 
-    private static string GetParameterUpdateCalls(IReadOnlyList<(string name, string type)> parameters)
+    private static string GetParameterUpdateCalls(IReadOnlyList<(string name, string type)> parameters, string componentName)
     {
-        return string.Join("\n", parameters.Select(x => $"UiComponent.{x.name} = _{x.name.ToLowerInvariant()};"));
+        return string.Join("\n", parameters.Select(x => $"(({componentName})component).{x.name} = _{x.name.ToLowerInvariant()};"));
     }
 
     private static string GetConstructorBody(IReadOnlyList<(string name, string type)> parameters)

@@ -1,14 +1,23 @@
 ﻿using JoaKit;
+using Modern.WindowKit;
 using Modern.WindowKit.Input;
+using Modern.WindowKit.Platform;
 
 namespace Joa.UI;
 
 public class SearchBar : IComponent
 {
+    private readonly IWindowImpl _window;
     private string _text = string.Empty;
-    private List<string> _searchResults = Enumerable.Range(0, 10).Select(x => x.ToString()).ToList();
+    private readonly List<string> _searchResults = Enumerable.Range(0, 5).Select(x => x.ToString()).ToList();
 
-    public RenderObject Render()
+    public SearchBar(IWindowImpl window)
+    {
+        _window = window;
+        window.Resize(new Size(window.ClientSize.Width, window.ClientSize.Height + _searchResults.Count * 60));
+    }
+    
+    public RenderObject Build()
     {
         return new Div
         {
@@ -24,6 +33,7 @@ public class SearchBar : IComponent
                 .XAlign(XAlign.Center)
                 .Padding(10)
                 .Gap(10)
+                .Height(60)
                 .Dir(Dir.Row),
             new Div()
                 .Items(_searchResults.Select(x =>
@@ -44,6 +54,7 @@ public class SearchBar : IComponent
 
         if (key == Key.Escape)
         {
+            // _window.Hide();
         }
     }
 }
