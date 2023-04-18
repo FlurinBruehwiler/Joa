@@ -57,11 +57,8 @@ public class SearchBar : IComponent
                 .Dir(Dir.Row),
             new Div()
                 .Items(_searchResults.Select(x =>
-                    new Div
-                        {
-                            new Txt(x.SearchResult.Title)
-                        }.Color(40, 40, 40)
-                        .BorderWidth(2)
+                    new SearchResultComponent(x)
+                        .Key(x.SearchResult.Title)
                 ))
         };
     }
