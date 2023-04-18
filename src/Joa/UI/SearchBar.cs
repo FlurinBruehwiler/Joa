@@ -1,5 +1,8 @@
-﻿using Joa.Hotkey;
+﻿using Joa.PluginCore;
+using Joa.Steps;
 using JoaKit;
+using JoaLauncher.Api;
+using Microsoft.Extensions.DependencyInjection;
 using Modern.WindowKit;
 using Modern.WindowKit.Input;
 using Modern.WindowKit.Platform;
@@ -10,15 +13,30 @@ namespace Joa.UI;
 public class SearchBar : IComponent
 {
     private readonly IWindowImpl _window;
-    private string _text = string.Empty;
-    private readonly List<string> _searchResults = Enumerable.Range(0, 5).Select(x => x.ToString()).ToList();
+    private readonly JoaManager _joaManager;
+    private string _input = string.Empty;
+    private List<PluginSearchResult> _searchResults = new();
+    private Stack<Step> _steps = new();
+    private readonly Search _search;
 
-    public SearchBar(IWindowImpl window)
+    public SearchBar(IWindowImpl window, JoaManager joaManager)
     {
+        joaManager.NewScope();
         _window = window;
-        // window.Resize(new Size(window.ClientSize.Width, window.ClientSize.Height + _searchResults.Count * 60));
+        _joaManager = joaManager;
+        _search = _joaManager.CurrentScope!.ServiceProvider.GetRequiredService<Search>();
+
+        _steps.Push(new Step
+        {
+            Providers = joaManager.CurrentScope!.ServiceProvider.GetRequiredService<PluginManager>().GlobalProviders,
+            Name = "Global Step",
+            Options = new StepOptions()
+        });
+        
+        
+        _window.Resize(new Size(_window.ClientSize.Width, _window.ClientSize.Height + 8 * 60));
     }
-    
+
     public RenderObject Build()
     {
         return new Div
@@ -26,7 +44,7 @@ public class SearchBar : IComponent
             new Div
                 {
                     new Img("./battery.svg"),
-                    new Txt(_text)
+                    new Txt(_input)
                         .Size(30)
                         .VAlign(TextAlign.Center)
                 }.Color(40, 40, 40)
@@ -37,48 +55,67 @@ public class SearchBar : IComponent
                 .Gap(10)
                 .Height(60)
                 .Dir(Dir.Row),
-            // new Div()
-            //     .Items(_searchResults.Select(x =>
-            //         new SearchResultComponent(x).Key(x)
-            //     ))
+            new Div()
+                .Items(_searchResults.Select(x =>
+                    new Div
+                        {
+                            new Txt(x.SearchResult.Title)
+                        }.Color(40, 40, 40)
+                        .BorderWidth(2)
+                ))
         };
+    }
+
+    private void TextChanged()
+    {
+        if (_input == string.Empty)
+            return;
+
+        _searchResults = _search.UpdateSearchResults(_steps.Peek(), _input);
+
+        SearchResultsHaveChanged();
+    }
+
+    private void SearchResultsHaveChanged()
+    {
     }
 
     private void OnTextInput(string s, RawInputModifiers modifiers)
     {
-        if (modifiers == RawInputModifiers.None)
+        if (modifiers != RawInputModifiers.Control)
         {
-            _text += s;
+            _input += s;
+            TextChanged();
         }
     }
-    
+
     private void OnKeyDown(Key key, RawInputModifiers modifiers)
     {
         if (key == Key.Back)
         {
             if (modifiers == RawInputModifiers.Control)
             {
-                _text = _text.TrimEnd();
-                
-                if (!_text.Contains(' '))
+                _input = _input.TrimEnd();
+
+                if (!_input.Contains(' '))
                 {
-                    _text = string.Empty;
+                    _input = string.Empty;
                 }
 
-                for (var i = _text.Length - 1; i > 0; i--)
+                for (var i = _input.Length - 1; i > 0; i--)
                 {
-                    if (_text[i] == ' ')
+                    if (_input[i] == ' ')
                     {
-                        _text = _text[..(i + 1)];
+                        _input = _input[..(i + 1)];
                         break;
                     }
                 }
             }
             else
             {
-                if (_text.Length != 0)
+                if (_input.Length != 0)
                 {
-                    _text = _text.Remove(_text.Length - 1);
+                    _input = _input.Remove(_input.Length - 1);
                 }
             }
         }
@@ -87,5 +124,6 @@ public class SearchBar : IComponent
         {
             // _window.Hide();
         }
+        TextChanged();
     }
 }

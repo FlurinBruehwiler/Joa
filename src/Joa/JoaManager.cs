@@ -13,14 +13,14 @@ public class JoaManager : IDisposable
     private readonly IServiceProvider _serviceProvider;
     private readonly IJoaLogger _joaLogger;
     private readonly FileSystemManager _fileSystemManager;
-    public IServiceScope? CurrentScope { get; set; }
+    public IServiceScope? CurrentScope { get; private set; }
     private FileWatcher _fileWatcher;
 
     private const string AssemblyType = "System.Text.Json.JsonSerializerOptionsUpdateHandler";
     private const string ClearCache = "ClearCache";
 
     public Func<bool, Task>? ShowUi { get; set; }
-    public Func<Action, Task> ExecuteOnUiThread { get; set; }
+    // public Func<Action, Task> ExecuteOnUiThread { get; set; }
 
     public JoaManager(IServiceProvider serviceProvider, IJoaLogger joaLogger, FileSystemManager fileSystemManager)
     {

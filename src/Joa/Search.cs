@@ -1,9 +1,10 @@
 ﻿using Joa.PluginCore;
 using Joa.Settings;
+using Joa.Steps;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Enums;
 using JoaLauncher.Api.Injectables;
-using ExecutionContext = Joa.Step.ExecutionContext;
+using ExecutionContext = Joa.Steps.ExecutionContext;
 
 namespace Joa;
 
@@ -20,7 +21,7 @@ public class Search
         _settingsManager = settingsManager;
     }
 
-    public async Task<Step.Step?> ExecuteCommand(SearchResult searchResult, ContextAction contextAction)
+    public async Task<Step?> ExecuteCommand(SearchResult searchResult, ContextAction contextAction)
     {
         var executionContext = new ExecutionContext(searchResult)
         {
@@ -33,7 +34,7 @@ public class Search
         return executionContext.StepBuilder?.Build();
     }
 
-    public List<PluginSearchResult> UpdateSearchResults(Step.Step step, string searchString)
+    public List<PluginSearchResult> UpdateSearchResults(Step step, string searchString)
     {
         using var _ = _logger.TimedOperation(nameof(UpdateSearchResults));
 

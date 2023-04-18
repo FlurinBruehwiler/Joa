@@ -76,7 +76,7 @@ public class Txt : RenderObject
         {
             TextAlign.Start => PSize,
             TextAlign.End => PComputedHeight,
-            TextAlign.Center => PComputedHeight / 2 + PSize * 0.74f / 2, // you ask "Why *0.74?" -> Because. 
+            TextAlign.Center => PComputedHeight / 2 + PSize * 1.2f / 2, //Don't Ask
             _ => throw new ArgumentOutOfRangeException()
         };
 

@@ -2,7 +2,7 @@
 using JoaLauncher.Api.Providers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Joa.Step;
+namespace Joa.Steps;
 
 public class StepBuilder : IStepBuilder
 {

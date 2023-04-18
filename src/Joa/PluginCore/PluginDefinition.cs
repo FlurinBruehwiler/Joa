@@ -1,5 +1,5 @@
 ﻿using Joa.Settings;
-using Joa.Step;
+using Joa.Steps;
 using JoaLauncher.Api.Plugin;
 
 namespace Joa.PluginCore;

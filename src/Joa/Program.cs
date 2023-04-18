@@ -53,10 +53,7 @@ public static class Program
         builder.Services.Configure<PathsConfiguration>(builder.Configuration.GetSection("Paths"));
 
         var app = builder.Build();
-        
-        // var joaManager = app.Services.GetRequiredService<JoaManager>();
-        // joaManager.NewScope();
-        
+
         app.Run();
     }
 

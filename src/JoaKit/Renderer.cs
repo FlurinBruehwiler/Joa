@@ -39,7 +39,7 @@ public class Renderer
         var buildContext = new BuildContext(_windowManager.ServiceProvider);
 
         Root = rootComponent.Build();
-        BuildTree(Root, buildContext);
+        // BuildTree(Root, buildContext);
     }
 
     public void BuildTree(RenderObject renderObject, BuildContext buildContext)

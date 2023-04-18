@@ -36,6 +36,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
             using JoaKit;
             using SkiaSharp;
             using System;
+            using Joa.PluginCore;
             using System.Runtime.CompilerServices;
             
             namespace {{componentInfo.Namespace}}
