@@ -23,7 +23,8 @@ public static class Program
 
         builder.AddWindow<SearchBar>(window =>
         {
-            window.Resize(new Size(500, 20));
+            window.Resize(new Size(  500, 20));
+            // window.Resize(new Size(  window.Scale(500), window.Scale(20)));
             window.SetTitle("Modern.WindowKit Demo");
             window.SetIcon(SKBitmap.Decode("icon.png"));
             window.CanResize(false);

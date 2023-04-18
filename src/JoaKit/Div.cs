@@ -51,10 +51,10 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public Action? POnInactive { get; set; }
     
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public Action<Key>? POnKeyDown { get; set; }
-    
+    public Action<Key, RawInputModifiers>? POnKeyDown { get; set; }
+
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public Action<string>? POnTextInput { get; set; }
+    public Action<string, RawInputModifiers>? POnTextInput { get; set; }
     
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Func<Task>? POnClickAsync { get; set; }
@@ -62,11 +62,11 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool LayoutHasChanged(Div oldDiv)
     {
-        if (PWidth != oldDiv.PWidth)
-            return true;
-
-        if (PHeight != oldDiv.PHeight)
-            return true;
+        // if (PWidth != oldDiv.PWidth)
+        //     return true;
+        //
+        // if (PHeight != oldDiv.PHeight)
+        //     return true;
         
         if ((oldDiv.Children?.Count ?? 0) != (Children?.Count ?? 0))
             return true;
@@ -105,7 +105,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override void Render(SKCanvas canvas)
+    public override void Render(SKCanvas canvas, RenderContext renderContext)
     {
         if (PBorderWidth != 0)
         {
@@ -142,7 +142,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         {
             foreach (var renderObject in Children)
             {
-                renderObject.Render(canvas);
+                renderObject.Render(canvas, renderContext);
             }    
         }
     }
@@ -244,39 +244,51 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         return this;
     }
 
-    public Div OnClick(Action callback)
+    public Div OnClick(Action onClick)
     {
-        POnClick = callback;
+        POnClick = onClick;
         return this;
     }
 
-    public Div OnClick(Func<Task> callback)
+    public Div OnClick(Func<Task> onClick)
     {
-        POnClickAsync = callback;
+        POnClickAsync = onClick;
         return this;
     }
 
-    public Div OnActive(Action callback)
+    public Div OnActive(Action onActive)
     {
-        POnActive = callback;
+        POnActive = onActive;
         return this;
     }
     
-    public Div OnInactive(Action callback)
+    public Div OnInactive(Action onInactive)
     {
-        POnInactive = callback;
+        POnInactive = onInactive;
         return this;
     }
 
-    public Div OnKeyDown(Action<Key> callback)
+    public Div OnKeyDown(Action<Key> onKeyDown)
     {
-        POnKeyDown = callback;
+        POnKeyDown = (key, _) => onKeyDown(key);
         return this;
     }
     
-    public Div OnTextInput(Action<string> callback)
+    public Div OnKeyDown(Action<Key, RawInputModifiers> onKeyDown)
     {
-        POnTextInput = callback;
+        POnKeyDown = onKeyDown;
+        return this;
+    }
+    
+    public Div OnTextInput(Action<string> onTextInput)
+    {
+        POnTextInput = (s, _) => onTextInput(s);
+        return this;
+    }
+    
+    public Div OnTextInput(Action<string, RawInputModifiers> onTextInput)
+    {
+        POnTextInput = onTextInput;
         return this;
     }
 

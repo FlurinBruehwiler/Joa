@@ -23,7 +23,7 @@ public class InputManager
         {
             if (_activeDiv?.POnKeyDown is not null)
             {
-                _activeDiv.POnKeyDown(keyEventArgs.Key);
+                _activeDiv.POnKeyDown(keyEventArgs.Key, keyEventArgs.Modifiers);
                 callbackWasCalled = true;
             }       
         }
@@ -31,9 +31,9 @@ public class InputManager
         {
             if (_activeDiv?.POnTextInput is not null)
             {
-                _activeDiv.POnTextInput(rawInputEventArgs.Text);
+                _activeDiv.POnTextInput(rawInputEventArgs.Text, rawInputEventArgs.Modifiers);
                 callbackWasCalled = true;
-            }    
+            }
         }
         if (args is RawPointerEventArgs pointer)
         {

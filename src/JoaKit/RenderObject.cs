@@ -42,5 +42,5 @@ public abstract class RenderObject
         };
     }
     
-    public abstract void Render(SKCanvas canvas);
+    public abstract void Render(SKCanvas canvas, RenderContext renderContext);
 }

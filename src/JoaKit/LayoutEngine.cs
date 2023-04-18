@@ -1,7 +1,16 @@
-﻿namespace JoaKit;
+﻿using Modern.WindowKit.Platform;
+
+namespace JoaKit;
 
 public class LayoutEngine
 {
+    private readonly IWindowImpl _window;
+
+    public LayoutEngine(IWindowImpl window)
+    {
+        _window = window;
+    }
+    
     public void ApplyLayoutCalculations(Div root)
     {
         // if (newRoot.LayoutHasChanged(oldRoot))
@@ -123,10 +132,10 @@ public class LayoutEngine
         {
             Dir.Row or Dir.RowReverse => item.PWidth.Kind == SizeKind.Percentage
                 ? 0
-                : item.PWidth.Value,
+                : item.PWidth.GetDpiAwareValue(_window),
             Dir.Column or Dir.ColumnReverse => item.PHeight.Kind == SizeKind.Percentage
                 ? 0
-                : item.PHeight.Value,
+                : item.PHeight.GetDpiAwareValue(_window),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -172,12 +181,12 @@ public class LayoutEngine
             item.PComputedHeight = item.PHeight.Kind switch
             {
                 SizeKind.Percentage => item.PHeight.Value * sizePerPercent,
-                SizeKind.Pixel => item.PHeight.Value,
+                SizeKind.Pixel => item.PHeight.GetDpiAwareValue(_window),
                 _ => throw new ArgumentOutOfRangeException()
             };
             item.PComputedWidth = item.PWidth.Kind switch
             {
-                SizeKind.Pixel => item.PWidth.Value,
+                SizeKind.Pixel => item.PWidth.GetDpiAwareValue(_window),
                 SizeKind.Percentage => (float)((div.PComputedWidth - 2 * div.PPadding) * item.PWidth.Value * 0.01),
                 _ => throw new ArgumentOutOfRangeException()
             };
@@ -213,12 +222,12 @@ public class LayoutEngine
             item.PComputedWidth = item.PWidth.Kind switch
             {
                 SizeKind.Percentage => item.PWidth.Value * sizePerPercent,
-                SizeKind.Pixel => item.PWidth.Value,
+                SizeKind.Pixel => item.PWidth.GetDpiAwareValue(_window),
                 _ => throw new ArgumentOutOfRangeException()
             };
             item.PComputedHeight = item.PHeight.Kind switch
             {
-                SizeKind.Pixel => item.PHeight.Value,
+                SizeKind.Pixel => item.PHeight.GetDpiAwareValue(_window),
                 SizeKind.Percentage => (float)((div.PComputedHeight * item.PHeight.Value * 0.01) - (2 * div.PPadding)),
                 _ => throw new ArgumentOutOfRangeException()
             };

@@ -55,13 +55,13 @@ public class Txt : RenderObject
         return this;
     }
 
-    public override void Render(SKCanvas canvas)
+    public override void Render(SKCanvas canvas, RenderContext renderContext)
     {
         var paint = new SKPaint
         {
             Color = new SKColor(255, 255, 255),
             IsAntialias = true,
-            TextSize = PSize,
+            TextSize = renderContext.Scale(PSize),
             Typeface = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Normal, SKFontStyleWidth.Normal,
                 SKFontStyleSlant.Upright)
         };

@@ -27,7 +27,7 @@ public class WindowManager
         ServiceProvider = serviceCollection.BuildServiceProvider();
         
         RootComponent = (IComponent)ActivatorUtilities.CreateInstance(ServiceProvider, rootType);
-        _renderer = new Renderer(this);
+        _renderer = new Renderer(this, window);
         var inputManager = new InputManager(_renderer, this);
         
         window.Closed = cancellationTokenSource.Cancel;
@@ -82,4 +82,12 @@ public class WindowManager
     }
     
     public int Scale(int value) => (int)(value * _window.RenderScaling);
+}
+
+public static class WindowExtensions
+{
+    public static float Scale(this IWindowImpl window, float value)
+    {
+        return (float)(value * window.RenderScaling);
+    }
 }

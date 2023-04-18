@@ -60,9 +60,9 @@ public class RenderObjectGenerator : IIncrementalGenerator
                         return RenderObject;
                     }
 
-                    public override void Render(SKCanvas canvas)
+                    public override void Render(SKCanvas canvas, RenderContext renderContext)
                     {
-                        RenderObject.Render(canvas);
+                        RenderObject.Render(canvas, renderContext);
                     }
 
                     public {{newTypeName}} Key(string key)

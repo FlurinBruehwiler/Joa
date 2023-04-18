@@ -1,7 +1,9 @@
-﻿using JoaKit;
+﻿using Joa.Hotkey;
+using JoaKit;
 using Modern.WindowKit;
 using Modern.WindowKit.Input;
 using Modern.WindowKit.Platform;
+using Key = Modern.WindowKit.Input.Key;
 
 namespace Joa.UI;
 
@@ -14,7 +16,7 @@ public class SearchBar : IComponent
     public SearchBar(IWindowImpl window)
     {
         _window = window;
-        window.Resize(new Size(window.ClientSize.Width, window.ClientSize.Height + _searchResults.Count * 60));
+        // window.Resize(new Size(window.ClientSize.Width, window.ClientSize.Height + _searchResults.Count * 60));
     }
     
     public RenderObject Build()
@@ -29,26 +31,55 @@ public class SearchBar : IComponent
                         .VAlign(TextAlign.Center)
                 }.Color(40, 40, 40)
                 .OnKeyDown(OnKeyDown)
-                .OnTextInput(s => { _text += s; })
+                .OnTextInput(OnTextInput)
                 .XAlign(XAlign.Center)
                 .Padding(10)
                 .Gap(10)
                 .Height(60)
                 .Dir(Dir.Row),
-            new Div()
-                .Items(_searchResults.Select(x =>
-                    new SearchResultComponent(x).Key(x)
-                ))
+            // new Div()
+            //     .Items(_searchResults.Select(x =>
+            //         new SearchResultComponent(x).Key(x)
+            //     ))
         };
     }
 
-    private void OnKeyDown(Key key)
+    private void OnTextInput(string s, RawInputModifiers modifiers)
+    {
+        if (modifiers == RawInputModifiers.None)
+        {
+            _text += s;
+        }
+    }
+    
+    private void OnKeyDown(Key key, RawInputModifiers modifiers)
     {
         if (key == Key.Back)
         {
-            if (_text.Length != 0)
+            if (modifiers == RawInputModifiers.Control)
             {
-                _text = _text.Remove(_text.Length - 1);
+                _text = _text.TrimEnd();
+                
+                if (!_text.Contains(' '))
+                {
+                    _text = string.Empty;
+                }
+
+                for (var i = _text.Length - 1; i > 0; i--)
+                {
+                    if (_text[i] == ' ')
+                    {
+                        _text = _text[..(i + 1)];
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if (_text.Length != 0)
+                {
+                    _text = _text.Remove(_text.Length - 1);
+                }
             }
         }
 

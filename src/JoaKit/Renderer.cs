@@ -1,14 +1,19 @@
-﻿using SkiaSharp;
+﻿using Modern.WindowKit.Platform;
+using SkiaSharp;
 
 namespace JoaKit;
 
 public class Renderer
 {
     private readonly WindowManager _windowManager;
+    private readonly IWindowImpl _window;
+    private readonly LayoutEngine _layoutEngine;
 
-    public Renderer(WindowManager windowManager)
+    public Renderer(WindowManager windowManager, IWindowImpl window)
     {
         _windowManager = windowManager;
+        _window = window;
+        _layoutEngine = new LayoutEngine(window);
     }
 
     private static readonly SKPaint s_paint = new()
@@ -23,7 +28,6 @@ public class Renderer
         return s_paint;
     }
 
-    private LayoutEngine _layoutEngine = new();
 
     public RenderObject Root = null!;
 
@@ -77,8 +81,7 @@ public class Renderer
         wrapper.PComputedWidth = _windowManager.ImageInfo.Width;
 
         _layoutEngine.ApplyLayoutCalculations(wrapper);
-
-        wrapper.Render(_windowManager.Canvas!);
+        wrapper.Render(_windowManager.Canvas!, new RenderContext(_window));
 
         _clickedElement?.POnClick?.Invoke();
         _clickedElement = null;

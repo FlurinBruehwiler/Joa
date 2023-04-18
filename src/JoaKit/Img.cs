@@ -30,7 +30,7 @@ public class Img : RenderObject
         PHeight = new SizeDefinition(svg.Picture.CullRect.Height, SizeKind.Pixel);
     }
 
-    public override void Render(SKCanvas canvas)
+    public override void Render(SKCanvas canvas, RenderContext renderContext)
     {
         canvas.DrawPicture(s_svgCache[PSrc].Picture, PComputedX, PComputedY);
     }
