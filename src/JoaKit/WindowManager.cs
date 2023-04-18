@@ -7,14 +7,12 @@ using SkiaSharp;
 
 namespace JoaKit;
 
-// ReSharper disable once InconsistentNaming
 public class WindowManager
 {
     private readonly IWindowImpl _window;
     public readonly IComponent RootComponent;
-    public readonly Renderer _renderer;
+    public readonly Renderer Renderer;
     private SKSurface? _surface;
-    public SKImageInfo ImageInfo;
     public ServiceProvider ServiceProvider { get; }
     public SKCanvas? Canvas { get; set; }
 
@@ -27,8 +25,8 @@ public class WindowManager
         ServiceProvider = serviceCollection.BuildServiceProvider();
         
         RootComponent = (IComponent)ActivatorUtilities.CreateInstance(ServiceProvider, rootType);
-        _renderer = new Renderer(this, window);
-        var inputManager = new InputManager(_renderer, this);
+        Renderer = new Renderer(this, window);
+        var inputManager = new InputManager(Renderer, this);
         
         window.Closed = cancellationTokenSource.Cancel;
         
@@ -44,7 +42,7 @@ public class WindowManager
 
         window.Show(true, false);
 
-        _renderer.Build(RootComponent);
+        Renderer.Build(RootComponent);
     }
     
     public void DoPaint(Rect bounds)
@@ -62,7 +60,7 @@ public class WindowManager
         surface.Canvas.DrawSurface(GetSurface(), SKPoint.Empty);
         Canvas = surface.Canvas;
 
-        _renderer.LayoutPaintComposite();
+        Renderer.LayoutPaintComposite(_window.ClientSize * _window.RenderScaling);
     }
     
     private SKSurface GetSurface()
@@ -72,9 +70,7 @@ public class WindowManager
 
         var screen = _window.ClientSize * _window.RenderScaling;
         var info = new SKImageInfo((int)screen.Width, (int)screen.Height);
-
-        ImageInfo = info;
-
+        
         _surface = SKSurface.Create(info);
         _surface.Canvas.Clear(SKColors.CornflowerBlue);
 

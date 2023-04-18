@@ -1,4 +1,5 @@
-﻿using Modern.WindowKit.Platform;
+﻿using Modern.WindowKit;
+using Modern.WindowKit.Platform;
 using SkiaSharp;
 
 namespace JoaKit;
@@ -71,14 +72,14 @@ public class Renderer
         }
     }
 
-    public void LayoutPaintComposite()
+    public void LayoutPaintComposite(Size windowRenderScaling)
     {
         var wrapper = new Div
         {
             Root
-        }.Width(_windowManager.ImageInfo.Width).Height(_windowManager.ImageInfo.Height);
-        wrapper.PComputedHeight = _windowManager.ImageInfo.Height;
-        wrapper.PComputedWidth = _windowManager.ImageInfo.Width;
+        };
+        wrapper.PComputedHeight = (float)windowRenderScaling.Height;
+        wrapper.PComputedWidth = (float)windowRenderScaling.Width;
 
         _layoutEngine.ApplyLayoutCalculations(wrapper);
         wrapper.Render(_windowManager.Canvas!, new RenderContext(_window));

@@ -4,7 +4,7 @@ namespace JoaKit;
 
 
 
-public record struct ColorDefinition(float Red, float Gree, float Blue, float Transparency);
+public record struct ColorDefinition(float Red, float Gree, float Blue, float Transparency = 255);
 
 public static class StaticStuff
 {

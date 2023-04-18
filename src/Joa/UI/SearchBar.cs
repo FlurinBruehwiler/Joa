@@ -16,6 +16,7 @@ public class SearchBar : IComponent
     private readonly JoaManager _joaManager;
     private string _input = string.Empty;
     private List<PluginSearchResult> _searchResults = new();
+    private int _selectedResult;
     private Stack<Step> _steps = new();
     private readonly Search _search;
 
@@ -32,9 +33,6 @@ public class SearchBar : IComponent
             Name = "Global Step",
             Options = new StepOptions()
         });
-        
-        
-        _window.Resize(new Size(_window.ClientSize.Width, _window.ClientSize.Height + 8 * 60));
     }
 
     public RenderObject Build()
@@ -56,8 +54,8 @@ public class SearchBar : IComponent
                 .Height(60)
                 .Dir(Dir.Row),
             new Div()
-                .Items(_searchResults.Select(x =>
-                    new SearchResultComponent(x)
+                .Items(_searchResults.Select((x, i) =>
+                    new SearchResultComponent(x, _selectedResult == i)
                         .Key(x.SearchResult.Title)
                 ))
         };
@@ -66,15 +64,21 @@ public class SearchBar : IComponent
     private void TextChanged()
     {
         if (_input == string.Empty)
-            return;
-
-        _searchResults = _search.UpdateSearchResults(_steps.Peek(), _input);
-
+        {
+            _searchResults.Clear();            
+        }
+        else
+        {
+            _searchResults = _search.UpdateSearchResults(_steps.Peek(), _input);
+        }
+        
         SearchResultsHaveChanged();
     }
 
     private void SearchResultsHaveChanged()
     {
+        _selectedResult = 0;
+        _window.Resize(new Size(_window.ClientSize.Width, 60 + _searchResults.Count * 60));
     }
 
     private void OnTextInput(string s, RawInputModifiers modifiers)
@@ -115,12 +119,28 @@ public class SearchBar : IComponent
                     _input = _input.Remove(_input.Length - 1);
                 }
             }
+            TextChanged();
         }
 
         if (key == Key.Escape)
         {
             // _window.Hide();
         }
-        TextChanged();
+
+        if (key == Key.Down)
+        {
+            if (_selectedResult < _searchResults.Count - 1)
+            {
+                _selectedResult++;
+            }
+        }
+
+        if (key == Key.Up)
+        {
+            if (_selectedResult > 0)
+            {
+                _selectedResult--;
+            }
+        }
     }
 }
