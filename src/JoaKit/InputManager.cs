@@ -1,5 +1,6 @@
 ﻿using Modern.WindowKit;
 using Modern.WindowKit.Input.Raw;
+using Modern.WindowKit.Threading;
 
 namespace JoaKit;
 
@@ -25,7 +26,20 @@ public class InputManager
             {
                 _activeDiv.POnKeyDown(keyEventArgs.Key, keyEventArgs.Modifiers);
                 callbackWasCalled = true;
-            }       
+            }
+
+            if (_activeDiv?.POnKeyDownAsync is not null)
+            {
+                Task.Run(async () =>
+                {
+                    await _activeDiv.POnKeyDownAsync(keyEventArgs.Key, keyEventArgs.Modifiers);
+                    _renderer.Build(_windowManager.RootComponent);
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        _windowManager.DoPaint(new Rect());
+                    });
+                });
+            }
         }
         if (args is RawTextInputEventArgs rawInputEventArgs)
         {

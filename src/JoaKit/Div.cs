@@ -52,6 +52,8 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Action<Key, RawInputModifiers>? POnKeyDown { get; set; }
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public Func<Key, RawInputModifiers, Task>? POnKeyDownAsync { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Action<string, RawInputModifiers>? POnTextInput { get; set; }
@@ -277,6 +279,18 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public Div OnKeyDown(Action<Key, RawInputModifiers> onKeyDown)
     {
         POnKeyDown = onKeyDown;
+        return this;
+    }
+    
+    public Div OnKeyDown(Func<Key, Task> onKeyDown)
+    {
+        POnKeyDownAsync = (key, _) => onKeyDown(key);
+        return this;
+    }
+    
+    public Div OnKeyDown(Func< Key, RawInputModifiers, Task> onKeyDown)
+    {
+        POnKeyDownAsync = onKeyDown;
         return this;
     }
     

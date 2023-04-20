@@ -1,21 +1,39 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Modern.WindowKit.Platform;
 using Modern.WindowKit.Threading;
 
 namespace JoaKit;
 
 public class JoaKitApp
 {
-    public IServiceProvider Services { get; set; }
-
-    private readonly IServiceCollection _serviceCollection;
     private readonly List<WindowDefinition> _windows;
     internal static List<WindowManager> WindowManagers = new();
+    internal IWindowImpl? CurrentlyBuildingWindow = null;
+    private IServiceScope? _serviceScope;
+    public IServiceProvider Services { get; set; }
 
-    internal JoaKitApp(IServiceProvider services, IServiceCollection serviceCollection, List<WindowDefinition> windows)
+    internal JoaKitApp(IServiceCollection services, List<WindowDefinition> windows)
     {
-        _serviceCollection = serviceCollection;
         _windows = windows;
-        Services = services;
+        
+        services.AddSingleton<IWindowImpl>(_ =>
+        {
+            if (CurrentlyBuildingWindow is null)
+                throw new Exception("No window is currently being built, can't inject window");
+
+            return CurrentlyBuildingWindow;
+        });
+        services.AddSingleton(this);
+        
+        Services = services.BuildServiceProvider();
+        RenewScope();
+    }
+
+    public void RenewScope()
+    {
+        _serviceScope?.Dispose();
+        _serviceScope = Services.CreateScope();
+        Services = _serviceScope.ServiceProvider;
     }
 
     public static JoaKitBuilder CreateBuilder()
@@ -28,7 +46,7 @@ public class JoaKitApp
         var cancellationTokenSource = new CancellationTokenSource();
 
         WindowManagers = _windows.Select(x => 
-            new WindowManager(x.WindowImpl, x.RootComponent, _serviceCollection, cancellationTokenSource)).ToList();
+            new WindowManager(this, x.WindowImpl, x.RootComponent, cancellationTokenSource)).ToList();
         
         Dispatcher.UIThread.MainLoop(cancellationTokenSource.Token);
     }

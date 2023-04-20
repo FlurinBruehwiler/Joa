@@ -34,6 +34,9 @@ public static class External
 
     [DllImport("user32.dll")]
     public static extern bool SetForegroundWindow(nint hWnd);
+    
+    [DllImport("user32.dll")]
+    public static extern bool SetFocus(nint hWnd);
 
     public const uint STGM_READ = 0;
     public const int MAX_PATH = 260;

@@ -32,7 +32,7 @@ public static class Program
             window.SetExtendClientAreaToDecorationsHint(true);
             window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
             window.ShowTaskbarIcon(false);
-            // window.LostFocus = window.Hide;
+            window.LostFocus = window.Hide;
             
             CenterWindow(window);
         });

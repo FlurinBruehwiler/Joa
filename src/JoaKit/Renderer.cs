@@ -37,10 +37,14 @@ public class Renderer
 
     public void Build(IComponent rootComponent)
     {
-        var buildContext = new BuildContext(_windowManager.ServiceProvider);
-
+        _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
+        
+        var buildContext = new BuildContext(_windowManager.JoaKitApp.Services);
+        
         Root = rootComponent.Build();
         BuildTree(Root, buildContext);
+        
+        _windowManager.JoaKitApp.CurrentlyBuildingWindow = null;
     }
 
     private void BuildTree(RenderObject renderObject, BuildContext buildContext)

@@ -3,28 +3,28 @@ using Modern.WindowKit;
 using Modern.WindowKit.Controls.Platform.Surfaces;
 using Modern.WindowKit.Platform;
 using Modern.WindowKit.Skia;
+using Modern.WindowKit.Threading;
 using SkiaSharp;
 
 namespace JoaKit;
 
 public class WindowManager
 {
-    private readonly IWindowImpl _window;
+    public JoaKitApp JoaKitApp { get; }
+    public IWindowImpl Window { get; }
     public readonly IComponent RootComponent;
     public readonly Renderer Renderer;
     private SKSurface? _surface;
-    public ServiceProvider ServiceProvider { get; }
     public SKCanvas? Canvas { get; set; }
 
-    public WindowManager(IWindowImpl window, Type rootType, IServiceCollection serviceCollection, CancellationTokenSource cancellationTokenSource)
+    public WindowManager(JoaKitApp joaKitApp, IWindowImpl window, Type rootType, CancellationTokenSource cancellationTokenSource)
     {
-        _window = window;
-
-        serviceCollection.AddSingleton(window);
-
-        ServiceProvider = serviceCollection.BuildServiceProvider();
+        JoaKitApp = joaKitApp;
+        Window = window;
+        joaKitApp.CurrentlyBuildingWindow = window;
+        RootComponent = (IComponent)ActivatorUtilities.CreateInstance(JoaKitApp.Services, rootType);
+        joaKitApp.CurrentlyBuildingWindow = null;
         
-        RootComponent = (IComponent)ActivatorUtilities.CreateInstance(ServiceProvider, rootType);
         Renderer = new Renderer(this, window);
         var inputManager = new InputManager(Renderer, this);
         
@@ -39,16 +39,16 @@ public class WindowManager
         window.Input = inputManager.Input;
 
         window.Paint = DoPaint;
-
+        
         window.Show(true, false);
 
         Renderer.Build(RootComponent);
     }
-    
+
     public void DoPaint(Rect bounds)
     {
-        var skiaFramebuffer = _window.Surfaces.OfType<IFramebufferPlatformSurface>().First();
-
+        var skiaFramebuffer = Window.Surfaces.OfType<IFramebufferPlatformSurface>().First();
+        
         using var framebuffer = skiaFramebuffer.Lock();
 
         var framebufferImageInfo = new SKImageInfo(framebuffer.Size.Width, framebuffer.Size.Height,
@@ -60,7 +60,7 @@ public class WindowManager
         surface.Canvas.DrawSurface(GetSurface(), SKPoint.Empty);
         Canvas = surface.Canvas;
 
-        Renderer.LayoutPaintComposite(_window.ClientSize * _window.RenderScaling);
+        Renderer.LayoutPaintComposite(Window.ClientSize * Window.RenderScaling);
     }
     
     private SKSurface GetSurface()
@@ -68,7 +68,7 @@ public class WindowManager
         if (_surface is not null)
             return _surface;
 
-        var screen = _window.ClientSize * _window.RenderScaling;
+        var screen = Window.ClientSize * Window.RenderScaling;
         var info = new SKImageInfo((int)screen.Width, (int)screen.Height);
         
         _surface = SKSurface.Create(info);
@@ -77,7 +77,7 @@ public class WindowManager
         return _surface;
     }
     
-    public int Scale(int value) => (int)(value * _window.RenderScaling);
+    public int Scale(int value) => (int)(value * Window.RenderScaling);
 }
 
 public static class WindowExtensions

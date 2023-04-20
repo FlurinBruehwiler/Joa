@@ -4,9 +4,9 @@ namespace JoaKit;
 
 public class BuildContext
 {
-    private readonly ServiceProvider _serviceProvider;
+    private readonly IServiceProvider _serviceProvider;
 
-    public BuildContext(ServiceProvider serviceProvider)
+    public BuildContext(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
     }

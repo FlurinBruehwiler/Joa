@@ -1,4 +1,6 @@
-﻿using Joa.PluginCore;
+﻿using System.Runtime.InteropServices;
+using Joa.Hotkey;
+using Joa.PluginCore;
 using Joa.Steps;
 using JoaKit;
 using JoaLauncher.Api;
@@ -13,25 +15,36 @@ namespace Joa.UI;
 public class SearchBar : IComponent
 {
     private readonly IWindowImpl _window;
-    private readonly JoaManager _joaManager;
     private string _input = string.Empty;
     private List<PluginSearchResult> _searchResults = new();
     private int _selectedResult;
     private Stack<Step> _steps = new();
     private readonly Search _search;
 
-    public SearchBar(IWindowImpl window, JoaManager joaManager)
+    public SearchBar(IWindowImpl window, GlobalHotKey globalHotKey, Search search, PluginManager pluginManager)
     {
-        joaManager.NewScope();
         _window = window;
-        _joaManager = joaManager;
-        _search = _joaManager.CurrentScope!.ServiceProvider.GetRequiredService<Search>();
+        _search = search;
 
         _steps.Push(new Step
         {
-            Providers = joaManager.CurrentScope!.ServiceProvider.GetRequiredService<PluginManager>().GlobalProviders,
+            Providers = pluginManager.GlobalProviders,
             Name = "Global Step",
             Options = new StepOptions()
+        });
+
+        globalHotKey.InitialHotKeyRegistration(() =>
+        {
+            _window.Show(true, false);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                External.SetFocus(_window.Handle.Handle);
+                External.SetForegroundWindow(_window.Handle.Handle);
+            }
+            else
+            {
+                throw new NotImplementedException("Focusing the window is currently only supported on windows");
+            }
         });
     }
 
@@ -65,13 +78,13 @@ public class SearchBar : IComponent
     {
         if (_input == string.Empty)
         {
-            _searchResults.Clear();            
+            _searchResults.Clear();
         }
         else
         {
             _searchResults = _search.UpdateSearchResults(_steps.Peek(), _input);
         }
-        
+
         SearchResultsHaveChanged();
     }
 
@@ -90,7 +103,7 @@ public class SearchBar : IComponent
         }
     }
 
-    private void OnKeyDown(Key key, RawInputModifiers modifiers)
+    private async Task OnKeyDown(Key key, RawInputModifiers modifiers)
     {
         if (key == Key.Back)
         {
@@ -119,12 +132,13 @@ public class SearchBar : IComponent
                     _input = _input.Remove(_input.Length - 1);
                 }
             }
+
             TextChanged();
         }
 
         if (key == Key.Escape)
         {
-            // _window.Hide();
+            _window.Hide();
         }
 
         if (key == Key.Down)
@@ -141,6 +155,34 @@ public class SearchBar : IComponent
             {
                 _selectedResult--;
             }
+        }
+
+        if (key == Key.Enter)
+        {
+            if (_searchResults.Count != 0)
+            {
+                    // _searchResults[_selectedResult].SearchResult.Actions!.First(action => action.Id == key.ToString());
+                var newStep = await _search.ExecuteCommand(_searchResults[_selectedResult].SearchResult, null);
+                if (newStep is not null)
+                {
+                    _steps.Push(newStep);
+                }
+                else
+                {
+                    ClearSteps();
+                }
+                _input = string.Empty;
+                _searchResults.Clear();
+                SearchResultsHaveChanged();
+            }
+        }
+    }
+
+    private void ClearSteps()
+    {
+        while (_steps.Count > 1)
+        {
+            _steps.Pop();
         }
     }
 }
