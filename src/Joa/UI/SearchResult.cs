@@ -26,6 +26,6 @@ public class SearchResult : IComponent
                     }.MAlign(MAlign.Center)
                     .Color(color)
             }
-            .Dir(Dir.Row);
+            .Dir(Dir.Horizontal);
     }
 }

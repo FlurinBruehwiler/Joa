@@ -23,8 +23,7 @@ public static class Program
 
         builder.AddWindow<SearchBar>(window =>
         {
-            window.Resize(new Size(  500, 20));
-            // window.Resize(new Size(  window.Scale(500), window.Scale(20)));
+            window.Resize(new Size(  SearchBar.Width, SearchBar.SearchBoxHeight));
             window.SetTitle("Modern.WindowKit Demo");
             window.SetIcon(SKBitmap.Decode("icon.png"));
             window.CanResize(false);
@@ -32,7 +31,6 @@ public static class Program
             window.SetExtendClientAreaToDecorationsHint(true);
             window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
             window.ShowTaskbarIcon(false);
-            window.LostFocus = window.Hide;
             
             CenterWindow(window);
         });

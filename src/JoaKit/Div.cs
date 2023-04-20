@@ -33,7 +33,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public int PBorderWidth { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public Dir PDir { get; set; } = JoaKit.Dir.Column;
+    public Dir PDir { get; set; } = JoaKit.Dir.Vertical;
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public MAlign PmAlign { get; set; } = JoaKit.MAlign.FlexStart;

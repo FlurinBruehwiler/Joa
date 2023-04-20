@@ -4,7 +4,6 @@ using Joa.PluginCore;
 using Joa.Steps;
 using JoaKit;
 using JoaLauncher.Api;
-using Microsoft.Extensions.DependencyInjection;
 using Modern.WindowKit;
 using Modern.WindowKit.Input;
 using Modern.WindowKit.Platform;
@@ -20,11 +19,19 @@ public class SearchBar : IComponent
     private int _selectedResult;
     private Stack<Step> _steps = new();
     private readonly Search _search;
+    public const int SearchBoxHeight = 60;
+    private const int StepsHeight = 30;
+    private const int SearchResultHeight = 60;
+    public const int Width = 600;
 
     public SearchBar(IWindowImpl window, GlobalHotKey globalHotKey, Search search, PluginManager pluginManager)
     {
         _window = window;
         _search = search;
+
+        window.LostFocus = HideWindow;
+        
+        SearchResultsHaveChanged();
 
         _steps.Push(new Step
         {
@@ -64,8 +71,22 @@ public class SearchBar : IComponent
                 .XAlign(XAlign.Center)
                 .Padding(10)
                 .Gap(10)
-                .Height(60)
-                .Dir(Dir.Row),
+                .Height(SearchBoxHeight)
+                .Dir(Dir.Horizontal),
+            new Div()
+                .Items(_steps.Reverse().Select(x => 
+                    new Div
+                    {
+                        new Txt(x.Name).VAlign(TextAlign.Center).HAlign(TextAlign.Center)
+                    }.Width(100)
+                        .MAlign(MAlign.Center)
+                        .Color(60,60,60)
+                        .Radius(5)
+                )).Dir(Dir.Horizontal)
+                .Padding(4)
+                .Gap(8)
+                .Height(StepsHeight)
+                .Color(40,40,40),
             new Div()
                 .Items(_searchResults.Select((x, i) =>
                     new SearchResultComponent(x, _selectedResult == i)
@@ -76,7 +97,7 @@ public class SearchBar : IComponent
 
     private void TextChanged()
     {
-        if (_input == string.Empty)
+        if (_input == string.Empty && _steps.Count == 1)
         {
             _searchResults.Clear();
         }
@@ -91,7 +112,7 @@ public class SearchBar : IComponent
     private void SearchResultsHaveChanged()
     {
         _selectedResult = 0;
-        _window.Resize(new Size(_window.ClientSize.Width, 60 + _searchResults.Count * 60));
+        _window.Resize(new Size(_window.ClientSize.Width, SearchBoxHeight + StepsHeight + _searchResults.Count * SearchResultHeight));
     }
 
     private void OnTextInput(string s, RawInputModifiers modifiers)
@@ -138,7 +159,7 @@ public class SearchBar : IComponent
 
         if (key == Key.Escape)
         {
-            _window.Hide();
+            HideWindow();
         }
 
         if (key == Key.Down)
@@ -169,13 +190,22 @@ public class SearchBar : IComponent
                 }
                 else
                 {
-                    ClearSteps();
+                    HideWindow();
                 }
                 _input = string.Empty;
                 _searchResults.Clear();
                 SearchResultsHaveChanged();
             }
         }
+    }
+
+    private void HideWindow()
+    {
+        _window.Hide();
+        ClearSteps();
+        _input = string.Empty;
+        _searchResults.Clear();
+        SearchResultsHaveChanged();
     }
 
     private void ClearSteps()

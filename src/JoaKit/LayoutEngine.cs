@@ -49,10 +49,10 @@ public class LayoutEngine
     {
         switch (div.PDir)
         {
-            case Dir.Row or Dir.RowReverse:
+            case Dir.Horizontal or Dir.RowReverse:
                 ComputeRowSize(div);
                 break;
-            case Dir.Column or Dir.ColumnReverse:
+            case Dir.Vertical or Dir.ColumnReverse:
                 ComputeColumnSize(div);
                 break;
         }
@@ -100,8 +100,8 @@ public class LayoutEngine
     {
         return div.PDir switch
         {
-            Dir.Row or Dir.RowReverse => div.PComputedWidth - 2 * div.PPadding,
-            Dir.Column or Dir.ColumnReverse => div.PComputedHeight - 2 * div.PPadding,
+            Dir.Horizontal or Dir.RowReverse => div.PComputedWidth - 2 * div.PPadding,
+            Dir.Vertical or Dir.ColumnReverse => div.PComputedHeight - 2 * div.PPadding,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -110,8 +110,8 @@ public class LayoutEngine
     {
         return div.PDir switch
         {
-            Dir.Row or Dir.RowReverse => div.PComputedHeight - 2 * div.PPadding,
-            Dir.Column or Dir.ColumnReverse => div.PComputedWidth - 2 * div.PPadding,
+            Dir.Horizontal or Dir.RowReverse => div.PComputedHeight - 2 * div.PPadding,
+            Dir.Vertical or Dir.ColumnReverse => div.PComputedWidth - 2 * div.PPadding,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -120,8 +120,8 @@ public class LayoutEngine
     {
         return div.PDir switch
         {
-            Dir.Row or Dir.RowReverse => item.PComputedWidth,
-            Dir.Column or Dir.ColumnReverse => item.PComputedHeight,
+            Dir.Horizontal or Dir.RowReverse => item.PComputedWidth,
+            Dir.Vertical or Dir.ColumnReverse => item.PComputedHeight,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -130,10 +130,10 @@ public class LayoutEngine
     {
         return div.PDir switch
         {
-            Dir.Row or Dir.RowReverse => item.PWidth.Kind == SizeKind.Percentage
+            Dir.Horizontal or Dir.RowReverse => item.PWidth.Kind == SizeKind.Percentage
                 ? 0
                 : item.PWidth.GetDpiAwareValue(_window),
-            Dir.Column or Dir.ColumnReverse => item.PHeight.Kind == SizeKind.Percentage
+            Dir.Vertical or Dir.ColumnReverse => item.PHeight.Kind == SizeKind.Percentage
                 ? 0
                 : item.PHeight.GetDpiAwareValue(_window),
             _ => throw new ArgumentOutOfRangeException()
@@ -144,8 +144,8 @@ public class LayoutEngine
     {
         return div.PDir switch
         {
-            Dir.Row or Dir.RowReverse => item.PComputedHeight,
-            Dir.Column or Dir.ColumnReverse => item.PComputedWidth,
+            Dir.Horizontal or Dir.RowReverse => item.PComputedHeight,
+            Dir.Vertical or Dir.ColumnReverse => item.PComputedWidth,
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -347,7 +347,7 @@ public class LayoutEngine
     {
         switch (div.PDir)
         {
-            case Dir.Row:
+            case Dir.Horizontal:
                 item.PComputedX = mainOffset;
                 item.PComputedY = GetCrossAxisOffset(div, item);
                 break;
@@ -355,7 +355,7 @@ public class LayoutEngine
                 item.PComputedX = div.PComputedWidth - 2 * div.PPadding - mainOffset - item.PComputedWidth;
                 item.PComputedY = GetCrossAxisOffset(div, item);
                 break;
-            case Dir.Column:
+            case Dir.Vertical:
                 item.PComputedX = GetCrossAxisOffset(div, item);
                 item.PComputedY = mainOffset;
                 break;

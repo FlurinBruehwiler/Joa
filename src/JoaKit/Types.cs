@@ -12,9 +12,9 @@ public enum MAlign
 
 public enum Dir
 {
-    Row,
+    Horizontal,
     RowReverse,
-    Column,
+    Vertical,
     ColumnReverse
 }
 
