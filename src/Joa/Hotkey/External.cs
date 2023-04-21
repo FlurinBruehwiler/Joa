@@ -7,7 +7,7 @@ public static class External
 {
     public const uint WmHotkey = 0x312;
     public const uint PM_REMOVE = 1;
-    
+
     [DllImport("user32.dll")]
     public static extern bool OpenClipboard(IntPtr hWndNewOwner);
 
@@ -34,7 +34,7 @@ public static class External
 
     [DllImport("user32.dll")]
     public static extern bool SetForegroundWindow(nint hWnd);
-    
+
     [DllImport("user32.dll")]
     public static extern bool SetFocus(nint hWnd);
 

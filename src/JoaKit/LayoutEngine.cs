@@ -10,7 +10,7 @@ public class LayoutEngine
     {
         _window = window;
     }
-    
+
     public void ApplyLayoutCalculations(Div root)
     {
         // if (newRoot.LayoutHasChanged(oldRoot))

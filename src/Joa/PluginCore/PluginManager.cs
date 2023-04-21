@@ -12,19 +12,17 @@ public class PluginManager
     private readonly PluginLoader _pluginLoader;
     private readonly IJoaLogger _logger;
     private readonly IServiceProvider _serviceProvider;
-    private readonly JoaManager _joaManager;
 
-    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, IServiceProvider serviceProvider, JoaManager joaManager)
+    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, IServiceProvider serviceProvider)
     {
         _pluginLoader = pluginLoader;
         _logger = logger;
         _serviceProvider = serviceProvider;
-        _joaManager = joaManager;
         ReloadPlugins();
-        
+
         Task.Run(async () =>
         {
-            var periodicTimer= new PeriodicTimer(TimeSpan.FromMinutes(5));
+            var periodicTimer = new PeriodicTimer(TimeSpan.FromMinutes(5));
             while (await periodicTimer.WaitForNextTickAsync())
             {
                 await UpdateIndexesAsync();
@@ -34,8 +32,8 @@ public class PluginManager
 
     private void ReloadPlugins()
     {
-        var builtInProvider = new BuiltInProvider(_serviceProvider, _joaManager, this);
-        
+        var builtInProvider = new BuiltInProvider(_serviceProvider, this);
+
         Plugins = _pluginLoader.ReloadPlugins();
         GlobalProviders = Plugins.SelectMany(x => x.GlobalProviders).ToList();
         GlobalProviders.Add(new ProviderWrapper
@@ -47,7 +45,7 @@ public class PluginManager
     public async Task UpdateIndexesAsync()
     {
         _logger.TimedOperation(nameof(UpdateIndexesAsync));
-        
+
         foreach (var cache in Plugins.SelectMany(x => x.Caches))
         {
             try

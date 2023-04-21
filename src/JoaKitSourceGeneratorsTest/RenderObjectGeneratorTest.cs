@@ -30,7 +30,7 @@ public class TestComponent : IComponent
     }
 }
 """;
-        
+
         var generated = """
 #nullable enable
 

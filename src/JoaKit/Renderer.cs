@@ -38,12 +38,12 @@ public class Renderer
     public void Build(IComponent rootComponent)
     {
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
-        
+
         var buildContext = new BuildContext(_windowManager.JoaKitApp.Services);
-        
+
         Root = rootComponent.Build();
         BuildTree(Root, buildContext);
-        
+
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = null;
     }
 
@@ -54,22 +54,22 @@ public class Renderer
             switch (renderObject)
             {
                 case CustomRenderObject customRenderObject:
-                {
-                    var componentHash = customRenderObject.GetComponentHash();
-                    var component = buildContext.GetComponent(componentHash, customRenderObject.ComponentType);
-                    var childRenderObject = customRenderObject.Build(component);
-                    renderObject = childRenderObject;
-                    continue;
-                }
-                case Div { Children.Count: > 0 } div:
-                {
-                    foreach (var divChild in div.Children)
                     {
-                        BuildTree(divChild, buildContext);
+                        var componentHash = customRenderObject.GetComponentHash();
+                        var component = buildContext.GetComponent(componentHash, customRenderObject.ComponentType);
+                        var childRenderObject = customRenderObject.Build(component);
+                        renderObject = childRenderObject;
+                        continue;
                     }
+                case Div { Children.Count: > 0 } div:
+                    {
+                        foreach (var divChild in div.Children)
+                        {
+                            BuildTree(divChild, buildContext);
+                        }
 
-                    break;
-                }
+                        break;
+                    }
             }
 
             break;

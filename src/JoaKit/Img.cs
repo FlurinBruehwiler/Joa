@@ -25,7 +25,7 @@ public class Img : RenderObject
 
         if (svg.Picture is null)
             return;
-        
+
         PWidth = new SizeDefinition(svg.Picture.CullRect.Width, SizeKind.Pixel);
         PHeight = new SizeDefinition(svg.Picture.CullRect.Height, SizeKind.Pixel);
     }

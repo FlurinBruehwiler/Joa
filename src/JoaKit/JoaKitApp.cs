@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Modern.WindowKit;
 using Modern.WindowKit.Platform;
 using Modern.WindowKit.Threading;
 
@@ -6,16 +7,14 @@ namespace JoaKit;
 
 public class JoaKitApp
 {
-    private readonly List<WindowDefinition> _windows;
-    internal static List<WindowManager> WindowManagers = new();
+    internal static readonly List<WindowManager> WindowManagers = new();
     internal IWindowImpl? CurrentlyBuildingWindow = null;
     private IServiceScope? _serviceScope;
-    public IServiceProvider Services { get; set; }
+    private readonly CancellationTokenSource _cancellationTokenSource = new();
+    public IServiceProvider Services { get; private set; }
 
-    internal JoaKitApp(IServiceCollection services, List<WindowDefinition> windows)
+    internal JoaKitApp(IServiceCollection services)
     {
-        _windows = windows;
-        
         services.AddSingleton<IWindowImpl>(_ =>
         {
             if (CurrentlyBuildingWindow is null)
@@ -24,9 +23,20 @@ public class JoaKitApp
             return CurrentlyBuildingWindow;
         });
         services.AddSingleton(this);
-        
+
         Services = services.BuildServiceProvider();
         RenewScope();
+    }
+
+    public void CreateWindow<T>(Action<IWindowImpl> configure, bool show = true) where T : IComponent
+    {
+        var window = AvaloniaGlobals.GetRequiredService<IWindowingPlatform>().CreateWindow();
+        configure(window);
+        WindowManagers.Add(new WindowManager(this, window, typeof(T), _cancellationTokenSource));
+        if (show)
+        {
+            window.Show(true, false);
+        }
     }
 
     public void RenewScope()
@@ -43,11 +53,6 @@ public class JoaKitApp
 
     public void Run()
     {
-        var cancellationTokenSource = new CancellationTokenSource();
-
-        WindowManagers = _windows.Select(x => 
-            new WindowManager(this, x.WindowImpl, x.RootComponent, cancellationTokenSource)).ToList();
-        
-        Dispatcher.UIThread.MainLoop(cancellationTokenSource.Token);
+        Dispatcher.UIThread.MainLoop(_cancellationTokenSource.Token);
     }
 }

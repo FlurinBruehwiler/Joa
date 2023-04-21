@@ -191,7 +191,7 @@ public class PluginLoader
     private PluginTypes? LoadType(PluginAssembly pluginAssembly)
     {
         var assembly = pluginAssembly.Assembly;
-        
+
         PluginTypes pluginTypes = new()
         {
             PluginManifest = pluginAssembly.PluginManifest
@@ -228,13 +228,13 @@ public class PluginLoader
                     $"Available types: \n{availableTypes}", LogLevel.Warning);
         return null;
     }
-    
+
     private List<PluginFiles> GetPluginDllPaths(string pluginsFinalLocation)
     {
         _logger.Log($"Searching for Plugins in {pluginsFinalLocation}", LogLevel.Info);
 
         var pluginFolders = Directory.GetDirectories(pluginsFinalLocation);
-        
+
         var plugins = pluginFolders.Select(pluginfolder =>
             {
                 var filesInFolder = Directory.GetFiles(pluginfolder);
@@ -255,7 +255,7 @@ public class PluginLoader
 
         return plugins!;
     }
-    
+
 
     private List<PluginAssembly> LoadAssemblies(List<PluginFiles> pluginFiles)
     {
@@ -270,7 +270,7 @@ public class PluginLoader
                     var manifest = JsonSerializer.Deserialize<PluginManifest>(manifestString);
                     if (manifest is null)
                         throw new Exception();
-                    
+
                     return new PluginAssembly(assembly, manifest);
                 }
                 catch
@@ -283,7 +283,7 @@ public class PluginLoader
 
             if (assemblyName is null)
                 throw new Exception($"Could not read assembly name from name from {s.Dll}");
-            
+
             var beautifiedName = BeautifyString(assemblyName);
             var generatedManifest = new PluginManifest
             {
@@ -305,7 +305,7 @@ public class PluginLoader
     private string BeautifyString(string inputString)
     {
         inputString = inputString.Replace("Plugin.", "");
-        
+
         var outputString = string.Empty;
 
         for (var i = 0; i < inputString.Length; i++)

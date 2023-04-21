@@ -22,7 +22,7 @@ internal class ComponentInfo : IEquatable<ComponentInfo>
     {
         var currentNamespace = typeSymbol.ContainingNamespace;
         var output = string.Empty;
-        
+
         while (!currentNamespace.IsGlobalNamespace)
         {
             if (output == string.Empty)
@@ -39,13 +39,13 @@ internal class ComponentInfo : IEquatable<ComponentInfo>
 
         return output;
     }
-    
+
     private static List<(string, string)> GetParameters(ITypeSymbol type)
     {
         return type.GetMembers().Where(IsParameter).Select(x => (((IPropertySymbol)x).Name, ((IPropertySymbol)x).Type.Name))
             .ToList();
     }
-    
+
     private static bool IsParameter(ISymbol symbol)
     {
         if (symbol.DeclaredAccessibility != Accessibility.Public)
@@ -59,10 +59,10 @@ internal class ComponentInfo : IEquatable<ComponentInfo>
                 {
                     AttributeClass:
                     {
-                        Name:"ParameterAttribute",
+                        Name: "ParameterAttribute",
                         ContainingNamespace:
                         {
-                            Name:"JoaKit",
+                            Name: "JoaKit",
                             ContainingNamespace.IsGlobalNamespace: true
                         }
                     }
@@ -71,15 +71,15 @@ internal class ComponentInfo : IEquatable<ComponentInfo>
 
         return true;
     }
-    
+
     public bool Equals(ComponentInfo other)
     {
         if (ReferenceEquals(null, other))
             return false;
-        
+
         if (ReferenceEquals(this, other))
             return true;
-        
+
         return Name == other.Name && Namespace == other.Namespace && Parameters.SequenceEqual(Parameters);
     }
 
@@ -87,13 +87,13 @@ internal class ComponentInfo : IEquatable<ComponentInfo>
     {
         if (ReferenceEquals(null, obj))
             return false;
-        
+
         if (ReferenceEquals(this, obj))
             return true;
-        
+
         if (obj.GetType() != GetType())
             return false;
-        
+
         return Equals((ComponentInfo)obj);
     }
 

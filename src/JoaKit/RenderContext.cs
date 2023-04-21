@@ -10,7 +10,7 @@ public class RenderContext
     {
         _window = window;
     }
-    
+
     public float Scale(float value)
     {
         return _window.Scale(value);

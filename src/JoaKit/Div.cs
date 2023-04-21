@@ -8,12 +8,12 @@ namespace JoaKit;
 
 public class Div : RenderObject, IEnumerable<RenderObject>
 {
-    public Div([CallerLineNumber]int lineNumer = -1, [CallerFilePath]string filePath = "")
+    public Div([CallerLineNumber] int lineNumer = -1, [CallerFilePath] string filePath = "")
     {
         PLineNumber = lineNumer;
         PFilePath = filePath;
     }
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public List<RenderObject>? Children { get; set; }
 
@@ -43,13 +43,13 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Action? POnClick { get; set; }
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Action? POnActive { get; set; }
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Action? POnInactive { get; set; }
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Action<Key, RawInputModifiers>? POnKeyDown { get; set; }
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -57,7 +57,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Action<string, RawInputModifiers>? POnTextInput { get; set; }
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Func<Task>? POnClickAsync { get; set; }
 
@@ -69,7 +69,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         //
         // if (PHeight != oldDiv.PHeight)
         //     return true;
-        
+
         if ((oldDiv.Children?.Count ?? 0) != (Children?.Count ?? 0))
             return true;
 
@@ -78,7 +78,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
         if (PGap != oldDiv.PGap)
             return true;
-        
+
         if (PDir != oldDiv.PDir)
             return true;
 
@@ -93,16 +93,16 @@ public class Div : RenderObject, IEnumerable<RenderObject>
             for (var i = Children.Count - 1; i >= 0; i--)
             {
                 // if (Children[i].LayoutHasChanged(oldDiv.Children[i]))
-                    return true;
+                return true;
             }
         }
-     
+
         //Copy layout calculations
         PComputedWidth = oldDiv.PComputedWidth;
         PComputedHeight = oldDiv.PComputedHeight;
         PComputedX = oldDiv.PComputedX;
         PComputedY = oldDiv.PComputedY;
-        
+
         return false;
     }
 
@@ -114,7 +114,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
             if (PRadius != 0)
             {
                 float borderRadius = PRadius + PBorderWidth;
-                
+
                 // canvas.DrawRoundRect(PComputedX - PComputedY - PBorderWidth, PComputedWidth + 2 * PBorderWidth, PComputedHeight + 2 * PBorderWidth, borderRadius, borderRadius, BorderColor);
                 canvas.DrawRoundRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight, PRadius, PRadius,
                     GetColor(PColor));
@@ -145,18 +145,18 @@ public class Div : RenderObject, IEnumerable<RenderObject>
             foreach (var renderObject in Children)
             {
                 renderObject.Render(canvas, renderContext);
-            }    
+            }
         }
     }
-    
+
     private static readonly SKPaint s_paint = new()
     {
         IsAntialias = true
     };
-    
+
     public static SKPaint GetColor(ColorDefinition colorDefinition)
     {
-        s_paint.Color = new SKColor((byte) colorDefinition.Red, (byte)colorDefinition.Gree, (byte)colorDefinition.Blue, (byte)colorDefinition.Transparency);
+        s_paint.Color = new SKColor((byte)colorDefinition.Red, (byte)colorDefinition.Gree, (byte)colorDefinition.Blue, (byte)colorDefinition.Transparency);
         return s_paint;
     }
 
@@ -165,7 +165,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         IsAntialias = true,
         Color = SKColors.Black
     };
-    
+
     public Div Items(IEnumerable<RenderObject> children)
     {
         Children ??= new List<RenderObject>();
@@ -263,7 +263,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         POnActive = onActive;
         return this;
     }
-    
+
     public Div OnInactive(Action onInactive)
     {
         POnInactive = onInactive;
@@ -275,31 +275,31 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         POnKeyDown = (key, _) => onKeyDown(key);
         return this;
     }
-    
+
     public Div OnKeyDown(Action<Key, RawInputModifiers> onKeyDown)
     {
         POnKeyDown = onKeyDown;
         return this;
     }
-    
+
     public Div OnKeyDown(Func<Key, Task> onKeyDown)
     {
         POnKeyDownAsync = (key, _) => onKeyDown(key);
         return this;
     }
-    
-    public Div OnKeyDown(Func< Key, RawInputModifiers, Task> onKeyDown)
+
+    public Div OnKeyDown(Func<Key, RawInputModifiers, Task> onKeyDown)
     {
         POnKeyDownAsync = onKeyDown;
         return this;
     }
-    
+
     public Div OnTextInput(Action<string> onTextInput)
     {
         POnTextInput = (s, _) => onTextInput(s);
         return this;
     }
-    
+
     public Div OnTextInput(Action<string, RawInputModifiers> onTextInput)
     {
         POnTextInput = onTextInput;

@@ -30,7 +30,7 @@ public class SearchBar : IComponent
         _search = search;
 
         window.LostFocus = HideWindow;
-        
+
         SearchResultsHaveChanged();
 
         _steps.Push(new Step
@@ -43,15 +43,10 @@ public class SearchBar : IComponent
         globalHotKey.InitialHotKeyRegistration(() =>
         {
             _window.Show(true, false);
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                External.SetFocus(_window.Handle.Handle);
-                External.SetForegroundWindow(_window.Handle.Handle);
-            }
-            else
-            {
-                throw new NotImplementedException("Focusing the window is currently only supported on windows");
-            }
+
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
+            External.SetFocus(_window.Handle.Handle);
+            External.SetForegroundWindow(_window.Handle.Handle);
         });
     }
 
@@ -74,19 +69,19 @@ public class SearchBar : IComponent
                 .Height(SearchBoxHeight)
                 .Dir(Dir.Horizontal),
             new Div()
-                .Items(_steps.Reverse().Select(x => 
+                .Items(_steps.Reverse().Select(x =>
                     new Div
-                    {
-                        new Txt(x.Name).VAlign(TextAlign.Center).HAlign(TextAlign.Center)
-                    }.Width(100)
+                        {
+                            new Txt(x.Name).VAlign(TextAlign.Center).HAlign(TextAlign.Center)
+                        }.Width(100)
                         .MAlign(MAlign.Center)
-                        .Color(60,60,60)
+                        .Color(60, 60, 60)
                         .Radius(5)
                 )).Dir(Dir.Horizontal)
                 .Padding(4)
                 .Gap(8)
                 .Height(StepsHeight)
-                .Color(40,40,40),
+                .Color(40, 40, 40),
             new Div()
                 .Items(_searchResults.Select((x, i) =>
                     new SearchResultComponent(x, _selectedResult == i)
@@ -112,7 +107,8 @@ public class SearchBar : IComponent
     private void SearchResultsHaveChanged()
     {
         _selectedResult = 0;
-        _window.Resize(new Size(_window.ClientSize.Width, SearchBoxHeight + StepsHeight + _searchResults.Count * SearchResultHeight));
+        _window.Resize(new Size(_window.ClientSize.Width,
+            SearchBoxHeight + StepsHeight + _searchResults.Count * SearchResultHeight));
     }
 
     private void OnTextInput(string s, RawInputModifiers modifiers)
@@ -182,7 +178,7 @@ public class SearchBar : IComponent
         {
             if (_searchResults.Count != 0)
             {
-                    // _searchResults[_selectedResult].SearchResult.Actions!.First(action => action.Id == key.ToString());
+                // _searchResults[_selectedResult].SearchResult.Actions!.First(action => action.Id == key.ToString());
                 var newStep = await _search.ExecuteCommand(_searchResults[_selectedResult].SearchResult, null);
                 if (newStep is not null)
                 {
@@ -192,6 +188,7 @@ public class SearchBar : IComponent
                 {
                     HideWindow();
                 }
+
                 _input = string.Empty;
                 _searchResults.Clear();
                 SearchResultsHaveChanged();

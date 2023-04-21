@@ -24,12 +24,12 @@ public class WindowManager
         joaKitApp.CurrentlyBuildingWindow = window;
         RootComponent = (IComponent)ActivatorUtilities.CreateInstance(JoaKitApp.Services, rootType);
         joaKitApp.CurrentlyBuildingWindow = null;
-        
+
         Renderer = new Renderer(this, window);
         var inputManager = new InputManager(Renderer, this);
-        
+
         window.Closed = cancellationTokenSource.Cancel;
-        
+
         window.Resized = (_, _) =>
         {
             Canvas?.Dispose();
@@ -39,8 +39,6 @@ public class WindowManager
         window.Input = inputManager.Input;
 
         window.Paint = DoPaint;
-        
-        window.Show(true, false);
 
         Renderer.Build(RootComponent);
     }
@@ -48,7 +46,7 @@ public class WindowManager
     public void DoPaint(Rect bounds)
     {
         var skiaFramebuffer = Window.Surfaces.OfType<IFramebufferPlatformSurface>().First();
-        
+
         using var framebuffer = skiaFramebuffer.Lock();
 
         var framebufferImageInfo = new SKImageInfo(framebuffer.Size.Width, framebuffer.Size.Height,
@@ -62,7 +60,7 @@ public class WindowManager
 
         Renderer.LayoutPaintComposite(Window.ClientSize * Window.RenderScaling);
     }
-    
+
     private SKSurface GetSurface()
     {
         if (_surface is not null)
@@ -70,13 +68,13 @@ public class WindowManager
 
         var screen = Window.ClientSize * Window.RenderScaling;
         var info = new SKImageInfo((int)screen.Width, (int)screen.Height);
-        
+
         _surface = SKSurface.Create(info);
         _surface.Canvas.Clear(SKColors.CornflowerBlue);
 
         return _surface;
     }
-    
+
     public int Scale(int value) => (int)(value * Window.RenderScaling);
 }
 

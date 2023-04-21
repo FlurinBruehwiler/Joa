@@ -12,7 +12,7 @@ namespace Joa;
 public class JoaManager
 {
     public Func<bool, Task>? ShowUi { get; set; }
-    
+
     private readonly IServiceProvider _serviceProvider;
     private readonly IJoaLogger _joaLogger;
     private readonly FileSystemManager _fileSystemManager;
@@ -48,7 +48,7 @@ public class JoaManager
             else
             {
                 _joaLogger.Info("Unloading succeeded");
-                Debugger.Break();                
+                Debugger.Break();
             }
 
             _fileWatcher = new FileWatcher(_fileSystemManager.GetPluginsLocation(), NewScope, 500);
@@ -68,7 +68,7 @@ public class JoaManager
 
         if (asmLoadContext is null)
             return null;
-        
+
         var assembly = typeof(JsonSerializerOptions).Assembly;
         var updateHandlerType = assembly.GetType(AssemblyType);
         var clearCacheMethod = updateHandlerType?.GetMethod(ClearCache, BindingFlags.Static | BindingFlags.Public);

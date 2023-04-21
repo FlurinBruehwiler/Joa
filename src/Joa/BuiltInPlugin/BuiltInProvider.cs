@@ -1,6 +1,12 @@
 ﻿using Joa.PluginCore;
+using Joa.UI.Settings;
+using JoaKit;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Providers;
+using Microsoft.Extensions.DependencyInjection;
+using Modern.WindowKit;
+using Modern.WindowKit.Threading;
+using SkiaSharp;
 
 namespace Joa.BuiltInPlugin;
 
@@ -8,7 +14,7 @@ public class BuiltInProvider : IProvider
 {
     private readonly List<SearchResult> _searchResults;
 
-    public BuiltInProvider(IServiceProvider serviceProvider, JoaManager joaManager, PluginManager pluginManager)
+    public BuiltInProvider(IServiceProvider serviceProvider, PluginManager pluginManager)
     {
         _searchResults = new List<SearchResult>
         {
@@ -19,7 +25,17 @@ public class BuiltInProvider : IProvider
                 Icon = string.Empty,
                 ExecutionAction = _ =>
                 {
-                    // joaManager.ExecuteOnUiThread(() => Program.CreateSettingsWindow(serviceProvider));
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        serviceProvider.GetRequiredService<JoaKitApp>().CreateWindow<SettingsWindow>(
+                            window =>
+                            {
+                                window.Resize(new Size(800, 600));
+                                window.SetTitle("Joa Settings");
+                                window.SetIcon(SKBitmap.Decode("icon.png"));
+                            });
+
+                    });
                 }
             },
             new BuiltInSearchResult
@@ -27,7 +43,7 @@ public class BuiltInProvider : IProvider
                 Title = "Refresh indexes",
                 Description = "Refresh all indexes of all plugins",
                 Icon = string.Empty,
-                ExecutionAction = context => Task.Run(pluginManager.UpdateIndexesAsync)
+                ExecutionAction = _ => Task.Run(pluginManager.UpdateIndexesAsync)
             }
         };
     }

@@ -45,7 +45,7 @@ public class PluginBuilder : IPluginBuilder
         _saveActions.Add(new SaveAction(o => callback((T)o), null, typeof(T), nameOfProperty, false));
         return this;
     }
-    
+
     public IPluginBuilder AddSaveAction<T>(string nameOfProperty, Func<T, Task> callback) where T : class
     {
         _saveActions.Add(new SaveAction(null, o => callback((T)o), typeof(T), nameOfProperty, true));

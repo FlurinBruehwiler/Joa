@@ -7,8 +7,6 @@ namespace JoaKit;
 
 public class JoaKitBuilder
 {
-    private List<WindowDefinition> _windows = new();
-
     public JoaKitBuilder()
     {
         Configuration = new ConfigurationBuilder()
@@ -17,28 +15,12 @@ public class JoaKitBuilder
             .AddEnvironmentVariables()
             .Build();
     }
-    
-    public JoaKitBuilder AddWindow<T>(Action<IWindowImpl> configureWindow) where T : IComponent
-    {
-        var window = AvaloniaGlobals.GetRequiredService<IWindowingPlatform>().CreateWindow();
-        configureWindow(window);
-        _windows.Add(new WindowDefinition(typeof(T), window));
-        return this;
-    }
-    
-    public JoaKitBuilder AddWindow<T>() where T : IComponent
-    {
-        AddWindow<T>(_ => {});
-        return this;
-    }
 
     public JoaKitApp Build()
     {
-        return new JoaKitApp(Services, _windows);
+        return new JoaKitApp(Services);
     }
 
     public IConfiguration Configuration { get; private set; }
     public IServiceCollection Services { get; } = new ServiceCollection();
 }
-
-public record WindowDefinition(Type RootComponent, IWindowImpl WindowImpl);

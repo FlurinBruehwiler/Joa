@@ -19,7 +19,7 @@ public class InputManager
     public void Input(RawInputEventArgs args)
     {
         var callbackWasCalled = false;
-        
+
         if (args is RawKeyEventArgs { Type: RawKeyEventType.KeyDown } keyEventArgs)
         {
             if (_activeDiv?.POnKeyDown is not null)
@@ -60,7 +60,7 @@ public class InputManager
 
                 if (div is null)
                     return;
-            
+
                 if (_activeDiv?.POnInactive is not null)
                 {
                     _activeDiv.POnInactive();
@@ -74,7 +74,7 @@ public class InputManager
                     div.POnActive();
                     callbackWasCalled = true;
                 }
-            
+
                 if (div.POnClick is not null)
                 {
                     div.POnClick();
@@ -88,7 +88,7 @@ public class InputManager
                 }
             }
         }
-        
+
         if (callbackWasCalled)
         {
             _renderer.Build(_windowManager.RootComponent);
@@ -104,12 +104,12 @@ public class InputManager
             {
                 return div;
             }
-            
+
             foreach (var child in div.Children)
             {
-                if(child is not Div divChild)
+                if (child is not Div divChild)
                     continue;
-                
+
                 var childHit = HitTest(divChild, x, y);
                 if (childHit is not null)
                     return childHit;

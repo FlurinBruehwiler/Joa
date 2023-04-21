@@ -4,6 +4,7 @@ using Joa.Injectables;
 using Joa.PluginCore;
 using Joa.Settings;
 using Joa.UI;
+using Joa.UI.Settings;
 using JoaKit;
 using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,24 +22,10 @@ public static class Program
     {
         var builder = JoaKitApp.CreateBuilder();
 
-        builder.AddWindow<SearchBar>(window =>
-        {
-            window.Resize(new Size(  SearchBar.Width, SearchBar.SearchBoxHeight));
-            window.SetTitle("Modern.WindowKit Demo");
-            window.SetIcon(SKBitmap.Decode("icon.png"));
-            window.CanResize(false);
-            window.SetExtendClientAreaTitleBarHeightHint(0);
-            window.SetExtendClientAreaToDecorationsHint(true);
-            window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
-            window.ShowTaskbarIcon(false);
-            
-            CenterWindow(window);
-        });
-
         builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
         builder.Services.AddSingleton<JoaManager>();
         builder.Services.AddSingleton<FileSystemManager>();
-    
+
         builder.Services.AddScoped<Search>();
         builder.Services.AddScoped<PluginManager>();
         builder.Services.AddScoped<PluginLoader>();
@@ -47,10 +34,23 @@ public static class Program
         builder.Services.AddScoped<BuiltInProvider>();
         builder.Services.AddScoped<GlobalHotKey>();
         builder.Services.AddScoped<HotKeyService>();
-    
+
         builder.Services.Configure<PathsConfiguration>(builder.Configuration.GetSection("Paths"));
 
         var app = builder.Build();
+
+        app.CreateWindow<SearchBar>(window =>
+        {
+            window.Resize(new Size(SearchBar.Width, SearchBar.SearchBoxHeight));
+            window.SetTitle("Joa");
+            window.SetIcon(SKBitmap.Decode("icon.png"));
+            window.CanResize(false);
+            window.SetExtendClientAreaTitleBarHeightHint(0);
+            window.SetExtendClientAreaToDecorationsHint(true);
+            window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
+            window.ShowTaskbarIcon(false);
+            CenterWindow(window);
+        }, false);
 
         app.Run();
     }
@@ -63,9 +63,7 @@ public static class Program
         var rect = window.FrameSize.HasValue
             ? new PixelRect(PixelSize.FromSize(window.FrameSize.Value, window.DesktopScaling))
             : new PixelRect(PixelSize.FromSize(window.ClientSize, window.DesktopScaling));
-        
+
         window.Move(screen.WorkingArea.CenterRect(rect).Position);
     }
 }
-
-

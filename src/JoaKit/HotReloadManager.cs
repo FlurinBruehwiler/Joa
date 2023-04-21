@@ -21,7 +21,7 @@ public static class HotReloadManager
             manager.Renderer.Build(manager.RootComponent);
             manager.DoPaint(new Rect());
         }
-        
+
         Console.WriteLine("HotReloadManager.UpdateApplication");
     }
 }

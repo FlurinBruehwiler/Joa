@@ -15,7 +15,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
             .Where(info => info is not null)
             .Collect()
             .SelectMany((infos, _) => infos.Distinct());
-        
+
         context.RegisterSourceOutput(components, GenerateCode!);
     }
 
@@ -28,7 +28,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
     private static string GenerateCode(ComponentInfo componentInfo)
     {
         var newTypeName = componentInfo.Name + "Component";
-        
+
         return $$"""
             #nullable enable
 
@@ -85,7 +85,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
 
         if (type is null)
             return null;
-        
+
         if (!IsUiComponent(type))
             return null;
 
@@ -121,7 +121,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
 
         if (parameters.Count != 0)
             defaultBody += "\n            ";
-        
+
         return defaultBody + string.Join("\n            ",
             parameters.Select(x => $"_{x.name.ToLowerInvariant()} = {x.name.ToLowerInvariant()};"));
     }
@@ -138,7 +138,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
 
         if (parameters.Count != 0)
             defaultArguments = ", " + defaultArguments;
-        
+
         return string.Join(", ", parameters.Select(x => $"{x.type} {x.name.ToLowerInvariant()}")) + defaultArguments;
     }
 }
