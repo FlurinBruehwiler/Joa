@@ -25,12 +25,10 @@ Joa offers a bunch of default plugins which cover the most common use cases. But
 ### ToDo for 1.0 release
 Planned release date is the 29. April 2023
 
-- Create documentation
 - Create landing page
 - Create more default plugins
 - Implement a way to specify a GitHub repository as a plugin source and add automatic updates
 - Create release process
-- Implement settings UI
 
 ### Comparison to alternatives
 |               | Cross platform | Free of charge        | Plugin support  | Open source | Customizable UI | Nested Search Results |
