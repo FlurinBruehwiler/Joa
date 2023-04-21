@@ -70,7 +70,7 @@ public class WindowManager
         var info = new SKImageInfo((int)screen.Width, (int)screen.Height);
 
         _surface = SKSurface.Create(info);
-        _surface.Canvas.Clear(SKColors.CornflowerBlue);
+        _surface.Canvas.Clear(SKColors.Black);
 
         return _surface;
     }

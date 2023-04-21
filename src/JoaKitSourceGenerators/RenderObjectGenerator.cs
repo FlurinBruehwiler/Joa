@@ -38,6 +38,7 @@ public class RenderObjectGenerator : IIncrementalGenerator
             using System;
             using Joa.PluginCore;
             using System.Runtime.CompilerServices;
+            using Joa.Settings;
             
             namespace {{componentInfo.Namespace}}
             {

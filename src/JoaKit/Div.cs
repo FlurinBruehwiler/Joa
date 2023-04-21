@@ -18,7 +18,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public List<RenderObject>? Children { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public ColorDefinition PColor { get; set; } = new(0, 0, 0, 255);
+    public ColorDefinition? PColor { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public int PPadding { get; set; }
@@ -109,36 +109,38 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override void Render(SKCanvas canvas, RenderContext renderContext)
     {
-        if (PBorderWidth != 0)
-        {
-            if (PRadius != 0)
+        if(PColor is not null){if (PBorderWidth != 0)
             {
-                float borderRadius = PRadius + PBorderWidth;
+                if (PRadius != 0)
+                {
+                    float borderRadius = PRadius + PBorderWidth;
 
-                // canvas.DrawRoundRect(PComputedX - PComputedY - PBorderWidth, PComputedWidth + 2 * PBorderWidth, PComputedHeight + 2 * PBorderWidth, borderRadius, borderRadius, BorderColor);
-                canvas.DrawRoundRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight, PRadius, PRadius,
-                    GetColor(PColor));
+                    // canvas.DrawRoundRect(PComputedX - PComputedY - PBorderWidth, PComputedWidth + 2 * PBorderWidth, PComputedHeight + 2 * PBorderWidth, borderRadius, borderRadius, BorderColor);
+                    canvas.DrawRoundRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight, PRadius, PRadius,
+                        GetColor(PColor.Value));
+                }
+                else
+                {
+                    canvas.DrawRect(PComputedX - PBorderWidth, PComputedY - PBorderWidth,
+                        PComputedWidth + 2 * PBorderWidth, PComputedHeight + 2 * PBorderWidth, BorderColor);
+                    canvas.DrawRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight,
+                        GetColor(PColor.Value));
+                }
             }
             else
             {
-                canvas.DrawRect(PComputedX - PBorderWidth, PComputedY - PBorderWidth,
-                    PComputedWidth + 2 * PBorderWidth, PComputedHeight + 2 * PBorderWidth, BorderColor);
-                canvas.DrawRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight,
-                    GetColor(PColor));
-            }
-        }
-        else
-        {
-            if (PRadius != 0)
-            {
-                canvas.DrawRoundRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight, PRadius, PRadius,
-                    GetColor(PColor));
-            }
-            else
-            {
-                canvas.DrawRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight, GetColor(PColor));
-            }
-        }
+                if (PRadius != 0)
+                {
+                    canvas.DrawRoundRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight, PRadius, PRadius,
+                        GetColor(PColor.Value));
+                }
+                else
+                {
+                    canvas.DrawRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight, GetColor(PColor.Value));
+                }
+            }}
+        
+        
 
         if (Children is not null)
         {
