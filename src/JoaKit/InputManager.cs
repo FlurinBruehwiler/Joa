@@ -107,9 +107,15 @@ public class InputManager
 
             foreach (var child in div.Children)
             {
-                if (child is not Div divChild)
-                    continue;
+                var actualChild = child;
+                
+                if (child is CustomRenderObject customRenderObject)
+                {
+                    actualChild = customRenderObject.RenderObject;
+                }
 
+                if (actualChild is not Div divChild) continue;
+                
                 var childHit = HitTest(divChild, x, y);
                 if (childHit is not null)
                     return childHit;

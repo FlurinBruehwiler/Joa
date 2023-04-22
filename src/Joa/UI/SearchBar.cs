@@ -58,6 +58,13 @@ public class SearchBar : IComponent
                 {
                     new Img("./battery.svg"),
                     new InputComponent()
+                        .OnKeyDownAsync(OnKeyDownAsync)
+                        .Value(_input)
+                        .OnChange(s =>
+                        {
+                            _input = s;
+                            TextChanged();
+                        })
                 }.Color(40, 40, 40)
                 .XAlign(XAlign.Center)
                 .Padding(10)
@@ -84,6 +91,47 @@ public class SearchBar : IComponent
                         .Key(x.SearchResult.Title)
                 ))
         };
+    }
+
+    private async Task OnKeyDownAsync(Key key, RawInputModifiers modifiers)
+    {
+        if (key == Key.Escape)
+        {
+            HideWindow();
+        }
+        if (key == Key.Down)
+        {
+            if (_selectedResult < _searchResults.Count - 1)
+            {
+                _selectedResult++;
+            }
+        }
+        if (key == Key.Up)
+        {
+            if (_selectedResult > 0)
+            {
+                _selectedResult--;
+            }
+        }
+        if (key == Key.Enter)
+        {
+            if (_searchResults.Count != 0)
+            {
+                // _searchResults[_selectedResult].SearchResult.Actions!.First(action => action.Id == key.ToString());
+                var newStep = await _search.ExecuteCommand(_searchResults[_selectedResult].SearchResult, _searchResults[_selectedResult].SearchResult.Actions!.First());
+                if (newStep is not null)
+                {
+                    _steps.Push(newStep);
+                }
+                else
+                {
+                    HideWindow();
+                }
+                _input = string.Empty;
+                _searchResults.Clear();
+                SearchResultsHaveChanged();
+            }
+        }   
     }
 
     private void TextChanged()

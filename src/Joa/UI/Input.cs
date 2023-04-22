@@ -5,57 +5,83 @@ namespace Joa.UI;
 
 public class Input : IComponent
 {
-    private string _input = string.Empty;
+    [Extension] 
+    public string Value { get; set; } = string.Empty;
 
-    [Parameter]
-    public Txt Txt { get; set; } = null!;
-    
+    [Extension] 
+    public Action<Key, RawInputModifiers>? OnKeyDown { get; set; }
+
+    [Extension] 
+    public Func<Key, RawInputModifiers, Task>? OnKeyDownAsync { get; set; }
+
+    [Extension]
+    public Action<string>? OnChange { get; set; }
+
+    [Extension]
+    public Func<string, Task>? OnChangeAsync { get; set; }
+
     public RenderObject Build()
     {
-        Txt.PText = _input;
-        
         return new Div
             {
-                Txt
+                new Txt(Value)
+                    .Size(30)
+                    .VAlign(TextAlign.Center)
             }
-            .OnKeyDown(OnKeyDown)
+            .OnKeyDown(OnKeyDownInternal)
             .OnTextInput(OnTextInput);
     }
-    
+
     private void OnTextInput(string s, RawInputModifiers modifiers)
     {
         if (modifiers != RawInputModifiers.Control)
         {
-            _input += s;
+            Value += s;
         }
+
+        ContentChanged();
     }
 
-    private void OnKeyDown(Key key, RawInputModifiers modifiers)
+    private void ContentChanged()
     {
-        if (key != Key.Back) return;
-        
-        if (modifiers == RawInputModifiers.Control)
+        OnChange?.Invoke(Value);
+    }
+
+    private async Task OnKeyDownInternal(Key key, RawInputModifiers modifiers)
+    {
+        if (key == Key.Back)
         {
-            _input = _input.TrimEnd();
-
-            if (!_input.Contains(' '))
+            if (modifiers == RawInputModifiers.Control)
             {
-                _input = string.Empty;
+                Value = Value.TrimEnd();
+
+                if (!Value.Contains(' '))
+                {
+                    Value = string.Empty;
+                }
+
+                for (var i = Value.Length - 1; i > 0; i--)
+                {
+                    if (Value[i] != ' ') continue;
+                    Value = Value[..(i + 1)];
+                    break;
+                }
             }
-
-            for (var i = _input.Length - 1; i > 0; i--)
+            else
             {
-                if (_input[i] != ' ') continue;
-                _input = _input[..(i + 1)];
-                break;
+                if (Value.Length != 0)
+                {
+                    Value = Value.Remove(Value.Length - 1);
+                }
             }
         }
-        else
+
+        if (OnKeyDownAsync is not null)
         {
-            if (_input.Length != 0)
-            {
-                _input = _input.Remove(_input.Length - 1);
-            }
+            await OnKeyDownAsync(key, modifiers);
         }
+
+        ContentChanged();
+        OnKeyDown?.Invoke(key, modifiers);
     }
 }

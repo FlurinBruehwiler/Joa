@@ -20,7 +20,10 @@ public class BuildContext
             return component;
         }
 
-        return (IComponent)ActivatorUtilities.CreateInstance(_serviceProvider, componentType);
+        component = (IComponent)ActivatorUtilities.CreateInstance(_serviceProvider, componentType);
+        _components.Add(componentHash, component);
+        
+        return component;
     }
 }
 

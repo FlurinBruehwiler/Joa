@@ -9,12 +9,15 @@ public class Renderer
     private readonly WindowManager _windowManager;
     private readonly IWindowImpl _window;
     private readonly LayoutEngine _layoutEngine;
+    private readonly BuildContext _buildContext;
 
     public Renderer(WindowManager windowManager, IWindowImpl window)
     {
         _windowManager = windowManager;
         _window = window;
         _layoutEngine = new LayoutEngine(window);
+        _buildContext = new BuildContext(_windowManager.JoaKitApp.Services);
+
     }
 
     private static readonly SKPaint s_paint = new()
@@ -38,11 +41,9 @@ public class Renderer
     public void Build(IComponent rootComponent)
     {
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
-
-        var buildContext = new BuildContext(_windowManager.JoaKitApp.Services);
-
+        
         Root = rootComponent.Build();
-        BuildTree(Root, buildContext);
+        BuildTree(Root, _buildContext);
 
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = null;
     }

@@ -7,7 +7,7 @@
 
         <IsPackable>false</IsPackable>
 
-        <RootNamespace>JoaKitSourceGeneratorsTest</RootNamespace>
+        <RootNamespace>DemoSourceGenTest</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,8 +25,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\JoaKitSourceGenerators\JoaKitSourceGenerators.csproj" />
-      <ProjectReference Include="..\JoaKit\JoaKit.csproj" />
+        <ProjectReference Include="..\JoaKitSourceGenerators\JoaKitSourceGenerators.csproj" />
+        <ProjectReference Include="..\JoaKit\JoaKit.csproj" />
     </ItemGroup>
 
 </Project>

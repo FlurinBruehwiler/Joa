@@ -7,12 +7,18 @@ namespace Joa.UI.Settings;
 
 public class PropertyDisplay : IComponent
 {
+    private readonly SettingsManager _settingsManager;
+
     [Parameter]
     public PluginDefinition PluginDefinition { get; set; } = null!;
     
     [Parameter]
     public PropertyInstance Property { get; set; } = null!;
 
+    public PropertyDisplay(SettingsManager settingsManager)
+    {
+        _settingsManager = settingsManager;
+    }
     
     public RenderObject Build()
     {
@@ -22,8 +28,10 @@ public class PropertyDisplay : IComponent
         {
             return new Div
                 {
-                    new Txt(Property.PropertyDescription.PropertyInfo.Name)
-                    //Text Input
+                    new Txt(Property.PropertyDescription.PropertyInfo.Name),
+                    new InputComponent()
+                        .Value(Property.GetValue().ToString())
+                        .OnChangeAsync(PropertyChanged)
                 }
                 .Height(50)
                 .Color(36, 36, 36)
@@ -43,5 +51,11 @@ public class PropertyDisplay : IComponent
         }
 
         return new Div();
+    }
+
+    private async Task PropertyChanged(string arg)
+    {
+        Property.SetValue(arg);
+        await _settingsManager.SaveSettingsToJsonAsync();
     }
 }

@@ -1,38 +1,54 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace JoaKitSourceGenerators;
 
 [Generator]
-public class RenderObjectGenerator : IIncrementalGenerator
+public class RenderObjectGenerator : ISourceGenerator
 {
-    public void Initialize(IncrementalGeneratorInitializationContext context)
+    public void Initialize(GeneratorInitializationContext context)
     {
-        var components = context.SyntaxProvider.CreateSyntaxProvider(IsClass, GetClassInfo)
-            .Where(info => info is not null)
-            .Collect()
-            .SelectMany((infos, _) => infos.Distinct());
-
-        context.RegisterSourceOutput(components, GenerateCode!);
+        context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
     }
 
-    private static void GenerateCode(SourceProductionContext ctx, ComponentInfo componentInfo)
+    public void Execute(GeneratorExecutionContext context)
     {
-        var code = GenerateCode(componentInfo);
-        ctx.AddSource($"{componentInfo.Name}Component_generated.cs", code);
-    }
+        if (context.SyntaxReceiver is not SyntaxReceiver receiver)
+            return;
 
-    private static string GenerateCode(ComponentInfo componentInfo)
-    {
-        var newTypeName = componentInfo.Name + "Component";
+        var parameterAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ParameterAttribute");
+        var extensionAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ExtensionAttribute");
+        var componentInterface = context.Compilation.GetTypeByMetadataName("JoaKit.IComponent");
 
-        return $$"""
+        if (parameterAttributeType is null)
+            throw new Exception("JoaKit.ParameterAttribute not found");
+
+        if (extensionAttributeType is null)
+            throw new Exception("JoaKit.InheritAttribute not found");
+
+        if (componentInterface is null)
+            throw new Exception("JoaKit.IComponent not found");
+
+        foreach (var classDeclarationSyntax in receiver.Candidates)
+        {
+            var model = context.Compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
+
+            if (model.GetDeclaredSymbol(classDeclarationSyntax) is not ITypeSymbol type)
+                continue;
+
+            if (!IsUiComponent(type, componentInterface))
+                continue;
+
+            var newTypeName = type.Name + "Component";
+
+            var parameters = GetParameters(type, parameterAttributeType);
+            var extensions = GetExtensions(type, extensionAttributeType);
+
+            var source = $$"""
             #nullable enable
-
-            using {{componentInfo.Namespace}};
+            using {{type.ContainingNamespace}};
             using JoaKit;
             using SkiaSharp;
             using System;
@@ -40,33 +56,36 @@ public class RenderObjectGenerator : IIncrementalGenerator
             using System.Runtime.CompilerServices;
             using Joa.Settings;
             
-            namespace {{componentInfo.Namespace}}
+            namespace {{type.ContainingNamespace}}
             {
                 public class {{newTypeName}} : CustomRenderObject
                 {
-                    {{GetFields(componentInfo.Parameters)}}
-           
-                    public {{newTypeName}}({{GetConstructorArguments(componentInfo.Parameters)}})
+                    {{GetFields(parameters, extensions)}}
+            
+                    public {{type.Name}} UiComponent { get; init; } = null!;
+            
+                    public {{newTypeName}}({{GetConstructorArguments(parameters)}})
                     {
-                        {{GetConstructorBody(componentInfo.Parameters)}}
+                        {{GetConstructorBody(parameters)}}
 
-                        ComponentType = typeof({{componentInfo.Name}});
+                        PLineNumber = lineNumer;
+                        PFilePath = filePath;
+
+                        ComponentType = typeof({{type.ToDisplayString()}});
                     }
             
                     public override RenderObject Build(IComponent component)
                     {
-                        {{GetParameterUpdateCalls(componentInfo.Parameters, componentInfo.Name)}}
+                        {{GetParameterUpdateCalls(parameters, extensions, type.ToDisplayString())}}
+
                         RenderObject = component.Build();
                         PWidth = RenderObject.PWidth;
                         PHeight = RenderObject.PHeight;
                         return RenderObject;
                     }
 
-                    public override void Render(SKCanvas canvas, RenderContext renderContext)
-                    {
-                        RenderObject.Render(canvas, renderContext);
-                    }
-
+                    {{GetExtensionMethods(extensions, newTypeName)}}
+                        
                     public {{newTypeName}} Key(string key)
                     {
                         PKey = key;
@@ -75,71 +94,103 @@ public class RenderObjectGenerator : IIncrementalGenerator
                 }
             }
             """;
+
+            context.AddSource($"{newTypeName}_generated.cs", source);
+        }
     }
 
-    private static ComponentInfo? GetClassInfo(GeneratorSyntaxContext ctx, CancellationToken cancellationToken)
+    private string GetExtensionMethods(List<IPropertySymbol> extensions, string newTypeName)
     {
-        if (ctx.Node is not ClassDeclarationSyntax classDeclarationSyntax)
-            return null;
-
-        var type = ctx.SemanticModel.GetDeclaredSymbol(classDeclarationSyntax) as ITypeSymbol;
-
-        if (type is null)
-            return null;
-
-        if (!IsUiComponent(type))
-            return null;
-
-        return new ComponentInfo(type);
-    }
-
-    private static bool IsClass(SyntaxNode syntaxNode, CancellationToken cancellationToken)
-    {
-        return syntaxNode is ClassDeclarationSyntax;
-    }
-
-    private static bool IsUiComponent(ITypeSymbol type)
-    {
-        return type.AllInterfaces.Any(x => x is
+        var output = string.Empty;
+        
+        foreach (var property in extensions)
         {
-            Name: "IComponent",
-            ContainingNamespace:
+            output += $$""" 
+            public {{newTypeName}} {{property.Name}}({{property.Type.ToDisplayString()}} {{property.Name.ToLowerInvariant()}})
             {
-                Name: "JoaKit",
-                ContainingNamespace.IsGlobalNamespace: true
+                _{{property.Name.ToLowerInvariant()}} = {{property.Name.ToLowerInvariant()}};
+                return this;
             }
-        });
+            """;
+        }
+
+        return output;
     }
 
-    private static string GetParameterUpdateCalls(IReadOnlyList<(string name, string type)> parameters, string componentName)
+    private static string GetParameterUpdateCalls(List<IPropertySymbol> parameters,
+        List<IPropertySymbol> extensions, string typeName)
     {
-        return string.Join("\n", parameters.Select(x => $"(({componentName})component).{x.name} = _{x.name.ToLowerInvariant()};"));
+        var updates = new List<IPropertySymbol>();
+        updates.AddRange(parameters);
+        updates.AddRange(extensions);
+        
+        return string.Join("\n",
+            updates.Select(x => $"(({typeName})component).{x.Name} = _{x.Name.ToLowerInvariant()};"));
     }
 
-    private static string GetConstructorBody(IReadOnlyList<(string name, string type)> parameters)
+    private static string GetConstructorBody(List<IPropertySymbol> parameters)
     {
-        var defaultBody = "PLineNumber = lineNumer;\n            PFilePath = filePath;";
+        return string.Join("\n",
+            parameters.Select(x => $"_{x.Name.ToLowerInvariant()} = {x.Name.ToLowerInvariant()};"));
+    }
+
+    private static string GetFields(List<IPropertySymbol> parameters, List<IPropertySymbol> extensions)
+    {
+        var fields = string.Join("\n",
+            parameters.Select(x => $"private readonly {x.Type.ToDisplayString()} _{x.Name.ToLowerInvariant()};"));
+
+        fields += "\n";
+
+        fields += string.Join("\n",
+            extensions.Select(x => $"private {x.Type.ToDisplayString()} _{x.Name.ToLowerInvariant()};"));
+        
+        return fields;
+    }
+
+    private static string GetConstructorArguments(List<IPropertySymbol> parameters)
+    {
+        var arguments = "[CallerLineNumber] int lineNumer = -1, [CallerFilePath] string filePath = \"\"";
 
         if (parameters.Count != 0)
-            defaultBody += "\n            ";
+        {
+            arguments = ", " + arguments;
+            var extraArguments =
+                string.Join(", ", parameters.Select(x => $"{x.Type.ToDisplayString()} {x.Name.ToLowerInvariant()}"));
+            arguments = extraArguments + arguments;
+        }
 
-        return defaultBody + string.Join("\n            ",
-            parameters.Select(x => $"_{x.name.ToLowerInvariant()} = {x.name.ToLowerInvariant()};"));
+        return arguments;
     }
 
-    private static string GetFields(IReadOnlyList<(string name, string type)> parameters)
+    private static List<IPropertySymbol> GetParameters(ITypeSymbol type, INamedTypeSymbol parameterAttributeType)
     {
-        return string.Join("\n        ",
-            parameters.Select(x => $"private readonly {x.type} _{x.name.ToLowerInvariant()};"));
+        return type.GetMembers().Where(x => HasAttributeOfType(x, parameterAttributeType)).Select(x => (IPropertySymbol)x)
+            .ToList();
+    }
+    
+    private static List<IPropertySymbol> GetExtensions(ITypeSymbol type, INamedTypeSymbol extensionAttributeType)
+    {
+        return type.GetMembers().Where(x => HasAttributeOfType(x, extensionAttributeType)).Select(x => (IPropertySymbol)x)
+            .ToList();
     }
 
-    private static string GetConstructorArguments(IReadOnlyList<(string name, string type)> parameters)
+    private static bool HasAttributeOfType(ISymbol symbol, INamedTypeSymbol attributeType)
     {
-        var defaultArguments = "[CallerLineNumber] int lineNumer = -1, [CallerFilePath] string filePath = \"\"";
+        if (symbol.DeclaredAccessibility != Accessibility.Public)
+            return false;
 
-        if (parameters.Count != 0)
-            defaultArguments = ", " + defaultArguments;
+        if (symbol is not IPropertySymbol)
+            return false;
 
-        return string.Join(", ", parameters.Select(x => $"{x.type} {x.name.ToLowerInvariant()}")) + defaultArguments;
+        if (!symbol.GetAttributes()
+                .Any(x => SymbolEqualityComparer.Default.Equals(x.AttributeClass, attributeType)))
+            return false;
+
+        return true;
+    }
+
+    private static bool IsUiComponent(ITypeSymbol type, INamedTypeSymbol componentInterface)
+    {
+        return type.AllInterfaces.Any(x => SymbolEqualityComparer.Default.Equals(x, componentInterface));
     }
 }
