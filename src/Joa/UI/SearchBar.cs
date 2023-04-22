@@ -57,12 +57,8 @@ public class SearchBar : IComponent
             new Div
                 {
                     new Img("./battery.svg"),
-                    new Txt(_input)
-                        .Size(30)
-                        .VAlign(TextAlign.Center)
+                    new InputComponent()
                 }.Color(40, 40, 40)
-                .OnKeyDown(OnKeyDown)
-                .OnTextInput(OnTextInput)
                 .XAlign(XAlign.Center)
                 .Padding(10)
                 .Gap(10)
@@ -109,91 +105,6 @@ public class SearchBar : IComponent
         _selectedResult = 0;
         _window.Resize(new Size(_window.ClientSize.Width,
             SearchBoxHeight + StepsHeight + _searchResults.Count * SearchResultHeight));
-    }
-
-    private void OnTextInput(string s, RawInputModifiers modifiers)
-    {
-        if (modifiers != RawInputModifiers.Control)
-        {
-            _input += s;
-            TextChanged();
-        }
-    }
-
-    private async Task OnKeyDown(Key key, RawInputModifiers modifiers)
-    {
-        if (key == Key.Back)
-        {
-            if (modifiers == RawInputModifiers.Control)
-            {
-                _input = _input.TrimEnd();
-
-                if (!_input.Contains(' '))
-                {
-                    _input = string.Empty;
-                }
-
-                for (var i = _input.Length - 1; i > 0; i--)
-                {
-                    if (_input[i] == ' ')
-                    {
-                        _input = _input[..(i + 1)];
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                if (_input.Length != 0)
-                {
-                    _input = _input.Remove(_input.Length - 1);
-                }
-            }
-
-            TextChanged();
-        }
-
-        if (key == Key.Escape)
-        {
-            HideWindow();
-        }
-
-        if (key == Key.Down)
-        {
-            if (_selectedResult < _searchResults.Count - 1)
-            {
-                _selectedResult++;
-            }
-        }
-
-        if (key == Key.Up)
-        {
-            if (_selectedResult > 0)
-            {
-                _selectedResult--;
-            }
-        }
-
-        if (key == Key.Enter)
-        {
-            if (_searchResults.Count != 0)
-            {
-                // _searchResults[_selectedResult].SearchResult.Actions!.First(action => action.Id == key.ToString());
-                var newStep = await _search.ExecuteCommand(_searchResults[_selectedResult].SearchResult, null);
-                if (newStep is not null)
-                {
-                    _steps.Push(newStep);
-                }
-                else
-                {
-                    HideWindow();
-                }
-
-                _input = string.Empty;
-                _searchResults.Clear();
-                SearchResultsHaveChanged();
-            }
-        }
     }
 
     private void HideWindow()
