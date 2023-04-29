@@ -8,7 +8,7 @@ public class InputManager
 {
     private readonly Renderer _renderer;
     private readonly WindowManager _windowManager;
-    private Div? _activeDiv;
+    public Div? ActiveDiv { get; set; }
 
     public InputManager(Renderer renderer, WindowManager windowManager)
     {
@@ -22,20 +22,20 @@ public class InputManager
 
         if (args is RawKeyEventArgs { Type: RawKeyEventType.KeyDown } keyEventArgs)
         {
-            if (_activeDiv?.POnKeyDown is not null)
+            if (ActiveDiv?.POnKeyDown is not null)
             {
-                _activeDiv.POnKeyDown(keyEventArgs.Key, keyEventArgs.Modifiers);
+                ActiveDiv.POnKeyDown(keyEventArgs.Key, keyEventArgs.Modifiers);
                 callbackWasCalled = true;
             }
 
-            if (_activeDiv?.POnKeyDownAsync is not null)
+            if (ActiveDiv?.POnKeyDownAsync is not null)
             {
                 Task.Run(async () =>
                 {
-                    await _activeDiv.POnKeyDownAsync(keyEventArgs.Key, keyEventArgs.Modifiers);
-                    _renderer.Build(_windowManager.RootComponent);
+                    await ActiveDiv.POnKeyDownAsync(keyEventArgs.Key, keyEventArgs.Modifiers);
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
+                        _renderer.Build(_windowManager.RootComponent);
                         _windowManager.DoPaint(new Rect());
                     });
                 });
@@ -43,9 +43,9 @@ public class InputManager
         }
         if (args is RawTextInputEventArgs rawInputEventArgs)
         {
-            if (_activeDiv?.POnTextInput is not null)
+            if (ActiveDiv?.POnTextInput is not null)
             {
-                _activeDiv.POnTextInput(rawInputEventArgs.Text, rawInputEventArgs.Modifiers);
+                ActiveDiv.POnTextInput(rawInputEventArgs.Text, rawInputEventArgs.Modifiers);
                 callbackWasCalled = true;
             }
         }
@@ -61,13 +61,13 @@ public class InputManager
                 if (div is null)
                     return;
 
-                if (_activeDiv?.POnInactive is not null)
+                if (ActiveDiv?.POnInactive is not null)
                 {
-                    _activeDiv.POnInactive();
+                    ActiveDiv.POnInactive();
                     callbackWasCalled = true;
                 }
 
-                _activeDiv = div;
+                ActiveDiv = div;
 
                 if (div.POnActive is not null)
                 {

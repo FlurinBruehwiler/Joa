@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace JoaKit;
 
@@ -15,6 +16,12 @@ public class BuildContext
 
     public IComponent GetComponent(ComponentHash componentHash, Type componentType)
     {
+        if (Environment.CurrentManagedThreadId != 1)
+        {
+            //NotGood
+            Debugger.Break();
+        }
+        
         if (_components.TryGetValue(componentHash, out var component))
         {
             return component;

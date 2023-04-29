@@ -29,7 +29,8 @@ public class Input : IComponent
                     .VAlign(TextAlign.Center)
             }
             .OnKeyDown(OnKeyDownInternal)
-            .OnTextInput(OnTextInput);
+            .OnTextInput(OnTextInput)
+            .AutoFocus();
     }
 
     private void OnTextInput(string s, RawInputModifiers modifiers)

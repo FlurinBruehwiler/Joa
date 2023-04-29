@@ -10,6 +10,7 @@ public class Renderer
     private readonly IWindowImpl _window;
     private readonly LayoutEngine _layoutEngine;
     private readonly BuildContext _buildContext;
+    public InputManager InputManager { get; }
 
     public Renderer(WindowManager windowManager, IWindowImpl window)
     {
@@ -17,7 +18,7 @@ public class Renderer
         _window = window;
         _layoutEngine = new LayoutEngine(window);
         _buildContext = new BuildContext(_windowManager.JoaKitApp.Services);
-
+        InputManager = new InputManager(this, windowManager);
     }
 
     private static readonly SKPaint s_paint = new()
@@ -62,8 +63,16 @@ public class Renderer
                         renderObject = childRenderObject;
                         continue;
                     }
-                case Div { Children.Count: > 0 } div:
+                case Div div:
                     {
+                        if (div.PAutoFocus)
+                        {
+                            InputManager.ActiveDiv = div;
+                        }
+                        
+                        if(div.Children is null)
+                            break;
+                        
                         foreach (var divChild in div.Children)
                         {
                             BuildTree(divChild, buildContext);

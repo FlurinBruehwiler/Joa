@@ -56,7 +56,10 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public Func<Key, RawInputModifiers, Task>? POnKeyDownAsync { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public Action<string, RawInputModifiers>? POnTextInput { get; set; }
+    public Action<string, RawInputModifiers>? POnTextInput { get; set; }    
+    
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public bool PAutoFocus { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Func<Task>? POnClickAsync { get; set; }
@@ -305,6 +308,12 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public Div OnTextInput(Action<string, RawInputModifiers> onTextInput)
     {
         POnTextInput = onTextInput;
+        return this;
+    }
+
+    public Div AutoFocus()
+    {
+        PAutoFocus = true;
         return this;
     }
 

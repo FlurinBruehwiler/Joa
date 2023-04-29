@@ -13,7 +13,12 @@ public class IconHelper : IIconHelper
 
     public string GetIconsDirectory(Type pluginType)
     {
-        var iconsLocation = Path.Combine("wwwroot", "Icons");
+        var pluginDirectory = Path.GetDirectoryName(pluginType.Assembly.Location);
+
+        if (pluginDirectory is null)
+            throw new Exception(); //ToDo
+
+        var iconsLocation = Path.Combine(pluginDirectory, "Icons");
 
         if (!Directory.Exists(iconsLocation))
             Directory.CreateDirectory(iconsLocation);
@@ -40,7 +45,7 @@ public class IconHelper : IIconHelper
             .Combine(GetIconsDirectory(typeof(T)), iconName);
 
         if (File.Exists(iconLocation))
-            return iconName;
+            return iconLocation;
 
         var icon = Icon.ExtractAssociatedIcon(fileLocation);
 
@@ -61,7 +66,7 @@ public class IconHelper : IIconHelper
 
         bitmapIcon.Save(iconLocation, ImageFormat.Png);
 
-        return iconName;
+        return iconLocation;
     }
 
     [DllImport("msvcrt.dll")]
@@ -69,6 +74,9 @@ public class IconHelper : IIconHelper
 
     private bool IsDefaultIcon(Bitmap bitmap)
     {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            throw new NotImplementedException();
+        
         if (bitmap.Size != _defaultIcon.Size) return false;
 
         var bd1 = bitmap.LockBits(new Rectangle(new Point(0, 0), bitmap.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);

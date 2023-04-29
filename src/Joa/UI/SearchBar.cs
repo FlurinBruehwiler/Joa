@@ -56,7 +56,7 @@ public class SearchBar : IComponent
         {
             new Div
                 {
-                    new Img("./battery.svg"),
+                    new JoaKit.Svg("./battery.svg"),
                     new InputComponent()
                         .OnKeyDownAsync(OnKeyDownAsync)
                         .Value(_input)

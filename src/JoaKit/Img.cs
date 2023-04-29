@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using SkiaSharp;
-using Svg.Skia;
 
 namespace JoaKit;
 
@@ -16,24 +15,21 @@ public class Img : RenderObject
         PFilePath = filePath;
         PSrc = src;
 
-        if (!s_svgCache.TryGetValue(PSrc, out var svg))
+        if (!ImgCache.TryGetValue(PSrc, out var img))
         {
-            svg = new SKSvg();
-            svg.Load(PSrc);
-            s_svgCache.Add(PSrc, svg);
+            img = SKBitmap.Decode(PSrc);
+            
+            ImgCache.Add(PSrc, img);
         }
 
-        if (svg.Picture is null)
-            return;
-
-        PWidth = new SizeDefinition(svg.Picture.CullRect.Width, SizeKind.Pixel);
-        PHeight = new SizeDefinition(svg.Picture.CullRect.Height, SizeKind.Pixel);
+        PWidth = new SizeDefinition(img.Width, SizeKind.Pixel);
+        PHeight = new SizeDefinition(img.Height, SizeKind.Pixel);
     }
 
     public override void Render(SKCanvas canvas, RenderContext renderContext)
     {
-        canvas.DrawPicture(s_svgCache[PSrc].Picture, PComputedX, PComputedY);
+        canvas.DrawBitmap(ImgCache[PSrc], PComputedX, PComputedY);
     }
 
-    private static readonly Dictionary<string, SKSvg> s_svgCache = new();
+    private static readonly Dictionary<string, SKBitmap> ImgCache = new();
 }

@@ -26,7 +26,6 @@ public class WindowManager
         joaKitApp.CurrentlyBuildingWindow = null;
 
         Renderer = new Renderer(this, window);
-        var inputManager = new InputManager(Renderer, this);
 
         window.Closed = cancellationTokenSource.Cancel;
 
@@ -36,7 +35,7 @@ public class WindowManager
             Canvas = null;
         };
 
-        window.Input = inputManager.Input;
+        window.Input = Renderer.InputManager.Input;
 
         window.Paint = DoPaint;
 

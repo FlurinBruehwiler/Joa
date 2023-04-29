@@ -15,9 +15,12 @@ public class SearchResult : IComponent
 
         return new Div
             {
-                new Div()
+                new Div
+                    {
+                        new Img(Sr.SearchResult.Icon)
+                    }
                     .Color(color)
-                    .Width(60),
+                    .Width(60).MAlign(MAlign.Center).XAlign(XAlign.Center),
                 new Div
                     {
                         new Txt(Sr.SearchResult.Title)

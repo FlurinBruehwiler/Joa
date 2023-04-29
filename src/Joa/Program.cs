@@ -60,10 +60,19 @@ public static class Program
         var screens = new Screens(window.Screen);
         var screen = screens.Primary ?? screens.All[0];
 
-        var rect = window.FrameSize.HasValue
+        var windowRect = window.FrameSize.HasValue
             ? new PixelRect(PixelSize.FromSize(window.FrameSize.Value, window.DesktopScaling))
             : new PixelRect(PixelSize.FromSize(window.ClientSize, window.DesktopScaling));
 
-        window.Move(screen.WorkingArea.CenterRect(rect).Position);
+        window.Move(screen.WorkingArea.PositionRect(windowRect).Position);
+    }
+    
+    private static PixelRect PositionRect(this PixelRect outerRect, PixelRect innerRect)
+    {
+        return new PixelRect(
+            outerRect.X + (outerRect.Width - innerRect.Width) / 2,
+            outerRect.Y + (outerRect.Height - innerRect.Height) / 3,
+            innerRect.Width,
+            innerRect.Height);
     }
 }
