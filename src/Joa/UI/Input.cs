@@ -38,9 +38,8 @@ public class Input : IComponent
         if (modifiers != RawInputModifiers.Control)
         {
             Value += s;
+            ContentChanged();
         }
-
-        ContentChanged();
     }
 
     private void ContentChanged()
@@ -50,6 +49,8 @@ public class Input : IComponent
 
     private async Task OnKeyDownInternal(Key key, RawInputModifiers modifiers)
     {
+        var initialValue = Value;
+        
         if (key == Key.Back)
         {
             if (modifiers == RawInputModifiers.Control)
@@ -82,7 +83,11 @@ public class Input : IComponent
             await OnKeyDownAsync(key, modifiers);
         }
 
-        ContentChanged();
+        if (initialValue != Value)
+        {
+            ContentChanged();
+        }
+        
         OnKeyDown?.Invoke(key, modifiers);
     }
 }

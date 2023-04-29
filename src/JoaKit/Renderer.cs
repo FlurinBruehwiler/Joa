@@ -1,5 +1,8 @@
-﻿using Modern.WindowKit;
+﻿using System.Diagnostics;
+using ExCSS;
+using Modern.WindowKit;
 using Modern.WindowKit.Platform;
+using Modern.WindowKit.Threading;
 using SkiaSharp;
 
 namespace JoaKit;
@@ -11,6 +14,8 @@ public class Renderer
     private readonly LayoutEngine _layoutEngine;
     private readonly BuildContext _buildContext;
     public InputManager InputManager { get; }
+    private bool _shouldRebuild;
+    public bool IsBuilding { get; private set; }
 
     public Renderer(WindowManager windowManager, IWindowImpl window)
     {
@@ -19,18 +24,58 @@ public class Renderer
         _layoutEngine = new LayoutEngine(window);
         _buildContext = new BuildContext(_windowManager.JoaKitApp.Services);
         InputManager = new InputManager(this, windowManager);
+        
+        Task.Run(BuildLoop);
+    }
+    
+    public void ShouldRebuild() => _shouldRebuild = true;
+
+    private async Task BuildLoop()
+    {
+        try
+        {
+            while (!_windowManager.CancellationToken.IsCancellationRequested)
+            {
+                var buildStartTime = Stopwatch.GetTimestamp();
+
+                if (_shouldRebuild)
+                {
+                    _shouldRebuild = false;
+                    IsBuilding = true;
+                
+                    Build(_windowManager.RootComponent);
+                    IsBuilding = false;
+
+                    await Dispatcher.UIThread.InvokeAsync(() => _windowManager.DoPaint(new Rect()));
+                }
+            
+                var totalBuildTime = Stopwatch.GetElapsedTime(buildStartTime).TotalMilliseconds;
+                const int frameTime = 1000 / 60;
+
+                if (totalBuildTime < frameTime)
+                {
+                    var timeToWait = frameTime - totalBuildTime;
+                    await Task.Delay((int)timeToWait, _windowManager.CancellationToken);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
-    private static readonly SKPaint s_paint = new()
+    private static readonly SKPaint SPaint = new()
     {
         IsAntialias = true
     };
 
     public static SKPaint GetColor(ColorDefinition colorDefinition)
     {
-        s_paint.Color = new SKColor((byte)colorDefinition.Red, (byte)colorDefinition.Gree, (byte)colorDefinition.Blue,
+        SPaint.Color = new SKColor((byte)colorDefinition.Red, (byte)colorDefinition.Gree, (byte)colorDefinition.Blue,
             (byte)colorDefinition.Transparency);
-        return s_paint;
+        return SPaint;
     }
 
 
@@ -39,7 +84,7 @@ public class Renderer
     private Div? _clickedElement;
 
 
-    public void Build(IComponent rootComponent)
+    private void Build(IComponent rootComponent)
     {
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
         

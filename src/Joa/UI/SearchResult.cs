@@ -17,7 +17,7 @@ public class SearchResult : IComponent
             {
                 new Div
                     {
-                        new Img(Sr.SearchResult.Icon)
+                        Sr.SearchResult.Icon is not null ? new Img(Sr.SearchResult.Icon) : new Div()
                     }
                     .Color(color)
                     .Width(60).MAlign(MAlign.Center).XAlign(XAlign.Center),

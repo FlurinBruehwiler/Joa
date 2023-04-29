@@ -1,4 +1,5 @@
-﻿using Modern.WindowKit;
+﻿using System.Diagnostics;
+using Modern.WindowKit;
 using Modern.WindowKit.Input.Raw;
 using Modern.WindowKit.Threading;
 
@@ -30,14 +31,21 @@ public class InputManager
 
             if (ActiveDiv?.POnKeyDownAsync is not null)
             {
-                Task.Run(async () =>
+                Dispatcher.UIThread.InvokeAsync(async () =>
                 {
-                    await ActiveDiv.POnKeyDownAsync(keyEventArgs.Key, keyEventArgs.Modifiers);
-                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    if (Environment.CurrentManagedThreadId != 1)
                     {
-                        _renderer.Build(_windowManager.RootComponent);
-                        _windowManager.DoPaint(new Rect());
-                    });
+                        //NotGood
+                        Debugger.Break();
+                    }
+                    await ActiveDiv.POnKeyDownAsync(keyEventArgs.Key, keyEventArgs.Modifiers);
+                    if (Environment.CurrentManagedThreadId != 1)
+                    {
+                        //NotGood
+                        Debugger.Break();
+                    }
+
+                    _renderer.ShouldRebuild();
                 });
             }
         }
@@ -91,8 +99,7 @@ public class InputManager
 
         if (callbackWasCalled)
         {
-            _renderer.Build(_windowManager.RootComponent);
-            _windowManager.DoPaint(new Rect());
+            _renderer.ShouldRebuild();
         }
     }
 

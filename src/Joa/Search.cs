@@ -1,4 +1,5 @@
-﻿using Joa.PluginCore;
+﻿using Joa.Injectables;
+using Joa.PluginCore;
 using Joa.Settings;
 using Joa.Steps;
 using JoaLauncher.Api;
@@ -42,6 +43,8 @@ public class Search
 
         var results = step.GetSearchResults(searchString).Take(8).ToList();
 
+        JoaLogger.GetInstance().Info(Environment.CurrentManagedThreadId.ToString());
+        
         foreach (var result in results)
         {
             result.SearchResult.Actions ??= new List<ContextAction>();
