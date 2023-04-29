@@ -20,9 +20,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build -c Release -o publish --no-restore
+        run: dotnet build ./Joa/Joa.csproj  -c Release -o publish --no-restore
       - name: Create zip file of output
-        run: zip -r release.zip ./bin/Release/net7.0
+        run: zip -r release.zip ./Joa/bin/Release/net7.0
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
