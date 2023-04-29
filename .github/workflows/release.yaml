@@ -21,6 +21,8 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build ./Joa/Joa.csproj  -c Release -o publish --no-restore
+      - name: debug
+        run: ls ./Joa/bin/Release/net7.0
       - name: Create zip file of output
         run: zip -r release.zip ./Joa/bin/Release/net7.0
       - name: Create Release
