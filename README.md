@@ -19,16 +19,11 @@ For a detailed comparison on what makes Joa better than the alternatives, see [h
 - Search Results can act as "directories"
 - Completely free of charge and open source (MIT Licence)
 
+### Download
+Joa is currently in an early alpha phase. You can download the latest releases from [Releases](https://github.com/Joa-Launcher/Joa/releases) section. Feedback would be appreciated
+
 ### Plugins
 Joa offers a bunch of default plugins which cover the most common use cases. But you can also import plugins other people have created or even create your own. The Joa plugin api is very flexible and easy to use.
-
-### ToDo for 1.0 release
-Planned release date is the 29. April 2023
-
-- Create landing page
-- Create more default plugins
-- Implement a way to specify a GitHub repository as a plugin source and add automatic updates
-- Create release process
 
 ### Comparison to alternatives
 |               | Cross platform | Free of charge        | Plugin support  | Open source | Customizable UI | Nested Search Results |
