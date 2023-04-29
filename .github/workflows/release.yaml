@@ -31,3 +31,4 @@ jobs:
         with:
           files: release.zip
           draft: true
+          token: ${{ secrets.GITHUB_TOKEN }}
