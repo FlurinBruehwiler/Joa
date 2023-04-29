@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using ExCSS;
 using Modern.WindowKit;
 using Modern.WindowKit.Platform;
 using Modern.WindowKit.Threading;
@@ -61,8 +60,7 @@ public class Renderer
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            JoaKitLogger.GetInstance().Error(e.ToString());
         }
     }
 
@@ -133,6 +131,9 @@ public class Renderer
 
     public void LayoutPaintComposite(Size windowRenderScaling)
     {
+        if (Root is null)
+            return;
+        
         var wrapper = new Div
         {
             Root
