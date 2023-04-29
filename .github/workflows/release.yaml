@@ -26,6 +26,8 @@ jobs:
         run: dotnet build ./Joa/Joa.csproj  -c Release -o publish --no-restore
       - name: Create zip file of output
         run: zip -r release.zip ./publish
+      - name: debug
+        run: ls .
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
