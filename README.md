@@ -10,7 +10,7 @@
 </p>
 
 Joa is a cross-platform command-palette for everything. It has similarities to Spotlight, Alfred and Powertoys Run. 
-For a detailed comparison on what makes Joa better than the alternatives, see [here](#comparison-to-alternatives). Joa is currently still in development, for a list of tasks that need to be done before Joa can release, see [here](#todo-for-10-release).
+For a detailed comparison on what makes Joa better than the alternatives, see [here](#comparison-to-alternatives).
 
 ### Features
 - Cross-platform (Windows, Mac, Linux)
