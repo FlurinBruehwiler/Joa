@@ -11,6 +11,9 @@ public class Txt : RenderObject
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public float PSize { get; set; } = 15;
+    
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public ColorDefinition PColor { get; set; } = new(255, 255, 255);
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public TextAlign PhAlign { get; set; } = TextAlign.Start;
@@ -34,6 +37,18 @@ public class Txt : RenderObject
     public Txt Height(float height, SizeKind sizeKind = SizeKind.Pixel)
     {
         PHeight = new SizeDefinition(height, sizeKind);
+        return this;
+    }
+
+    public Txt Color(float red, float green, float blue, float transparency = 255)
+    {
+        PColor = new ColorDefinition(red, green, blue, transparency);
+        return this;
+    }
+    
+    public Txt Color(ColorDefinition color)
+    {
+        PColor = color;
         return this;
     }
 
@@ -71,7 +86,6 @@ public class Txt : RenderObject
 
         paint.GetFontMetrics(out var metrics);
         
-        
         var actualX = PComputedX;
         var actualY = PComputedY;
 
@@ -79,7 +93,7 @@ public class Txt : RenderObject
         {
             TextAlign.Start => PSize,
             TextAlign.End => PComputedHeight,
-            TextAlign.Center => PComputedHeight / 2 - (metrics.Ascent + metrics.Descent) / 2, //Don't Ask
+            TextAlign.Center => PComputedHeight / 2 - (metrics.Ascent + metrics.Descent) / 2,
             _ => throw new ArgumentOutOfRangeException()
         };
 

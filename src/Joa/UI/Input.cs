@@ -20,17 +20,23 @@ public class Input : Component
     [Extension]
     public Func<string, Task>? OnChangeAsync { get; set; }
 
+    [Extension]
+    public bool AutoFocus { get; set; } = false;
+    
+    [Extension] 
+    public float Size { get; set; } = 30;
+
     public override RenderObject Build()
     {
         return new Div
             {
                 new Txt(Value)
-                    .Size(30)
+                    .Size(Size)
                     .VAlign(TextAlign.Center)
             }
             .OnKeyDown(OnKeyDownInternal)
             .OnTextInput(OnTextInput)
-            .AutoFocus();
+            .AutoFocus(AutoFocus);
     }
 
     private void OnTextInput(string s, RawInputModifiers modifiers)

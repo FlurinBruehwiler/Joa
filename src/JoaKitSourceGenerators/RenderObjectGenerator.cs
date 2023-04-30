@@ -125,7 +125,12 @@ public class RenderObjectGenerator : ISourceGenerator
         updates.AddRange(extensions);
         
         return string.Join("\n",
-            updates.Select(x => $"(({typeName})component).{x.Name} = _{x.Name.ToLowerInvariant()};"));
+            updates.Select(x => $$"""
+            if(_{{x.Name.ToLowerInvariant()}} != default)
+            {
+                (({{typeName}})component).{{x.Name}} = _{{x.Name.ToLowerInvariant()}};        
+            }
+            """));
     }
 
     private static string GetConstructorBody(List<IPropertySymbol> parameters)

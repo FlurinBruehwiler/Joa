@@ -60,6 +60,7 @@ public class SearchBar : Component
                     new InputComponent()
                         .OnKeyDownAsync(OnKeyDownAsync)
                         .Value(_input)
+                        .AutoFocus(true)
                         .OnChange(s =>
                         {
                             _input = s;

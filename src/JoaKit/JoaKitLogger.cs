@@ -15,7 +15,7 @@ public class JoaLogger : ILogger
                 File.Create(FileName).Dispose();
             }
 
-            File.AppendAllText(FileName, formatter(state, exception));
+            File.AppendAllText(FileName, $"{formatter(state, exception)}\n");
         }
         catch
         {
@@ -28,7 +28,7 @@ public class JoaLogger : ILogger
         throw new NotImplementedException();
     }
 
-    public IDisposable? BeginScope<TState>(TState state) where TState : notnull
+    public IDisposable BeginScope<TState>(TState state) where TState : notnull
     {
         throw new NotImplementedException();
     }

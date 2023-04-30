@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Modern.WindowKit.Input;
 using Modern.WindowKit.Input.Raw;
 using Modern.WindowKit.Threading;
 
@@ -22,6 +23,11 @@ public class InputManager
 
         if (args is RawKeyEventArgs { Type: RawKeyEventType.KeyDown } keyEventArgs)
         {
+            if (keyEventArgs.Key == Key.F5)
+            {
+                _renderer.ShouldRebuild();
+            }
+            
             if (ActiveDiv?.POnKeyDown is not null)
             {
                 ActiveDiv.POnKeyDown(keyEventArgs.Key, keyEventArgs.Modifiers);
