@@ -1,13 +1,11 @@
 ﻿using Joa.BuiltInPlugin;
 using Joa.Hotkey;
-using Joa.Injectables;
 using Joa.PluginCore;
 using Joa.Settings;
 using Joa.UI;
-using Joa.UI.Settings;
 using JoaKit;
-using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Modern.WindowKit;
 using Modern.WindowKit.Controls;
 using Modern.WindowKit.Platform;
@@ -22,7 +20,6 @@ public static class Program
     {
         var builder = JoaKitApp.CreateBuilder();
 
-        builder.Services.AddSingleton<IJoaLogger>(JoaLogger.GetInstance());
         builder.Services.AddSingleton<JoaManager>();
         builder.Services.AddSingleton<FileSystemManager>();
 
@@ -36,6 +33,10 @@ public static class Program
         builder.Services.AddScoped<HotKeyService>();
 
         builder.Services.Configure<PathsConfiguration>(builder.Configuration.GetSection("Paths"));
+
+        builder.Services.AddLogging(loggingBuilder =>
+        {
+        });
 
         var app = builder.Build();
 

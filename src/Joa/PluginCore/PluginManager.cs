@@ -1,6 +1,7 @@
 ﻿using Joa.BuiltInPlugin;
 using Joa.Steps;
-using JoaLauncher.Api.Injectables;
+using JoaLauncher.Api;
+using Microsoft.Extensions.Logging;
 
 namespace Joa.PluginCore;
 
@@ -10,10 +11,10 @@ public class PluginManager
     public List<ProviderWrapper> GlobalProviders { get; set; } = new();
 
     private readonly PluginLoader _pluginLoader;
-    private readonly IJoaLogger _logger;
+    private readonly ILogger<PluginManager> _logger;
     private readonly IServiceProvider _serviceProvider;
 
-    public PluginManager(PluginLoader pluginLoader, IJoaLogger logger, IServiceProvider serviceProvider)
+    public PluginManager(PluginLoader pluginLoader, ILogger<PluginManager> logger, IServiceProvider serviceProvider)
     {
         _pluginLoader = pluginLoader;
         _logger = logger;
@@ -44,7 +45,7 @@ public class PluginManager
 
     public async Task UpdateIndexesAsync()
     {
-        _logger.TimedOperation(nameof(UpdateIndexesAsync));
+        using var _ = _logger.TimedLogOperation();
 
         foreach (var cache in Plugins.SelectMany(x => x.Caches))
         {
@@ -54,7 +55,7 @@ public class PluginManager
             }
             catch (Exception e)
             {
-                _logger.LogException(e, $"Updating the index for cache {cache.GetType().Name} failed");
+                _logger.LogError(e, "Updating the index for cache {cacheName} failed", cache.GetType().Name);
             }
         }
 
@@ -66,7 +67,7 @@ public class PluginManager
             }
             catch (Exception e)
             {
-                _logger.LogException(e, $"Updating the index for async cache {asyncCache.GetType().Name} failed");
+                _logger.LogError(e, "Updating the index for async cache {asyncCacheName} failed", asyncCache.GetType().Name);
             }
         }
     }

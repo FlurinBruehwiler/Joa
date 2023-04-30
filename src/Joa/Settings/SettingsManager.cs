@@ -1,15 +1,15 @@
 ﻿using System.Text.Json;
 using Joa.BuiltInPlugin;
 using Joa.PluginCore;
-using JoaLauncher.Api.Injectables;
-using LogLevel = JoaLauncher.Api.Injectables.LogLevel;
+using JoaLauncher.Api;
+using Microsoft.Extensions.Logging;
 
 namespace Joa.Settings;
 
 public class SettingsManager
 {
     private readonly PluginManager _pluginManager;
-    private readonly IJoaLogger _logger;
+    private readonly ILogger<SettingsManager> _logger;
     private readonly FileSystemManager _fileSystemManager;
     private readonly JsonSerializerOptions _options;
     private readonly FileWatcher _fileWatcher;
@@ -17,7 +17,7 @@ public class SettingsManager
     public Action SettingsChangedOutsideOfUi { get; set; }
     public BuiltInSettings BuiltInSettings { get; set; } = new();
 
-    public SettingsManager(PluginManager pluginManager, IJoaLogger logger, FileSystemManager fileSystemManager)
+    public SettingsManager(PluginManager pluginManager, ILogger<SettingsManager> logger, FileSystemManager fileSystemManager)
     {
         _pluginManager = pluginManager;
         _logger = logger;
@@ -37,7 +37,7 @@ public class SettingsManager
 
     private void Sync()
     {
-        _logger.Log("Synchronizing the settings.", LogLevel.Info);
+        _logger.LogInformation("Synchronizing the settings.");
         UpdateSettingsFromJson();
         SaveSettingsToJsonAsync().GetAwaiter().GetResult();
     }
@@ -64,7 +64,7 @@ public class SettingsManager
     public async Task SaveSettingsToJsonAsync()
     {
         _fileWatcher.Disable();
-        using var _ = _logger.TimedOperation(nameof(SaveSettingsToJsonAsync));
+        using var _ = _logger.TimedLogOperation();
 
         // _globalHotKey.RegisterUiHotKey();
 
@@ -76,9 +76,7 @@ public class SettingsManager
         }
         catch (Exception e)
         {
-            _logger.Log(
-                $"There was an exception thrown while Saving the Settings with the following exception{Environment.NewLine}{e}",
-                LogLevel.Error);
+            _logger.LogError(e,"There was an exception thrown while Saving the Settings");
         }
         finally
         {
@@ -88,7 +86,7 @@ public class SettingsManager
 
     private void UpdateSettingsFromJson()
     {
-        using var _ = _logger.TimedOperation(nameof(UpdateSettingsFromJson));
+        using var _ = _logger.TimedLogOperation();
 
         try
         {
@@ -109,9 +107,7 @@ public class SettingsManager
         }
         catch (Exception e)
         {
-            _logger.Log(
-                $"There was an exception thrown while Updating the Settings from the settings.json with the following exception{Environment.NewLine}{e}",
-                LogLevel.Error);
+            _logger.LogError(e, "There was an exception thrown while Updating the Settings from the settings.json");
         }
     }
 

@@ -4,8 +4,8 @@ using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Joa.PluginCore;
 using JoaKit;
-using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Joa;
 
@@ -14,17 +14,17 @@ public class JoaManager
     public Func<bool, Task>? ShowUi { get; set; }
 
     private readonly IServiceProvider _serviceProvider;
-    private readonly IJoaLogger _joaLogger;
+    private readonly ILogger<JoaManager> _logger;
     private readonly FileSystemManager _fileSystemManager;
     private readonly JoaKitApp _joaKitApp;
     private FileWatcher _fileWatcher;
     private const string AssemblyType = "System.Text.Json.JsonSerializerOptionsUpdateHandler";
     private const string ClearCache = "ClearCache";
 
-    public JoaManager(IServiceProvider serviceProvider, IJoaLogger joaLogger, FileSystemManager fileSystemManager, JoaKitApp joaKitApp)
+    public JoaManager(IServiceProvider serviceProvider, ILogger<JoaManager> logger, FileSystemManager fileSystemManager, JoaKitApp joaKitApp)
     {
         _serviceProvider = serviceProvider;
-        _joaLogger = joaLogger;
+        _logger = logger;
         _fileSystemManager = fileSystemManager;
         _joaKitApp = joaKitApp;
         _fileWatcher = new FileWatcher(fileSystemManager.GetPluginsLocation(), NewScope, 500);
@@ -44,10 +44,10 @@ public class JoaManager
             }
 
             if (alcWeakRef.IsAlive)
-                _joaLogger.Error("Unloading failed");
+                _logger.LogError("Unloading failed");
             else
             {
-                _joaLogger.Info("Unloading succeeded");
+                _logger.LogInformation("Unloading succeeded");
                 Debugger.Break();
             }
 

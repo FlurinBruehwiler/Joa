@@ -1,21 +1,21 @@
-﻿using JoaLauncher.Api.Injectables;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Joa.Hotkey;
 
 public class HotKeyService : IDisposable
 {
-    private readonly IJoaLogger _joaLogger;
+    private readonly ILogger<HotKeyService> _logger;
     private readonly Dictionary<int, HotKey> _registerdHotkeys = new();
     private readonly Dictionary<int, HotKey> _hotKeysToRegister = new();
     private readonly List<int> _hotKeysToUnregister = new();
     private readonly CancellationTokenSource _cancellationTokenSource;
     private readonly CancellationToken _cancellationToken;
 
-    public HotKeyService(IJoaLogger joaLogger)
+    public HotKeyService(ILogger<HotKeyService> logger)
     {
+        _logger = logger;
         _cancellationTokenSource = new CancellationTokenSource();
         _cancellationToken = _cancellationTokenSource.Token;
-        _joaLogger = joaLogger;
         Task.Run(ListenForHotKey, _cancellationToken);
     }
 
@@ -51,7 +51,7 @@ public class HotKeyService : IDisposable
 
             if (status == -1)
             {
-                _joaLogger.Info("Error while getting Hotkey message");
+                _logger.LogInformation("Error while getting Hotkey message");
                 continue;
             }
 
@@ -63,14 +63,14 @@ public class HotKeyService : IDisposable
             if (!_registerdHotkeys.TryGetValue(hotKeyId, out var hotkey))
                 continue;
 
-            _joaLogger.Info($"Received Hotkey: {hotkey}");
+            _logger.LogInformation("Received Hotkey: {hotkey}", hotkey);
 
             // ReSharper disable once MethodSupportsCancellation
             Task.Run(hotkey.Callback);
         }
         _hotKeysToUnregister.AddRange(_registerdHotkeys.Select(x => x.Key));
         UnregisterHotKeys();
-        _joaLogger.Info("Stop listening for Hotkeys");
+        _logger.LogInformation("Stop listening for Hotkeys");
     }
 
     private void UnregisterHotKeys()
@@ -79,7 +79,7 @@ public class HotKeyService : IDisposable
         {
             if (!External.UnregisterHotKey(nint.Zero, id))
             {
-                _joaLogger.Error($"Failed to unregister hot key with id {id}");
+                _logger.LogError("Failed to unregister hot key with id {id}", id);
                 continue;
             }
 
@@ -95,12 +95,12 @@ public class HotKeyService : IDisposable
 
             if (!External.RegisterHotKey(nint.Zero, id, modifiers, (uint)hotKey.Key))
             {
-                _joaLogger.Info($"Error while registering hotkey: {hotKey}");
+                _logger.LogInformation("Error while registering hotkey: {hotKey}", hotKey);
                 continue;
             }
 
             _registerdHotkeys.Add(id, hotKey);
-            _joaLogger.Info($"Registered Hotkey: {hotKey}");
+            _logger.LogInformation("Registered Hotkey: {hotKey}", hotKey);
         }
 
         _hotKeysToRegister.Clear();

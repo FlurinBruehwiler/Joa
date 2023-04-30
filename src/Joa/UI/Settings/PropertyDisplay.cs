@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Joa.PluginCore;
+﻿using Joa.PluginCore;
 using Joa.Settings;
 using JoaKit;
 

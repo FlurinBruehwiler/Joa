@@ -1,77 +1,23 @@
-﻿namespace JoaKit;
+﻿using Microsoft.Extensions.Logging;
 
-internal enum LogLevel
+namespace JoaKit;
+
+public class JoaLogger : ILogger
 {
-    Warning,
-    Info,
-    Error,
-}
+    public static ILogger Instance = new JoaLogger();
 
-internal class JoaKitLogger
-{
-    private static JoaKitLogger? _instance;
-
-    private const string FileName = "./Joalog.log";
-
-    private JoaKitLogger()
+    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
+        throw new NotImplementedException();
     }
 
-    public void Log(string logMessage, LogLevel logLevel)
+    public bool IsEnabled(LogLevel logLevel)
     {
-        var level = logLevel switch
-        {
-            LogLevel.Warning => "Warning:",
-            LogLevel.Error => "Error:",
-            _ => "Information:"
-        };
-
-        LogMessage($"[{DateTime.Now} | {level} | {logMessage}");
+        throw new NotImplementedException();
     }
 
-    public void Info(string logMessage)
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull
     {
-        Log(logMessage, LogLevel.Info);
-    }
-
-    public void Warning(string logMessage)
-    {
-        Log(logMessage, LogLevel.Warning);
-    }
-
-    public void Error(string logMessage)
-    {
-        Log(logMessage, LogLevel.Error);
-    }
-
-    public void LogException(Exception e, string logName = "")
-    {
-        Log(
-            string.IsNullOrEmpty(logName)
-                ? $"There was an Exception with the following Stacktrace {e}"
-                : $"{logName} with the following Stacktrace {e}",
-            LogLevel.Error);
-    }
-
-    public static JoaKitLogger GetInstance()
-    {
-        return _instance ??= new JoaKitLogger();
-    }
-
-    private void LogMessage(string message)
-    {
-        try
-        {
-            if (!File.Exists(FileName))
-            {
-                File.Create(FileName).Dispose();
-            }
-
-            File.AppendAllText(FileName, message + Environment.NewLine);
-        }
-        catch
-        {
-            // ignored
-        }
+        throw new NotImplementedException();
     }
 }

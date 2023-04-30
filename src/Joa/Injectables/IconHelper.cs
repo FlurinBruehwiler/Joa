@@ -4,13 +4,20 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Joa.Hotkey;
 using JoaLauncher.Api.Injectables;
+using Microsoft.Extensions.Logging;
 
 namespace Joa.Injectables;
 
 public class IconHelper : IIconHelper
 {
+    private readonly ILogger<IconHelper> _logger;
     private readonly Bitmap _defaultIcon = new("defaultIcon.bmp");
 
+    public IconHelper(ILogger<IconHelper> logger)
+    {
+        _logger = logger;
+    }
+    
     public string GetIconsDirectory(Type pluginType)
     {
         var pluginDirectory = Path.GetDirectoryName(pluginType.Assembly.Location);
@@ -114,7 +121,7 @@ public class IconHelper : IIconHelper
         }
         catch (Exception e)
         {
-            JoaLogger.GetInstance().LogException(e, $"Cant get shortcut target for: {file}");
+            _logger.LogError(e, "Cant get shortcut target for: {file}", file);
             return file;
         }
     }

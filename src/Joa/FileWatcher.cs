@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
-using Joa.Injectables;
+using JoaKit;
+using Microsoft.Extensions.Logging;
 
 namespace Joa;
 
@@ -34,7 +35,7 @@ public class FileWatcher
         _watcher.Changed += OnChanged;
         _watcher.Error += (sender, args) =>
         {
-            JoaLogger.GetInstance().Error(args.GetException().Message);
+            JoaLogger.Instance.LogError(args.GetException(), "FileWatcher");
         };
 
         if (file is not null)

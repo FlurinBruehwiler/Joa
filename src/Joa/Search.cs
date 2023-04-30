@@ -1,21 +1,20 @@
-﻿using Joa.Injectables;
-using Joa.PluginCore;
+﻿using Joa.PluginCore;
 using Joa.Settings;
 using Joa.Steps;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Enums;
-using JoaLauncher.Api.Injectables;
+using Microsoft.Extensions.Logging;
 using ExecutionContext = Joa.Steps.ExecutionContext;
 
 namespace Joa;
 
 public class Search
 {
-    private readonly IJoaLogger _logger;
+    private readonly ILogger<Search> _logger;
     private readonly PluginServiceProvider _pluginServiceProvider;
     private readonly SettingsManager _settingsManager;
 
-    public Search(IJoaLogger logger, PluginServiceProvider pluginServiceProvider, SettingsManager settingsManager)
+    public Search(ILogger<Search> logger, PluginServiceProvider pluginServiceProvider, SettingsManager settingsManager)
     {
         _logger = logger;
         _pluginServiceProvider = pluginServiceProvider;
@@ -37,13 +36,13 @@ public class Search
 
     public List<PluginSearchResult> UpdateSearchResults(Step step, string searchString)
     {
-        using var _ = _logger.TimedOperation(nameof(UpdateSearchResults));
+        using var _ = _logger.TimedLogOperation();
 
-        _logger.Info($"SearchString: ${searchString}");
+        _logger.LogInformation("SearchString: {searchString}", searchString);
 
         var results = step.GetSearchResults(searchString).Take(8).ToList();
 
-        JoaLogger.GetInstance().Info(Environment.CurrentManagedThreadId.ToString());
+        _logger.LogInformation(Environment.CurrentManagedThreadId.ToString());
         
         foreach (var result in results)
         {

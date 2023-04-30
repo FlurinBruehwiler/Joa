@@ -1,22 +1,22 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 using System.Text.Json;
-using JoaLauncher.Api.Injectables;
 using JoaLauncher.Api.Plugin;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Joa.PluginCore;
 
 public class PluginLoader
 {
-    private readonly IJoaLogger _logger;
+    private readonly ILogger<PluginLoader> _logger;
     private readonly PluginServiceProvider _pluginServiceProvider;
     private Dictionary<Type, object> _instantiatedTypes = new();
     private readonly FileSystemManager _fileSystemManager;
 
     public AssemblyLoadContext? AssemblyLoadContext { get; private set; }
 
-    public PluginLoader(IJoaLogger logger, PluginServiceProvider pluginServiceProvider,
+    public PluginLoader(ILogger<PluginLoader> logger, PluginServiceProvider pluginServiceProvider,
         FileSystemManager fileSystemManager)
     {
         _logger = logger;
@@ -30,7 +30,7 @@ public class PluginLoader
         var pluginsLocation = _fileSystemManager.GetPluginsLocation();
 
         ClearPluginsFinalLocation(pluginsFinalLocation);
-        _logger.Info($"Moving plugins from {pluginsLocation} to {pluginsFinalLocation}");
+        _logger.LogInformation("Moving plugins from {pluginsLocation} to {pluginsFinalLocation}", pluginsLocation, pluginsFinalLocation);
         MovePluginDllsToCopyLocation(pluginsLocation, pluginsFinalLocation);
 
         List<PluginDefinition> pluginDefinitions = new();
@@ -112,7 +112,7 @@ public class PluginLoader
         if (ActivatorUtilities.CreateInstance(_pluginServiceProvider.ServiceProvider, settingType) is not ISetting
             setting)
         {
-            _logger.Error($"{settingType.Name} does not inherit from {nameof(ISetting)}");
+            _logger.LogInformation("{settingType} does not inherit from {isetting}", settingType.Name, nameof(ISetting));
             return new EmptySetting();
         }
 
@@ -212,7 +212,7 @@ public class PluginLoader
             {
                 if (pluginTypes.Setting is not null)
                 {
-                    _logger.Error("A plugin can only contain one Setting");
+                    _logger.LogError("A plugin can only contain one Setting");
                     continue;
                 }
 
@@ -224,14 +224,13 @@ public class PluginLoader
             return pluginTypes;
 
         var availableTypes = string.Join("\n", assembly.GetTypes().Select(t => t.FullName));
-        _logger.Log($"Can't find any type which implements IPlugin in {assembly} from {assembly.Location}.\n" +
-                    $"Available types: \n{availableTypes}", LogLevel.Warning);
+        _logger.LogWarning("Can't find any type which implements IPlugin in {assembly} from {assemblyLocation}. Available types: {availableTypes}", assembly, assembly.Location, availableTypes);
         return null;
     }
 
     private List<PluginFiles> GetPluginDllPaths(string pluginsFinalLocation)
     {
-        _logger.Log($"Searching for Plugins in {pluginsFinalLocation}", LogLevel.Info);
+        _logger.LogInformation("Searching for Plugins in {pluginsFinalLocation}", pluginsFinalLocation);
 
         var pluginFolders = Directory.GetDirectories(pluginsFinalLocation);
 
@@ -251,7 +250,7 @@ public class PluginLoader
             .ToList();
 
         var pluginsToLog = plugins.Aggregate("", (current, plugin) => current + Environment.NewLine + plugin);
-        _logger.Log($"Found the following plugins DLLs: {pluginsToLog}", LogLevel.Info);
+        _logger.LogInformation("Found the following plugins DLLs: {pluginsToLog}", pluginsToLog);
 
         return plugins!;
     }
@@ -275,7 +274,7 @@ public class PluginLoader
                 }
                 catch
                 {
-                    _logger.Error($"Error parsing the manifest file '{s.Manifest}'");
+                    _logger.LogError("Error parsing the manifest file '{Manifest}'", s.Manifest);
                 }
             }
 
