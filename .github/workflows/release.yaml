@@ -31,9 +31,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet publish ./Joa/Joa.csproj -r $${{ matrix.target }} -c Release -o $${{ matrix.target }}
+        run: dotnet publish ./Joa/Joa.csproj -r "$${{ matrix.target }}" -c Release -o "$${{ matrix.target }}"
       - name: Create zip file of output
-        run: zip -r ${{ matrix.target }}.zip ${{ matrix.target }}
+        run: zip -r "${{ matrix.target }}.zip" "${{ matrix.target }}"
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
