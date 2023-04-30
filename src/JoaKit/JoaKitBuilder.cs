@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Modern.WindowKit;
-using Modern.WindowKit.Platform;
 
 namespace JoaKit;
 

@@ -4,11 +4,23 @@ namespace JoaKit;
 
 public class JoaLogger : ILogger
 {
-    public static ILogger Instance = new JoaLogger();
+    private const string FileName = "./Joalog.log";
 
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if (!File.Exists(FileName))
+            {
+                File.Create(FileName).Dispose();
+            }
+
+            File.AppendAllText(FileName, formatter(state, exception));
+        }
+        catch
+        {
+            // ignored
+        }
     }
 
     public bool IsEnabled(LogLevel logLevel)

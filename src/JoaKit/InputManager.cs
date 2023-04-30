@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Modern.WindowKit;
 using Modern.WindowKit.Input.Raw;
 using Modern.WindowKit.Threading;
 

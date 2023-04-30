@@ -1,5 +1,4 @@
 ﻿using JoaKit;
-using Modern.WindowKit;
 
 #pragma warning disable CS0657
 [assembly: System.Reflection.Metadata.MetadataUpdateHandler(typeof(HotReloadManager))]

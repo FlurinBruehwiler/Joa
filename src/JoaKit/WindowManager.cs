@@ -3,7 +3,6 @@ using Modern.WindowKit;
 using Modern.WindowKit.Controls.Platform.Surfaces;
 using Modern.WindowKit.Platform;
 using Modern.WindowKit.Skia;
-using Modern.WindowKit.Threading;
 using SkiaSharp;
 
 namespace JoaKit;

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using Microsoft.Extensions.Logging;
 using Modern.WindowKit;
 using Modern.WindowKit.Platform;
 using Modern.WindowKit.Threading;
@@ -61,7 +60,8 @@ public class Renderer
         }
         catch (Exception e)
         {
-            JoaLogger.Instance.LogError(e, "Renderer");
+            // JoaLogger.Instance.LogError(e, "Renderer");
+            //ToDo
         }
     }
 

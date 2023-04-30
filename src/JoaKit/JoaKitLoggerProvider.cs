@@ -11,6 +11,6 @@ public class JoaKitLoggerProvider : ILoggerProvider
 
     public ILogger CreateLogger(string categoryName)
     {
-        return JoaLogger.Instance;
+        return new JoaLogger();
     }
 }

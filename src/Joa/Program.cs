@@ -36,6 +36,7 @@ public static class Program
 
         builder.Services.AddLogging(loggingBuilder =>
         {
+            loggingBuilder.AddProvider(new JoaKitLoggerProvider());
         });
 
         var app = builder.Build();
