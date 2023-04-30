@@ -23,14 +23,12 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build ./Joa/Joa.csproj  -c Release -o publish --no-restore
+        run: dotnet publish ./Joa/Joa.csproj -c Release -r win10-x64 --self-contained true
       - name: Create zip file of output
-        run: zip -r release.zip ./publish
-      - name: debug
-        run: ls .
+        run: zip -r win10-x64.zip ./publish
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: src/release.zip
+          files: src/win10-x64.zip
           draft: true
           token: ${{ secrets.GITHUB_TOKEN }}
