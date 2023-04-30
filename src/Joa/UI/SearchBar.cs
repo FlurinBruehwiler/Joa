@@ -11,7 +11,7 @@ using Key = Modern.WindowKit.Input.Key;
 
 namespace Joa.UI;
 
-public class SearchBar : IComponent
+public class SearchBar : Component
 {
     private readonly IWindowImpl _window;
     private string _input = string.Empty;
@@ -50,7 +50,7 @@ public class SearchBar : IComponent
         });
     }
 
-    public RenderObject Build()
+    public override RenderObject Build()
     {
         return new Div
         {
@@ -162,6 +162,7 @@ public class SearchBar : IComponent
         _input = string.Empty;
         _searchResults.Clear();
         SearchResultsHaveChanged();
+        StateHasChanged();
     }
 
     private void ClearSteps()

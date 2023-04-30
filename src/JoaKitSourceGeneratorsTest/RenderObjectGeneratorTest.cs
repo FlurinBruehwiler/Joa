@@ -25,12 +25,12 @@ public class RenderObjectGeneratorTest
         var code = """
 using JoaKit;
 namespace Test;
-public class TestComponent : IComponent
+public class TestComponent : Component
 {
     [Parameter]
     public string Test { get; set; }
     
-    public RenderObject Build()
+    public override RenderObject Build()
     {
         return new Div();
     }
@@ -80,7 +80,7 @@ namespace Test
             },
         };
 
-        test.TestState.AdditionalReferences.Add(typeof(IComponent).Assembly);
+        test.TestState.AdditionalReferences.Add(typeof(Component).Assembly);
         test.TestState.AdditionalReferences.Add(typeof(SKCanvas).Assembly);
         
         await test.RunAsync();

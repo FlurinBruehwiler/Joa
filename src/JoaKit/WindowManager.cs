@@ -11,7 +11,7 @@ public class WindowManager
 {
     public JoaKitApp JoaKitApp { get; }
     public IWindowImpl Window { get; }
-    public readonly IComponent RootComponent;
+    public readonly Component RootComponent;
     public readonly Renderer Renderer;
     private SKSurface? _surface;
     public SKCanvas? Canvas { get; set; }
@@ -23,11 +23,14 @@ public class WindowManager
         JoaKitApp = joaKitApp;
         Window = window;
         joaKitApp.CurrentlyBuildingWindow = window;
-        RootComponent = (IComponent)ActivatorUtilities.CreateInstance(JoaKitApp.Services, rootType);
-        joaKitApp.CurrentlyBuildingWindow = null;
 
         Renderer = new Renderer(this, window);
 
+        RootComponent = (Component)ActivatorUtilities.CreateInstance(JoaKitApp.Services, rootType);
+        RootComponent.Renderer = Renderer;
+        
+        joaKitApp.CurrentlyBuildingWindow = null;
+        
         window.Closed = cancellationTokenSource.Cancel;
 
         window.Resized = (_, _) =>

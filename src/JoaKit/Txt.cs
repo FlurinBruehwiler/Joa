@@ -69,6 +69,9 @@ public class Txt : RenderObject
         var path = paint.GetTextPath(PText, PComputedX, PComputedY);
         path.GetBounds(out var rect);
 
+        paint.GetFontMetrics(out var metrics);
+        
+        
         var actualX = PComputedX;
         var actualY = PComputedY;
 
@@ -76,7 +79,7 @@ public class Txt : RenderObject
         {
             TextAlign.Start => PSize,
             TextAlign.End => PComputedHeight,
-            TextAlign.Center => PComputedHeight / 2 + PSize * 1.2f / 2, //Don't Ask
+            TextAlign.Center => PComputedHeight / 2 - (metrics.Ascent + metrics.Descent) / 2, //Don't Ask
             _ => throw new ArgumentOutOfRangeException()
         };
 

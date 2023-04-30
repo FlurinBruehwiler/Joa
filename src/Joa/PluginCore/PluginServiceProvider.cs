@@ -1,4 +1,5 @@
 ﻿using Joa.Injectables;
+using JoaKit;
 using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -11,10 +12,13 @@ public class PluginServiceProvider
 
     public ServiceCollection ServiceCollection { get; set; }
 
-    public PluginServiceProvider(ILogger<PluginServiceProvider> logger)
+    public PluginServiceProvider()
     {
         ServiceCollection = new ServiceCollection();
-        ServiceCollection.AddSingleton(logger); //ToDo
+        ServiceCollection.AddLogging(builder =>
+        {
+            builder.AddProvider(new JoaKitLoggerProvider());
+        });
         ServiceCollection.AddSingleton<IBrowserHelper, BrowserHelper>();
         ServiceCollection.AddSingleton<IIconHelper, IconHelper>();
         ServiceCollection.AddSingleton<IClipboardHelper, ClipboardHelper>();

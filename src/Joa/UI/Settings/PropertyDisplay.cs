@@ -4,7 +4,7 @@ using JoaKit;
 
 namespace Joa.UI.Settings;
 
-public class PropertyDisplay : IComponent
+public class PropertyDisplay : Component
 {
     private readonly SettingsManager _settingsManager;
 
@@ -19,7 +19,7 @@ public class PropertyDisplay : IComponent
         _settingsManager = settingsManager;
     }
     
-    public RenderObject Build()
+    public override RenderObject Build()
     {
         var type = Property.PropertyDescription.PropertyInfo.PropertyType;
 

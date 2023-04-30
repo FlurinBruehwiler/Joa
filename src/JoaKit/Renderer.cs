@@ -83,7 +83,7 @@ public class Renderer
     private Div? _clickedElement;
 
 
-    private void Build(IComponent rootComponent)
+    private void Build(Component rootComponent)
     {
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
         
@@ -102,7 +102,7 @@ public class Renderer
                 case CustomRenderObject customRenderObject:
                     {
                         var componentHash = customRenderObject.GetComponentHash();
-                        var component = buildContext.GetComponent(componentHash, customRenderObject.ComponentType);
+                        var component = buildContext.GetComponent(componentHash, customRenderObject.ComponentType, this);
                         var childRenderObject = customRenderObject.Build(component);
                         renderObject = childRenderObject;
                         continue;

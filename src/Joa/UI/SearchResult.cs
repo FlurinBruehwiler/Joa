@@ -3,13 +3,13 @@ using JoaKit;
 
 namespace Joa.UI;
 
-public class SearchResult : IComponent
+public class SearchResult : Component
 {
     [Parameter] public PluginSearchResult Sr { get; set; } = default!;
 
     [Parameter] public bool IsSelected { get; set; } = default!;
 
-    public RenderObject Build()
+    public override RenderObject Build()
     {
         var color = IsSelected ? new ColorDefinition(60, 60, 60) : new ColorDefinition(40, 40, 40);
 

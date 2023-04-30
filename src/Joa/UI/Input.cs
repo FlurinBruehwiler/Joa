@@ -3,7 +3,7 @@ using Modern.WindowKit.Input;
 
 namespace Joa.UI;
 
-public class Input : IComponent
+public class Input : Component
 {
     [Extension] 
     public string Value { get; set; } = string.Empty;
@@ -20,7 +20,7 @@ public class Input : IComponent
     [Extension]
     public Func<string, Task>? OnChangeAsync { get; set; }
 
-    public RenderObject Build()
+    public override RenderObject Build()
     {
         return new Div
             {

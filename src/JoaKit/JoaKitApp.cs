@@ -28,7 +28,7 @@ public class JoaKitApp
         RenewScope();
     }
 
-    public void CreateWindow<T>(Action<IWindowImpl> configure, bool show = true) where T : IComponent
+    public void CreateWindow<T>(Action<IWindowImpl> configure, bool show = true) where T : Component
     {
         var window = AvaloniaGlobals.GetRequiredService<IWindowingPlatform>().CreateWindow();
         configure(window);

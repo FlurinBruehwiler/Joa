@@ -3,7 +3,7 @@ using JoaKit;
 
 namespace Joa.UI.Settings;
 
-public class SettingsWindow : IComponent
+public class SettingsWindow : Component
 {
     private readonly PluginManager _pluginManager;
     private PluginDefinition _selectedPlugin;
@@ -14,7 +14,7 @@ public class SettingsWindow : IComponent
         _selectedPlugin = _pluginManager.Plugins.First();
     }
 
-    public RenderObject Build()
+    public override RenderObject Build()
     {
         return new Div
         {

@@ -20,7 +20,7 @@ public class RenderObjectGenerator : ISourceGenerator
 
         var parameterAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ParameterAttribute");
         var extensionAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ExtensionAttribute");
-        var componentInterface = context.Compilation.GetTypeByMetadataName("JoaKit.IComponent");
+        var componentInterface = context.Compilation.GetTypeByMetadataName("JoaKit.Component");
 
         if (parameterAttributeType is null)
             throw new Exception("JoaKit.ParameterAttribute not found");
@@ -29,7 +29,7 @@ public class RenderObjectGenerator : ISourceGenerator
             throw new Exception("JoaKit.InheritAttribute not found");
 
         if (componentInterface is null)
-            throw new Exception("JoaKit.IComponent not found");
+            throw new Exception("JoaKit.Component not found");
 
         foreach (var classDeclarationSyntax in receiver.Candidates)
         {
@@ -74,7 +74,7 @@ public class RenderObjectGenerator : ISourceGenerator
                         ComponentType = typeof({{type.ToDisplayString()}});
                     }
             
-                    public override RenderObject Build(IComponent component)
+                    public override RenderObject Build(Component component)
                     {
                         {{GetParameterUpdateCalls(parameters, extensions, type.ToDisplayString())}}
 
@@ -189,8 +189,8 @@ public class RenderObjectGenerator : ISourceGenerator
         return true;
     }
 
-    private static bool IsUiComponent(ITypeSymbol type, INamedTypeSymbol componentInterface)
+    private static bool IsUiComponent(ITypeSymbol type, INamedTypeSymbol componentClass)
     {
-        return type.AllInterfaces.Any(x => SymbolEqualityComparer.Default.Equals(x, componentInterface));
+        return SymbolEqualityComparer.Default.Equals(type.BaseType, componentClass);
     }
 }

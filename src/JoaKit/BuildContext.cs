@@ -11,16 +11,18 @@ public class BuildContext
         _serviceProvider = serviceProvider;
     }
 
-    private readonly Dictionary<ComponentHash, IComponent> _components = new();
+    private readonly Dictionary<ComponentHash, Component> _components = new();
 
-    public IComponent GetComponent(ComponentHash componentHash, Type componentType)
+    public Component GetComponent(ComponentHash componentHash, Type componentType, Renderer renderer)
     {
         if (_components.TryGetValue(componentHash, out var component))
         {
             return component;
         }
 
-        component = (IComponent)ActivatorUtilities.CreateInstance(_serviceProvider, componentType);
+        component = (Component)ActivatorUtilities.CreateInstance(_serviceProvider, componentType);
+        component.Renderer = renderer;
+        
         _components.Add(componentHash, component);
         
         return component;
