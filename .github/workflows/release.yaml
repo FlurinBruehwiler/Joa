@@ -7,8 +7,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  release:
+    name: Release
+    strategy: 
+      matrix:
+        kind: ['windows']
+        include:
+          - kind: windows
+            os: windows-latest
+            target: win-x64
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: ./src
@@ -25,10 +33,10 @@ jobs:
       - name: Build
         run: dotnet publish ./Joa/Joa.csproj -c Release -r win10-x64 --self-contained true
       - name: Create zip file of output
-        run: zip -r win10-x64.zip ./Joa/bin/Release/net7.0/win10-x64/publish
+        run: zip -r ${{ matrix.target }}.zip ${{ matrix.target }}
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: src/win10-x64.zip
+          files: src/${{ matrix.target }}.zip
           draft: true
           token: ${{ secrets.GITHUB_TOKEN }}
