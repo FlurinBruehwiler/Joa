@@ -25,7 +25,7 @@ jobs:
       - name: Build
         run: dotnet publish ./Joa/Joa.csproj -c Release -r win10-x64 --self-contained true
       - name: Create zip file of output
-        run: zip -r win10-x64.zip ./publish
+        run: zip -r win10-x64.zip ./Joa/bin/Release/net7.0/win10-x64/publish
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
