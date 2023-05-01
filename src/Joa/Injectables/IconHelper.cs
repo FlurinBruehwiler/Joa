@@ -11,7 +11,7 @@ namespace Joa.Injectables;
 public class IconHelper : IIconHelper
 {
     private readonly ILogger<IconHelper> _logger;
-    private readonly Bitmap _defaultIcon = new("defaultIcon.bmp");
+    private readonly Bitmap _defaultIcon = new("Assets/defaultIcon.bmp");
 
     public IconHelper(ILogger<IconHelper> logger)
     {

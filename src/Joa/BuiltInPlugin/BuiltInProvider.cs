@@ -32,7 +32,7 @@ public class BuiltInProvider : IProvider
                             {
                                 window.Resize(new Size(800, 600));
                                 window.SetTitle("Joa Settings");
-                                window.SetIcon(SKBitmap.Decode("icon.png"));
+                                window.SetIcon(SKBitmap.Decode("Assets/icon.png"));
                             });
 
                     });

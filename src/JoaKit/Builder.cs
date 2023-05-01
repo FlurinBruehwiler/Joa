@@ -6,7 +6,7 @@ using SkiaSharp;
 
 namespace JoaKit;
 
-public class Renderer
+public class Builder
 {
     private readonly WindowManager _windowManager;
     private readonly IWindowImpl _window;
@@ -16,7 +16,7 @@ public class Renderer
     private bool _shouldRebuild;
     public bool IsBuilding { get; private set; }
 
-    public Renderer(WindowManager windowManager, IWindowImpl window)
+    public Builder(WindowManager windowManager, IWindowImpl window)
     {
         _windowManager = windowManager;
         _window = window;

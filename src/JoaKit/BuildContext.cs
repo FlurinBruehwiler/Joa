@@ -13,7 +13,7 @@ public class BuildContext
 
     private readonly Dictionary<ComponentHash, Component> _components = new();
 
-    public Component GetComponent(ComponentHash componentHash, Type componentType, Renderer renderer)
+    public Component GetComponent(ComponentHash componentHash, Type componentType, Builder builder)
     {
         if (_components.TryGetValue(componentHash, out var component))
         {
@@ -21,7 +21,7 @@ public class BuildContext
         }
 
         component = (Component)ActivatorUtilities.CreateInstance(_serviceProvider, componentType);
-        component.Renderer = renderer;
+        component.Builder = builder;
         
         _components.Add(componentHash, component);
         

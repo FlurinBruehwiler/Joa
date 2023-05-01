@@ -12,13 +12,12 @@ public class Svg : RenderObject
     public string PSrc { get; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public float PScaleX { get; private set; } = 1;
+    public bool PFill { get; set; }
 
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public float PScaleY { get; private set; } = 1;
-    
     public Svg(string src, [CallerLineNumber] int lineNumer = -1, [CallerFilePath] string filePath = "")
     {
+        src = "Assets/" + src;
+        
         PLineNumber = lineNumer;
         PFilePath = filePath;
         PSrc = src;
@@ -33,29 +32,49 @@ public class Svg : RenderObject
         if (svg.Picture is null)
             return;
 
-        PWidth = new SizeDefinition(svg.Picture.CullRect.Width, SizeKind.Pixel);
-        PHeight = new SizeDefinition(svg.Picture.CullRect.Height, SizeKind.Pixel);
+        var svgSize = SSvgCache[PSrc].Picture.CullRect;
+        
+        PWidth = new SizeDefinition(svgSize.Width, SizeKind.Pixel);
+        PHeight = new SizeDefinition(svgSize.Height, SizeKind.Pixel);
     }
 
     public override void Render(SKCanvas canvas, RenderContext renderContext)
     {
-        var matrix = SKMatrix.CreateScale(PScaleX, PScaleY);
+        var svgSize = SSvgCache[PSrc].Picture.CullRect;
+
+        var matrix = SKMatrix.Identity;
+
+        if (PFill)
+        {
+            var availableRatio = PComputedWidth / PComputedHeight;
+            var currentRatio = svgSize.Width / svgSize.Height;
+
+            float factor;
+            
+            if (availableRatio > currentRatio) //Height is the limiting factor
+            {
+                factor = PComputedHeight / svgSize.Height;
+            }
+            else //Width is the limiting factor
+            {
+                factor = PComputedWidth / svgSize.Width;
+            }
+
+            matrix.ScaleX = factor;
+            matrix.ScaleY = factor;
+        }
+        
         matrix.TransX = PComputedX;
         matrix.TransY = PComputedY;
+        
         canvas.DrawPicture(SSvgCache[PSrc].Picture, ref matrix);
     }
 
-    public Svg Scale(float scale)
+    public Svg Fill(bool fill = true)
     {
-        PScaleX = scale;
-        PScaleY = scale;
-        return this;
-    }
-
-    public Svg Scale(float x, float y)
-    {
-        PScaleX = x;
-        PScaleY = y;
+        PWidth = new SizeDefinition(100, SizeKind.Percentage);
+        PHeight = new SizeDefinition(100, SizeKind.Percentage);
+        PFill = fill;
         return this;
     }
 

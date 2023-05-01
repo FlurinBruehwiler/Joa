@@ -13,7 +13,7 @@ public class Checkbox : Component
             {
                 IsChecked
                     ? new JoaKit.Svg("check.svg")
-                        .Scale(0.7f)
+                        .Fill()
                     : new Empty()
             }
             .Width(20)
@@ -21,7 +21,6 @@ public class Checkbox : Component
             .Color(40, 40, 40)
             .BorderWidth(1)
             .Radius(4)
-            .Padding(2)
             .Height(20)
             .OnClick(() => IsChecked = !IsChecked);
     }

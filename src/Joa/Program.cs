@@ -45,7 +45,7 @@ public static class Program
         {
             window.Resize(new Size(SearchBar.Width, SearchBar.SearchBoxHeight));
             window.SetTitle("Joa");
-            window.SetIcon(SKBitmap.Decode("icon.png"));
+            window.SetIcon(SKBitmap.Decode("Assets/icon.png"));
             window.CanResize(false);
             window.SetExtendClientAreaTitleBarHeightHint(0);
             window.SetExtendClientAreaToDecorationsHint(true);

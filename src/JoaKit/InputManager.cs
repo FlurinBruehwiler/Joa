@@ -7,13 +7,13 @@ namespace JoaKit;
 
 public class InputManager
 {
-    private readonly Renderer _renderer;
+    private readonly Builder _builder;
     private readonly WindowManager _windowManager;
     public Div? ActiveDiv { get; set; }
 
-    public InputManager(Renderer renderer, WindowManager windowManager)
+    public InputManager(Builder builder, WindowManager windowManager)
     {
-        _renderer = renderer;
+        _builder = builder;
         _windowManager = windowManager;
     }
 
@@ -25,7 +25,7 @@ public class InputManager
         {
             if (keyEventArgs.Key == Key.F5)
             {
-                _renderer.ShouldRebuild();
+                _builder.ShouldRebuild();
             }
             
             if (ActiveDiv?.POnKeyDown is not null)
@@ -50,7 +50,7 @@ public class InputManager
                         Debugger.Break();
                     }
 
-                    _renderer.ShouldRebuild();
+                    _builder.ShouldRebuild();
                 });
             }
         }
@@ -67,7 +67,7 @@ public class InputManager
             var x = _windowManager.Scale((int)pointer.Position.X);
             var y = _windowManager.Scale((int)pointer.Position.Y);
 
-            if (pointer.Type == RawPointerEventType.LeftButtonDown && _renderer.Root is Div divRoot)
+            if (pointer.Type == RawPointerEventType.LeftButtonDown && _builder.Root is Div divRoot)
             {
                 var div = HitTest(divRoot, x, y);
 
@@ -104,7 +104,7 @@ public class InputManager
 
         if (callbackWasCalled)
         {
-            _renderer.ShouldRebuild();
+            _builder.ShouldRebuild();
         }
     }
 

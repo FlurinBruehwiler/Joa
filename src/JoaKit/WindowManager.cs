@@ -12,7 +12,7 @@ public class WindowManager
     public JoaKitApp JoaKitApp { get; }
     public IWindowImpl Window { get; }
     public readonly Component RootComponent;
-    public readonly Renderer Renderer;
+    public readonly Builder Builder;
     private SKSurface? _surface;
     public SKCanvas? Canvas { get; set; }
     public CancellationToken CancellationToken { get; }
@@ -24,10 +24,10 @@ public class WindowManager
         Window = window;
         joaKitApp.CurrentlyBuildingWindow = window;
 
-        Renderer = new Renderer(this, window);
+        Builder = new Builder(this, window);
 
         RootComponent = (Component)ActivatorUtilities.CreateInstance(JoaKitApp.Services, rootType);
-        RootComponent.Renderer = Renderer;
+        RootComponent.Builder = Builder;
         
         joaKitApp.CurrentlyBuildingWindow = null;
         
@@ -39,16 +39,16 @@ public class WindowManager
             Canvas = null;
         };
 
-        window.Input = Renderer.InputManager.Input;
+        window.Input = Builder.InputManager.Input;
 
         window.Paint = DoPaint;
         
-        Renderer.ShouldRebuild();
+        Builder.ShouldRebuild();
     }
 
     public void DoPaint(Rect bounds)
     {
-        if (Renderer.IsBuilding)
+        if (Builder.IsBuilding)
             return;
         
         var skiaFramebuffer = Window.Surfaces.OfType<IFramebufferPlatformSurface>().First();
@@ -64,7 +64,7 @@ public class WindowManager
         surface.Canvas.DrawSurface(GetSurface(), SKPoint.Empty);
         Canvas = surface.Canvas;
 
-        Renderer.LayoutPaintComposite(Window.ClientSize * Window.RenderScaling);
+        Builder.LayoutPaintComposite(Window.ClientSize * Window.RenderScaling);
     }
 
     private SKSurface GetSurface()
