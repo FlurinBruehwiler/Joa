@@ -1,7 +1,7 @@
 ﻿using JoaKit;
 using Modern.WindowKit.Input;
 
-namespace Joa.UI;
+namespace Joa.UI.Components;
 
 public class Input : Component
 {

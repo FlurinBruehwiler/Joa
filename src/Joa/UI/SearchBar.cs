@@ -2,6 +2,7 @@
 using Joa.Hotkey;
 using Joa.PluginCore;
 using Joa.Steps;
+using Joa.UI.Components;
 using JoaKit;
 using JoaLauncher.Api;
 using Modern.WindowKit;

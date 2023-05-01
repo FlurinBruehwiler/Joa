@@ -1,5 +1,6 @@
 ﻿using Joa.PluginCore;
 using Joa.Settings;
+using Joa.UI.Components;
 using JoaKit;
 
 namespace Joa.UI.Settings;
@@ -27,17 +28,18 @@ public class PropertyDisplay : Component
         {
             return new Div
                 {
-                    new Txt(Property.PropertyDescription.PropertyInfo.Name),
-                    new InputComponent()
-                        .Value(Property.GetValue().ToString())
-                        .OnChangeAsync(PropertyChanged)
+                    new Txt(Property.PropertyDescription.PropertyInfo.Name)
+                        .VAlign(TextAlign.Center)
+                        .Size(17),
+                    new TextBoxComponent()
                 }
                 .Height(50)
                 .Color(36, 36, 36)
                 .XAlign(XAlign.Center)
+                .Dir(Dir.Horizontal)
                 .Padding(8)
                 .MAlign(MAlign.SpaceBetween)
-                .Radius(4);
+                .Radius(7);
         }
 
         if (type == typeof(bool))
@@ -45,11 +47,18 @@ public class PropertyDisplay : Component
             return new Div
             {
                 new Txt(Property.PropertyDescription.PropertyInfo.Name)
-                //Checkbox
-            };
+                    .VAlign(TextAlign.Center)
+                    .Size(17),
+                new CheckboxComponent()
+            }.Height(50)
+                .Color(36, 36, 36)
+                .Padding(8)
+                .Radius(7)
+                .XAlign(XAlign.Center)
+                .Dir(Dir.Horizontal);
         }
 
-        return new Div();
+        return new Div().Height(0);
     }
 
     private async Task PropertyChanged(string arg)
