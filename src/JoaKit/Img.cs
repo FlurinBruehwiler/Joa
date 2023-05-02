@@ -40,7 +40,7 @@ public class Img : RenderObject
         if (!_isValid)
             return;
         
-        canvas.DrawBitmap(ImgCache[PSrc], PComputedX, PComputedY);
+        canvas.DrawBitmap(ImgCache[PSrc] ,new SKRect(PComputedX, PComputedY,   PComputedX + PComputedWidth, PComputedY + PComputedHeight));
     }
 
     private static readonly Dictionary<string, SKBitmap> ImgCache = new();
