@@ -17,7 +17,7 @@ public class IconHelper : IIconHelper
     {
         _logger = logger;
     }
-    
+
     public string GetIconsDirectory(Type pluginType)
     {
         var pluginDirectory = Path.GetDirectoryName(pluginType.Assembly.Location);
@@ -83,7 +83,7 @@ public class IconHelper : IIconHelper
     {
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             throw new NotImplementedException();
-        
+
         if (bitmap.Size != _defaultIcon.Size) return false;
 
         var bd1 = bitmap.LockBits(new Rectangle(new Point(0, 0), bitmap.Size), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);

@@ -11,7 +11,7 @@ public class PropertyDisplay : Component
 
     [Parameter]
     public PluginDefinition PluginDefinition { get; set; } = null!;
-    
+
     [Parameter]
     public PropertyInstance Property { get; set; } = null!;
 
@@ -19,7 +19,7 @@ public class PropertyDisplay : Component
     {
         _settingsManager = settingsManager;
     }
-    
+
     public override RenderObject Build()
     {
         var type = Property.PropertyDescription.PropertyInfo.PropertyType;

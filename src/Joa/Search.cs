@@ -43,7 +43,7 @@ public class Search
         var results = step.GetSearchResults(searchString).Take(8).ToList();
 
         _logger.LogInformation(Environment.CurrentManagedThreadId.ToString());
-        
+
         foreach (var result in results)
         {
             result.SearchResult.Actions ??= new List<ContextAction>();

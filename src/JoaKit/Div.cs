@@ -19,7 +19,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public ColorDefinition? PColor { get; set; }
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public ColorDefinition? PBorderColor { get; set; }
 
@@ -124,18 +124,18 @@ public class Div : RenderObject, IEnumerable<RenderObject>
                 {
                     float borderRadius = PRadius + PBorderWidth;
 
-                    canvas.DrawRoundRect(PComputedX  - PBorderWidth, 
+                    canvas.DrawRoundRect(PComputedX - PBorderWidth,
                         PComputedY - PBorderWidth,
-                        PComputedWidth + 2 * PBorderWidth, 
-                        PComputedHeight + 2 * PBorderWidth, 
-                        borderRadius, 
+                        PComputedWidth + 2 * PBorderWidth,
+                        PComputedHeight + 2 * PBorderWidth,
+                        borderRadius,
                         borderRadius,
                         GetColor(PBorderColor ?? PColor.Value));
-                    canvas.DrawRoundRect(PComputedX, 
-                        PComputedY, 
-                        PComputedWidth, 
-                        PComputedHeight, 
-                        PRadius, 
+                    canvas.DrawRoundRect(PComputedX,
+                        PComputedY,
+                        PComputedWidth,
+                        PComputedHeight,
+                        PRadius,
                         PRadius,
                         GetColor(PColor.Value));
                 }

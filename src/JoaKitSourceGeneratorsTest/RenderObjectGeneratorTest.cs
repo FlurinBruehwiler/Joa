@@ -36,7 +36,7 @@ public class TestComponent : Component
     }
 }
 """;
-        
+
         var generated = """
 #nullable enable
 using Test;
@@ -74,15 +74,15 @@ namespace Test
                         "TestComponentComponent_generated.cs",
                         SourceText.From(generated, Encoding.UTF8)),
                 },
-                ReferenceAssemblies = new ReferenceAssemblies("net7.0", 
-                    new PackageIdentity("Microsoft.NETCore.App.Ref", "7.0.0"), 
+                ReferenceAssemblies = new ReferenceAssemblies("net7.0",
+                    new PackageIdentity("Microsoft.NETCore.App.Ref", "7.0.0"),
                     Path.Combine("ref", "7.0.0"))
             },
         };
 
         test.TestState.AdditionalReferences.Add(typeof(Component).Assembly);
         test.TestState.AdditionalReferences.Add(typeof(SKCanvas).Assembly);
-        
+
         await test.RunAsync();
     }
 }

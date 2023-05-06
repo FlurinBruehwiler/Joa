@@ -68,7 +68,7 @@ public static class Program
 
         window.Move(screen.WorkingArea.PositionRect(windowRect).Position);
     }
-    
+
     private static PixelRect PositionRect(this PixelRect outerRect, PixelRect innerRect)
     {
         return new PixelRect(

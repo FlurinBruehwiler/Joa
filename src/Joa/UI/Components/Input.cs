@@ -5,13 +5,13 @@ namespace Joa.UI.Components;
 
 public class Input : Component
 {
-    [Extension] 
+    [Extension]
     public string Value { get; set; } = string.Empty;
 
-    [Extension] 
+    [Extension]
     public Action<Key, RawInputModifiers>? OnKeyDown { get; set; }
 
-    [Extension] 
+    [Extension]
     public Func<Key, RawInputModifiers, Task>? OnKeyDownAsync { get; set; }
 
     [Extension]
@@ -22,8 +22,8 @@ public class Input : Component
 
     [Extension]
     public bool AutoFocus { get; set; } = false;
-    
-    [Extension] 
+
+    [Extension]
     public float Size { get; set; } = 30;
 
     public override RenderObject Build()
@@ -56,7 +56,7 @@ public class Input : Component
     private async Task OnKeyDownInternal(Key key, RawInputModifiers modifiers)
     {
         var initialValue = Value;
-        
+
         if (key == Key.Back)
         {
             if (modifiers == RawInputModifiers.Control)
@@ -93,7 +93,7 @@ public class Input : Component
         {
             ContentChanged();
         }
-        
+
         OnKeyDown?.Invoke(key, modifiers);
     }
 }

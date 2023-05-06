@@ -102,7 +102,7 @@ public class RenderObjectGenerator : ISourceGenerator
     private string GetExtensionMethods(List<IPropertySymbol> extensions, string newTypeName)
     {
         var output = string.Empty;
-        
+
         foreach (var property in extensions)
         {
             output += $$""" 
@@ -123,7 +123,7 @@ public class RenderObjectGenerator : ISourceGenerator
         var updates = new List<IPropertySymbol>();
         updates.AddRange(parameters);
         updates.AddRange(extensions);
-        
+
         return string.Join("\n",
             updates.Select(x => $$"""
             if(_{{x.Name.ToLowerInvariant()}} != default)
@@ -148,7 +148,7 @@ public class RenderObjectGenerator : ISourceGenerator
 
         fields += string.Join("\n",
             extensions.Select(x => $"private {x.Type.ToDisplayString()} _{x.Name.ToLowerInvariant()};"));
-        
+
         return fields;
     }
 
@@ -172,7 +172,7 @@ public class RenderObjectGenerator : ISourceGenerator
         return type.GetMembers().Where(x => HasAttributeOfType(x, parameterAttributeType)).Select(x => (IPropertySymbol)x)
             .ToList();
     }
-    
+
     private static List<IPropertySymbol> GetExtensions(ITypeSymbol type, INamedTypeSymbol extensionAttributeType)
     {
         return type.GetMembers().Where(x => HasAttributeOfType(x, extensionAttributeType)).Select(x => (IPropertySymbol)x)

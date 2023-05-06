@@ -76,7 +76,7 @@ public class SettingsManager
         }
         catch (Exception e)
         {
-            _logger.LogError(e,"There was an exception thrown while Saving the Settings");
+            _logger.LogError(e, "There was an exception thrown while Saving the Settings");
         }
         finally
         {

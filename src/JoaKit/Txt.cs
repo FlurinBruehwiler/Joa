@@ -11,7 +11,7 @@ public class Txt : RenderObject
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public float PSize { get; set; } = 15;
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public ColorDefinition PColor { get; set; } = new(255, 255, 255);
 
@@ -45,7 +45,7 @@ public class Txt : RenderObject
         PColor = new ColorDefinition(red, green, blue, transparency);
         return this;
     }
-    
+
     public Txt Color(ColorDefinition color)
     {
         PColor = color;
@@ -85,7 +85,7 @@ public class Txt : RenderObject
         path.GetBounds(out var rect);
 
         paint.GetFontMetrics(out var metrics);
-        
+
         var actualX = PComputedX;
         var actualY = PComputedY;
 

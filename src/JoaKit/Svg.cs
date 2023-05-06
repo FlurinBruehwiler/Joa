@@ -14,7 +14,7 @@ public class Svg : RenderObject
     public Svg(string src, [CallerLineNumber] int lineNumer = -1, [CallerFilePath] string filePath = "")
     {
         src = "Assets/" + src;
-        
+
         PLineNumber = lineNumer;
         PFilePath = filePath;
         PSrc = src;
@@ -36,12 +36,12 @@ public class Svg : RenderObject
     public override void Render(SKCanvas canvas, RenderContext renderContext)
     {
         var svgSize = SSvgCache[PSrc].Picture.CullRect;
-        
+
         var availableRatio = PComputedWidth / PComputedHeight;
         var currentRatio = svgSize.Width / svgSize.Height;
 
         float factor;
-        
+
         if (availableRatio > currentRatio) //Height is the limiting factor
         {
             factor = PComputedHeight / svgSize.Height;
@@ -50,12 +50,12 @@ public class Svg : RenderObject
         {
             factor = PComputedWidth / svgSize.Width;
         }
-        
+
         var matrix = SKMatrix.CreateScale(factor, factor);
 
         matrix.TransX = PComputedX;
         matrix.TransY = PComputedY;
-        
+
         canvas.DrawPicture(SSvgCache[PSrc].Picture, ref matrix);
     }
 

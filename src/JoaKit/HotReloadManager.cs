@@ -17,7 +17,7 @@ public static class HotReloadManager
     {
         foreach (var manager in JoaKitApp.WindowManagers)
         {
-            manager.Builder.ShouldRebuild();
+            manager.Builder.ShouldRebuild(manager.RootComponent);
         }
 
         Console.WriteLine("HotReloadManager.UpdateApplication");

@@ -16,7 +16,7 @@ public class WindowManager
     private SKSurface? _surface;
     public SKCanvas? Canvas { get; set; }
     public CancellationToken CancellationToken { get; }
-    
+
     public WindowManager(JoaKitApp joaKitApp, IWindowImpl window, Type rootType, CancellationTokenSource cancellationTokenSource)
     {
         CancellationToken = cancellationTokenSource.Token;
@@ -28,9 +28,9 @@ public class WindowManager
 
         RootComponent = (Component)ActivatorUtilities.CreateInstance(JoaKitApp.Services, rootType);
         RootComponent.Builder = Builder;
-        
+
         joaKitApp.CurrentlyBuildingWindow = null;
-        
+
         window.Closed = cancellationTokenSource.Cancel;
 
         window.Resized = (_, _) =>
@@ -42,15 +42,15 @@ public class WindowManager
         window.Input = Builder.InputManager.Input;
 
         window.Paint = DoPaint;
-        
-        Builder.ShouldRebuild();
+
+        Builder.ShouldRebuild(RootComponent);
     }
 
     public void DoPaint(Rect bounds)
     {
         if (Builder.IsBuilding)
             return;
-        
+
         var skiaFramebuffer = Window.Surfaces.OfType<IFramebufferPlatformSurface>().First();
 
         using var framebuffer = skiaFramebuffer.Lock();

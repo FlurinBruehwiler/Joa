@@ -19,19 +19,19 @@ public class InputManager
 
     public void Input(RawInputEventArgs args)
     {
-        var callbackWasCalled = false;
+        var objectsWhichReceivedACallback = new HashSet<RenderObject>();
 
         if (args is RawKeyEventArgs { Type: RawKeyEventType.KeyDown } keyEventArgs)
         {
             if (keyEventArgs.Key == Key.F5)
             {
-                _builder.ShouldRebuild();
+                _builder.ShouldRebuild(_windowManager.RootComponent);
             }
-            
+
             if (ActiveDiv?.POnKeyDown is not null)
             {
                 ActiveDiv.POnKeyDown(keyEventArgs.Key, keyEventArgs.Modifiers);
-                callbackWasCalled = true;
+                objectsWhichReceivedACallback.Add(ActiveDiv);
             }
 
             if (ActiveDiv?.POnKeyDownAsync is not null)
@@ -50,7 +50,7 @@ public class InputManager
                         Debugger.Break();
                     }
 
-                    _builder.ShouldRebuild();
+                    _builder.ShouldRebuild(GetContainingComponent(ActiveDiv));
                 });
             }
         }
@@ -59,7 +59,7 @@ public class InputManager
             if (ActiveDiv?.POnTextInput is not null)
             {
                 ActiveDiv.POnTextInput(rawInputEventArgs.Text, rawInputEventArgs.Modifiers);
-                callbackWasCalled = true;
+                objectsWhichReceivedACallback.Add(ActiveDiv);
             }
         }
         if (args is RawPointerEventArgs pointer)
@@ -77,7 +77,7 @@ public class InputManager
                 if (ActiveDiv?.POnInactive is not null)
                 {
                     ActiveDiv.POnInactive();
-                    callbackWasCalled = true;
+                    objectsWhichReceivedACallback.Add(ActiveDiv);
                 }
 
                 ActiveDiv = div;
@@ -85,27 +85,40 @@ public class InputManager
                 if (div.POnActive is not null)
                 {
                     div.POnActive();
-                    callbackWasCalled = true;
+                    objectsWhichReceivedACallback.Add(div);
                 }
 
                 if (div.POnClick is not null)
                 {
                     div.POnClick();
-                    callbackWasCalled = true;
+                    objectsWhichReceivedACallback.Add(div);
                 }
 
                 if (div.POnClickAsync is not null)
                 {
                     div.POnClickAsync();
-                    callbackWasCalled = true;
+                    objectsWhichReceivedACallback.Add(div);
                 }
             }
         }
 
-        if (callbackWasCalled)
+
+        foreach (var renderObject in objectsWhichReceivedACallback)
         {
-            _builder.ShouldRebuild();
+            _builder.ShouldRebuild(GetContainingComponent(renderObject));
         }
+    }
+
+    private Component GetContainingComponent(RenderObject renderObject)
+    {
+        var current = renderObject;
+
+        while (current is not CustomRenderObject)
+        {
+            current = current.Parent;
+        }
+
+        return ((CustomRenderObject)current).Component;
     }
 
     private static Div? HitTest(Div div, int x, int y)
@@ -120,14 +133,14 @@ public class InputManager
             foreach (var child in div.Children)
             {
                 var actualChild = child;
-                
+
                 if (child is CustomRenderObject customRenderObject)
                 {
                     actualChild = customRenderObject.RenderObject;
                 }
 
                 if (actualChild is not Div divChild) continue;
-                
+
                 var childHit = HitTest(divChild, x, y);
                 if (childHit is not null)
                     return childHit;

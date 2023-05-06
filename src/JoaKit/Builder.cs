@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
 using Modern.WindowKit;
 using Modern.WindowKit.Platform;
 using Modern.WindowKit.Threading;
@@ -11,9 +12,8 @@ public class Builder
     private readonly WindowManager _windowManager;
     private readonly IWindowImpl _window;
     private readonly LayoutEngine _layoutEngine;
-    private readonly BuildContext _buildContext;
     public InputManager InputManager { get; }
-    private bool _shouldRebuild;
+    private List<Component> _componentsToBuld;
     public bool IsBuilding { get; private set; }
 
     public Builder(WindowManager windowManager, IWindowImpl window)
@@ -21,13 +21,74 @@ public class Builder
         _windowManager = windowManager;
         _window = window;
         _layoutEngine = new LayoutEngine(window);
-        _buildContext = new BuildContext(_windowManager.JoaKitApp.Services);
         InputManager = new InputManager(this, windowManager);
-        
+
         Task.Run(BuildLoop);
     }
-    
-    public void ShouldRebuild() => _shouldRebuild = true;
+
+    public Component GetComponent(Type componentType)
+    {
+        var component = (Component)ActivatorUtilities.CreateInstance(_windowManager.JoaKitApp.Services, componentType);
+        component.Builder = this;
+
+        return component;
+    }
+
+    public void ShouldRebuild(Component component) => _componentsToBuld.Add(component);
+
+    private Component GetSharedRoot()
+    {
+        if (_componentsToBuld.Count == 1)
+            return _componentsToBuld.First();
+
+        var parents = GetParents(_componentsToBuld.First());
+        var lastIntersection = 0;
+
+        for (var i = 1; i < _componentsToBuld.Count; i++)
+        {
+            var component = _componentsToBuld[i];
+            var currentIntersection = GetIntersection(parents, component);
+
+            if (currentIntersection > lastIntersection)
+                lastIntersection = currentIntersection;
+        }
+
+        return parents[lastIntersection];
+    }
+
+    private int GetIntersection(List<Component> parents, Component component)
+    {
+        var current = component;
+
+        while (true)
+        {
+            if (parents.Contains(current))
+                return parents.IndexOf(current);
+
+            current = current.Parent ?? throw new Exception();
+        }
+    }
+
+    private List<Component> GetParents(Component component)
+    {
+        var parents = new List<Component>();
+
+        var current = component;
+        parents.Add(current);
+
+        while (true)
+        {
+            if (current.Parent is null)
+            {
+                break;
+            }
+
+            parents.Add(current.Parent);
+            current = current.Parent;
+        }
+
+        return parents;
+    }
 
     private async Task BuildLoop()
     {
@@ -37,17 +98,21 @@ public class Builder
             {
                 var buildStartTime = Stopwatch.GetTimestamp();
 
-                if (_shouldRebuild)
+                if (_componentsToBuld.Count != 0)
                 {
-                    _shouldRebuild = false;
                     IsBuilding = true;
-                
-                    Build(_windowManager.RootComponent);
+
+                    var componentToBuld = GetSharedRoot();
+
+                    Build(componentToBuld);
+
                     IsBuilding = false;
+
+                    _componentsToBuld.Clear();
 
                     await Dispatcher.UIThread.InvokeAsync(() => _windowManager.DoPaint(new Rect()));
                 }
-            
+
                 var totalBuildTime = Stopwatch.GetElapsedTime(buildStartTime).TotalMilliseconds;
                 const int frameTime = 1000 / 60;
 
@@ -82,51 +147,117 @@ public class Builder
 
     private Div? _clickedElement;
 
-
-    private void Build(Component rootComponent)
+    private void Build(Component componentToBuild)
     {
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
-        
-        Root = rootComponent.Build();
-        BuildTree(Root, _buildContext);
+
+        var previousRenderObject = componentToBuild.RenderObject;
+
+        var newRenderObject = componentToBuild.Build();
+        componentToBuild.RenderObject = newRenderObject;
+
+        AttachNewRenderObject(previousRenderObject, newRenderObject);
+
+        BuildTree(previousRenderObject, newRenderObject);
 
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = null;
     }
 
-    private void BuildTree(RenderObject renderObject, BuildContext buildContext)
+    private void BuildTree(RenderObject oldRenderObject, RenderObject newRenderObject)
     {
-        while (true)
+        if (oldRenderObject is Div previousDiv && newRenderObject is Div newDiv)
         {
-            switch (renderObject)
+            BuildTreeDiv(previousDiv, newDiv);
+        }
+    }
+
+    private void BuildTreeDiv(Div previousDiv, Div newDiv)
+    {
+        var previousRenderObject = new Dictionary<ComponentHash, RenderObject>();
+
+        foreach (var renderObject in previousDiv)
+        {
+            if (renderObject is CustomRenderObject or Div)
             {
-                case CustomRenderObject customRenderObject:
-                    {
-                        var componentHash = customRenderObject.GetComponentHash();
-                        var component = buildContext.GetComponent(componentHash, customRenderObject.ComponentType, this);
-                        var childRenderObject = customRenderObject.Build(component);
-                        renderObject = childRenderObject;
-                        continue;
-                    }
-                case Div div:
-                    {
-                        if (div.PAutoFocus)
-                        {
-                            InputManager.ActiveDiv = div;
-                        }
-                        
-                        if(div.Children is null)
-                            break;
-                        
-                        foreach (var divChild in div.Children)
-                        {
-                            BuildTree(divChild, buildContext);
-                        }
-
-                        break;
-                    }
+                previousRenderObject.Add(renderObject.GetComponentHash(), renderObject);
             }
+        }
 
-            break;
+        foreach (var renderObject in newDiv)
+        {
+            if (renderObject is CustomRenderObject customRenderObject)
+            {
+                if (previousRenderObject.TryGetValue(customRenderObject.GetComponentHash(),
+                        out var previousCustomRenderObject))
+                {
+                    var newRenderObject =
+                        customRenderObject.Build(((CustomRenderObject)previousCustomRenderObject).Component);
+                    customRenderObject.RenderObject = newRenderObject;
+                }
+                else
+                {
+                    BuildNewCustomRenderObject(customRenderObject);
+                }
+            }
+            else if (renderObject is Div div)
+            {
+                if (previousRenderObject.TryGetValue(div.GetComponentHash(), out var previousDivChild))
+                {
+                    BuildTreeDiv((Div)previousDivChild, div);
+                }
+                else
+                {
+                    BuildNewDiv(div);
+                }
+            }
+        }
+    }
+
+    private void BuildNewDiv(Div div)
+    {
+        foreach (var renderObject in div)
+        {
+            BuildNewRenderObject(renderObject);
+        }
+    }
+
+    private void BuildNewCustomRenderObject(CustomRenderObject customRenderObject)
+    {
+        var renderObject = customRenderObject.Build(GetComponent(customRenderObject.ComponentType));
+        customRenderObject.RenderObject = renderObject;
+
+        BuildNewRenderObject(renderObject);
+    }
+
+    private void BuildNewRenderObject(RenderObject renderObject)
+    {
+        if (renderObject is CustomRenderObject customRenderObject)
+        {
+            BuildNewCustomRenderObject(customRenderObject);
+        }
+        else if (renderObject is Div childDiv)
+        {
+            BuildNewDiv(childDiv);
+        }
+    }
+
+    private void AttachNewRenderObject(RenderObject previousRenderObject, RenderObject newRenderObject)
+    {
+        var parent = previousRenderObject.Parent;
+
+        switch (parent)
+        {
+            case Div div:
+                {
+                    var index = div.Children!.IndexOf(previousRenderObject);
+                    div.Children[index] = newRenderObject;
+                    break;
+                }
+            case CustomRenderObject customRenderObject:
+                customRenderObject.RenderObject = newRenderObject;
+                break;
+            default:
+                throw new UnreachableException();
         }
     }
 
@@ -134,7 +265,7 @@ public class Builder
     {
         if (Root is null)
             return;
-        
+
         var wrapper = new Div
         {
             Root

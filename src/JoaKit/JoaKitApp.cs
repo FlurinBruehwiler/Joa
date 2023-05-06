@@ -54,7 +54,7 @@ public class JoaKitApp
     public void Run()
     {
         JoaSynchronizationContext.Install();
-        
+
         AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
         {
             File.WriteAllText("crash.log", args.ExceptionObject.ToString());

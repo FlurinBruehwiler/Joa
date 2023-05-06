@@ -136,7 +136,7 @@ public class SearchBar : Component
                 _searchResults.Clear();
                 SearchResultsHaveChanged();
             }
-        }   
+        }
     }
 
     private void TextChanged()

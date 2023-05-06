@@ -13,7 +13,7 @@ public class ClipboardHelper : IClipboardHelper
     {
         _logger = logger;
     }
-    
+
     public void Copy(string text)
     {
         if (!External.OpenClipboard(nint.Zero))

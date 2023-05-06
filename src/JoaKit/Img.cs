@@ -23,7 +23,7 @@ public class Img : RenderObject
         if (!ImgCache.TryGetValue(PSrc, out var img))
         {
             img = SKBitmap.Decode(PSrc);
-            
+
             ImgCache.Add(PSrc, img);
         }
 
@@ -39,8 +39,8 @@ public class Img : RenderObject
     {
         if (!_isValid)
             return;
-        
-        canvas.DrawBitmap(ImgCache[PSrc] ,new SKRect(PComputedX, PComputedY,   PComputedX + PComputedWidth, PComputedY + PComputedHeight));
+
+        canvas.DrawBitmap(ImgCache[PSrc], new SKRect(PComputedX, PComputedY, PComputedX + PComputedWidth, PComputedY + PComputedHeight));
     }
 
     private static readonly Dictionary<string, SKBitmap> ImgCache = new();

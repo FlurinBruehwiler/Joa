@@ -13,12 +13,13 @@ public abstract class CustomRenderObject : RenderObject
         }
         else
         {
-            
+
         }
     }
 
-    
+
     public abstract RenderObject Build(Component component);
     public RenderObject? RenderObject { get; set; }
     public Type ComponentType { get; set; }
+    public Component Component { get; set; }
 }
