@@ -101,17 +101,13 @@ public class Builder
 
                 if (_componentsToBuld.Count != 0)
                 {
-                    IsBuilding = true;
-
-                    var componentToBuld = GetSharedRoot();
-
-                    Build(componentToBuld);
-
-                    IsBuilding = false;
-
-                    _componentsToBuld.Clear();
-
-                    await Dispatcher.UIThread.InvokeAsync(() => _windowManager.DoPaint(new Rect()));
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        var componentToBuld = GetSharedRoot();
+                        Build(componentToBuld);
+                        _componentsToBuld.Clear();
+                        _windowManager.DoPaint(new Rect());
+                    });
                 }
 
                 var totalBuildTime = Stopwatch.GetElapsedTime(buildStartTime).TotalMilliseconds;

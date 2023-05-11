@@ -83,7 +83,7 @@ public class RenderObjectGenerator : ISourceGenerator
             
                     public override RenderObject Build(Component component)
                     {
-                        {{GetParameterUpdateCalls(parameters, extensions, type.ToDisplayString())}}
+            {{GetParameterUpdateCalls(parameters, extensions, type.ToDisplayString())}}
 
                         RenderObject = component.Build();
                         PWidth = RenderObject.PWidth;
@@ -91,7 +91,7 @@ public class RenderObjectGenerator : ISourceGenerator
                         return RenderObject;
                     }
 
-                    {{GetExtensionMethods(extensions, newTypeName)}}
+            {{GetExtensionMethods(extensions, newTypeName)}}
 
                     public {{newTypeName}} Key(string key)
                     {
@@ -115,11 +115,13 @@ public class RenderObjectGenerator : ISourceGenerator
             var name = property.Name.ToLowerInvariant();
             
             output += $$""" 
-            public {{newTypeName}} {{property.Name}}({{property.Type.ToDisplayString()}} {{name}})
-            {
-                {{GetExtensionsBody(property, name)}}
-                return this;
-            }
+                    public {{newTypeName}} {{property.Name}}({{property.Type.ToDisplayString()}} {{name}})
+                    {
+            {{GetExtensionsBody(property, name)}}
+                        return this;
+                    }
+
+
             """;
         }
 
@@ -145,16 +147,16 @@ public class RenderObjectGenerator : ISourceGenerator
             return GetFuncBody(propertyType, name);
         }
         
-        return $"_{property.Name.ToLowerInvariant()} = {property.Name.ToLowerInvariant()};";
+        return $"           _{property.Name.ToLowerInvariant()} = {property.Name.ToLowerInvariant()};";
     }
 
     private string GetActionBody(string name)
     {
         return $$""" 
-        _{{name}} = () => {
-            Component.Parent.StateHasChanged();
-            {{name}}();
-        };
+                    _{{name}} = () => {
+                        Component.Parent.StateHasChanged();
+                        {{name}}();
+                    };
         """;
     }
 
@@ -171,10 +173,10 @@ public class RenderObjectGenerator : ISourceGenerator
         var callBackCallParametersString = string.Join(", ", parameters.Select(x => x.Value));
         
         return $$""" 
-        _{{name}} = ({{parametersString}}) => {
-            Component.Parent.StateHasChanged();
-            {{name}}({{callBackCallParametersString}});
-        };
+                    _{{name}} = ({{parametersString}}) => {
+                        Component.Parent.StateHasChanged();
+                        {{name}}({{callBackCallParametersString}});
+                    };
         """;
     }
 
@@ -182,20 +184,20 @@ public class RenderObjectGenerator : ISourceGenerator
     {
         Dictionary<string, string> parameters = new();
 
-        for (var i = 0; i < type.TypeParameters.Length - 1; i++)
+        for (var i = 0; i < type.TypeArguments.Length - 1; i++)
         {
-            var parameter = type.TypeParameters[i];
-            parameters.Add(parameter.ToDisplayString(), Guid.NewGuid().ToString("N"));
+            var parameter = type.TypeArguments[i];
+            parameters.Add(parameter.ToDisplayString(), "n" + Guid.NewGuid().ToString("N"));
         }
 
         var parametersString = string.Join(", ", parameters.Select(x => $"{x.Key} {x.Value}"));
         var callBackCallParametersString = string.Join(", ", parameters.Select(x => x.Value));
         
         return $$""" 
-        _{{name}} = ({{parametersString}}) => {
-            Component.Parent.StateHasChanged();
-            return {{name}}({{callBackCallParametersString}});
-        };
+                    _{{name}} = ({{parametersString}}) => {
+                        Component.Parent.StateHasChanged();
+                        return {{name}}({{callBackCallParametersString}});
+                    };
         """;
     }
     
@@ -204,9 +206,7 @@ public class RenderObjectGenerator : ISourceGenerator
         if (!typeSymbol.IsGenericType)
             return false;
 
-        var genericType = typeSymbol.OriginalDefinition;
-
-        return SymbolEqualityComparer.Default.Equals(genericType, _funcType);
+        return typeSymbol.Name == "Func" && typeSymbol.ContainingNamespace.ToString() == "System";
     }
 
     private bool IsAction(INamedTypeSymbol typeSymbol)
@@ -219,9 +219,7 @@ public class RenderObjectGenerator : ISourceGenerator
         if (!typeSymbol.IsGenericType)
             return false;
 
-        var genericType = typeSymbol.OriginalDefinition;
-
-        return SymbolEqualityComparer.Default.Equals(genericType, _genericActionType);
+        return typeSymbol.Name == "Action" && typeSymbol.ContainingNamespace.ToString() == "System";
     }
 
 
@@ -232,12 +230,12 @@ public class RenderObjectGenerator : ISourceGenerator
         updates.AddRange(parameters);
         updates.AddRange(extensions);
 
-        return string.Join("\n",
+        return string.Join("\n\n",
             updates.Select(x => $$"""
-            if(_{{x.Name.ToLowerInvariant()}} != default)
-            {
-                (({{typeName}})component).{{x.Name}} = _{{x.Name.ToLowerInvariant()}};        
-            }
+                        if(_{{x.Name.ToLowerInvariant()}} != default)
+                        {
+                            (({{typeName}})component).{{x.Name}} = _{{x.Name.ToLowerInvariant()}};        
+                        }
             """));
     }
 
@@ -250,12 +248,12 @@ public class RenderObjectGenerator : ISourceGenerator
     private static string GetFields(List<IPropertySymbol> parameters, List<IPropertySymbol> extensions)
     {
         var fields = string.Join("\n",
-            parameters.Select(x => $"private readonly {x.Type.ToDisplayString()} _{x.Name.ToLowerInvariant()};"));
+            parameters.Select(x => $"        private readonly {x.Type.ToDisplayString()} _{x.Name.ToLowerInvariant()};"));
 
         fields += "\n";
 
         fields += string.Join("\n",
-            extensions.Select(x => $"private {x.Type.ToDisplayString()} _{x.Name.ToLowerInvariant()};"));
+            extensions.Select(x => $"        private {x.Type.ToDisplayString()} _{x.Name.ToLowerInvariant()};"));
 
         return fields;
     }
