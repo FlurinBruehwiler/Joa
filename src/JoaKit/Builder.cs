@@ -13,7 +13,7 @@ public class Builder
     private readonly IWindowImpl _window;
     private readonly LayoutEngine _layoutEngine;
     public InputManager InputManager { get; }
-    private List<Component> _componentsToBuld;
+    private readonly List<Component> _componentsToBuld = new();
     public bool IsBuilding { get; private set; }
 
     public Builder(WindowManager windowManager, IWindowImpl window)
@@ -26,10 +26,11 @@ public class Builder
         Task.Run(BuildLoop);
     }
 
-    public Component GetComponent(Type componentType)
+    private Component GetComponent(Type componentType, Component parent)
     {
         var component = (Component)ActivatorUtilities.CreateInstance(_windowManager.JoaKitApp.Services, componentType);
         component.Builder = this;
+        component.Parent = parent;
 
         return component;
     }
@@ -151,27 +152,37 @@ public class Builder
     {
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
 
-        var previousRenderObject = componentToBuild.RenderObject;
+        if (Root is null)
+        {
+            var renderObject = componentToBuild.Build();
+            componentToBuild.RenderObject = renderObject;
+            Root = renderObject;
+            BuildNewRenderObject(renderObject, componentToBuild);   
+        }
+        else
+        {
+            var previousRenderObject = componentToBuild.RenderObject;
 
-        var newRenderObject = componentToBuild.Build();
-        componentToBuild.RenderObject = newRenderObject;
+            var newRenderObject = componentToBuild.Build();
+            componentToBuild.RenderObject = newRenderObject;
 
-        AttachNewRenderObject(previousRenderObject, newRenderObject);
+            AttachNewRenderObject(previousRenderObject, newRenderObject);
 
-        BuildTree(previousRenderObject, newRenderObject);
+            BuildTree(previousRenderObject, newRenderObject, componentToBuild);
+        }
 
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = null;
     }
 
-    private void BuildTree(RenderObject oldRenderObject, RenderObject newRenderObject)
+    private void BuildTree(RenderObject oldRenderObject, RenderObject newRenderObject, Component parent)
     {
         if (oldRenderObject is Div previousDiv && newRenderObject is Div newDiv)
         {
-            BuildTreeDiv(previousDiv, newDiv);
+            BuildTreeDiv(previousDiv, newDiv, parent);
         }
     }
 
-    private void BuildTreeDiv(Div previousDiv, Div newDiv)
+    private void BuildTreeDiv(Div previousDiv, Div newDiv, Component parent)
     {
         var previousRenderObject = new Dictionary<ComponentHash, RenderObject>();
 
@@ -185,6 +196,8 @@ public class Builder
 
         foreach (var renderObject in newDiv)
         {
+            renderObject.Parent = newDiv;
+            
             if (renderObject is CustomRenderObject customRenderObject)
             {
                 if (previousRenderObject.TryGetValue(customRenderObject.GetComponentHash(),
@@ -196,48 +209,51 @@ public class Builder
                 }
                 else
                 {
-                    BuildNewCustomRenderObject(customRenderObject);
+                    BuildNewCustomRenderObject(customRenderObject, parent);
                 }
             }
             else if (renderObject is Div div)
             {
                 if (previousRenderObject.TryGetValue(div.GetComponentHash(), out var previousDivChild))
                 {
-                    BuildTreeDiv((Div)previousDivChild, div);
+                    BuildTreeDiv((Div)previousDivChild, div, parent);
                 }
                 else
                 {
-                    BuildNewDiv(div);
+                    BuildNewDiv(div, parent);
                 }
             }
         }
     }
 
-    private void BuildNewDiv(Div div)
+    private void BuildNewDiv(Div div, Component parent)
     {
         foreach (var renderObject in div)
         {
-            BuildNewRenderObject(renderObject);
+            renderObject.Parent = div;
+            BuildNewRenderObject(renderObject, parent);
         }
     }
 
-    private void BuildNewCustomRenderObject(CustomRenderObject customRenderObject)
+    private void BuildNewCustomRenderObject(CustomRenderObject customRenderObject, Component parent)
     {
-        var renderObject = customRenderObject.Build(GetComponent(customRenderObject.ComponentType));
+        var newComponent = GetComponent(customRenderObject.ComponentType, parent);
+        var renderObject = customRenderObject.Build(newComponent);
         customRenderObject.RenderObject = renderObject;
-
-        BuildNewRenderObject(renderObject);
+        renderObject.Parent = customRenderObject;
+        
+        BuildNewRenderObject(renderObject, newComponent);
     }
 
-    private void BuildNewRenderObject(RenderObject renderObject)
+    private void BuildNewRenderObject(RenderObject renderObject, Component parent)
     {
         if (renderObject is CustomRenderObject customRenderObject)
         {
-            BuildNewCustomRenderObject(customRenderObject);
+            BuildNewCustomRenderObject(customRenderObject, parent);
         }
         else if (renderObject is Div childDiv)
         {
-            BuildNewDiv(childDiv);
+            BuildNewDiv(childDiv, parent);
         }
     }
 
@@ -251,10 +267,12 @@ public class Builder
                 {
                     var index = div.Children!.IndexOf(previousRenderObject);
                     div.Children[index] = newRenderObject;
+                    newRenderObject.Parent = div;
                     break;
                 }
             case CustomRenderObject customRenderObject:
                 customRenderObject.RenderObject = newRenderObject;
+                newRenderObject.Parent = customRenderObject;
                 break;
             default:
                 throw new UnreachableException();

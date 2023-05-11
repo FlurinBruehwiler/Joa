@@ -8,6 +8,10 @@ namespace JoaKitSourceGenerators;
 [Generator]
 public class RenderObjectGenerator : ISourceGenerator
 {
+    private INamedTypeSymbol? _funcType;
+    private INamedTypeSymbol? _genericActionType;
+    private INamedTypeSymbol? _actionType;
+
     public void Initialize(GeneratorInitializationContext context)
     {
         context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
@@ -21,6 +25,9 @@ public class RenderObjectGenerator : ISourceGenerator
         var parameterAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ParameterAttribute");
         var extensionAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ExtensionAttribute");
         var componentInterface = context.Compilation.GetTypeByMetadataName("JoaKit.Component");
+        _funcType = context.Compilation.GetTypeByMetadataName(typeof(Func<>).FullName);
+        _genericActionType = context.Compilation.GetTypeByMetadataName(typeof(Action<>).FullName);
+        _actionType = context.Compilation.GetTypeByMetadataName(typeof(Action).FullName);
 
         if (parameterAttributeType is null)
             throw new Exception("JoaKit.ParameterAttribute not found");
@@ -85,7 +92,7 @@ public class RenderObjectGenerator : ISourceGenerator
                     }
 
                     {{GetExtensionMethods(extensions, newTypeName)}}
-                        
+
                     public {{newTypeName}} Key(string key)
                     {
                         PKey = key;
@@ -105,10 +112,12 @@ public class RenderObjectGenerator : ISourceGenerator
 
         foreach (var property in extensions)
         {
+            var name = property.Name.ToLowerInvariant();
+            
             output += $$""" 
-            public {{newTypeName}} {{property.Name}}({{property.Type.ToDisplayString()}} {{property.Name.ToLowerInvariant()}})
+            public {{newTypeName}} {{property.Name}}({{property.Type.ToDisplayString()}} {{name}})
             {
-                _{{property.Name.ToLowerInvariant()}} = {{property.Name.ToLowerInvariant()}};
+                {{GetExtensionsBody(property, name)}}
                 return this;
             }
             """;
@@ -116,6 +125,105 @@ public class RenderObjectGenerator : ISourceGenerator
 
         return output;
     }
+
+    private string GetExtensionsBody(IPropertySymbol property, string name)
+    {
+        var propertyType = (INamedTypeSymbol)property.Type;
+        
+        if (IsAction(propertyType))
+        {
+            return GetActionBody(name);
+        }
+
+        if (IsGenericAction(propertyType))
+        {
+            return GetGenericActionBody(propertyType, name);
+        }
+
+        if (IsFunc(propertyType))
+        {
+            return GetFuncBody(propertyType, name);
+        }
+        
+        return $"_{property.Name.ToLowerInvariant()} = {property.Name.ToLowerInvariant()};";
+    }
+
+    private string GetActionBody(string name)
+    {
+        return $$""" 
+        _{{name}} = () => {
+            Component.Parent.StateHasChanged();
+            {{name}}();
+        };
+        """;
+    }
+
+    private string GetGenericActionBody(INamedTypeSymbol type, string name)
+    {
+        Dictionary<string, string> parameters = new();
+
+        foreach (var parameter in type.TypeArguments)
+        {
+            parameters.Add(parameter.ToDisplayString(), "n" + Guid.NewGuid().ToString("N"));
+        }
+
+        var parametersString = string.Join(", ", parameters.Select(x => $"{x.Key} {x.Value}"));
+        var callBackCallParametersString = string.Join(", ", parameters.Select(x => x.Value));
+        
+        return $$""" 
+        _{{name}} = ({{parametersString}}) => {
+            Component.Parent.StateHasChanged();
+            {{name}}({{callBackCallParametersString}});
+        };
+        """;
+    }
+
+    private string GetFuncBody(INamedTypeSymbol type, string name)
+    {
+        Dictionary<string, string> parameters = new();
+
+        for (var i = 0; i < type.TypeParameters.Length - 1; i++)
+        {
+            var parameter = type.TypeParameters[i];
+            parameters.Add(parameter.ToDisplayString(), Guid.NewGuid().ToString("N"));
+        }
+
+        var parametersString = string.Join(", ", parameters.Select(x => $"{x.Key} {x.Value}"));
+        var callBackCallParametersString = string.Join(", ", parameters.Select(x => x.Value));
+        
+        return $$""" 
+        _{{name}} = ({{parametersString}}) => {
+            Component.Parent.StateHasChanged();
+            return {{name}}({{callBackCallParametersString}});
+        };
+        """;
+    }
+    
+    private bool IsFunc(INamedTypeSymbol typeSymbol)
+    {
+        if (!typeSymbol.IsGenericType)
+            return false;
+
+        var genericType = typeSymbol.OriginalDefinition;
+
+        return SymbolEqualityComparer.Default.Equals(genericType, _funcType);
+    }
+
+    private bool IsAction(INamedTypeSymbol typeSymbol)
+    {
+        return SymbolEqualityComparer.Default.Equals(typeSymbol, _actionType);
+    }
+    
+    private bool IsGenericAction(INamedTypeSymbol typeSymbol)
+    {
+        if (!typeSymbol.IsGenericType)
+            return false;
+
+        var genericType = typeSymbol.OriginalDefinition;
+
+        return SymbolEqualityComparer.Default.Equals(genericType, _genericActionType);
+    }
+
 
     private static string GetParameterUpdateCalls(List<IPropertySymbol> parameters,
         List<IPropertySymbol> extensions, string typeName)
@@ -169,16 +277,18 @@ public class RenderObjectGenerator : ISourceGenerator
 
     private static List<IPropertySymbol> GetParameters(ITypeSymbol type, INamedTypeSymbol parameterAttributeType)
     {
-        return type.GetMembers().Where(x => HasAttributeOfType(x, parameterAttributeType)).Select(x => (IPropertySymbol)x)
+        return type.GetMembers().Where(x => HasAttributeOfType(x, parameterAttributeType))
+            .Select(x => (IPropertySymbol)x)
             .ToList();
     }
 
-    private static List<IPropertySymbol> GetExtensions(ITypeSymbol type, INamedTypeSymbol extensionAttributeType)
+    private List<IPropertySymbol> GetExtensions(ITypeSymbol type, INamedTypeSymbol extensionAttributeType)
     {
-        return type.GetMembers().Where(x => HasAttributeOfType(x, extensionAttributeType)).Select(x => (IPropertySymbol)x)
+        return type.GetMembers().Where(x => HasAttributeOfType(x, extensionAttributeType))
+            .Select(x => (IPropertySymbol)x)
             .ToList();
     }
-
+    
     private static bool HasAttributeOfType(ISymbol symbol, INamedTypeSymbol attributeType)
     {
         if (symbol.DeclaredAccessibility != Accessibility.Public)
