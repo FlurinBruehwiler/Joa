@@ -8,8 +8,6 @@ namespace JoaKitSourceGenerators;
 [Generator]
 public class RenderObjectGenerator : ISourceGenerator
 {
-    private INamedTypeSymbol? _funcType;
-    private INamedTypeSymbol? _genericActionType;
     private INamedTypeSymbol? _actionType;
 
     public void Initialize(GeneratorInitializationContext context)
@@ -25,8 +23,6 @@ public class RenderObjectGenerator : ISourceGenerator
         var parameterAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ParameterAttribute");
         var extensionAttributeType = context.Compilation.GetTypeByMetadataName("JoaKit.ExtensionAttribute");
         var componentInterface = context.Compilation.GetTypeByMetadataName("JoaKit.Component");
-        _funcType = context.Compilation.GetTypeByMetadataName(typeof(Func<>).FullName);
-        _genericActionType = context.Compilation.GetTypeByMetadataName(typeof(Action<>).FullName);
         _actionType = context.Compilation.GetTypeByMetadataName(typeof(Action).FullName);
 
         if (parameterAttributeType is null)

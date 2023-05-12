@@ -5,7 +5,7 @@ namespace JoaKit;
 
 public abstract class RenderObject
 {
-    public RenderObject Parent { get; set; }
+    public RenderObject? Parent { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public string PFilePath { get; set; } = string.Empty;

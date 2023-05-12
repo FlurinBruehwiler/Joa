@@ -14,7 +14,6 @@ public class Builder
     private readonly LayoutEngine _layoutEngine;
     public InputManager InputManager { get; }
     private readonly List<Component> _componentsToBuld = new();
-    public bool IsBuilding { get; private set; }
 
     public Builder(WindowManager windowManager, IWindowImpl window)
     {
@@ -37,17 +36,17 @@ public class Builder
 
     public void ShouldRebuild(Component component) => _componentsToBuld.Add(component);
 
-    private Component GetSharedRoot()
+    private Component GetSharedRoot(List<Component> components)
     {
-        if (_componentsToBuld.Count == 1)
-            return _componentsToBuld.First();
+        if (components.Count == 1)
+            return components.First();
 
-        var parents = GetParents(_componentsToBuld.First());
+        var parents = GetParents(components.First());
         var lastIntersection = 0;
 
-        for (var i = 1; i < _componentsToBuld.Count; i++)
+        for (var i = 1; i < components.Count; i++)
         {
-            var component = _componentsToBuld[i];
+            var component = components[i];
             var currentIntersection = GetIntersection(parents, component);
 
             if (currentIntersection > lastIntersection)
@@ -101,11 +100,12 @@ public class Builder
 
                 if (_componentsToBuld.Count != 0)
                 {
+                    var copy = new List<Component>(_componentsToBuld);
+                    _componentsToBuld.Clear();
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        var componentToBuld = GetSharedRoot();
+                        var componentToBuld = GetSharedRoot(copy);
                         Build(componentToBuld);
-                        _componentsToBuld.Clear();
                         _windowManager.DoPaint(new Rect());
                     });
                 }
@@ -140,7 +140,7 @@ public class Builder
     }
 
 
-    public RenderObject Root = null!;
+    public RenderObject? Root;
 
     private Div? _clickedElement;
 
@@ -159,6 +159,11 @@ public class Builder
         {
             var previousRenderObject = componentToBuild.RenderObject;
 
+            if (previousRenderObject is null)
+            {
+                Debugger.Break();
+            }
+            
             var newRenderObject = componentToBuild.Build();
             componentToBuild.RenderObject = newRenderObject;
 
@@ -199,9 +204,11 @@ public class Builder
                 if (previousRenderObject.TryGetValue(customRenderObject.GetComponentHash(),
                         out var previousCustomRenderObject))
                 {
-                    var newRenderObject =
-                        customRenderObject.Build(((CustomRenderObject)previousCustomRenderObject).Component);
+                    var component = ((CustomRenderObject)previousCustomRenderObject).Component;
+                    var newRenderObject = 
+                        customRenderObject.Build(component);
                     customRenderObject.RenderObject = newRenderObject;
+                    customRenderObject.Component = component;
                 }
                 else
                 {
@@ -236,6 +243,8 @@ public class Builder
         var newComponent = GetComponent(customRenderObject.ComponentType, parent);
         var renderObject = customRenderObject.Build(newComponent);
         customRenderObject.RenderObject = renderObject;
+        customRenderObject.Component = newComponent;
+        newComponent.RenderObject = renderObject;
         renderObject.Parent = customRenderObject;
         
         BuildNewRenderObject(renderObject, newComponent);
@@ -257,6 +266,12 @@ public class Builder
     {
         var parent = previousRenderObject.Parent;
 
+        if (parent is null)
+        {
+            Root = newRenderObject;
+            return;            
+        }
+        
         switch (parent)
         {
             case Div div:

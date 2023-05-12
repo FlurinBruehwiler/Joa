@@ -48,9 +48,6 @@ public class WindowManager
 
     public void DoPaint(Rect bounds)
     {
-        if (Builder.IsBuilding)
-            return;
-
         var skiaFramebuffer = Window.Surfaces.OfType<IFramebufferPlatformSurface>().First();
 
         using var framebuffer = skiaFramebuffer.Lock();
