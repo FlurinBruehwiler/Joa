@@ -10,7 +10,7 @@ using Modern.WindowKit.Input;
 using Modern.WindowKit.Platform;
 using Key = Modern.WindowKit.Input.Key;
 
-namespace Joa.UI;
+namespace Joa.UI.Search;
 
 public class SearchBar : Component
 {
@@ -19,13 +19,13 @@ public class SearchBar : Component
     private List<PluginSearchResult> _searchResults = new();
     private int _selectedResult;
     private Stack<Step> _steps = new();
-    private readonly Search _search;
+    private readonly Joa.Search _search;
     public const int SearchBoxHeight = 60;
     private const int StepsHeight = 30;
     private const int SearchResultHeight = 60;
     public const int Width = 600;
 
-    public SearchBar(IWindowImpl window, GlobalHotKey globalHotKey, Search search, PluginManager pluginManager)
+    public SearchBar(IWindowImpl window, GlobalHotKey globalHotKey, Joa.Search search, PluginManager pluginManager)
     {
         _window = window;
         _search = search;

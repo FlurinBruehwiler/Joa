@@ -10,8 +10,45 @@ public class InputManager
 {
     private readonly Builder _builder;
     private readonly WindowManager _windowManager;
-    public Div? ActiveDiv { get; set; }
-    public Div? HoveredDiv { get; set; }
+    private Div? _activeDiv;
+    private Div? _hoveredDiv;
+
+    public Div? ActiveDiv
+    {
+        get => _activeDiv;
+        set
+        {
+            if (ActiveDiv is not null)
+            {
+                ActiveDiv.IsActive = false;
+            }
+            
+            _activeDiv = value;
+            if (value is not null)
+            {
+                value.IsActive = true;
+            }
+        }
+    }
+
+    public Div? HoveredDiv
+    {
+        get => _hoveredDiv;
+        set
+        {
+            if (HoveredDiv is not null)
+            {
+                HoveredDiv.IsHovered = false;
+            }
+            
+            _hoveredDiv = value;
+            if (value is not null)
+            {
+                value.IsHovered = true;
+            }
+        }
+    }
+    
 
     public InputManager(Builder builder, WindowManager windowManager)
     {
@@ -42,14 +79,12 @@ public class InputManager
                 {
                     if (Environment.CurrentManagedThreadId != 1)
                     {
-                        //NotGood
                         Debugger.Break();
                     }
 
                     await ActiveDiv.POnKeyDownAsync(keyEventArgs.Key, keyEventArgs.Modifiers);
                     if (Environment.CurrentManagedThreadId != 1)
                     {
-                        //NotGood
                         Debugger.Break();
                     }
 

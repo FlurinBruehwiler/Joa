@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Modern.WindowKit;
 using Modern.WindowKit.Controls.Platform.Surfaces;
 using Modern.WindowKit.Platform;
@@ -48,6 +49,8 @@ public class WindowManager
 
     public void DoPaint(Rect bounds)
     {
+        JoaLogger.GetInstance().LogInformation("Paint!!!!");
+        
         var skiaFramebuffer = Window.Surfaces.OfType<IFramebufferPlatformSurface>().First();
 
         using var framebuffer = skiaFramebuffer.Lock();

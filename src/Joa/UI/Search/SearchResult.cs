@@ -1,7 +1,7 @@
 ﻿using Joa.PluginCore;
 using JoaKit;
 
-namespace Joa.UI;
+namespace Joa.UI.Search;
 
 public class SearchResult : Component
 {

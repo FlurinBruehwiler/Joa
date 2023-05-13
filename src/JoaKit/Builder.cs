@@ -219,7 +219,6 @@ public class Builder
     {
         var previousRenderObject = new Dictionary<ComponentHash, RenderObject>();
 
-        newDiv.IsActive = previousDiv.IsActive;
         newDiv.IsHovered = previousDiv.IsHovered;
 
         if (newDiv.IsActive)
@@ -280,13 +279,7 @@ public class Builder
     {
         if (div.PAutoFocus)
         {
-            if (InputManager.ActiveDiv is not null)
-            {
-                InputManager.ActiveDiv.IsActive = false;
-            }
-            
             InputManager.ActiveDiv = div;
-            div.IsActive = true;
         }
         
         foreach (var renderObject in div)

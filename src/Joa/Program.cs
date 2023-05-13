@@ -3,6 +3,7 @@ using Joa.Hotkey;
 using Joa.PluginCore;
 using Joa.Settings;
 using Joa.UI;
+using Joa.UI.Search;
 using JoaKit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
