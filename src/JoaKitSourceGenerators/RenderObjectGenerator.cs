@@ -109,7 +109,7 @@ public class RenderObjectGenerator : ISourceGenerator
         foreach (var property in extensions)
         {
             var name = property.Name.ToLowerInvariant();
-            
+
             output += $$""" 
                     public {{newTypeName}} {{property.Name}}({{property.Type.ToDisplayString()}} {{name}})
                     {
@@ -127,7 +127,7 @@ public class RenderObjectGenerator : ISourceGenerator
     private string GetExtensionsBody(IPropertySymbol property, string name)
     {
         var propertyType = (INamedTypeSymbol)property.Type;
-        
+
         if (IsAction(propertyType))
         {
             return GetActionBody(name);
@@ -142,7 +142,7 @@ public class RenderObjectGenerator : ISourceGenerator
         {
             return GetFuncBody(propertyType, name);
         }
-        
+
         return $"           _{property.Name.ToLowerInvariant()} = {property.Name.ToLowerInvariant()};";
     }
 
@@ -167,7 +167,7 @@ public class RenderObjectGenerator : ISourceGenerator
 
         var parametersString = string.Join(", ", parameters.Select(x => $"{x.Key} {x.Value}"));
         var callBackCallParametersString = string.Join(", ", parameters.Select(x => x.Value));
-        
+
         return $$""" 
                     _{{name}} = ({{parametersString}}) => {
                         Component.Parent.StateHasChanged();
@@ -188,7 +188,7 @@ public class RenderObjectGenerator : ISourceGenerator
 
         var parametersString = string.Join(", ", parameters.Select(x => $"{x.Key} {x.Value}"));
         var callBackCallParametersString = string.Join(", ", parameters.Select(x => x.Value));
-        
+
         return $$""" 
                     _{{name}} = ({{parametersString}}) => {
                         Component.Parent.StateHasChanged();
@@ -196,7 +196,7 @@ public class RenderObjectGenerator : ISourceGenerator
                     };
         """;
     }
-    
+
     private bool IsFunc(INamedTypeSymbol typeSymbol)
     {
         if (!typeSymbol.IsGenericType)
@@ -209,7 +209,7 @@ public class RenderObjectGenerator : ISourceGenerator
     {
         return SymbolEqualityComparer.Default.Equals(typeSymbol, _actionType);
     }
-    
+
     private bool IsGenericAction(INamedTypeSymbol typeSymbol)
     {
         if (!typeSymbol.IsGenericType)
@@ -282,7 +282,7 @@ public class RenderObjectGenerator : ISourceGenerator
             .Select(x => (IPropertySymbol)x)
             .ToList();
     }
-    
+
     private static bool HasAttributeOfType(ISymbol symbol, INamedTypeSymbol attributeType)
     {
         if (symbol.DeclaredAccessibility != Accessibility.Public)

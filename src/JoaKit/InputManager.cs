@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Modern.WindowKit;
 using Modern.WindowKit.Input;
 using Modern.WindowKit.Input.Raw;
 using Modern.WindowKit.Threading;
@@ -10,6 +11,7 @@ public class InputManager
     private readonly Builder _builder;
     private readonly WindowManager _windowManager;
     public Div? ActiveDiv { get; set; }
+    public Div? HoveredDiv { get; set; }
 
     public InputManager(Builder builder, WindowManager windowManager)
     {
@@ -43,6 +45,7 @@ public class InputManager
                         //NotGood
                         Debugger.Break();
                     }
+
                     await ActiveDiv.POnKeyDownAsync(keyEventArgs.Key, keyEventArgs.Modifiers);
                     if (Environment.CurrentManagedThreadId != 1)
                     {
@@ -54,6 +57,7 @@ public class InputManager
                 });
             }
         }
+
         if (args is RawTextInputEventArgs rawInputEventArgs)
         {
             if (ActiveDiv?.POnTextInput is not null)
@@ -62,6 +66,7 @@ public class InputManager
                 objectsWhichReceivedACallback.Add(ActiveDiv);
             }
         }
+
         if (args is RawPointerEventArgs pointer)
         {
             var x = _windowManager.Scale((int)pointer.Position.X);
@@ -80,7 +85,14 @@ public class InputManager
                     objectsWhichReceivedACallback.Add(ActiveDiv);
                 }
 
+                if (ActiveDiv is not null)
+                {
+                    ActiveDiv.IsActive = false;
+                }
+
                 ActiveDiv = div;
+
+                ActiveDiv.IsActive = true;
 
                 if (div.POnActive is not null)
                 {
@@ -100,6 +112,44 @@ public class InputManager
                     objectsWhichReceivedACallback.Add(div);
                 }
             }
+
+            if (pointer.Type == RawPointerEventType.Move && _builder.Root is Div divRoot2)
+            {
+                if (HoveredDiv is not null)
+                {
+                    var res = HitTest(HoveredDiv, pointer.Position.X, pointer.Position.Y);
+
+                    if (res is null)
+                    {
+                        HoveredDiv.IsHovered = false;
+                        HoveredDiv = HitTest(divRoot2, pointer.Position.X, pointer.Position.Y);
+                        if (HoveredDiv is not null)
+                        {
+                            HoveredDiv.IsHovered = true;
+                            _windowManager.DoPaint(new Rect());
+                        }
+                    }
+                    else
+                    {
+                        if (res != HoveredDiv)
+                        {
+                            HoveredDiv.IsHovered = false;
+                            HoveredDiv = res;
+                            HoveredDiv.IsHovered = true;
+                            _windowManager.DoPaint(new Rect());
+                        }
+                    }
+                }
+                else
+                {
+                    HoveredDiv = HitTest(divRoot2, pointer.Position.X, pointer.Position.Y);
+                    if (HoveredDiv is not null)
+                    {
+                        HoveredDiv.IsHovered = true;
+                        _windowManager.DoPaint(new Rect());
+                    }
+                }
+            }
         }
 
 
@@ -116,14 +166,19 @@ public class InputManager
         while (current is not CustomRenderObject)
         {
             current = current.Parent;
+
+            if (current is null)
+            {
+                return _builder.RootComponent;
+            }
         }
 
         return ((CustomRenderObject)current).Component;
     }
 
-    private static Div? HitTest(Div div, int x, int y)
+    private static Div? HitTest(Div div, double x, double y)
     {
-        if (div.PComputedX <= x && div.PComputedX + div.PComputedWidth >= x && div.PComputedY <= y && div.PComputedY + div.PComputedHeight >= y)
+        if (DivContainsPoint(div, x, y))
         {
             if (div.Children is null)
             {
@@ -150,5 +205,11 @@ public class InputManager
         }
 
         return null;
+    }
+
+    private static bool DivContainsPoint(Div div, double x, double y)
+    {
+        return div.PComputedX <= x && div.PComputedX + div.PComputedWidth >= x && div.PComputedY <= y &&
+               div.PComputedY + div.PComputedHeight >= y;
     }
 }

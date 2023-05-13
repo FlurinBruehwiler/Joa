@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics;
 using SkiaSharp;
 
 namespace JoaKit;
@@ -13,7 +14,7 @@ public abstract class CustomRenderObject : RenderObject
         }
         else
         {
-
+            Debugger.Break();
         }
     }
 

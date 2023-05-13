@@ -6,7 +6,6 @@
         <Nullable>enable</Nullable>
         <OutputType>WinExe</OutputType>
         <RootNamespace>Joa</RootNamespace>
-        <SelfContained>true</SelfContained>
     </PropertyGroup>
     
     <ItemGroup>
@@ -43,4 +42,5 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+    
 </Project>

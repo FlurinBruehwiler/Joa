@@ -21,6 +21,9 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public ColorDefinition? PColor { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
+    public ColorDefinition? PHoverColor { get; set; }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public ColorDefinition? PBorderColor { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -64,6 +67,12 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool PAutoFocus { get; set; }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public bool IsHovered { get; set; }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public bool IsActive { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Func<Task>? POnClickAsync { get; set; }
@@ -113,10 +122,20 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         return false;
     }
 
+    private ColorDefinition? GetColor()
+    {
+        if (IsHovered && PHoverColor is not null)
+        {
+            return PHoverColor;
+        }
+
+        return PColor;
+    }
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public override void Render(SKCanvas canvas, RenderContext renderContext)
     {
-        if (PColor is not null)
+        if (GetColor() is not null)
         {
             if (PBorderWidth != 0)
             {
@@ -130,21 +149,22 @@ public class Div : RenderObject, IEnumerable<RenderObject>
                         PComputedHeight + 2 * PBorderWidth,
                         borderRadius,
                         borderRadius,
-                        GetColor(PBorderColor ?? PColor.Value));
+                        GetColor(PBorderColor ?? GetColor().Value));
                     canvas.DrawRoundRect(PComputedX,
                         PComputedY,
                         PComputedWidth,
                         PComputedHeight,
                         PRadius,
                         PRadius,
-                        GetColor(PColor.Value));
+                        GetColor(GetColor().Value));
                 }
                 else
                 {
                     canvas.DrawRect(PComputedX - PBorderWidth, PComputedY - PBorderWidth,
-                        PComputedWidth + 2 * PBorderWidth, PComputedHeight + 2 * PBorderWidth, GetColor(PBorderColor ?? PColor.Value));
+                        PComputedWidth + 2 * PBorderWidth, PComputedHeight + 2 * PBorderWidth,
+                        GetColor(PBorderColor ?? GetColor().Value));
                     canvas.DrawRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight,
-                        GetColor(PColor.Value));
+                        GetColor(GetColor().Value));
                 }
             }
             else
@@ -152,11 +172,12 @@ public class Div : RenderObject, IEnumerable<RenderObject>
                 if (PRadius != 0)
                 {
                     canvas.DrawRoundRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight, PRadius, PRadius,
-                        GetColor(PColor.Value));
+                        GetColor(GetColor().Value));
                 }
                 else
                 {
-                    canvas.DrawRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight, GetColor(PColor.Value));
+                    canvas.DrawRect(PComputedX, PComputedY, PComputedWidth, PComputedHeight,
+                        GetColor(GetColor().Value));
                 }
             }
         }
@@ -221,6 +242,18 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         return this;
     }
 
+    public Div HoverColor(float red, float green, float blue, float transparency = 255)
+    {
+        PHoverColor = new ColorDefinition(red, green, blue, transparency);
+        return this;
+    }
+
+    public Div HoverColor(ColorDefinition color)
+    {
+        PHoverColor = color;
+        return this;
+    }
+
     public Div Padding(int padding)
     {
         PPadding = padding;
@@ -250,6 +283,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         PBorderColor = color;
         return this;
     }
+
     public Div BorderColor(float red, float green, float blue, float transparency = 255)
     {
         PBorderColor = new ColorDefinition(red, green, blue, transparency);
@@ -337,6 +371,12 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public Div AutoFocus(bool autoFocus = true)
     {
         PAutoFocus = autoFocus;
+        return this;
+    }
+
+    public Div Key(string key)
+    {
+        PKey = key;
         return this;
     }
 

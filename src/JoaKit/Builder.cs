@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Modern.WindowKit;
 using Modern.WindowKit.Platform;
 using Modern.WindowKit.Threading;
@@ -141,19 +142,21 @@ public class Builder
 
 
     public RenderObject? Root;
-
-    private Div? _clickedElement;
+    public Component RootComponent;
 
     private void Build(Component componentToBuild)
     {
+        JoaLogger.GetInstance().LogInformation(componentToBuild.GetType().Name);
+
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
 
         if (Root is null)
         {
+            RootComponent = componentToBuild;
             var renderObject = componentToBuild.Build();
             componentToBuild.RenderObject = renderObject;
             Root = renderObject;
-            BuildNewRenderObject(renderObject, componentToBuild);   
+            BuildNewRenderObject(renderObject, componentToBuild);
         }
         else
         {
@@ -163,7 +166,7 @@ public class Builder
             {
                 Debugger.Break();
             }
-            
+
             var newRenderObject = componentToBuild.Build();
             componentToBuild.RenderObject = newRenderObject;
 
@@ -172,7 +175,36 @@ public class Builder
             BuildTree(previousRenderObject, newRenderObject, componentToBuild);
         }
 
+        ValidateTree(Root);
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = null;
+    }
+
+    private void ValidateTree(RenderObject renderObject)
+    {
+        if (renderObject != Root)
+        {
+            if (renderObject.Parent is null)
+            {
+                Debugger.Break();
+            }
+        }
+
+        if (renderObject is Div div)
+        {
+            foreach (var child in div)
+            {
+                ValidateTree(child);
+            }
+        }
+        else if (renderObject is CustomRenderObject customRenderObject)
+        {
+            if (customRenderObject.Component is null)
+            {
+                Debugger.Break();
+            }
+
+            ValidateTree(customRenderObject.RenderObject);
+        }
     }
 
     private void BuildTree(RenderObject oldRenderObject, RenderObject newRenderObject, Component parent)
@@ -187,6 +219,19 @@ public class Builder
     {
         var previousRenderObject = new Dictionary<ComponentHash, RenderObject>();
 
+        newDiv.IsActive = previousDiv.IsActive;
+        newDiv.IsHovered = previousDiv.IsHovered;
+
+        if (newDiv.IsActive)
+        {
+            InputManager.ActiveDiv = newDiv;
+        }
+
+        if (newDiv.IsHovered)
+        {
+            InputManager.HoveredDiv = newDiv;
+        }
+
         foreach (var renderObject in previousDiv)
         {
             if (renderObject is CustomRenderObject or Div)
@@ -198,17 +243,20 @@ public class Builder
         foreach (var renderObject in newDiv)
         {
             renderObject.Parent = newDiv;
-            
+
             if (renderObject is CustomRenderObject customRenderObject)
             {
                 if (previousRenderObject.TryGetValue(customRenderObject.GetComponentHash(),
                         out var previousCustomRenderObject))
                 {
-                    var component = ((CustomRenderObject)previousCustomRenderObject).Component;
-                    var newRenderObject = 
+                    var previousActuallyCustomRenderObject = (CustomRenderObject)previousCustomRenderObject;
+                    var component = (previousActuallyCustomRenderObject).Component;
+                    var newRenderObject =
                         customRenderObject.Build(component);
+                    newRenderObject.Parent = customRenderObject;
                     customRenderObject.RenderObject = newRenderObject;
                     customRenderObject.Component = component;
+                    BuildTree(previousActuallyCustomRenderObject.RenderObject, newRenderObject, component);
                 }
                 else
                 {
@@ -246,7 +294,7 @@ public class Builder
         customRenderObject.Component = newComponent;
         newComponent.RenderObject = renderObject;
         renderObject.Parent = customRenderObject;
-        
+
         BuildNewRenderObject(renderObject, newComponent);
     }
 
@@ -269,9 +317,9 @@ public class Builder
         if (parent is null)
         {
             Root = newRenderObject;
-            return;            
+            return;
         }
-        
+
         switch (parent)
         {
             case Div div:
@@ -304,8 +352,5 @@ public class Builder
 
         _layoutEngine.ApplyLayoutCalculations(wrapper);
         wrapper.Render(_windowManager.Canvas!, new RenderContext(_window));
-
-        _clickedElement?.POnClick?.Invoke();
-        _clickedElement = null;
     }
 }

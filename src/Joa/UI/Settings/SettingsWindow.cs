@@ -32,9 +32,11 @@ public class SettingsWindow : Component
                                     new Txt(x.Manifest.Name).VAlign(TextAlign.Center)
                                 }.Height(40)
                                 .Color(62, 62, 62)
+                                .HoverColor(70, 70, 70)
                                 .Padding(10)
                                 .Radius(4)
-                                .OnClick(() => _selectedPlugin = x)))
+                                .OnClick(() => _selectedPlugin = x)
+                                .Key(x.Manifest.Id)))
                         .Gap(6)
                         .Padding(15),
                     new Div()
