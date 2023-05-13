@@ -250,9 +250,8 @@ public class Builder
                         out var previousCustomRenderObject))
                 {
                     var previousActuallyCustomRenderObject = (CustomRenderObject)previousCustomRenderObject;
-                    var component = (previousActuallyCustomRenderObject).Component;
-                    var newRenderObject =
-                        customRenderObject.Build(component);
+                    var component = previousActuallyCustomRenderObject.Component;
+                    var newRenderObject = customRenderObject.Build(component);
                     newRenderObject.Parent = customRenderObject;
                     customRenderObject.RenderObject = newRenderObject;
                     customRenderObject.Component = component;
@@ -279,6 +278,17 @@ public class Builder
 
     private void BuildNewDiv(Div div, Component parent)
     {
+        if (div.PAutoFocus)
+        {
+            if (InputManager.ActiveDiv is not null)
+            {
+                InputManager.ActiveDiv.IsActive = false;
+            }
+            
+            InputManager.ActiveDiv = div;
+            div.IsActive = true;
+        }
+        
         foreach (var renderObject in div)
         {
             renderObject.Parent = div;
