@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using Modern.WindowKit.Input;
 using SkiaSharp;
 
@@ -27,7 +28,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public ColorDefinition? PBorderColor { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public Padding PPadding { get; set; } = new Padding(0, 0, 0, 0);
+    public Quadrant PQuadrant { get; set; } = new Quadrant(0, 0, 0, 0);
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public int PGap { get; set; }
@@ -67,6 +68,12 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool PAutoFocus { get; set; }
+    
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public bool PAbsolute { get; set; }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public Quadrant PAbsolutePosition { get; set; } = new(0, 0, 0, 0);
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool IsHovered { get; set; }
@@ -89,7 +96,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         if ((oldDiv.Children?.Count ?? 0) != (Children?.Count ?? 0))
             return true;
 
-        if (PPadding != oldDiv.PPadding)
+        if (PQuadrant != oldDiv.PQuadrant)
             return true;
 
         if (PGap != oldDiv.PGap)
@@ -256,49 +263,49 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
     public Div Padding(int padding)
     {
-        PPadding = new Padding(padding, padding, padding, padding);
+        PQuadrant = new Quadrant(padding, padding, padding, padding);
         return this;
     }
 
     public Div Padding(int left, int right, int top, int bottom)
     {
-        PPadding = new Padding(left, right, top, bottom);
+        PQuadrant = new Quadrant(left, right, top, bottom);
         return this;
     }
 
     public Div PaddingHorizontal(int paddingHorizontal)
     {
-        PPadding = PPadding with { Left = paddingHorizontal, Right = paddingHorizontal };
+        PQuadrant = PQuadrant with { Left = paddingHorizontal, Right = paddingHorizontal };
         return this;
     }
 
     public Div PaddingVertical(int paddingVertical)
     {
-        PPadding = PPadding with { Top = paddingVertical, Bottom = paddingVertical };
+        PQuadrant = PQuadrant with { Top = paddingVertical, Bottom = paddingVertical };
         return this;
     }
-    
+
     public Div PaddingLeft(int paddingLeft)
     {
-        PPadding = PPadding with { Left = paddingLeft };
+        PQuadrant = PQuadrant with { Left = paddingLeft };
         return this;
     }
     
     public Div PaddingRight(int paddingRight)
     {
-        PPadding = PPadding with { Right = paddingRight };
+        PQuadrant = PQuadrant with { Right = paddingRight };
         return this;
     }
     
     public Div PaddingTop(int paddingTop)
     {
-        PPadding = PPadding with { Top = paddingTop };
+        PQuadrant = PQuadrant with { Top = paddingTop };
         return this;
     }
     
     public Div PaddingBottom(int paddingBottom)
     {
-        PPadding = PPadding with { Bottom = paddingBottom };
+        PQuadrant = PQuadrant with { Bottom = paddingBottom };
         return this;
     }
 
@@ -422,6 +429,13 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         return this;
     }
 
+    public Div Absolute(int left = 0, int right = 0, int top = 0, int bottom = 0)  
+    {
+        PAbsolute = true;
+        PAbsolutePosition = new Quadrant(left, right, top, bottom);
+        return this;
+    }
+
     public IEnumerator<RenderObject> GetEnumerator()
     {
         return Children?.GetEnumerator() ?? Enumerable.Empty<RenderObject>().GetEnumerator();
@@ -433,4 +447,4 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     }
 }
 
-public record struct Padding(int Left, int Right, int Top, int Bottom);
+public record struct Quadrant(int Left, int Right, int Top, int Bottom);

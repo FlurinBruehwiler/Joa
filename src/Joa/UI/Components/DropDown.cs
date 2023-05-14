@@ -35,6 +35,7 @@ public class DropDown : Component
                         .BorderColor(200, 200, 200, 100)
                         .Radius(5)
                         .Color(40, 40, 40)
+                        .Absolute(top: 40)
                         .Items(Enumerable.Range(0, 5).Select(x =>
                             new Div
                                 {

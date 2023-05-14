@@ -13,15 +13,12 @@ public class LayoutEngine
 
     public void ApplyLayoutCalculations(Div root)
     {
-        // if (newRoot.LayoutHasChanged(oldRoot))
-        // {
         ComputeRenderObj(root);
-        // }
     }
 
     private void ComputeRenderObj(RenderObject renderObject)
     {
-        if (renderObject is CustomRenderObject { RenderObject: not null } customRenderObject)
+        if (renderObject is CustomRenderObject {  RenderObject: not null } customRenderObject)
         {
             customRenderObject.RenderObject.PComputedX = customRenderObject.PComputedX;
             customRenderObject.RenderObject.PComputedY = customRenderObject.PComputedY;
@@ -100,8 +97,8 @@ public class LayoutEngine
     {
         return div.PDir switch
         {
-            Dir.Horizontal or Dir.RowReverse => div.PComputedWidth - (div.PPadding.Left + div.PPadding.Right),
-            Dir.Vertical or Dir.ColumnReverse => div.PComputedHeight - (div.PPadding.Top + div.PPadding.Bottom),
+            Dir.Horizontal or Dir.RowReverse => div.PComputedWidth - (div.PQuadrant.Left + div.PQuadrant.Right),
+            Dir.Vertical or Dir.ColumnReverse => div.PComputedHeight - (div.PQuadrant.Top + div.PQuadrant.Bottom),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -110,8 +107,8 @@ public class LayoutEngine
     {
         return div.PDir switch
         {
-            Dir.Horizontal or Dir.RowReverse => div.PComputedHeight - (div.PPadding.Top + div.PPadding.Bottom),
-            Dir.Vertical or Dir.ColumnReverse => div.PComputedWidth - (div.PPadding.Left + div.PPadding.Right),
+            Dir.Horizontal or Dir.RowReverse => div.PComputedHeight - (div.PQuadrant.Top + div.PQuadrant.Bottom),
+            Dir.Vertical or Dir.ColumnReverse => div.PComputedWidth - (div.PQuadrant.Left + div.PQuadrant.Right),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -159,9 +156,12 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
-            if (child.PHeight.Kind == SizeKind.Percentage)
+            if (child is not Div { PAbsolute: true })
             {
-                totalPercentage += child.PHeight.Value;
+                if (child.PHeight.Kind == SizeKind.Percentage)
+                {
+                    totalPercentage += child.PHeight.Value;
+                }
             }
         }
 
@@ -178,6 +178,12 @@ public class LayoutEngine
 
         foreach (var item in div.Children)
         {
+            if (item is  Div { PAbsolute: true })
+            {
+                CalculateAbsoluteSize(item, div);
+                continue;
+            }
+            
             item.PComputedHeight = item.PHeight.Kind switch
             {
                 SizeKind.Percentage => item.PHeight.Value * sizePerPercent,
@@ -187,7 +193,8 @@ public class LayoutEngine
             item.PComputedWidth = item.PWidth.Kind switch
             {
                 SizeKind.Pixel => item.PWidth.GetDpiAwareValue(_window),
-                SizeKind.Percentage => (float)((div.PComputedWidth - (div.PPadding.Left + div.PPadding.Right)) * item.PWidth.Value * 0.01),
+                SizeKind.Percentage => (float)((div.PComputedWidth - (div.PQuadrant.Left + div.PQuadrant.Right)) *
+                                               item.PWidth.Value * 0.01),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -200,9 +207,12 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
-            if (child.PWidth.Kind == SizeKind.Percentage)
+            if (child is not Div { PAbsolute: true })
             {
-                totalPercentage += child.PWidth.Value;
+                if (child.PWidth.Kind == SizeKind.Percentage)
+                {
+                    totalPercentage += child.PWidth.Value;
+                }
             }
         }
 
@@ -219,6 +229,12 @@ public class LayoutEngine
 
         foreach (var item in div.Children)
         {
+            if (item is Div { PAbsolute: true })
+            {
+                CalculateAbsoluteSize(item, div);
+                continue;
+            }
+
             item.PComputedWidth = item.PWidth.Kind switch
             {
                 SizeKind.Percentage => item.PWidth.Value * sizePerPercent,
@@ -228,10 +244,35 @@ public class LayoutEngine
             item.PComputedHeight = item.PHeight.Kind switch
             {
                 SizeKind.Pixel => item.PHeight.GetDpiAwareValue(_window),
-                SizeKind.Percentage => (float)((div.PComputedHeight * item.PHeight.Value * 0.01) - (div.PPadding.Top + div.PPadding.Bottom)),
+                SizeKind.Percentage => (float)(div.PComputedHeight * item.PHeight.Value * 0.01 -
+                                               (div.PQuadrant.Top + div.PQuadrant.Bottom)),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
+    }
+    
+    private void PositionAbsoluteItem(Div item, Div parent)
+    {
+        item.PComputedX = parent.PComputedX + parent.PQuadrant.Left + item.PAbsolutePosition.Left;
+        item.PComputedY = parent.PComputedY + parent.PQuadrant.Top + item.PAbsolutePosition.Top;
+    }
+
+    private void CalculateAbsoluteSize(RenderObject item, Div parent)
+    {
+        item.PComputedWidth = item.PWidth.Kind switch
+        {
+            SizeKind.Percentage => item.PWidth.Value * ((parent.PComputedWidth - parent.PQuadrant.Left -
+                                                         parent.PQuadrant.Right) / 100),
+            SizeKind.Pixel => item.PWidth.GetDpiAwareValue(_window),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        item.PComputedHeight = item.PHeight.Kind switch
+        {
+            SizeKind.Pixel => item.PHeight.GetDpiAwareValue(_window),
+            SizeKind.Percentage => item.PHeight.Value * ((parent.PComputedHeight - parent.PQuadrant.Top -
+                                                          parent.PQuadrant.Right) / 100),
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 
     private float RemainingMainAxisFixedSize(Div div)
@@ -240,9 +281,11 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
+            if (child is Div { PAbsolute: true })
+                continue;
+
             childSum += GetItemMainAxisFixedLength(div, child);
         }
-
 
         return GetMainAxisLength(div) - childSum - GetGapSize(div);
     }
@@ -261,6 +304,9 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
+            if (child is Div { PAbsolute: true })
+                continue;
+
             sum += GetItemMainAxisLength(div, child);
         }
 
@@ -273,6 +319,12 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
+            if (child is Div { PAbsolute: true } divChild)
+            {
+                PositionAbsoluteItem(divChild, div);
+                continue;
+            }
+            
             DrawWithMainOffset(div, mainOffset, child);
             mainOffset += GetItemMainAxisLength(div, child) + div.PGap;
         }
@@ -284,6 +336,12 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
+            if (child is Div { PAbsolute: true } divChild)
+            {
+                PositionAbsoluteItem(divChild, div);
+                continue;
+            }
+
             DrawWithMainOffset(div, mainOffset, child);
             mainOffset += GetItemMainAxisLength(div, child) + div.PGap;
         }
@@ -295,6 +353,12 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
+            if (child is Div { PAbsolute: true } divChild)
+            {
+                PositionAbsoluteItem(divChild, div);
+                continue;
+            }
+
             DrawWithMainOffset(div, mainOffset, child);
             mainOffset += GetItemMainAxisLength(div, child) + div.PGap;
         }
@@ -309,6 +373,12 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
+            if (child is Div { PAbsolute: true } divChild)
+            {
+                PositionAbsoluteItem(divChild, div);
+                continue;
+            }
+
             DrawWithMainOffset(div, mainOffset, child);
             mainOffset += GetItemMainAxisLength(div, child) + space + div.PGap;
         }
@@ -323,6 +393,12 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
+            if (child is Div { PAbsolute: true } divChild)
+            {
+                PositionAbsoluteItem(divChild, div);
+                continue;
+            }
+
             mainOffset += space;
             DrawWithMainOffset(div, mainOffset, child);
             mainOffset += GetItemMainAxisLength(div, child) + space + div.PGap;
@@ -338,6 +414,12 @@ public class LayoutEngine
 
         foreach (var child in div.Children)
         {
+            if (child is Div { PAbsolute: true } divChild)
+            {
+                PositionAbsoluteItem(divChild, div);
+                continue;
+            }
+
             DrawWithMainOffset(div, mainOffset, child);
             mainOffset += GetItemMainAxisLength(div, child) + space + div.PGap;
         }
@@ -352,7 +434,8 @@ public class LayoutEngine
                 item.PComputedY = GetCrossAxisOffset(div, item);
                 break;
             case Dir.RowReverse:
-                item.PComputedX = div.PComputedWidth - (div.PPadding.Left + div.PPadding.Right) - mainOffset - item.PComputedWidth;
+                item.PComputedX = div.PComputedWidth - (div.PQuadrant.Left + div.PQuadrant.Right) - mainOffset -
+                                  item.PComputedWidth;
                 item.PComputedY = GetCrossAxisOffset(div, item);
                 break;
             case Dir.Vertical:
@@ -367,7 +450,7 @@ public class LayoutEngine
                 throw new ArgumentOutOfRangeException();
         }
 
-        item.PComputedX += div.PComputedX + div.PPadding.Left;
-        item.PComputedY += div.PComputedY + div.PPadding.Top;
+        item.PComputedX += div.PComputedX + div.PQuadrant.Left;
+        item.PComputedY += div.PComputedY + div.PQuadrant.Top;
     }
 }
