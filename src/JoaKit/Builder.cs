@@ -146,7 +146,7 @@ public class Builder
 
     private void Build(Component componentToBuild)
     {
-        JoaLogger.GetInstance().LogInformation(componentToBuild.GetType().Name);
+        JoaLogger.GetInstance().LogInformation($"Building {componentToBuild.GetType().Name}");
 
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
 

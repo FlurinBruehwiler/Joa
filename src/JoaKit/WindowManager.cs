@@ -49,7 +49,7 @@ public class WindowManager
 
     public void DoPaint(Rect bounds)
     {
-        JoaLogger.GetInstance().LogInformation("Paint!!!!");
+        JoaLogger.GetInstance().LogInformation("Repainting");
         
         var skiaFramebuffer = Window.Surfaces.OfType<IFramebufferPlatformSurface>().First();
 
