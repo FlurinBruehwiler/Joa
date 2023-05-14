@@ -42,18 +42,20 @@ public static class Program
 
         var app = builder.Build();
 
-        app.CreateWindow<SearchBar>(window =>
-        {
-            window.Resize(new Size(SearchBar.Width, SearchBar.SearchBoxHeight));
-            window.SetTitle("Joa");
-            window.SetIcon(SKBitmap.Decode("Assets/icon.png"));
-            window.CanResize(false);
-            window.SetExtendClientAreaTitleBarHeightHint(0);
-            window.SetExtendClientAreaToDecorationsHint(true);
-            window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
-            window.ShowTaskbarIcon(false);
-            CenterWindow(window);
-        }, false);
+        app.CreateWindow<UiTest>(impl => {});
+        
+        // app.CreateWindow<SearchBar>(window =>
+        // {
+        //     window.Resize(new Size(SearchBar.Width, SearchBar.SearchBoxHeight));
+        //     window.SetTitle("Joa");
+        //     window.SetIcon(SKBitmap.Decode("Assets/icon.png"));
+        //     window.CanResize(false);
+        //     window.SetExtendClientAreaTitleBarHeightHint(0);
+        //     window.SetExtendClientAreaToDecorationsHint(true);
+        //     window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
+        //     window.ShowTaskbarIcon(false);
+        //     CenterWindow(window);
+        // }, false);
 
         app.Run();
     }

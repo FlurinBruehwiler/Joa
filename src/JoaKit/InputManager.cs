@@ -65,6 +65,7 @@ public class InputManager
             if (keyEventArgs.Key == Key.F5)
             {
                 _builder.ShouldRebuild(_windowManager.RootComponent);
+                
             }
 
             if (ActiveDiv?.POnKeyDown is not null)
@@ -161,7 +162,10 @@ public class InputManager
                         if (HoveredDiv is not null)
                         {
                             HoveredDiv.IsHovered = true;
-                            _windowManager.DoPaint(new Rect());
+                            if (HoveredDiv.PHoverColor is not null)
+                            {
+                                _windowManager.DoPaint(new Rect());
+                            }
                         }
                     }
                     else
@@ -171,7 +175,10 @@ public class InputManager
                             HoveredDiv.IsHovered = false;
                             HoveredDiv = res;
                             HoveredDiv.IsHovered = true;
-                            _windowManager.DoPaint(new Rect());
+                            if (HoveredDiv.PHoverColor is not null)
+                            {
+                                _windowManager.DoPaint(new Rect());
+                            }
                         }
                     }
                 }
@@ -181,7 +188,10 @@ public class InputManager
                     if (HoveredDiv is not null)
                     {
                         HoveredDiv.IsHovered = true;
-                        _windowManager.DoPaint(new Rect());
+                        if (HoveredDiv.PHoverColor is not null)
+                        {
+                            _windowManager.DoPaint(new Rect());
+                        }
                     }
                 }
             }

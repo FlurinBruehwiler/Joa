@@ -100,8 +100,8 @@ public class LayoutEngine
     {
         return div.PDir switch
         {
-            Dir.Horizontal or Dir.RowReverse => div.PComputedWidth - 2 * div.PPadding,
-            Dir.Vertical or Dir.ColumnReverse => div.PComputedHeight - 2 * div.PPadding,
+            Dir.Horizontal or Dir.RowReverse => div.PComputedWidth - (div.PPadding.Left + div.PPadding.Right),
+            Dir.Vertical or Dir.ColumnReverse => div.PComputedHeight - (div.PPadding.Top + div.PPadding.Bottom),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -110,8 +110,8 @@ public class LayoutEngine
     {
         return div.PDir switch
         {
-            Dir.Horizontal or Dir.RowReverse => div.PComputedHeight - 2 * div.PPadding,
-            Dir.Vertical or Dir.ColumnReverse => div.PComputedWidth - 2 * div.PPadding,
+            Dir.Horizontal or Dir.RowReverse => div.PComputedHeight - (div.PPadding.Top + div.PPadding.Bottom),
+            Dir.Vertical or Dir.ColumnReverse => div.PComputedWidth - (div.PPadding.Left + div.PPadding.Right),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -187,7 +187,7 @@ public class LayoutEngine
             item.PComputedWidth = item.PWidth.Kind switch
             {
                 SizeKind.Pixel => item.PWidth.GetDpiAwareValue(_window),
-                SizeKind.Percentage => (float)((div.PComputedWidth - 2 * div.PPadding) * item.PWidth.Value * 0.01),
+                SizeKind.Percentage => (float)((div.PComputedWidth - (div.PPadding.Left + div.PPadding.Right)) * item.PWidth.Value * 0.01),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -228,7 +228,7 @@ public class LayoutEngine
             item.PComputedHeight = item.PHeight.Kind switch
             {
                 SizeKind.Pixel => item.PHeight.GetDpiAwareValue(_window),
-                SizeKind.Percentage => (float)((div.PComputedHeight * item.PHeight.Value * 0.01) - (2 * div.PPadding)),
+                SizeKind.Percentage => (float)((div.PComputedHeight * item.PHeight.Value * 0.01) - (div.PPadding.Top + div.PPadding.Bottom)),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -352,7 +352,7 @@ public class LayoutEngine
                 item.PComputedY = GetCrossAxisOffset(div, item);
                 break;
             case Dir.RowReverse:
-                item.PComputedX = div.PComputedWidth - 2 * div.PPadding - mainOffset - item.PComputedWidth;
+                item.PComputedX = div.PComputedWidth - (div.PPadding.Left + div.PPadding.Right) - mainOffset - item.PComputedWidth;
                 item.PComputedY = GetCrossAxisOffset(div, item);
                 break;
             case Dir.Vertical:
@@ -367,7 +367,7 @@ public class LayoutEngine
                 throw new ArgumentOutOfRangeException();
         }
 
-        item.PComputedX += div.PComputedX + div.PPadding;
-        item.PComputedY += div.PComputedY + div.PPadding;
+        item.PComputedX += div.PComputedX + div.PPadding.Left;
+        item.PComputedY += div.PComputedY + div.PPadding.Top;
     }
 }

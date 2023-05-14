@@ -1,4 +1,5 @@
 ﻿using JoaKit;
+using Microsoft.Extensions.Logging;
 
 #pragma warning disable CS0657
 [assembly: System.Reflection.Metadata.MetadataUpdateHandler(typeof(HotReloadManager))]
@@ -20,6 +21,6 @@ public static class HotReloadManager
             manager.Builder.ShouldRebuild(manager.RootComponent);
         }
 
-        Console.WriteLine("HotReloadManager.UpdateApplication");
+        JoaLogger.GetInstance().LogInformation("HotReloadManager.UpdateApplication");
     }
 }

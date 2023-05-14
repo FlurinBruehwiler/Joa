@@ -27,7 +27,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public ColorDefinition? PBorderColor { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public int PPadding { get; set; }
+    public Padding PPadding { get; set; } = new Padding(0, 0, 0, 0);
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public int PGap { get; set; }
@@ -256,7 +256,49 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
     public Div Padding(int padding)
     {
-        PPadding = padding;
+        PPadding = new Padding(padding, padding, padding, padding);
+        return this;
+    }
+
+    public Div Padding(int left, int right, int top, int bottom)
+    {
+        PPadding = new Padding(left, right, top, bottom);
+        return this;
+    }
+
+    public Div PaddingHorizontal(int paddingHorizontal)
+    {
+        PPadding = PPadding with { Left = paddingHorizontal, Right = paddingHorizontal };
+        return this;
+    }
+
+    public Div PaddingVertical(int paddingVertical)
+    {
+        PPadding = PPadding with { Top = paddingVertical, Bottom = paddingVertical };
+        return this;
+    }
+    
+    public Div PaddingLeft(int paddingLeft)
+    {
+        PPadding = PPadding with { Left = paddingLeft };
+        return this;
+    }
+    
+    public Div PaddingRight(int paddingRight)
+    {
+        PPadding = PPadding with { Right = paddingRight };
+        return this;
+    }
+    
+    public Div PaddingTop(int paddingTop)
+    {
+        PPadding = PPadding with { Top = paddingTop };
+        return this;
+    }
+    
+    public Div PaddingBottom(int paddingBottom)
+    {
+        PPadding = PPadding with { Bottom = paddingBottom };
         return this;
     }
 
@@ -390,3 +432,5 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         return GetEnumerator();
     }
 }
+
+public record struct Padding(int Left, int Right, int Top, int Bottom);
