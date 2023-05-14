@@ -12,7 +12,8 @@ public class InputManager
     private readonly WindowManager _windowManager;
     private Div? _activeDiv;
     private Div? _hoveredDiv;
-
+    public List<Div> AbsoluteDivs { get; set; } = new();
+    
     public Div? ActiveDiv
     {
         get => _activeDiv;
@@ -49,7 +50,6 @@ public class InputManager
         }
     }
     
-
     public InputManager(Builder builder, WindowManager windowManager)
     {
         _builder = builder;
@@ -65,7 +65,6 @@ public class InputManager
             if (keyEventArgs.Key == Key.F5)
             {
                 _builder.ShouldRebuild(_windowManager.RootComponent);
-                
             }
 
             if (ActiveDiv?.POnKeyDown is not null)
@@ -110,7 +109,7 @@ public class InputManager
 
             if (pointer.Type == RawPointerEventType.LeftButtonDown && _builder.Root is Div divRoot)
             {
-                var div = HitTest(divRoot, x, y);
+                var div = ActualHitTest(divRoot, x, y);
 
                 if (div is null)
                     return;
@@ -153,12 +152,12 @@ public class InputManager
             {
                 if (HoveredDiv is not null)
                 {
-                    var res = HitTest(HoveredDiv, pointer.Position.X, pointer.Position.Y);
+                    var res = ActualHitTest(HoveredDiv, pointer.Position.X, pointer.Position.Y);
 
                     if (res is null)
                     {
                         HoveredDiv.IsHovered = false;
-                        HoveredDiv = HitTest(divRoot2, pointer.Position.X, pointer.Position.Y);
+                        HoveredDiv = ActualHitTest(divRoot2, pointer.Position.X, pointer.Position.Y);
                         if (HoveredDiv is not null)
                         {
                             HoveredDiv.IsHovered = true;
@@ -184,7 +183,7 @@ public class InputManager
                 }
                 else
                 {
-                    HoveredDiv = HitTest(divRoot2, pointer.Position.X, pointer.Position.Y);
+                    HoveredDiv = ActualHitTest(divRoot2, pointer.Position.X, pointer.Position.Y);
                     if (HoveredDiv is not null)
                     {
                         HoveredDiv.IsHovered = true;
@@ -221,6 +220,18 @@ public class InputManager
         return ((CustomRenderObject)current).Component;
     }
 
+    private Div? ActualHitTest(Div div, double x, double y)
+    {
+        foreach (var absoluteDiv in AbsoluteDivs)
+        {
+            var hit = HitTest(absoluteDiv, x, y);
+            if (hit is not null)
+                return hit;
+        }
+
+        return HitTest(div, x, y);
+    }
+    
     private static Div? HitTest(Div div, double x, double y)
     {
         if (DivContainsPoint(div, x, y))

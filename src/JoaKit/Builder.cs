@@ -149,7 +149,8 @@ public class Builder
         JoaLogger.GetInstance().LogInformation($"Building {componentToBuild.GetType().Name}");
 
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
-
+        InputManager.AbsoluteDivs.Clear();
+        
         if (Root is null)
         {
             RootComponent = componentToBuild;
@@ -191,6 +192,11 @@ public class Builder
 
         if (renderObject is Div div)
         {
+            if (div.PAbsolute)
+            {
+                InputManager.AbsoluteDivs.Add(div);
+            }
+            
             foreach (var child in div)
             {
                 ValidateTree(child);

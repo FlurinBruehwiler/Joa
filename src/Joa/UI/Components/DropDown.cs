@@ -5,6 +5,14 @@ namespace Joa.UI.Components;
 public class DropDown : Component
 {
     private bool _isExpanded;
+    private List<string> _options;
+    private string _selectedOption;
+
+    public DropDown()
+    {
+        _options = Enumerable.Range(0, 5).Select(x => $"Option {x}").ToList();
+        _selectedOption = _options.FirstOrDefault() ?? string.Empty;
+    }
 
     public override RenderObject Build()
     {
@@ -12,14 +20,14 @@ public class DropDown : Component
             {
                 new Div
                     {
-                        new Txt("An Option 2")
+                        new Txt(_selectedOption)
                             .Size(18)
                             .VAlign(TextAlign.Center),
                         new Div
                             {
                                 new JoaKit.Svg("expand.svg")
-                            }.Width(30)
-                            .Height(30)
+                            }.Width(35)
+                            .Height(35)
                             .OnActive(() => _isExpanded = true)
                             .OnInactive(() => _isExpanded = false)
                     }.Height(35)
@@ -36,15 +44,17 @@ public class DropDown : Component
                         .Radius(5)
                         .Color(40, 40, 40)
                         .Absolute(top: 40)
-                        .Items(Enumerable.Range(0, 5).Select(x =>
+                        .Items(_options.Select(x =>
                             new Div
                                 {
-                                    new Txt($"Option {x}")
+                                    new Txt(x)
                                         .VAlign(TextAlign.Center)
                                         .Size(18)
                                 }
                                 .PaddingLeft(10)
+                                .Radius(5)
                                 .HoverColor(50, 50, 50)
+                                .OnClick(() => _selectedOption = x)
                                 .Key(x.ToString())))
                     : new Empty()
             }
