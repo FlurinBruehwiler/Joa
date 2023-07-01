@@ -18,7 +18,7 @@ public class LayoutEngine
 
     private void ComputeRenderObj(RenderObject renderObject)
     {
-        if (renderObject is CustomRenderObject {  RenderObject: not null } customRenderObject)
+        if (renderObject is CustomRenderObject { RenderObject: not null } customRenderObject)
         {
             customRenderObject.RenderObject.PComputedX = customRenderObject.PComputedX;
             customRenderObject.RenderObject.PComputedY = customRenderObject.PComputedY;
@@ -178,12 +178,12 @@ public class LayoutEngine
 
         foreach (var item in div.Children)
         {
-            if (item is  Div { PAbsolute: true })
+            if (item is Div { PAbsolute: true })
             {
                 CalculateAbsoluteSize(item, div);
                 continue;
             }
-            
+
             item.PComputedHeight = item.PHeight.Kind switch
             {
                 SizeKind.Percentage => item.PHeight.Value * sizePerPercent,
@@ -250,7 +250,7 @@ public class LayoutEngine
             };
         }
     }
-    
+
     private void PositionAbsoluteItem(Div item, Div parent)
     {
         item.PComputedX = parent.PComputedX + parent.PQuadrant.Left + item.PAbsolutePosition.Left;
@@ -324,7 +324,7 @@ public class LayoutEngine
                 PositionAbsoluteItem(divChild, div);
                 continue;
             }
-            
+
             DrawWithMainOffset(div, mainOffset, child);
             mainOffset += GetItemMainAxisLength(div, child) + div.PGap;
         }

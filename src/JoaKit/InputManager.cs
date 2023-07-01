@@ -13,7 +13,7 @@ public class InputManager
     private Div? _activeDiv;
     private Div? _hoveredDiv;
     public List<Div> AbsoluteDivs { get; set; } = new();
-    
+
     public Div? ActiveDiv
     {
         get => _activeDiv;
@@ -23,7 +23,7 @@ public class InputManager
             {
                 ActiveDiv.IsActive = false;
             }
-            
+
             _activeDiv = value;
             if (value is not null)
             {
@@ -41,7 +41,7 @@ public class InputManager
             {
                 HoveredDiv.IsHovered = false;
             }
-            
+
             _hoveredDiv = value;
             if (value is not null)
             {
@@ -49,7 +49,7 @@ public class InputManager
             }
         }
     }
-    
+
     public InputManager(Builder builder, WindowManager windowManager)
     {
         _builder = builder;
@@ -231,7 +231,7 @@ public class InputManager
 
         return HitTest(div, x, y);
     }
-    
+
     private static Div? HitTest(Div div, double x, double y)
     {
         if (DivContainsPoint(div, x, y))

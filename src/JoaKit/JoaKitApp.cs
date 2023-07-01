@@ -28,10 +28,10 @@ public class JoaKitApp
         RenewScope();
     }
 
-    public void CreateWindow<T>(Action<IWindowImpl> configure, bool show = true) where T : Component
+    public void CreateWindow<T>(Action<IWindowImpl>? configure = null, bool show = true) where T : Component
     {
         var window = AvaloniaGlobals.GetRequiredService<IWindowingPlatform>().CreateWindow();
-        configure(window);
+        configure?.Invoke(window);
         WindowManagers.Add(new WindowManager(this, window, typeof(T), _cancellationTokenSource));
         if (show)
         {

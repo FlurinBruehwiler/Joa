@@ -150,7 +150,7 @@ public class Builder
 
         _windowManager.JoaKitApp.CurrentlyBuildingWindow = _window;
         InputManager.AbsoluteDivs.Clear();
-        
+
         if (Root is null)
         {
             RootComponent = componentToBuild;
@@ -196,7 +196,7 @@ public class Builder
             {
                 InputManager.AbsoluteDivs.Add(div);
             }
-            
+
             foreach (var child in div)
             {
                 ValidateTree(child);
@@ -287,7 +287,7 @@ public class Builder
         {
             InputManager.ActiveDiv = div;
         }
-        
+
         foreach (var renderObject in div)
         {
             renderObject.Parent = div;

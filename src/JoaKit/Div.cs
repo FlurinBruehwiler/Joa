@@ -68,7 +68,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool PAutoFocus { get; set; }
-    
+
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool PAbsolute { get; set; }
 
@@ -290,19 +290,19 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         PQuadrant = PQuadrant with { Left = paddingLeft };
         return this;
     }
-    
+
     public Div PaddingRight(int paddingRight)
     {
         PQuadrant = PQuadrant with { Right = paddingRight };
         return this;
     }
-    
+
     public Div PaddingTop(int paddingTop)
     {
         PQuadrant = PQuadrant with { Top = paddingTop };
         return this;
     }
-    
+
     public Div PaddingBottom(int paddingBottom)
     {
         PQuadrant = PQuadrant with { Bottom = paddingBottom };
@@ -429,7 +429,7 @@ public class Div : RenderObject, IEnumerable<RenderObject>
         return this;
     }
 
-    public Div Absolute(int left = 0, int right = 0, int top = 0, int bottom = 0)  
+    public Div Absolute(int left = 0, int right = 0, int top = 0, int bottom = 0)
     {
         PAbsolute = true;
         PAbsolutePosition = new Quadrant(left, right, top, bottom);

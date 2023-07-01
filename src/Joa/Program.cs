@@ -2,7 +2,6 @@
 using Joa.Hotkey;
 using Joa.PluginCore;
 using Joa.Settings;
-using Joa.UI;
 using Joa.UI.Search;
 using JoaKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,20 +41,18 @@ public static class Program
 
         var app = builder.Build();
 
-        app.CreateWindow<UiTest>(impl => {});
-        
-        // app.CreateWindow<SearchBar>(window =>
-        // {
-        //     window.Resize(new Size(SearchBar.Width, SearchBar.SearchBoxHeight));
-        //     window.SetTitle("Joa");
-        //     window.SetIcon(SKBitmap.Decode("Assets/icon.png"));
-        //     window.CanResize(false);
-        //     window.SetExtendClientAreaTitleBarHeightHint(0);
-        //     window.SetExtendClientAreaToDecorationsHint(true);
-        //     window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
-        //     window.ShowTaskbarIcon(false);
-        //     CenterWindow(window);
-        // }, false);
+        app.CreateWindow<SearchBar>(window =>
+        {
+            window.Resize(new Size(SearchBar.Width, SearchBar.SearchBoxHeight));
+            window.SetTitle("Joa");
+            window.SetIcon(SKBitmap.Decode("Assets/icon.png"));
+            window.CanResize(false);
+            window.SetExtendClientAreaTitleBarHeightHint(0);
+            window.SetExtendClientAreaToDecorationsHint(true);
+            window.SetExtendClientAreaChromeHints(ExtendClientAreaChromeHints.NoChrome);
+            window.ShowTaskbarIcon(false);
+            CenterWindow(window);
+        }, false);
 
         app.Run();
     }
