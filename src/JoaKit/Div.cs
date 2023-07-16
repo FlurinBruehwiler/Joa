@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using Modern.WindowKit.Input;
 using SkiaSharp;
 
@@ -80,6 +79,9 @@ public class Div : RenderObject, IEnumerable<RenderObject>
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool IsActive { get; set; }
+
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public bool PCanScroll { get; set; }
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     public Func<Task>? POnClickAsync { get; set; }
@@ -189,12 +191,29 @@ public class Div : RenderObject, IEnumerable<RenderObject>
             }
         }
 
-
+        
         if (Children is not null)
         {
-            foreach (var renderObject in Children)
+            var childSumHeight = Children.Sum(x => x.PComputedHeight);
+            if (childSumHeight > PComputedHeight  && PCanScroll)
             {
-                renderObject.Render(canvas, renderContext);
+                var scrollSurface = SKSurface.Create(new SKImageInfo
+                {
+                    Width = 1000,
+                    Height = 1000
+                });
+                
+                foreach (var renderObject in Children)
+                {
+                    renderObject.Render(scrollSurface.Canvas, renderContext);
+                }
+            }
+            else
+            {
+                foreach (var renderObject in Children)
+                {
+                    renderObject.Render(canvas, renderContext);
+                }
             }
         }
     }
@@ -258,6 +277,12 @@ public class Div : RenderObject, IEnumerable<RenderObject>
     public Div HoverColor(ColorDefinition color)
     {
         PHoverColor = color;
+        return this;
+    }
+
+    public Div CanScroll(bool canScroll = true)
+    {
+        PCanScroll = canScroll;
         return this;
     }
 

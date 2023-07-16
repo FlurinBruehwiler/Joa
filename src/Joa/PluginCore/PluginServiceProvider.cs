@@ -19,9 +19,7 @@ public class PluginServiceProvider
         {
             builder.AddProvider(new JoaKitLoggerProvider());
         });
-        ServiceCollection.AddSingleton<IBrowserHelper, BrowserHelper>();
         ServiceCollection.AddSingleton<IIconHelper, IconHelper>();
-        ServiceCollection.AddSingleton<IClipboardHelper, ClipboardHelper>();
         ServiceProvider = ServiceCollection.BuildServiceProvider();
     }
 

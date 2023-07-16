@@ -1,5 +1,4 @@
-﻿using System.Security.Principal;
-using Joa.PluginCore;
+﻿using Joa.PluginCore;
 using JoaKit;
 
 namespace Joa.UI.Settings;

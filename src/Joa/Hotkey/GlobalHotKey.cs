@@ -1,4 +1,5 @@
-﻿using Joa.Settings;
+﻿using FlurinBruehwiler.Helpers;
+using Joa.Settings;
 
 namespace Joa.Hotkey;
 

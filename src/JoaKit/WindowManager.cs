@@ -61,24 +61,24 @@ public class WindowManager
 
         using var surface = SKSurface.Create(framebufferImageInfo, framebuffer.Address, framebuffer.RowBytes);
 
-        surface.Canvas.DrawSurface(GetSurface(), SKPoint.Empty);
+        // surface.Canvas.DrawSurface(GetSurface(), SKPoint.Empty);
         Canvas = surface.Canvas;
 
+        
         Builder.LayoutPaintComposite(Window.ClientSize * Window.RenderScaling);
-    }
+        
+        var newSurface = SKSurface.Create(new SKImageInfo(framebuffer.Size.Width, framebuffer.Size.Height));
+        // newSurface.Canvas.Translate(100, 0);
+        newSurface.Canvas.DrawRect(0, 0, 100, 100, new SKPaint
+        {
+            Color = SKColors.Black
+        });
+        // newSurface.Canvas.SetMatrix(new SKMatrix(0, 0, 50, 0, 0, 100, 0, 0, 0));
 
-    private SKSurface GetSurface()
-    {
-        if (_surface is not null)
-            return _surface;
-
-        var screen = Window.ClientSize * Window.RenderScaling;
-        var info = new SKImageInfo((int)screen.Width, (int)screen.Height);
-
-        _surface = SKSurface.Create(info);
-        _surface.Canvas.Clear(SKColors.Black);
-
-        return _surface;
+        
+        
+        Canvas.DrawSurface(newSurface, 0, 0);
+        
     }
 
     public int Scale(int value) => (int)(value * Window.RenderScaling);

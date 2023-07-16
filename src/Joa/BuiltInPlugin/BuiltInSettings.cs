@@ -1,4 +1,4 @@
-﻿using Joa.Hotkey;
+﻿using FlurinBruehwiler.Helpers;
 using JoaLauncher.Api.Plugin;
 
 namespace Joa.BuiltInPlugin;
