@@ -4,13 +4,13 @@ using Joa.Hotkey;
 using Joa.PluginCore;
 using Joa.Settings;
 using Joa.UI.Search;
-using JoaKit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Modern.WindowKit;
 using Modern.WindowKit.Controls;
 using Modern.WindowKit.Platform;
 using SkiaSharp;
+using TolggeUI;
 
 namespace Joa;
 
@@ -19,7 +19,7 @@ public static class Program
     [STAThread]
     public static void Main()
     {
-        var builder = JoaKitApp.CreateBuilder();
+        var builder = TolggeApp.CreateBuilder();
 
         builder.Services.AddSingleton<JoaManager>();
         builder.Services.AddSingleton<FileSystemManager>();
@@ -37,7 +37,7 @@ public static class Program
 
         builder.Services.AddLogging(loggingBuilder =>
         {
-            loggingBuilder.AddProvider(new JoaKitLoggerProvider());
+            loggingBuilder.AddProvider(new TolggeLoggerProvider());
         });
 
         var app = builder.Build();

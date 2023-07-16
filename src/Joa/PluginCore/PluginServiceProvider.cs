@@ -1,8 +1,8 @@
 ﻿using Joa.Injectables;
-using JoaKit;
 using JoaLauncher.Api.Injectables;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TolggeUI;
 
 namespace Joa.PluginCore;
 
@@ -17,7 +17,7 @@ public class PluginServiceProvider
         ServiceCollection = new ServiceCollection();
         ServiceCollection.AddLogging(builder =>
         {
-            builder.AddProvider(new JoaKitLoggerProvider());
+            builder.AddProvider(new TolggeLoggerProvider());
         });
         ServiceCollection.AddSingleton<IIconHelper, IconHelper>();
         ServiceProvider = ServiceCollection.BuildServiceProvider();

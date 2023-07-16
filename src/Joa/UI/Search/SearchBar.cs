@@ -2,12 +2,12 @@
 using Joa.Hotkey;
 using Joa.PluginCore;
 using Joa.Steps;
-using Joa.UI.Components;
-using JoaKit;
 using JoaLauncher.Api;
 using Modern.WindowKit;
 using Modern.WindowKit.Input;
 using Modern.WindowKit.Platform;
+using TolggeUI;
+using TolggeUI.Components;
 using Key = Modern.WindowKit.Input.Key;
 
 namespace Joa.UI.Search;
@@ -59,7 +59,7 @@ public class SearchBar : Component
                 {
                     new Div
                     {
-                        new JoaKit.Svg("./battery.svg")
+                        new TolggeUI.Svg("./battery.svg")
                     }.Width(40),
                     new InputComponent()
                         .OnKeyDownAsync(OnKeyDownAsync)

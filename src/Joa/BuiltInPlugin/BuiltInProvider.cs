@@ -1,12 +1,12 @@
 ﻿using Joa.PluginCore;
 using Joa.UI.Settings;
-using JoaKit;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Providers;
 using Microsoft.Extensions.DependencyInjection;
 using Modern.WindowKit;
 using Modern.WindowKit.Threading;
 using SkiaSharp;
+using TolggeUI;
 
 namespace Joa.BuiltInPlugin;
 
@@ -27,7 +27,7 @@ public class BuiltInProvider : IProvider
                 {
                     Dispatcher.UIThread.Post(() =>
                     {
-                        serviceProvider.GetRequiredService<JoaKitApp>().CreateWindow<SettingsWindow>(
+                        serviceProvider.GetRequiredService<TolggeApp>().CreateWindow<SettingsWindow>(
                             window =>
                             {
                                 window.Resize(new Size(800, 600));

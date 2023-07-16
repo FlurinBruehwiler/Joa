@@ -3,9 +3,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using Joa.PluginCore;
-using JoaKit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TolggeUI;
 
 namespace Joa;
 
@@ -16,12 +16,12 @@ public class JoaManager
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<JoaManager> _logger;
     private readonly FileSystemManager _fileSystemManager;
-    private readonly JoaKitApp _joaKitApp;
+    private readonly TolggeApp _joaKitApp;
     private FileWatcher _fileWatcher;
     private const string AssemblyType = "System.Text.Json.JsonSerializerOptionsUpdateHandler";
     private const string ClearCache = "ClearCache";
 
-    public JoaManager(IServiceProvider serviceProvider, ILogger<JoaManager> logger, FileSystemManager fileSystemManager, JoaKitApp joaKitApp)
+    public JoaManager(IServiceProvider serviceProvider, ILogger<JoaManager> logger, FileSystemManager fileSystemManager, TolggeApp joaKitApp)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;

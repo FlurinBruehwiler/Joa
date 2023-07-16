@@ -1,5 +1,5 @@
 ﻿using Joa.PluginCore;
-using JoaKit;
+using TolggeUI;
 
 namespace Joa.UI.Search;
 

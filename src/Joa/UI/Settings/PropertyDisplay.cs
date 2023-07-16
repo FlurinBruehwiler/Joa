@@ -1,7 +1,7 @@
 ﻿using Joa.PluginCore;
 using Joa.Settings;
-using Joa.UI.Components;
-using JoaKit;
+using TolggeUI;
+using TolggeUI.Components;
 
 namespace Joa.UI.Settings;
 
