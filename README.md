@@ -43,33 +43,3 @@ Joa offers a bunch of default plugins which cover the most common use cases. But
 
 ### Tech
 We use a custom UI Framework ([flamui](https://github.com/FlurinBruehwiler/flamui)).
-
-### Development
-Joa relies on the NuGet package JoaLauncher.Api, which is hosted on two different platforms:
-
-- The versions that will be used in releases are hosted on [nuget.org](https://www.nuget.org/packages/JoaLauncher.Api). 
-- Versions used during development are hosted on [GitHub](https://github.com/Joa-Launcher/Plugin-Api/pkgs/nuget/JoaLauncher.Api). To use these versions, you need to be [authenticated to GitHub packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-nuget-registry#authenticating-to-github-packages):
-  1. Create a [Personal access token (classic)](https://github.com/settings/tokens). Make sure it has the read:packages scope.
-  2. Create a `nuget.config` file in the `./src` folder
-  3. Paste the following into the nuget.config file
-  ```xml
-  <?xml version="1.0" encoding="utf-8"?>
-  <configuration>
-      <packageSources>
-          <add key="github" value="https://nuget.pkg.github.com/Joa-Launcher/index.json" />
-      </packageSources>
-      <packageSourceCredentials>
-          <github>
-              <add key="Username" value="USERNAME" />
-              <add key="ClearTextPassword" value="TOKEN" />
-          </github>
-      </packageSourceCredentials>
-      <packageSourceMapping>
-          <packageSources key="github">
-              <package pattern="*" />
-          </packageSources>
-      </packageSourceMapping>
-  </configuration>
-  ```
-   4. Replace USERNAME with your GitHub username
-   5. Replace TOKEN with the token from step 1
