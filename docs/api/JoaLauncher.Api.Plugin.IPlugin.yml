@@ -1,0 +1,115 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Plugin.IPlugin
+  commentId: T:JoaLauncher.Api.Plugin.IPlugin
+  id: IPlugin
+  parent: JoaLauncher.Api.Plugin
+  children:
+  - JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+  langs:
+  - csharp
+  - vb
+  name: IPlugin
+  nameWithType: IPlugin
+  fullName: JoaLauncher.Api.Plugin.IPlugin
+  type: Interface
+  source:
+    remote:
+      path: src/Plugin/IPlugin.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IPlugin
+    path: ../../../Plugin-Api/src/Plugin/IPlugin.cs
+    startLine: 5
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Plugin
+  summary: "\nRepresents a Plugin\n"
+  example: []
+  syntax:
+    content: public interface IPlugin
+    content.vb: Public Interface IPlugin
+- uid: JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+  commentId: M:JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+  id: ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+  parent: JoaLauncher.Api.Plugin.IPlugin
+  langs:
+  - csharp
+  - vb
+  name: ConfigurePlugin(IPluginBuilder)
+  nameWithType: IPlugin.ConfigurePlugin(IPluginBuilder)
+  fullName: JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+  type: Method
+  source:
+    remote:
+      path: src/Plugin/IPlugin.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: ConfigurePlugin
+    path: ../../../Plugin-Api/src/Plugin/IPlugin.cs
+    startLine: 11
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Plugin
+  summary: "\nIs used to configure the plugin\n"
+  example: []
+  syntax:
+    content: void ConfigurePlugin(IPluginBuilder builder)
+    parameters:
+    - id: builder
+      type: JoaLauncher.Api.IPluginBuilder
+      description: ''
+    content.vb: Sub ConfigurePlugin(builder As IPluginBuilder)
+  overload: JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin*
+references:
+- uid: JoaLauncher.Api.Plugin
+  commentId: N:JoaLauncher.Api.Plugin
+  name: JoaLauncher.Api.Plugin
+  nameWithType: JoaLauncher.Api.Plugin
+  fullName: JoaLauncher.Api.Plugin
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Plugin
+    name: Plugin
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Plugin
+    name: Plugin
+- uid: JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin*
+  commentId: Overload:JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin
+  name: ConfigurePlugin
+  nameWithType: IPlugin.ConfigurePlugin
+  fullName: JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin
+- uid: JoaLauncher.Api.IPluginBuilder
+  commentId: T:JoaLauncher.Api.IPluginBuilder
+  parent: JoaLauncher.Api
+  name: IPluginBuilder
+  nameWithType: IPluginBuilder
+  fullName: JoaLauncher.Api.IPluginBuilder
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api

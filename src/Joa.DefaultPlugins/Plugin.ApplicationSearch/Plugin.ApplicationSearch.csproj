@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <RootNamespace>ApplicationSearch</RootNamespace>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="System.Drawing.Common" Version="6.0.0"/>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\Joa.Api\Joa.Api.csproj" />
+    </ItemGroup>
+
+</Project>

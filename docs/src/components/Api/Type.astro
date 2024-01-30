@@ -1,0 +1,24 @@
+---
+import {apiType, externType} from "../../../public/types";
+import Method from "./Method.astro";
+import Property from "./Property.astro";
+import { Markdown } from '@astropub/md'
+import CodeBlock from "./CodeBlock.astro";
+
+interface Props {
+    type: apiType
+  }
+
+const {type} = Astro.props;
+---
+<p>Namespace: <code>{type.namespace}</code></p>
+<p>{type.description}</p>
+
+<CodeBlock code={type.signature}></CodeBlock>
+
+{type.methods.length != 0 && <h2 id="methods">Methods</h2>}
+{type.methods.map(m => <Method method={m}></Method> )}
+
+{type.properties.length != 0 && <h2 id="properties">Properties</h2>}
+{type.properties.map(p => <Property property={p}></Property>)}
+

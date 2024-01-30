@@ -1,0 +1,8 @@
+---
+import {types} from "../../public/api";
+let slot = await Astro.slots.render("default");
+const type = types.find(value => value.name == slot);
+
+---
+{type ? <code><a href={"/" + type.url}>{slot}</a></code> :
+<code>{slot}</code> }

@@ -1,0 +1,33 @@
+---
+import {apiProperty} from "../../../public/types";
+import {Icon} from "astro-icon";
+import CodeBlock from "./CodeBlock.astro";
+import TypeName from "./TypeName.astro";
+interface Props {
+    property: apiProperty
+}
+
+const {property} : Props = Astro.props;
+
+---
+
+<div class="w-full flex flex-col bg-[#0d1117] rounded-[8px]">
+    <div class="flex justify-between w-full  cursor-pointer  pr-[20px]" id="dropDownButton">
+        <CodeBlock code={property.signature}></CodeBlock>
+        <div class="h-10 w-10 ">
+            <div id="dropDownIcon" class="w-full h-full">
+                <Icon name="mdi:chevron-down"/>
+            </div>
+            <div id="dropUpIcon" class="hidden w-full h-full">
+                <Icon name="mdi:chevron-up"/>
+            </div>
+        </div>
+    </div>
+    <div id="dropDown" class="hidden p-[20px] pt-0 w-full ">
+        <p>{property.description}</p>
+        <p class="mt-2"> <span class="font-bold">Type:</span> <TypeName type={property.type}></TypeName></p>
+    </div>
+</div>
+
+
+

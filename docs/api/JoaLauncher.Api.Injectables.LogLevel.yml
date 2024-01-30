@@ -1,0 +1,141 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Injectables.LogLevel
+  commentId: T:JoaLauncher.Api.Injectables.LogLevel
+  id: LogLevel
+  parent: JoaLauncher.Api.Injectables
+  children:
+  - JoaLauncher.Api.Injectables.LogLevel.Error
+  - JoaLauncher.Api.Injectables.LogLevel.Info
+  - JoaLauncher.Api.Injectables.LogLevel.Warning
+  langs:
+  - csharp
+  - vb
+  name: LogLevel
+  nameWithType: LogLevel
+  fullName: JoaLauncher.Api.Injectables.LogLevel
+  type: Enum
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: LogLevel
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 49
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nRepresent the different Log levels\n"
+  example: []
+  syntax:
+    content: public enum LogLevel
+    content.vb: Public Enum LogLevel
+- uid: JoaLauncher.Api.Injectables.LogLevel.Warning
+  commentId: F:JoaLauncher.Api.Injectables.LogLevel.Warning
+  id: Warning
+  parent: JoaLauncher.Api.Injectables.LogLevel
+  langs:
+  - csharp
+  - vb
+  name: Warning
+  nameWithType: LogLevel.Warning
+  fullName: JoaLauncher.Api.Injectables.LogLevel.Warning
+  type: Field
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Warning
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 51
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  syntax:
+    content: Warning = 0
+    return:
+      type: JoaLauncher.Api.Injectables.LogLevel
+- uid: JoaLauncher.Api.Injectables.LogLevel.Info
+  commentId: F:JoaLauncher.Api.Injectables.LogLevel.Info
+  id: Info
+  parent: JoaLauncher.Api.Injectables.LogLevel
+  langs:
+  - csharp
+  - vb
+  name: Info
+  nameWithType: LogLevel.Info
+  fullName: JoaLauncher.Api.Injectables.LogLevel.Info
+  type: Field
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Info
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 52
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  syntax:
+    content: Info = 1
+    return:
+      type: JoaLauncher.Api.Injectables.LogLevel
+- uid: JoaLauncher.Api.Injectables.LogLevel.Error
+  commentId: F:JoaLauncher.Api.Injectables.LogLevel.Error
+  id: Error
+  parent: JoaLauncher.Api.Injectables.LogLevel
+  langs:
+  - csharp
+  - vb
+  name: Error
+  nameWithType: LogLevel.Error
+  fullName: JoaLauncher.Api.Injectables.LogLevel.Error
+  type: Field
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Error
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 53
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  syntax:
+    content: Error = 2
+    return:
+      type: JoaLauncher.Api.Injectables.LogLevel
+references:
+- uid: JoaLauncher.Api.Injectables
+  commentId: N:JoaLauncher.Api.Injectables
+  name: JoaLauncher.Api.Injectables
+  nameWithType: JoaLauncher.Api.Injectables
+  fullName: JoaLauncher.Api.Injectables
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables
+- uid: JoaLauncher.Api.Injectables.LogLevel
+  commentId: T:JoaLauncher.Api.Injectables.LogLevel
+  parent: JoaLauncher.Api.Injectables
+  name: LogLevel
+  nameWithType: LogLevel
+  fullName: JoaLauncher.Api.Injectables.LogLevel

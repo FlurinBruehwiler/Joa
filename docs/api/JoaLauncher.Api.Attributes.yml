@@ -1,0 +1,64 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Attributes
+  commentId: N:JoaLauncher.Api.Attributes
+  id: JoaLauncher.Api.Attributes
+  children:
+  - JoaLauncher.Api.Attributes.ColorAttribute
+  - JoaLauncher.Api.Attributes.EnablerAttribute
+  - JoaLauncher.Api.Attributes.ListTypeAttribute
+  - JoaLauncher.Api.Attributes.OperatingSystemAttribute
+  - JoaLauncher.Api.Attributes.PathAttribute
+  - JoaLauncher.Api.Attributes.PluginAttribute
+  - JoaLauncher.Api.Attributes.RangeAttribute
+  - JoaLauncher.Api.Attributes.SettingPropertyAttribute
+  langs:
+  - csharp
+  - vb
+  name: JoaLauncher.Api.Attributes
+  nameWithType: JoaLauncher.Api.Attributes
+  fullName: JoaLauncher.Api.Attributes
+  type: Namespace
+  assemblies:
+  - JoaLauncher.Api
+references:
+- uid: JoaLauncher.Api.Attributes.ColorAttribute
+  commentId: T:JoaLauncher.Api.Attributes.ColorAttribute
+  name: ColorAttribute
+  nameWithType: ColorAttribute
+  fullName: JoaLauncher.Api.Attributes.ColorAttribute
+- uid: JoaLauncher.Api.Attributes.EnablerAttribute
+  commentId: T:JoaLauncher.Api.Attributes.EnablerAttribute
+  name: EnablerAttribute
+  nameWithType: EnablerAttribute
+  fullName: JoaLauncher.Api.Attributes.EnablerAttribute
+- uid: JoaLauncher.Api.Attributes.ListTypeAttribute
+  commentId: T:JoaLauncher.Api.Attributes.ListTypeAttribute
+  name: ListTypeAttribute
+  nameWithType: ListTypeAttribute
+  fullName: JoaLauncher.Api.Attributes.ListTypeAttribute
+- uid: JoaLauncher.Api.Attributes.OperatingSystemAttribute
+  commentId: T:JoaLauncher.Api.Attributes.OperatingSystemAttribute
+  name: OperatingSystemAttribute
+  nameWithType: OperatingSystemAttribute
+  fullName: JoaLauncher.Api.Attributes.OperatingSystemAttribute
+- uid: JoaLauncher.Api.Attributes.PathAttribute
+  commentId: T:JoaLauncher.Api.Attributes.PathAttribute
+  name: PathAttribute
+  nameWithType: PathAttribute
+  fullName: JoaLauncher.Api.Attributes.PathAttribute
+- uid: JoaLauncher.Api.Attributes.PluginAttribute
+  commentId: T:JoaLauncher.Api.Attributes.PluginAttribute
+  name: PluginAttribute
+  nameWithType: PluginAttribute
+  fullName: JoaLauncher.Api.Attributes.PluginAttribute
+- uid: JoaLauncher.Api.Attributes.RangeAttribute
+  commentId: T:JoaLauncher.Api.Attributes.RangeAttribute
+  name: RangeAttribute
+  nameWithType: RangeAttribute
+  fullName: JoaLauncher.Api.Attributes.RangeAttribute
+- uid: JoaLauncher.Api.Attributes.SettingPropertyAttribute
+  commentId: T:JoaLauncher.Api.Attributes.SettingPropertyAttribute
+  name: SettingPropertyAttribute
+  nameWithType: SettingPropertyAttribute
+  fullName: JoaLauncher.Api.Attributes.SettingPropertyAttribute

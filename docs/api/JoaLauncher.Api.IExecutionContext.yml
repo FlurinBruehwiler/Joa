@@ -1,0 +1,187 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.IExecutionContext
+  commentId: T:JoaLauncher.Api.IExecutionContext
+  id: IExecutionContext
+  parent: JoaLauncher.Api
+  children:
+  - JoaLauncher.Api.IExecutionContext.AddStepBuilder
+  - JoaLauncher.Api.IExecutionContext.ContextAction
+  - JoaLauncher.Api.IExecutionContext.ServiceProvider
+  langs:
+  - csharp
+  - vb
+  name: IExecutionContext
+  nameWithType: IExecutionContext
+  fullName: JoaLauncher.Api.IExecutionContext
+  type: Interface
+  source:
+    remote:
+      path: src/IExecutionContext.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IExecutionContext
+    path: ../../../Plugin-Api/src/IExecutionContext.cs
+    startLine: 8
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nA parameter passed in to the\n<see cref=\"!:ISearchResult.Execute\"></see> Method on a SearchResult\nContaint information about the context in which the execution\nhappens\n"
+  example: []
+  syntax:
+    content: public interface IExecutionContext
+    content.vb: Public Interface IExecutionContext
+- uid: JoaLauncher.Api.IExecutionContext.ContextAction
+  commentId: P:JoaLauncher.Api.IExecutionContext.ContextAction
+  id: ContextAction
+  parent: JoaLauncher.Api.IExecutionContext
+  langs:
+  - csharp
+  - vb
+  name: ContextAction
+  nameWithType: IExecutionContext.ContextAction
+  fullName: JoaLauncher.Api.IExecutionContext.ContextAction
+  type: Property
+  source:
+    remote:
+      path: src/IExecutionContext.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: ContextAction
+    path: ../../../Plugin-Api/src/IExecutionContext.cs
+    startLine: 14
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nIs the <xref href=\"JoaLauncher.Api.IExecutionContext.ContextAction\" data-throw-if-not-resolved=\"false\"></xref> that the user selected when\nexecuting the <see cref=\"!:ISearchResult\"></see>\n"
+  example: []
+  syntax:
+    content: ContextAction ContextAction { get; set; }
+    parameters: []
+    return:
+      type: JoaLauncher.Api.ContextAction
+    content.vb: Property ContextAction As ContextAction
+  overload: JoaLauncher.Api.IExecutionContext.ContextAction*
+- uid: JoaLauncher.Api.IExecutionContext.ServiceProvider
+  commentId: P:JoaLauncher.Api.IExecutionContext.ServiceProvider
+  id: ServiceProvider
+  parent: JoaLauncher.Api.IExecutionContext
+  langs:
+  - csharp
+  - vb
+  name: ServiceProvider
+  nameWithType: IExecutionContext.ServiceProvider
+  fullName: JoaLauncher.Api.IExecutionContext.ServiceProvider
+  type: Property
+  source:
+    remote:
+      path: src/IExecutionContext.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: ServiceProvider
+    path: ../../../Plugin-Api/src/IExecutionContext.cs
+    startLine: 19
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nA ServiceProvider that can be used to inject services\n"
+  example: []
+  syntax:
+    content: IServiceProvider ServiceProvider { get; set; }
+    parameters: []
+    return:
+      type: System.IServiceProvider
+    content.vb: Property ServiceProvider As IServiceProvider
+  overload: JoaLauncher.Api.IExecutionContext.ServiceProvider*
+- uid: JoaLauncher.Api.IExecutionContext.AddStepBuilder
+  commentId: M:JoaLauncher.Api.IExecutionContext.AddStepBuilder
+  id: AddStepBuilder
+  parent: JoaLauncher.Api.IExecutionContext
+  langs:
+  - csharp
+  - vb
+  name: AddStepBuilder()
+  nameWithType: IExecutionContext.AddStepBuilder()
+  fullName: JoaLauncher.Api.IExecutionContext.AddStepBuilder()
+  type: Method
+  source:
+    remote:
+      path: src/IExecutionContext.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: AddStepBuilder
+    path: ../../../Plugin-Api/src/IExecutionContext.cs
+    startLine: 27
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nCreates a new StepBuilder and returns it.\nIf this method is called, the UI will navigate\nto the new Step\n"
+  example: []
+  syntax:
+    content: IStepBuilder AddStepBuilder()
+    return:
+      type: JoaLauncher.Api.IStepBuilder
+      description: ''
+    content.vb: Function AddStepBuilder() As IStepBuilder
+  overload: JoaLauncher.Api.IExecutionContext.AddStepBuilder*
+references:
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+- uid: JoaLauncher.Api.IExecutionContext.ContextAction
+  commentId: P:JoaLauncher.Api.IExecutionContext.ContextAction
+  isExternal: true
+- uid: JoaLauncher.Api.IExecutionContext.ContextAction*
+  commentId: Overload:JoaLauncher.Api.IExecutionContext.ContextAction
+  name: ContextAction
+  nameWithType: IExecutionContext.ContextAction
+  fullName: JoaLauncher.Api.IExecutionContext.ContextAction
+- uid: JoaLauncher.Api.ContextAction
+  commentId: T:JoaLauncher.Api.ContextAction
+  parent: JoaLauncher.Api
+  name: ContextAction
+  nameWithType: ContextAction
+  fullName: JoaLauncher.Api.ContextAction
+- uid: JoaLauncher.Api.IExecutionContext.ServiceProvider*
+  commentId: Overload:JoaLauncher.Api.IExecutionContext.ServiceProvider
+  name: ServiceProvider
+  nameWithType: IExecutionContext.ServiceProvider
+  fullName: JoaLauncher.Api.IExecutionContext.ServiceProvider
+- uid: System.IServiceProvider
+  commentId: T:System.IServiceProvider
+  parent: System
+  isExternal: true
+  name: IServiceProvider
+  nameWithType: IServiceProvider
+  fullName: System.IServiceProvider
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: JoaLauncher.Api.IExecutionContext.AddStepBuilder*
+  commentId: Overload:JoaLauncher.Api.IExecutionContext.AddStepBuilder
+  name: AddStepBuilder
+  nameWithType: IExecutionContext.AddStepBuilder
+  fullName: JoaLauncher.Api.IExecutionContext.AddStepBuilder
+- uid: JoaLauncher.Api.IStepBuilder
+  commentId: T:JoaLauncher.Api.IStepBuilder
+  parent: JoaLauncher.Api
+  name: IStepBuilder
+  nameWithType: IStepBuilder
+  fullName: JoaLauncher.Api.IStepBuilder

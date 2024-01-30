@@ -1,0 +1,93 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Providers.IProvider`1
+  commentId: T:JoaLauncher.Api.Providers.IProvider`1
+  id: IProvider`1
+  parent: JoaLauncher.Api.Providers
+  children: []
+  langs:
+  - csharp
+  - vb
+  name: IProvider<T>
+  nameWithType: IProvider<T>
+  fullName: JoaLauncher.Api.Providers.IProvider<T>
+  type: Interface
+  source:
+    remote:
+      path: src/Providers/IProvider.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IProvider
+    path: ../../../Plugin-Api/src/Providers/IProvider.cs
+    startLine: 20
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Providers
+  summary: "\nA Provider has the job to provide search results.\nA Provider can be used at two points\n1. It can be registered as a global provider\n2. It can be added to a step using the StepBuilder\nin a search result\n"
+  example: []
+  syntax:
+    content: 'public interface IProvider<in T> : IProvider'
+    typeParameters:
+    - id: T
+    content.vb: Public Interface IProvider(Of In T) Inherits IProvider
+  inheritedMembers:
+  - JoaLauncher.Api.Providers.IProvider.GetSearchResults(System.String)
+  nameWithType.vb: IProvider(Of T)
+  fullName.vb: JoaLauncher.Api.Providers.IProvider(Of T)
+  name.vb: IProvider(Of T)
+references:
+- uid: JoaLauncher.Api.Providers
+  commentId: N:JoaLauncher.Api.Providers
+  name: JoaLauncher.Api.Providers
+  nameWithType: JoaLauncher.Api.Providers
+  fullName: JoaLauncher.Api.Providers
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Providers
+    name: Providers
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Providers
+    name: Providers
+- uid: JoaLauncher.Api.Providers.IProvider.GetSearchResults(System.String)
+  commentId: M:JoaLauncher.Api.Providers.IProvider.GetSearchResults(System.String)
+  parent: JoaLauncher.Api.Providers.IProvider
+  isExternal: true
+  name: GetSearchResults(string)
+  nameWithType: IProvider.GetSearchResults(string)
+  fullName: JoaLauncher.Api.Providers.IProvider.GetSearchResults(string)
+  nameWithType.vb: IProvider.GetSearchResults(String)
+  fullName.vb: JoaLauncher.Api.Providers.IProvider.GetSearchResults(String)
+  name.vb: GetSearchResults(String)
+  spec.csharp:
+  - uid: JoaLauncher.Api.Providers.IProvider.GetSearchResults(System.String)
+    name: GetSearchResults
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: JoaLauncher.Api.Providers.IProvider.GetSearchResults(System.String)
+    name: GetSearchResults
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+  - name: )
+- uid: JoaLauncher.Api.Providers.IProvider
+  commentId: T:JoaLauncher.Api.Providers.IProvider
+  parent: JoaLauncher.Api.Providers
+  name: IProvider
+  nameWithType: IProvider
+  fullName: JoaLauncher.Api.Providers.IProvider

@@ -1,0 +1,195 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Providers.IProvider
+  commentId: T:JoaLauncher.Api.Providers.IProvider
+  id: IProvider
+  parent: JoaLauncher.Api.Providers
+  children:
+  - JoaLauncher.Api.Providers.IProvider.GetSearchResults(System.String)
+  langs:
+  - csharp
+  - vb
+  name: IProvider
+  nameWithType: IProvider
+  fullName: JoaLauncher.Api.Providers.IProvider
+  type: Interface
+  source:
+    remote:
+      path: src/Providers/IProvider.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IProvider
+    path: ../../../Plugin-Api/src/Providers/IProvider.cs
+    startLine: 2
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Providers
+  syntax:
+    content: public interface IProvider
+    content.vb: Public Interface IProvider
+- uid: JoaLauncher.Api.Providers.IProvider.GetSearchResults(System.String)
+  commentId: M:JoaLauncher.Api.Providers.IProvider.GetSearchResults(System.String)
+  id: GetSearchResults(System.String)
+  parent: JoaLauncher.Api.Providers.IProvider
+  langs:
+  - csharp
+  - vb
+  name: GetSearchResults(string)
+  nameWithType: IProvider.GetSearchResults(string)
+  fullName: JoaLauncher.Api.Providers.IProvider.GetSearchResults(string)
+  type: Method
+  source:
+    remote:
+      path: src/Providers/IProvider.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: GetSearchResults
+    path: ../../../Plugin-Api/src/Providers/IProvider.cs
+    startLine: 10
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Providers
+  summary: "\nA performance critical method used to return search results.\nIn most cases this method should only return cached search results.\n"
+  example: []
+  syntax:
+    content: List<SearchResult> GetSearchResults(string searchString)
+    parameters:
+    - id: searchString
+      type: System.String
+      description: ''
+    return:
+      type: System.Collections.Generic.List{JoaLauncher.Api.SearchResult}
+      description: ''
+    content.vb: Function GetSearchResults(searchString As String) As List(Of SearchResult)
+  overload: JoaLauncher.Api.Providers.IProvider.GetSearchResults*
+  nameWithType.vb: IProvider.GetSearchResults(String)
+  fullName.vb: JoaLauncher.Api.Providers.IProvider.GetSearchResults(String)
+  name.vb: GetSearchResults(String)
+references:
+- uid: JoaLauncher.Api.Providers
+  commentId: N:JoaLauncher.Api.Providers
+  name: JoaLauncher.Api.Providers
+  nameWithType: JoaLauncher.Api.Providers
+  fullName: JoaLauncher.Api.Providers
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Providers
+    name: Providers
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Providers
+    name: Providers
+- uid: JoaLauncher.Api.Providers.IProvider.GetSearchResults*
+  commentId: Overload:JoaLauncher.Api.Providers.IProvider.GetSearchResults
+  name: GetSearchResults
+  nameWithType: IProvider.GetSearchResults
+  fullName: JoaLauncher.Api.Providers.IProvider.GetSearchResults
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System.Collections.Generic.List{JoaLauncher.Api.SearchResult}
+  commentId: T:System.Collections.Generic.List{JoaLauncher.Api.SearchResult}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.List`1
+  name: List<SearchResult>
+  nameWithType: List<SearchResult>
+  fullName: System.Collections.Generic.List<JoaLauncher.Api.SearchResult>
+  nameWithType.vb: List(Of SearchResult)
+  fullName.vb: System.Collections.Generic.List(Of JoaLauncher.Api.SearchResult)
+  name.vb: List(Of SearchResult)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+  - name: <
+  - uid: JoaLauncher.Api.SearchResult
+    name: SearchResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: JoaLauncher.Api.SearchResult
+    name: SearchResult
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.Collections.Generic.List`1
+  commentId: T:System.Collections.Generic.List`1
+  isExternal: true
+  name: List<T>
+  nameWithType: List<T>
+  fullName: System.Collections.Generic.List<T>
+  nameWithType.vb: List(Of T)
+  fullName.vb: System.Collections.Generic.List(Of T)
+  name.vb: List(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.List`1
+    name: List
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true

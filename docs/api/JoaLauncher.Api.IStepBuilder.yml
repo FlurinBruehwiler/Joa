@@ -1,0 +1,199 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.IStepBuilder
+  commentId: T:JoaLauncher.Api.IStepBuilder
+  id: IStepBuilder
+  parent: JoaLauncher.Api
+  children:
+  - JoaLauncher.Api.IStepBuilder.AddProvider``1
+  - JoaLauncher.Api.IStepBuilder.AddProvider``2(``1)
+  - JoaLauncher.Api.IStepBuilder.WithOptions(JoaLauncher.Api.StepOptions)
+  langs:
+  - csharp
+  - vb
+  name: IStepBuilder
+  nameWithType: IStepBuilder
+  fullName: JoaLauncher.Api.IStepBuilder
+  type: Interface
+  source:
+    remote:
+      path: src/IStepBuilder.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IStepBuilder
+    path: ../../../Plugin-Api/src/IStepBuilder.cs
+    startLine: 7
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nIs used to Build a new Step. A Step Containt Providers\n"
+  example: []
+  syntax:
+    content: public interface IStepBuilder
+    content.vb: Public Interface IStepBuilder
+- uid: JoaLauncher.Api.IStepBuilder.AddProvider``1
+  commentId: M:JoaLauncher.Api.IStepBuilder.AddProvider``1
+  id: AddProvider``1
+  parent: JoaLauncher.Api.IStepBuilder
+  langs:
+  - csharp
+  - vb
+  name: AddProvider<T>()
+  nameWithType: IStepBuilder.AddProvider<T>()
+  fullName: JoaLauncher.Api.IStepBuilder.AddProvider<T>()
+  type: Method
+  source:
+    remote:
+      path: src/IStepBuilder.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: AddProvider
+    path: ../../../Plugin-Api/src/IStepBuilder.cs
+    startLine: 14
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nCan be used to add a Provider without a ProviderContext to the Step.\n"
+  example: []
+  syntax:
+    content: 'IStepBuilder AddProvider<T>() where T : IProvider'
+    typeParameters:
+    - id: T
+      description: The Type of Provider to be added to the StepBuilder
+    return:
+      type: JoaLauncher.Api.IStepBuilder
+      description: The StepBuilder
+    content.vb: Function AddProvider(Of T As IProvider)() As IStepBuilder
+  overload: JoaLauncher.Api.IStepBuilder.AddProvider*
+  nameWithType.vb: IStepBuilder.AddProvider(Of T)()
+  fullName.vb: JoaLauncher.Api.IStepBuilder.AddProvider(Of T)()
+  name.vb: AddProvider(Of T)()
+- uid: JoaLauncher.Api.IStepBuilder.AddProvider``2(``1)
+  commentId: M:JoaLauncher.Api.IStepBuilder.AddProvider``2(``1)
+  id: AddProvider``2(``1)
+  parent: JoaLauncher.Api.IStepBuilder
+  langs:
+  - csharp
+  - vb
+  name: AddProvider<TProvider, TContext>(TContext)
+  nameWithType: IStepBuilder.AddProvider<TProvider, TContext>(TContext)
+  fullName: JoaLauncher.Api.IStepBuilder.AddProvider<TProvider, TContext>(TContext)
+  type: Method
+  source:
+    remote:
+      path: src/IStepBuilder.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: AddProvider
+    path: ../../../Plugin-Api/src/IStepBuilder.cs
+    startLine: 23
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nCan be used to add a Provider with a ProviderContext to the Step.\n"
+  example: []
+  syntax:
+    content: 'IStepBuilder AddProvider<TProvider, TContext>(TContext providerContext) where TProvider : IProvider<TContext>'
+    parameters:
+    - id: providerContext
+      type: '{TContext}'
+      description: The ProviderContext used to instantiate the Provider
+    typeParameters:
+    - id: TProvider
+      description: The Type of Provider to be added to the StepBuilder
+    - id: TContext
+      description: The Type of ProviderContext used to instatiate the Provider
+    return:
+      type: JoaLauncher.Api.IStepBuilder
+      description: The StepBuilder
+    content.vb: Function AddProvider(Of TProvider As IProvider(Of TContext), TContext)(providerContext As TContext) As IStepBuilder
+  overload: JoaLauncher.Api.IStepBuilder.AddProvider*
+  nameWithType.vb: IStepBuilder.AddProvider(Of TProvider, TContext)(TContext)
+  fullName.vb: JoaLauncher.Api.IStepBuilder.AddProvider(Of TProvider, TContext)(TContext)
+  name.vb: AddProvider(Of TProvider, TContext)(TContext)
+- uid: JoaLauncher.Api.IStepBuilder.WithOptions(JoaLauncher.Api.StepOptions)
+  commentId: M:JoaLauncher.Api.IStepBuilder.WithOptions(JoaLauncher.Api.StepOptions)
+  id: WithOptions(JoaLauncher.Api.StepOptions)
+  parent: JoaLauncher.Api.IStepBuilder
+  langs:
+  - csharp
+  - vb
+  name: WithOptions(StepOptions)
+  nameWithType: IStepBuilder.WithOptions(StepOptions)
+  fullName: JoaLauncher.Api.IStepBuilder.WithOptions(JoaLauncher.Api.StepOptions)
+  type: Method
+  source:
+    remote:
+      path: src/IStepBuilder.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: WithOptions
+    path: ../../../Plugin-Api/src/IStepBuilder.cs
+    startLine: 31
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nConfigures the step with the provided options \n"
+  example: []
+  syntax:
+    content: IStepBuilder WithOptions(StepOptions stepOptions)
+    parameters:
+    - id: stepOptions
+      type: JoaLauncher.Api.StepOptions
+      description: ''
+    return:
+      type: JoaLauncher.Api.IStepBuilder
+      description: ''
+    content.vb: Function WithOptions(stepOptions As StepOptions) As IStepBuilder
+  overload: JoaLauncher.Api.IStepBuilder.WithOptions*
+references:
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+- uid: JoaLauncher.Api.IStepBuilder.AddProvider*
+  commentId: Overload:JoaLauncher.Api.IStepBuilder.AddProvider
+  name: AddProvider
+  nameWithType: IStepBuilder.AddProvider
+  fullName: JoaLauncher.Api.IStepBuilder.AddProvider
+- uid: JoaLauncher.Api.IStepBuilder
+  commentId: T:JoaLauncher.Api.IStepBuilder
+  parent: JoaLauncher.Api
+  name: IStepBuilder
+  nameWithType: IStepBuilder
+  fullName: JoaLauncher.Api.IStepBuilder
+- uid: '{TContext}'
+  commentId: '!:TContext'
+  definition: TContext
+  name: TContext
+  nameWithType: TContext
+  fullName: TContext
+- uid: TContext
+  commentId: '!:TContext'
+  name: TContext
+  nameWithType: TContext
+  fullName: TContext
+- uid: JoaLauncher.Api.IStepBuilder.WithOptions*
+  commentId: Overload:JoaLauncher.Api.IStepBuilder.WithOptions
+  name: WithOptions
+  nameWithType: IStepBuilder.WithOptions
+  fullName: JoaLauncher.Api.IStepBuilder.WithOptions
+- uid: JoaLauncher.Api.StepOptions
+  commentId: T:JoaLauncher.Api.StepOptions
+  parent: JoaLauncher.Api
+  name: StepOptions
+  nameWithType: StepOptions
+  fullName: JoaLauncher.Api.StepOptions

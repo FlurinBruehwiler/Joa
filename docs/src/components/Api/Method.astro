@@ -1,0 +1,90 @@
+---
+import {Icon} from 'astro-icon'
+import {apiMethod} from '../../../public/types'
+import TypeName from "./TypeName.astro";
+import CodeBlock from "./CodeBlock.astro";
+
+interface Props{
+    method: apiMethod
+}
+
+const {method}: Props = Astro.props;
+
+
+---
+
+<div class="w-full flex flex-col items-start bg-[#0d1117] rounded-[8px]">
+    <div class="flex justify-between w-full  cursor-pointer  pr-[20px]" id="dropDownButton">
+        <CodeBlock code={method.signature}></CodeBlock>
+        <div class="h-10 w-10 ">
+            <div id="dropDownIcon" class="w-full h-full">
+                <Icon name="mdi:chevron-down"/>
+            </div>
+            <div id="dropUpIcon" class="hidden w-full h-full">
+                <Icon name="mdi:chevron-up"/>
+            </div>
+        </div>
+    </div>
+    <div id="dropDown" class="hidden p-[20px] pt-4 w-full">
+        <p>{method.description}</p>
+        {method.parameters.length != 0 && <p class="font-bold mt-3">Parameters</p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                    {method.parameters.map(p =>
+                            <tr>
+                                <td><TypeName type={p.type}></TypeName> {p.name}</td>
+                                <td>{p.description}</td>
+                            </tr>
+                    )}
+                    </thead>
+                </table>
+        }
+        {method.returns &&
+                <p class="font-bold mt-3">Returns</p>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><TypeName type={method.returns.type}></TypeName></td>
+                        <td>{method.returns.description}</td>
+                    </tr>
+                    </thead>
+                </table>
+        }
+    </div>
+</div>
+
+<script>
+    const elm = document.querySelectorAll < HTMLElement > ("#dropDownButton");
+    const elements = Array.from(elm).map((x) => {
+        return {
+            button: x,
+            isExpanded: false,
+        };
+    });
+
+    elements.forEach((element) => {
+        element.button.addEventListener("click", () => {
+            element.isExpanded = !element.isExpanded;
+            let dropdown =
+                element.button.parentElement?.querySelector < HTMLElement > ("#dropDown");
+            let dropDownIcon = element.button.querySelector < HTMLElement > ("#dropDownIcon");
+            let dropUpIcon = element.button.querySelector < HTMLElement > ("#dropUpIcon");
+
+            if (!dropdown) throw "dropdown not found";
+            if (!dropDownIcon) throw "dropDownIcon not found";
+            if (!dropUpIcon) throw "dropUpIcon not found";
+
+            dropdown.style.display = element.isExpanded ? "Block" : "None";
+            dropDownIcon.style.display = element.isExpanded ? "None" : "Block";
+            dropUpIcon.style.display = element.isExpanded ? "Block" : "None";
+        });
+    });
+</script>

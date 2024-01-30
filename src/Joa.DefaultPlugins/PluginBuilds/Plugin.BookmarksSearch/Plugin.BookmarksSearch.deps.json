@@ -1,0 +1,46 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "Plugin.BookmarksSearch/1.0.0": {
+        "dependencies": {
+          "JoaLauncher.Api": "1.0.27-g8604fc7845"
+        },
+        "runtime": {
+          "Plugin.BookmarksSearch.dll": {}
+        }
+      },
+      "JoaLauncher.Api/1.0.27-g8604fc7845": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "7.0.0"
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/7.0.0": {}
+    }
+  },
+  "libraries": {
+    "Plugin.BookmarksSearch/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "JoaLauncher.Api/1.0.27-g8604fc7845": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rFhjORVqnMjwHYa8aQ0CXBlZQeDrXWKseeXfePZHEmwpHz1Ou/sMheXLhxreNSf7eeWTO6EI6aS+HpA7YqW3Cw==",
+      "path": "joalauncher.api/1.0.27-g8604fc7845",
+      "hashPath": "joalauncher.api.1.0.27-g8604fc7845.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/7.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kmn78+LPVMOWeITUjIlfxUPDsI0R6G0RkeAMBmQxAJ7vBJn4q2dTva7pWi65ceN5vPGjJ9q/Uae2WKgvfktJAw==",
+      "path": "microsoft.extensions.logging.abstractions/7.0.0",
+      "hashPath": "microsoft.extensions.logging.abstractions.7.0.0.nupkg.sha512"
+    }
+  }
+}

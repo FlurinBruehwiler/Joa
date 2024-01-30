@@ -1,0 +1,69 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Providers
+  commentId: N:JoaLauncher.Api.Providers
+  id: JoaLauncher.Api.Providers
+  children:
+  - JoaLauncher.Api.Providers.IProvider
+  - JoaLauncher.Api.Providers.IProvider`1
+  langs:
+  - csharp
+  - vb
+  name: JoaLauncher.Api.Providers
+  nameWithType: JoaLauncher.Api.Providers
+  fullName: JoaLauncher.Api.Providers
+  type: Namespace
+  assemblies:
+  - JoaLauncher.Api
+references:
+- uid: JoaLauncher.Api.Providers.IProvider
+  commentId: T:JoaLauncher.Api.Providers.IProvider
+  parent: JoaLauncher.Api.Providers
+  name: IProvider
+  nameWithType: IProvider
+  fullName: JoaLauncher.Api.Providers.IProvider
+- uid: JoaLauncher.Api.Providers.IProvider`1
+  commentId: T:JoaLauncher.Api.Providers.IProvider`1
+  name: IProvider<T>
+  nameWithType: IProvider<T>
+  fullName: JoaLauncher.Api.Providers.IProvider<T>
+  nameWithType.vb: IProvider(Of T)
+  fullName.vb: JoaLauncher.Api.Providers.IProvider(Of T)
+  name.vb: IProvider(Of T)
+  spec.csharp:
+  - uid: JoaLauncher.Api.Providers.IProvider`1
+    name: IProvider
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: JoaLauncher.Api.Providers.IProvider`1
+    name: IProvider
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: JoaLauncher.Api.Providers
+  commentId: N:JoaLauncher.Api.Providers
+  name: JoaLauncher.Api.Providers
+  nameWithType: JoaLauncher.Api.Providers
+  fullName: JoaLauncher.Api.Providers
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Providers
+    name: Providers
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Providers
+    name: Providers

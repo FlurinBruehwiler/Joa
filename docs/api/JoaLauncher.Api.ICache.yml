@@ -1,0 +1,82 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.ICache
+  commentId: T:JoaLauncher.Api.ICache
+  id: ICache
+  parent: JoaLauncher.Api
+  children:
+  - JoaLauncher.Api.ICache.UpdateIndexes
+  langs:
+  - csharp
+  - vb
+  name: ICache
+  nameWithType: ICache
+  fullName: JoaLauncher.Api.ICache
+  type: Interface
+  source:
+    remote:
+      path: src/ICache.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: ICache
+    path: ../../../Plugin-Api/src/ICache.cs
+    startLine: 5
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nAn ICache can be used to cache information.\n"
+  example: []
+  syntax:
+    content: public interface ICache
+    content.vb: Public Interface ICache
+- uid: JoaLauncher.Api.ICache.UpdateIndexes
+  commentId: M:JoaLauncher.Api.ICache.UpdateIndexes
+  id: UpdateIndexes
+  parent: JoaLauncher.Api.ICache
+  langs:
+  - csharp
+  - vb
+  name: UpdateIndexes()
+  nameWithType: ICache.UpdateIndexes()
+  fullName: JoaLauncher.Api.ICache.UpdateIndexes()
+  type: Method
+  source:
+    remote:
+      path: src/ICache.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: UpdateIndexes
+    path: ../../../Plugin-Api/src/ICache.cs
+    startLine: 12
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nIs getting called at the start of the application and after that periodically\nHow often this method gets called can be adjusted by the user in the settings\nThe user can also manually call this method via a global search result \n"
+  example: []
+  syntax:
+    content: void UpdateIndexes()
+    content.vb: Sub UpdateIndexes()
+  overload: JoaLauncher.Api.ICache.UpdateIndexes*
+references:
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+- uid: JoaLauncher.Api.ICache.UpdateIndexes*
+  commentId: Overload:JoaLauncher.Api.ICache.UpdateIndexes
+  name: UpdateIndexes
+  nameWithType: ICache.UpdateIndexes
+  fullName: JoaLauncher.Api.ICache.UpdateIndexes

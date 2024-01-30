@@ -1,0 +1,12 @@
+---
+import {Markdown} from "@astropub/md";
+
+interface Props {
+    code: string
+}
+
+const {code} = Astro.props;
+let content = "```csharp\n" + code + "\n```"
+---
+
+<Markdown of={content}></Markdown>

@@ -1,0 +1,173 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Plugin.IUiPlugin
+  commentId: T:JoaLauncher.Api.Plugin.IUiPlugin
+  id: IUiPlugin
+  parent: JoaLauncher.Api.Plugin
+  children:
+  - JoaLauncher.Api.Plugin.IUiPlugin.Start(System.String)
+  - JoaLauncher.Api.Plugin.IUiPlugin.Stop
+  langs:
+  - csharp
+  - vb
+  name: IUiPlugin
+  nameWithType: IUiPlugin
+  fullName: JoaLauncher.Api.Plugin.IUiPlugin
+  type: Interface
+  source:
+    remote:
+      path: src/Plugin/IUiPlugin.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IUiPlugin
+    path: ../../../Plugin-Api/src/Plugin/IUiPlugin.cs
+    startLine: 5
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Plugin
+  summary: "\nDefines a UI Plugin\n"
+  example: []
+  syntax:
+    content: 'public interface IUiPlugin : IPlugin'
+    content.vb: Public Interface IUiPlugin Inherits IPlugin
+  inheritedMembers:
+  - JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+- uid: JoaLauncher.Api.Plugin.IUiPlugin.Start(System.String)
+  commentId: M:JoaLauncher.Api.Plugin.IUiPlugin.Start(System.String)
+  id: Start(System.String)
+  parent: JoaLauncher.Api.Plugin.IUiPlugin
+  langs:
+  - csharp
+  - vb
+  name: Start(string)
+  nameWithType: IUiPlugin.Start(string)
+  fullName: JoaLauncher.Api.Plugin.IUiPlugin.Start(string)
+  type: Method
+  source:
+    remote:
+      path: src/Plugin/IUiPlugin.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Start
+    path: ../../../Plugin-Api/src/Plugin/IUiPlugin.cs
+    startLine: 11
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Plugin
+  summary: "\nWhen executed, the plugin should start the UI\n"
+  example: []
+  syntax:
+    content: void Start(string port)
+    parameters:
+    - id: port
+      type: System.String
+      description: The port used for communication between the plugin and Joa
+    content.vb: Sub Start(port As String)
+  overload: JoaLauncher.Api.Plugin.IUiPlugin.Start*
+  nameWithType.vb: IUiPlugin.Start(String)
+  fullName.vb: JoaLauncher.Api.Plugin.IUiPlugin.Start(String)
+  name.vb: Start(String)
+- uid: JoaLauncher.Api.Plugin.IUiPlugin.Stop
+  commentId: M:JoaLauncher.Api.Plugin.IUiPlugin.Stop
+  id: Stop
+  parent: JoaLauncher.Api.Plugin.IUiPlugin
+  langs:
+  - csharp
+  - vb
+  name: Stop()
+  nameWithType: IUiPlugin.Stop()
+  fullName: JoaLauncher.Api.Plugin.IUiPlugin.Stop()
+  type: Method
+  source:
+    remote:
+      path: src/Plugin/IUiPlugin.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Stop
+    path: ../../../Plugin-Api/src/Plugin/IUiPlugin.cs
+    startLine: 16
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Plugin
+  summary: "\nWhen executed, the plugin should stop the UI\n"
+  example: []
+  syntax:
+    content: void Stop()
+    content.vb: Sub [Stop]()
+  overload: JoaLauncher.Api.Plugin.IUiPlugin.Stop*
+references:
+- uid: JoaLauncher.Api.Plugin
+  commentId: N:JoaLauncher.Api.Plugin
+  name: JoaLauncher.Api.Plugin
+  nameWithType: JoaLauncher.Api.Plugin
+  fullName: JoaLauncher.Api.Plugin
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Plugin
+    name: Plugin
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Plugin
+    name: Plugin
+- uid: JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+  commentId: M:JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+  parent: JoaLauncher.Api.Plugin.IPlugin
+  name: ConfigurePlugin(IPluginBuilder)
+  nameWithType: IPlugin.ConfigurePlugin(IPluginBuilder)
+  fullName: JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+  spec.csharp:
+  - uid: JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+    name: ConfigurePlugin
+  - name: (
+  - uid: JoaLauncher.Api.IPluginBuilder
+    name: IPluginBuilder
+  - name: )
+  spec.vb:
+  - uid: JoaLauncher.Api.Plugin.IPlugin.ConfigurePlugin(JoaLauncher.Api.IPluginBuilder)
+    name: ConfigurePlugin
+  - name: (
+  - uid: JoaLauncher.Api.IPluginBuilder
+    name: IPluginBuilder
+  - name: )
+- uid: JoaLauncher.Api.Plugin.IPlugin
+  commentId: T:JoaLauncher.Api.Plugin.IPlugin
+  parent: JoaLauncher.Api.Plugin
+  name: IPlugin
+  nameWithType: IPlugin
+  fullName: JoaLauncher.Api.Plugin.IPlugin
+- uid: JoaLauncher.Api.Plugin.IUiPlugin.Start*
+  commentId: Overload:JoaLauncher.Api.Plugin.IUiPlugin.Start
+  name: Start
+  nameWithType: IUiPlugin.Start
+  fullName: JoaLauncher.Api.Plugin.IUiPlugin.Start
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: JoaLauncher.Api.Plugin.IUiPlugin.Stop*
+  commentId: Overload:JoaLauncher.Api.Plugin.IUiPlugin.Stop
+  name: Stop
+  nameWithType: IUiPlugin.Stop
+  fullName: JoaLauncher.Api.Plugin.IUiPlugin.Stop

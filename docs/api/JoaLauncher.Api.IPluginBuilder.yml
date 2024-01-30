@@ -1,0 +1,263 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.IPluginBuilder
+  commentId: T:JoaLauncher.Api.IPluginBuilder
+  id: IPluginBuilder
+  parent: JoaLauncher.Api
+  children:
+  - JoaLauncher.Api.IPluginBuilder.AddGlobalProvider``1
+  - JoaLauncher.Api.IPluginBuilder.AddGlobalProvider``1(System.Func{System.String,System.Boolean})
+  - JoaLauncher.Api.IPluginBuilder.AddGlobalResult(JoaLauncher.Api.SearchResult)
+  langs:
+  - csharp
+  - vb
+  name: IPluginBuilder
+  nameWithType: IPluginBuilder
+  fullName: JoaLauncher.Api.IPluginBuilder
+  type: Interface
+  source:
+    remote:
+      path: src/IPluginBuilder.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IPluginBuilder
+    path: ../../../Plugin-Api/src/IPluginBuilder.cs
+    startLine: 7
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nUsed to configure the plugin\n"
+  example: []
+  syntax:
+    content: public interface IPluginBuilder
+    content.vb: Public Interface IPluginBuilder
+- uid: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider``1
+  commentId: M:JoaLauncher.Api.IPluginBuilder.AddGlobalProvider``1
+  id: AddGlobalProvider``1
+  parent: JoaLauncher.Api.IPluginBuilder
+  langs:
+  - csharp
+  - vb
+  name: AddGlobalProvider<T>()
+  nameWithType: IPluginBuilder.AddGlobalProvider<T>()
+  fullName: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider<T>()
+  type: Method
+  source:
+    remote:
+      path: src/IPluginBuilder.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: AddGlobalProvider
+    path: ../../../Plugin-Api/src/IPluginBuilder.cs
+    startLine: 14
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nAdds a global provider of type T\n"
+  example: []
+  syntax:
+    content: 'IPluginBuilder AddGlobalProvider<T>() where T : IProvider'
+    typeParameters:
+    - id: T
+      description: ''
+    return:
+      type: JoaLauncher.Api.IPluginBuilder
+      description: ''
+    content.vb: Function AddGlobalProvider(Of T As IProvider)() As IPluginBuilder
+  overload: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider*
+  nameWithType.vb: IPluginBuilder.AddGlobalProvider(Of T)()
+  fullName.vb: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider(Of T)()
+  name.vb: AddGlobalProvider(Of T)()
+- uid: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider``1(System.Func{System.String,System.Boolean})
+  commentId: M:JoaLauncher.Api.IPluginBuilder.AddGlobalProvider``1(System.Func{System.String,System.Boolean})
+  id: AddGlobalProvider``1(System.Func{System.String,System.Boolean})
+  parent: JoaLauncher.Api.IPluginBuilder
+  langs:
+  - csharp
+  - vb
+  name: AddGlobalProvider<T>(Func<string, bool>)
+  nameWithType: IPluginBuilder.AddGlobalProvider<T>(Func<string, bool>)
+  fullName: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider<T>(System.Func<string, bool>)
+  type: Method
+  source:
+    remote:
+      path: src/IPluginBuilder.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: AddGlobalProvider
+    path: ../../../Plugin-Api/src/IPluginBuilder.cs
+    startLine: 24
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nAdds a global provider of type T\nThe provider is only beeing used if the condition is true\nThe search results are not getting sortet\n"
+  example: []
+  syntax:
+    content: 'IPluginBuilder AddGlobalProvider<T>(Func<string, bool> condition) where T : IProvider'
+    parameters:
+    - id: condition
+      type: System.Func{System.String,System.Boolean}
+      description: ''
+    typeParameters:
+    - id: T
+      description: ''
+    return:
+      type: JoaLauncher.Api.IPluginBuilder
+      description: ''
+    content.vb: Function AddGlobalProvider(Of T As IProvider)(condition As Func(Of String, Boolean)) As IPluginBuilder
+  overload: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider*
+  nameWithType.vb: IPluginBuilder.AddGlobalProvider(Of T)(Func(Of String, Boolean))
+  fullName.vb: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider(Of T)(System.Func(Of String, Boolean))
+  name.vb: AddGlobalProvider(Of T)(Func(Of String, Boolean))
+- uid: JoaLauncher.Api.IPluginBuilder.AddGlobalResult(JoaLauncher.Api.SearchResult)
+  commentId: M:JoaLauncher.Api.IPluginBuilder.AddGlobalResult(JoaLauncher.Api.SearchResult)
+  id: AddGlobalResult(JoaLauncher.Api.SearchResult)
+  parent: JoaLauncher.Api.IPluginBuilder
+  langs:
+  - csharp
+  - vb
+  name: AddGlobalResult(SearchResult)
+  nameWithType: IPluginBuilder.AddGlobalResult(SearchResult)
+  fullName: JoaLauncher.Api.IPluginBuilder.AddGlobalResult(JoaLauncher.Api.SearchResult)
+  type: Method
+  source:
+    remote:
+      path: src/IPluginBuilder.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: AddGlobalResult
+    path: ../../../Plugin-Api/src/IPluginBuilder.cs
+    startLine: 31
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nAdds a global search result\n"
+  example: []
+  syntax:
+    content: IPluginBuilder AddGlobalResult(SearchResult searchResult)
+    parameters:
+    - id: searchResult
+      type: JoaLauncher.Api.SearchResult
+      description: ''
+    return:
+      type: JoaLauncher.Api.IPluginBuilder
+      description: ''
+    content.vb: Function AddGlobalResult(searchResult As SearchResult) As IPluginBuilder
+  overload: JoaLauncher.Api.IPluginBuilder.AddGlobalResult*
+references:
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+- uid: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider*
+  commentId: Overload:JoaLauncher.Api.IPluginBuilder.AddGlobalProvider
+  name: AddGlobalProvider
+  nameWithType: IPluginBuilder.AddGlobalProvider
+  fullName: JoaLauncher.Api.IPluginBuilder.AddGlobalProvider
+- uid: JoaLauncher.Api.IPluginBuilder
+  commentId: T:JoaLauncher.Api.IPluginBuilder
+  parent: JoaLauncher.Api
+  name: IPluginBuilder
+  nameWithType: IPluginBuilder
+  fullName: JoaLauncher.Api.IPluginBuilder
+- uid: System.Func{System.String,System.Boolean}
+  commentId: T:System.Func{System.String,System.Boolean}
+  parent: System
+  definition: System.Func`2
+  name: Func<string, bool>
+  nameWithType: Func<string, bool>
+  fullName: System.Func<string, bool>
+  nameWithType.vb: Func(Of String, Boolean)
+  fullName.vb: System.Func(Of String, Boolean)
+  name.vb: Func(Of String, Boolean)
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: <
+  - uid: System.String
+    name: string
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: System.Func`2
+  commentId: T:System.Func`2
+  isExternal: true
+  name: Func<T, TResult>
+  nameWithType: Func<T, TResult>
+  fullName: System.Func<T, TResult>
+  nameWithType.vb: Func(Of T, TResult)
+  fullName.vb: System.Func(Of T, TResult)
+  name.vb: Func(Of T, TResult)
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: <
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: JoaLauncher.Api.IPluginBuilder.AddGlobalResult*
+  commentId: Overload:JoaLauncher.Api.IPluginBuilder.AddGlobalResult
+  name: AddGlobalResult
+  nameWithType: IPluginBuilder.AddGlobalResult
+  fullName: JoaLauncher.Api.IPluginBuilder.AddGlobalResult
+- uid: JoaLauncher.Api.SearchResult
+  commentId: T:JoaLauncher.Api.SearchResult
+  parent: JoaLauncher.Api
+  name: SearchResult
+  nameWithType: SearchResult
+  fullName: JoaLauncher.Api.SearchResult

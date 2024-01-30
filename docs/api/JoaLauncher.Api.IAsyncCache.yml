@@ -1,0 +1,121 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.IAsyncCache
+  commentId: T:JoaLauncher.Api.IAsyncCache
+  id: IAsyncCache
+  parent: JoaLauncher.Api
+  children:
+  - JoaLauncher.Api.IAsyncCache.UpdateIndexesAsync
+  langs:
+  - csharp
+  - vb
+  name: IAsyncCache
+  nameWithType: IAsyncCache
+  fullName: JoaLauncher.Api.IAsyncCache
+  type: Interface
+  source:
+    remote:
+      path: src/ICache.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IAsyncCache
+    path: ../../../Plugin-Api/src/ICache.cs
+    startLine: 18
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nAn ICache can be used to cache information.\n"
+  example: []
+  syntax:
+    content: public interface IAsyncCache
+    content.vb: Public Interface IAsyncCache
+- uid: JoaLauncher.Api.IAsyncCache.UpdateIndexesAsync
+  commentId: M:JoaLauncher.Api.IAsyncCache.UpdateIndexesAsync
+  id: UpdateIndexesAsync
+  parent: JoaLauncher.Api.IAsyncCache
+  langs:
+  - csharp
+  - vb
+  name: UpdateIndexesAsync()
+  nameWithType: IAsyncCache.UpdateIndexesAsync()
+  fullName: JoaLauncher.Api.IAsyncCache.UpdateIndexesAsync()
+  type: Method
+  source:
+    remote:
+      path: src/ICache.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: UpdateIndexesAsync
+    path: ../../../Plugin-Api/src/ICache.cs
+    startLine: 25
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nIs getting called at the start of the application and after that periodically\nHow often this method gets called can be adjusted by the user in the settings\nThe user can also manually call this method via a global search result \n"
+  example: []
+  syntax:
+    content: Task UpdateIndexesAsync()
+    return:
+      type: System.Threading.Tasks.Task
+    content.vb: Function UpdateIndexesAsync() As Task
+  overload: JoaLauncher.Api.IAsyncCache.UpdateIndexesAsync*
+references:
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+- uid: JoaLauncher.Api.IAsyncCache.UpdateIndexesAsync*
+  commentId: Overload:JoaLauncher.Api.IAsyncCache.UpdateIndexesAsync
+  name: UpdateIndexesAsync
+  nameWithType: IAsyncCache.UpdateIndexesAsync
+  fullName: JoaLauncher.Api.IAsyncCache.UpdateIndexesAsync
+- uid: System.Threading.Tasks.Task
+  commentId: T:System.Threading.Tasks.Task
+  parent: System.Threading.Tasks
+  isExternal: true
+  name: Task
+  nameWithType: Task
+  fullName: System.Threading.Tasks.Task
+- uid: System.Threading.Tasks
+  commentId: N:System.Threading.Tasks
+  isExternal: true
+  name: System.Threading.Tasks
+  nameWithType: System.Threading.Tasks
+  fullName: System.Threading.Tasks
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+  - name: .
+  - uid: System.Threading
+    name: Threading
+    isExternal: true
+  - name: .
+  - uid: System.Threading.Tasks
+    name: Tasks
+    isExternal: true

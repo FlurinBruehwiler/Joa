@@ -1,0 +1,467 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.ContextAction
+  commentId: T:JoaLauncher.Api.ContextAction
+  id: ContextAction
+  parent: JoaLauncher.Api
+  children:
+  - JoaLauncher.Api.ContextAction.Id
+  - JoaLauncher.Api.ContextAction.Key
+  - JoaLauncher.Api.ContextAction.Name
+  langs:
+  - csharp
+  - vb
+  name: ContextAction
+  nameWithType: ContextAction
+  fullName: JoaLauncher.Api.ContextAction
+  type: Class
+  source:
+    remote:
+      path: src/ContextAction.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: ContextAction
+    path: ../../../Plugin-Api/src/ContextAction.cs
+    startLine: 8
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nA ContextAction represents a variant with which the\nuser can execute a search result\n"
+  example: []
+  syntax:
+    content: 'public record ContextAction : IEquatable<ContextAction>'
+    content.vb: Public Class ContextAction Implements IEquatable(Of ContextAction)
+  inheritance:
+  - System.Object
+  implements:
+  - System.IEquatable{JoaLauncher.Api.ContextAction}
+  inheritedMembers:
+  - System.Object.Equals(System.Object)
+  - System.Object.Equals(System.Object,System.Object)
+  - System.Object.GetHashCode
+  - System.Object.GetType
+  - System.Object.MemberwiseClone
+  - System.Object.ReferenceEquals(System.Object,System.Object)
+  - System.Object.ToString
+- uid: JoaLauncher.Api.ContextAction.Id
+  commentId: P:JoaLauncher.Api.ContextAction.Id
+  id: Id
+  parent: JoaLauncher.Api.ContextAction
+  langs:
+  - csharp
+  - vb
+  name: Id
+  nameWithType: ContextAction.Id
+  fullName: JoaLauncher.Api.ContextAction.Id
+  type: Property
+  source:
+    remote:
+      path: src/ContextAction.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Id
+    path: ../../../Plugin-Api/src/ContextAction.cs
+    startLine: 13
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nThe key which is used to identify the ContextAction\n"
+  example: []
+  syntax:
+    content: public string Id { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Id As String
+  overload: JoaLauncher.Api.ContextAction.Id*
+- uid: JoaLauncher.Api.ContextAction.Name
+  commentId: P:JoaLauncher.Api.ContextAction.Name
+  id: Name
+  parent: JoaLauncher.Api.ContextAction
+  langs:
+  - csharp
+  - vb
+  name: Name
+  nameWithType: ContextAction.Name
+  fullName: JoaLauncher.Api.ContextAction.Name
+  type: Property
+  source:
+    remote:
+      path: src/ContextAction.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Name
+    path: ../../../Plugin-Api/src/ContextAction.cs
+    startLine: 18
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nThe name which will be displayed to the user\n"
+  example: []
+  syntax:
+    content: public string Name { get; init; }
+    parameters: []
+    return:
+      type: System.String
+    content.vb: Public Property Name As String
+  overload: JoaLauncher.Api.ContextAction.Name*
+- uid: JoaLauncher.Api.ContextAction.Key
+  commentId: P:JoaLauncher.Api.ContextAction.Key
+  id: Key
+  parent: JoaLauncher.Api.ContextAction
+  langs:
+  - csharp
+  - vb
+  name: Key
+  nameWithType: ContextAction.Key
+  fullName: JoaLauncher.Api.ContextAction.Key
+  type: Property
+  source:
+    remote:
+      path: src/ContextAction.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Key
+    path: ../../../Plugin-Api/src/ContextAction.cs
+    startLine: 24
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nThe keyboard key that the user can use to execute\nthe search result with this action\n"
+  example: []
+  syntax:
+    content: public Key Key { get; init; }
+    parameters: []
+    return:
+      type: JoaLauncher.Api.Enums.Key
+    content.vb: Public Property Key As Key
+  overload: JoaLauncher.Api.ContextAction.Key*
+references:
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.IEquatable{JoaLauncher.Api.ContextAction}
+  commentId: T:System.IEquatable{JoaLauncher.Api.ContextAction}
+  parent: System
+  definition: System.IEquatable`1
+  name: IEquatable<ContextAction>
+  nameWithType: IEquatable<ContextAction>
+  fullName: System.IEquatable<JoaLauncher.Api.ContextAction>
+  nameWithType.vb: IEquatable(Of ContextAction)
+  fullName.vb: System.IEquatable(Of JoaLauncher.Api.ContextAction)
+  name.vb: IEquatable(Of ContextAction)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+  - name: <
+  - uid: JoaLauncher.Api.ContextAction
+    name: ContextAction
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: JoaLauncher.Api.ContextAction
+    name: ContextAction
+  - name: )
+- uid: System.Object.Equals(System.Object)
+  commentId: M:System.Object.Equals(System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(object)
+  nameWithType: object.Equals(object)
+  fullName: object.Equals(object)
+  nameWithType.vb: Object.Equals(Object)
+  fullName.vb: Object.Equals(Object)
+  name.vb: Equals(Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object)
+    name: Equals
+    isExternal: true
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+  - name: )
+- uid: System.Object.Equals(System.Object,System.Object)
+  commentId: M:System.Object.Equals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: Equals(object, object)
+  nameWithType: object.Equals(object, object)
+  fullName: object.Equals(object, object)
+  nameWithType.vb: Object.Equals(Object, Object)
+  fullName.vb: Object.Equals(Object, Object)
+  name.vb: Equals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: System.Object.Equals(System.Object,System.Object)
+    name: Equals
+    isExternal: true
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+  - name: )
+- uid: System.Object.GetHashCode
+  commentId: M:System.Object.GetHashCode
+  parent: System.Object
+  isExternal: true
+  name: GetHashCode()
+  nameWithType: object.GetHashCode()
+  fullName: object.GetHashCode()
+  nameWithType.vb: Object.GetHashCode()
+  fullName.vb: Object.GetHashCode()
+  spec.csharp:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetHashCode
+    name: GetHashCode
+    isExternal: true
+  - name: (
+  - name: )
+- uid: System.Object.GetType
+  commentId: M:System.Object.GetType
+  parent: System.Object
+  isExternal: true
+  name: GetType()
+  nameWithType: object.GetType()
+  fullName: object.GetType()
+  nameWithType.vb: Object.GetType()
+  fullName.vb: Object.GetType()
+  spec.csharp:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.GetType
+    name: GetType
+    isExternal: true
+  - name: (
+  - name: )
+- uid: System.Object.MemberwiseClone
+  commentId: M:System.Object.MemberwiseClone
+  parent: System.Object
+  isExternal: true
+  name: MemberwiseClone()
+  nameWithType: object.MemberwiseClone()
+  fullName: object.MemberwiseClone()
+  nameWithType.vb: Object.MemberwiseClone()
+  fullName.vb: Object.MemberwiseClone()
+  spec.csharp:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.MemberwiseClone
+    name: MemberwiseClone
+    isExternal: true
+  - name: (
+  - name: )
+- uid: System.Object.ReferenceEquals(System.Object,System.Object)
+  commentId: M:System.Object.ReferenceEquals(System.Object,System.Object)
+  parent: System.Object
+  isExternal: true
+  name: ReferenceEquals(object, object)
+  nameWithType: object.ReferenceEquals(object, object)
+  fullName: object.ReferenceEquals(object, object)
+  nameWithType.vb: Object.ReferenceEquals(Object, Object)
+  fullName.vb: Object.ReferenceEquals(Object, Object)
+  name.vb: ReferenceEquals(Object, Object)
+  spec.csharp:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+  - name: (
+  - uid: System.Object
+    name: object
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: object
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: System.Object.ReferenceEquals(System.Object,System.Object)
+    name: ReferenceEquals
+    isExternal: true
+  - name: (
+  - uid: System.Object
+    name: Object
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Object
+    name: Object
+    isExternal: true
+  - name: )
+- uid: System.Object.ToString
+  commentId: M:System.Object.ToString
+  parent: System.Object
+  isExternal: true
+  name: ToString()
+  nameWithType: object.ToString()
+  fullName: object.ToString()
+  nameWithType.vb: Object.ToString()
+  fullName.vb: Object.ToString()
+  spec.csharp:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: System.Object.ToString
+    name: ToString
+    isExternal: true
+  - name: (
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: System.IEquatable`1
+  commentId: T:System.IEquatable`1
+  isExternal: true
+  name: IEquatable<T>
+  nameWithType: IEquatable<T>
+  fullName: System.IEquatable<T>
+  nameWithType.vb: IEquatable(Of T)
+  fullName.vb: System.IEquatable(Of T)
+  name.vb: IEquatable(Of T)
+  spec.csharp:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.IEquatable`1
+    name: IEquatable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: JoaLauncher.Api.ContextAction.Id*
+  commentId: Overload:JoaLauncher.Api.ContextAction.Id
+  name: Id
+  nameWithType: ContextAction.Id
+  fullName: JoaLauncher.Api.ContextAction.Id
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: JoaLauncher.Api.ContextAction.Name*
+  commentId: Overload:JoaLauncher.Api.ContextAction.Name
+  name: Name
+  nameWithType: ContextAction.Name
+  fullName: JoaLauncher.Api.ContextAction.Name
+- uid: JoaLauncher.Api.ContextAction.Key*
+  commentId: Overload:JoaLauncher.Api.ContextAction.Key
+  name: Key
+  nameWithType: ContextAction.Key
+  fullName: JoaLauncher.Api.ContextAction.Key
+- uid: JoaLauncher.Api.Enums.Key
+  commentId: T:JoaLauncher.Api.Enums.Key
+  parent: JoaLauncher.Api.Enums
+  name: Key
+  nameWithType: Key
+  fullName: JoaLauncher.Api.Enums.Key
+- uid: JoaLauncher.Api.Enums
+  commentId: N:JoaLauncher.Api.Enums
+  name: JoaLauncher.Api.Enums
+  nameWithType: JoaLauncher.Api.Enums
+  fullName: JoaLauncher.Api.Enums
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Enums
+    name: Enums
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Enums
+    name: Enums

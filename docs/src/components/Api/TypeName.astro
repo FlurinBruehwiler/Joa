@@ -1,0 +1,14 @@
+---
+import {apiType, apiType2} from "../../../public/types";
+interface Props {
+    type: apiType2
+}
+
+const {type} = Astro.props;
+
+---
+<a href={type.url}>{type.name}</a>{type.genericParams && type.genericParams.length != 0 &&
+<>
+    <span><</span>{type.genericParams && type.genericParams.map(x =>
+        <Astro.self type={x}></Astro.self>)}<span>></span>
+</>}

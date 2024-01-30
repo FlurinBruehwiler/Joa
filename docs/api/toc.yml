@@ -1,0 +1,76 @@
+### YamlMime:TableOfContent
+- uid: JoaLauncher.Api
+  name: JoaLauncher.Api
+  items:
+  - uid: JoaLauncher.Api.ContextAction
+    name: ContextAction
+  - uid: JoaLauncher.Api.DefaultSearchResult
+    name: DefaultSearchResult
+  - uid: JoaLauncher.Api.IAsyncCache
+    name: IAsyncCache
+  - uid: JoaLauncher.Api.ICache
+    name: ICache
+  - uid: JoaLauncher.Api.IExecutionContext
+    name: IExecutionContext
+  - uid: JoaLauncher.Api.IPluginBuilder
+    name: IPluginBuilder
+  - uid: JoaLauncher.Api.ISetting
+    name: ISetting
+  - uid: JoaLauncher.Api.IStepBuilder
+    name: IStepBuilder
+  - uid: JoaLauncher.Api.SearchResult
+    name: SearchResult
+  - uid: JoaLauncher.Api.StepOptions
+    name: StepOptions
+- uid: JoaLauncher.Api.Attributes
+  name: JoaLauncher.Api.Attributes
+  items:
+  - uid: JoaLauncher.Api.Attributes.ColorAttribute
+    name: ColorAttribute
+  - uid: JoaLauncher.Api.Attributes.EnablerAttribute
+    name: EnablerAttribute
+  - uid: JoaLauncher.Api.Attributes.ListTypeAttribute
+    name: ListTypeAttribute
+  - uid: JoaLauncher.Api.Attributes.OperatingSystemAttribute
+    name: OperatingSystemAttribute
+  - uid: JoaLauncher.Api.Attributes.PathAttribute
+    name: PathAttribute
+  - uid: JoaLauncher.Api.Attributes.PluginAttribute
+    name: PluginAttribute
+  - uid: JoaLauncher.Api.Attributes.RangeAttribute
+    name: RangeAttribute
+  - uid: JoaLauncher.Api.Attributes.SettingPropertyAttribute
+    name: SettingPropertyAttribute
+- uid: JoaLauncher.Api.Enums
+  name: JoaLauncher.Api.Enums
+  items:
+  - uid: JoaLauncher.Api.Enums.Key
+    name: Key
+  - uid: JoaLauncher.Api.Enums.OperatingSystem
+    name: OperatingSystem
+- uid: JoaLauncher.Api.Injectables
+  name: JoaLauncher.Api.Injectables
+  items:
+  - uid: JoaLauncher.Api.Injectables.IBrowserHelper
+    name: IBrowserHelper
+  - uid: JoaLauncher.Api.Injectables.IIconHelper
+    name: IIconHelper
+  - uid: JoaLauncher.Api.Injectables.IJoaLogger
+    name: IJoaLogger
+  - uid: JoaLauncher.Api.Injectables.LogLevel
+    name: LogLevel
+- uid: JoaLauncher.Api.Plugin
+  name: JoaLauncher.Api.Plugin
+  items:
+  - uid: JoaLauncher.Api.Plugin.IPlugin
+    name: IPlugin
+  - uid: JoaLauncher.Api.Plugin.IUiPlugin
+    name: IUiPlugin
+- uid: JoaLauncher.Api.Providers
+  name: JoaLauncher.Api.Providers
+  items:
+  - uid: JoaLauncher.Api.Providers.IProvider
+    name: IProvider
+  - uid: JoaLauncher.Api.Providers.IProvider`1
+    name: IProvider<T>
+    name.vb: IProvider(Of T)

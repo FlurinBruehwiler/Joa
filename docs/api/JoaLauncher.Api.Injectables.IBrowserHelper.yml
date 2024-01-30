@@ -1,0 +1,111 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Injectables.IBrowserHelper
+  commentId: T:JoaLauncher.Api.Injectables.IBrowserHelper
+  id: IBrowserHelper
+  parent: JoaLauncher.Api.Injectables
+  children:
+  - JoaLauncher.Api.Injectables.IBrowserHelper.OpenWebsite(System.String)
+  langs:
+  - csharp
+  - vb
+  name: IBrowserHelper
+  nameWithType: IBrowserHelper
+  fullName: JoaLauncher.Api.Injectables.IBrowserHelper
+  type: Interface
+  source:
+    remote:
+      path: src/Injectables/IBrowserHelper.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IBrowserHelper
+    path: ../../../Plugin-Api/src/Injectables/IBrowserHelper.cs
+    startLine: 5
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nA helper to help with Browsers\n"
+  example: []
+  syntax:
+    content: public interface IBrowserHelper
+    content.vb: Public Interface IBrowserHelper
+- uid: JoaLauncher.Api.Injectables.IBrowserHelper.OpenWebsite(System.String)
+  commentId: M:JoaLauncher.Api.Injectables.IBrowserHelper.OpenWebsite(System.String)
+  id: OpenWebsite(System.String)
+  parent: JoaLauncher.Api.Injectables.IBrowserHelper
+  langs:
+  - csharp
+  - vb
+  name: OpenWebsite(string)
+  nameWithType: IBrowserHelper.OpenWebsite(string)
+  fullName: JoaLauncher.Api.Injectables.IBrowserHelper.OpenWebsite(string)
+  type: Method
+  source:
+    remote:
+      path: src/Injectables/IBrowserHelper.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: OpenWebsite
+    path: ../../../Plugin-Api/src/Injectables/IBrowserHelper.cs
+    startLine: 11
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nOpens the url in the default Browser\n"
+  example: []
+  syntax:
+    content: void OpenWebsite(string url)
+    parameters:
+    - id: url
+      type: System.String
+      description: ''
+    content.vb: Sub OpenWebsite(url As String)
+  overload: JoaLauncher.Api.Injectables.IBrowserHelper.OpenWebsite*
+  nameWithType.vb: IBrowserHelper.OpenWebsite(String)
+  fullName.vb: JoaLauncher.Api.Injectables.IBrowserHelper.OpenWebsite(String)
+  name.vb: OpenWebsite(String)
+references:
+- uid: JoaLauncher.Api.Injectables
+  commentId: N:JoaLauncher.Api.Injectables
+  name: JoaLauncher.Api.Injectables
+  nameWithType: JoaLauncher.Api.Injectables
+  fullName: JoaLauncher.Api.Injectables
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables
+- uid: JoaLauncher.Api.Injectables.IBrowserHelper.OpenWebsite*
+  commentId: Overload:JoaLauncher.Api.Injectables.IBrowserHelper.OpenWebsite
+  name: OpenWebsite
+  nameWithType: IBrowserHelper.OpenWebsite
+  fullName: JoaLauncher.Api.Injectables.IBrowserHelper.OpenWebsite
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System

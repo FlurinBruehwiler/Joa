@@ -1,0 +1,99 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  id: JoaLauncher.Api
+  children:
+  - JoaLauncher.Api.ContextAction
+  - JoaLauncher.Api.DefaultSearchResult
+  - JoaLauncher.Api.IAsyncCache
+  - JoaLauncher.Api.ICache
+  - JoaLauncher.Api.IExecutionContext
+  - JoaLauncher.Api.IPluginBuilder
+  - JoaLauncher.Api.ISetting
+  - JoaLauncher.Api.IStepBuilder
+  - JoaLauncher.Api.SearchResult
+  - JoaLauncher.Api.StepOptions
+  langs:
+  - csharp
+  - vb
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  type: Namespace
+  assemblies:
+  - JoaLauncher.Api
+references:
+- uid: JoaLauncher.Api.ContextAction
+  commentId: T:JoaLauncher.Api.ContextAction
+  parent: JoaLauncher.Api
+  name: ContextAction
+  nameWithType: ContextAction
+  fullName: JoaLauncher.Api.ContextAction
+- uid: JoaLauncher.Api.DefaultSearchResult
+  commentId: T:JoaLauncher.Api.DefaultSearchResult
+  name: DefaultSearchResult
+  nameWithType: DefaultSearchResult
+  fullName: JoaLauncher.Api.DefaultSearchResult
+- uid: JoaLauncher.Api.ICache
+  commentId: T:JoaLauncher.Api.ICache
+  name: ICache
+  nameWithType: ICache
+  fullName: JoaLauncher.Api.ICache
+- uid: JoaLauncher.Api.IAsyncCache
+  commentId: T:JoaLauncher.Api.IAsyncCache
+  name: IAsyncCache
+  nameWithType: IAsyncCache
+  fullName: JoaLauncher.Api.IAsyncCache
+- uid: JoaLauncher.Api.IExecutionContext
+  commentId: T:JoaLauncher.Api.IExecutionContext
+  parent: JoaLauncher.Api
+  name: IExecutionContext
+  nameWithType: IExecutionContext
+  fullName: JoaLauncher.Api.IExecutionContext
+- uid: JoaLauncher.Api.IPluginBuilder
+  commentId: T:JoaLauncher.Api.IPluginBuilder
+  parent: JoaLauncher.Api
+  name: IPluginBuilder
+  nameWithType: IPluginBuilder
+  fullName: JoaLauncher.Api.IPluginBuilder
+- uid: JoaLauncher.Api.ISetting
+  commentId: T:JoaLauncher.Api.ISetting
+  name: ISetting
+  nameWithType: ISetting
+  fullName: JoaLauncher.Api.ISetting
+- uid: JoaLauncher.Api.IStepBuilder
+  commentId: T:JoaLauncher.Api.IStepBuilder
+  parent: JoaLauncher.Api
+  name: IStepBuilder
+  nameWithType: IStepBuilder
+  fullName: JoaLauncher.Api.IStepBuilder
+- uid: JoaLauncher.Api.StepOptions
+  commentId: T:JoaLauncher.Api.StepOptions
+  parent: JoaLauncher.Api
+  name: StepOptions
+  nameWithType: StepOptions
+  fullName: JoaLauncher.Api.StepOptions
+- uid: JoaLauncher.Api.SearchResult
+  commentId: T:JoaLauncher.Api.SearchResult
+  parent: JoaLauncher.Api
+  name: SearchResult
+  nameWithType: SearchResult
+  fullName: JoaLauncher.Api.SearchResult
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api

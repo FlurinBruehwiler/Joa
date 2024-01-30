@@ -1,0 +1,28 @@
+---
+import {SUB_URL} from "../../consts";
+type Props = {
+	size: number;
+};
+const { size } = Astro.props;
+---
+
+<img class="dark" height={size} width={size} src=`${SUB_URL}/joa_dark.png` alt="Joa Logo">
+<img class="light" height={size} width={size} src=`${SUB_URL}/joa_light.png` alt="Joa Logo">
+
+<style>
+    .dark{
+        display: none;
+    }
+
+    :root.theme-dark .dark{
+        display: block;
+    }
+
+    .light{
+        display: block;
+    }
+
+    :root.theme-dark .light{
+        display: none;
+    }
+</style>

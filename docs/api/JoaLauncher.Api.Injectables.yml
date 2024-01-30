@@ -1,0 +1,64 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Injectables
+  commentId: N:JoaLauncher.Api.Injectables
+  id: JoaLauncher.Api.Injectables
+  children:
+  - JoaLauncher.Api.Injectables.IBrowserHelper
+  - JoaLauncher.Api.Injectables.IIconHelper
+  - JoaLauncher.Api.Injectables.IJoaLogger
+  - JoaLauncher.Api.Injectables.LogLevel
+  langs:
+  - csharp
+  - vb
+  name: JoaLauncher.Api.Injectables
+  nameWithType: JoaLauncher.Api.Injectables
+  fullName: JoaLauncher.Api.Injectables
+  type: Namespace
+  assemblies:
+  - JoaLauncher.Api
+references:
+- uid: JoaLauncher.Api.Injectables.IBrowserHelper
+  commentId: T:JoaLauncher.Api.Injectables.IBrowserHelper
+  name: IBrowserHelper
+  nameWithType: IBrowserHelper
+  fullName: JoaLauncher.Api.Injectables.IBrowserHelper
+- uid: JoaLauncher.Api.Injectables.IIconHelper
+  commentId: T:JoaLauncher.Api.Injectables.IIconHelper
+  name: IIconHelper
+  nameWithType: IIconHelper
+  fullName: JoaLauncher.Api.Injectables.IIconHelper
+- uid: JoaLauncher.Api.Injectables.IJoaLogger
+  commentId: T:JoaLauncher.Api.Injectables.IJoaLogger
+  name: IJoaLogger
+  nameWithType: IJoaLogger
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger
+- uid: JoaLauncher.Api.Injectables.LogLevel
+  commentId: T:JoaLauncher.Api.Injectables.LogLevel
+  parent: JoaLauncher.Api.Injectables
+  name: LogLevel
+  nameWithType: LogLevel
+  fullName: JoaLauncher.Api.Injectables.LogLevel
+- uid: JoaLauncher.Api.Injectables
+  commentId: N:JoaLauncher.Api.Injectables
+  name: JoaLauncher.Api.Injectables
+  nameWithType: JoaLauncher.Api.Injectables
+  fullName: JoaLauncher.Api.Injectables
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <OutputType>WinExe</OutputType>
@@ -9,8 +9,7 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <PackageReference Include="FlurinBruehwiler.Helpers" Version="0.1.6" />
-        <PackageReference Include="JoaLauncher.Api" Version="1.0.27-g8604fc7845" />
+        <PackageReference Include="FlurinBruehwiler.Helpers" Version="1.1.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
         <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
         <PackageReference Include="TolggeUI" Version="0.1.0-beta1" />
@@ -43,6 +42,10 @@
         <None Update="Assets\expand.svg">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Joa.Api\Joa.Api.csproj" />
     </ItemGroup>
     
 </Project>

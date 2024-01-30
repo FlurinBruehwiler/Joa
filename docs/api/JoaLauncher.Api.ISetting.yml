@@ -1,0 +1,48 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.ISetting
+  commentId: T:JoaLauncher.Api.ISetting
+  id: ISetting
+  parent: JoaLauncher.Api
+  children: []
+  langs:
+  - csharp
+  - vb
+  name: ISetting
+  nameWithType: ISetting
+  fullName: JoaLauncher.Api.ISetting
+  type: Interface
+  source:
+    remote:
+      path: src/ISetting.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: ISetting
+    path: ../../../Plugin-Api/src/ISetting.cs
+    startLine: 6
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api
+  summary: "\nA Plugin can only have one Setting.\nThe setting can be injected \n"
+  example: []
+  syntax:
+    content: public interface ISetting
+    content.vb: Public Interface ISetting
+references:
+- uid: JoaLauncher.Api
+  commentId: N:JoaLauncher.Api
+  name: JoaLauncher.Api
+  nameWithType: JoaLauncher.Api
+  fullName: JoaLauncher.Api
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api

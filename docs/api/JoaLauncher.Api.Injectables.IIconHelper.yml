@@ -1,0 +1,165 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Injectables.IIconHelper
+  commentId: T:JoaLauncher.Api.Injectables.IIconHelper
+  id: IIconHelper
+  parent: JoaLauncher.Api.Injectables
+  children:
+  - JoaLauncher.Api.Injectables.IIconHelper.CreateIconFromFileIfNotExists``1(System.String)
+  - JoaLauncher.Api.Injectables.IIconHelper.GetIconsDirectory(System.Type)
+  langs:
+  - csharp
+  - vb
+  name: IIconHelper
+  nameWithType: IIconHelper
+  fullName: JoaLauncher.Api.Injectables.IIconHelper
+  type: Interface
+  source:
+    remote:
+      path: src/Injectables/IIconHelper.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IIconHelper
+    path: ../../../Plugin-Api/src/Injectables/IIconHelper.cs
+    startLine: 5
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nHelper to help with icons\n"
+  example: []
+  syntax:
+    content: public interface IIconHelper
+    content.vb: Public Interface IIconHelper
+- uid: JoaLauncher.Api.Injectables.IIconHelper.GetIconsDirectory(System.Type)
+  commentId: M:JoaLauncher.Api.Injectables.IIconHelper.GetIconsDirectory(System.Type)
+  id: GetIconsDirectory(System.Type)
+  parent: JoaLauncher.Api.Injectables.IIconHelper
+  langs:
+  - csharp
+  - vb
+  name: GetIconsDirectory(Type)
+  nameWithType: IIconHelper.GetIconsDirectory(Type)
+  fullName: JoaLauncher.Api.Injectables.IIconHelper.GetIconsDirectory(System.Type)
+  type: Method
+  source:
+    remote:
+      path: src/Injectables/IIconHelper.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: GetIconsDirectory
+    path: ../../../Plugin-Api/src/Injectables/IIconHelper.cs
+    startLine: 12
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nGets the directory meant to store icons\n"
+  example: []
+  syntax:
+    content: string GetIconsDirectory(Type pluginType)
+    parameters:
+    - id: pluginType
+      type: System.Type
+      description: ''
+    return:
+      type: System.String
+      description: ''
+    content.vb: Function GetIconsDirectory(pluginType As Type) As String
+  overload: JoaLauncher.Api.Injectables.IIconHelper.GetIconsDirectory*
+- uid: JoaLauncher.Api.Injectables.IIconHelper.CreateIconFromFileIfNotExists``1(System.String)
+  commentId: M:JoaLauncher.Api.Injectables.IIconHelper.CreateIconFromFileIfNotExists``1(System.String)
+  id: CreateIconFromFileIfNotExists``1(System.String)
+  parent: JoaLauncher.Api.Injectables.IIconHelper
+  langs:
+  - csharp
+  - vb
+  name: CreateIconFromFileIfNotExists<T>(string)
+  nameWithType: IIconHelper.CreateIconFromFileIfNotExists<T>(string)
+  fullName: JoaLauncher.Api.Injectables.IIconHelper.CreateIconFromFileIfNotExists<T>(string)
+  type: Method
+  source:
+    remote:
+      path: src/Injectables/IIconHelper.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: CreateIconFromFileIfNotExists
+    path: ../../../Plugin-Api/src/Injectables/IIconHelper.cs
+    startLine: 20
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nStores the icon of a file\n"
+  example: []
+  syntax:
+    content: string CreateIconFromFileIfNotExists<T>(string fileLocation)
+    parameters:
+    - id: fileLocation
+      type: System.String
+      description: ''
+    typeParameters:
+    - id: T
+      description: ''
+    return:
+      type: System.String
+      description: ''
+    content.vb: Function CreateIconFromFileIfNotExists(Of T)(fileLocation As String) As String
+  overload: JoaLauncher.Api.Injectables.IIconHelper.CreateIconFromFileIfNotExists*
+  nameWithType.vb: IIconHelper.CreateIconFromFileIfNotExists(Of T)(String)
+  fullName.vb: JoaLauncher.Api.Injectables.IIconHelper.CreateIconFromFileIfNotExists(Of T)(String)
+  name.vb: CreateIconFromFileIfNotExists(Of T)(String)
+references:
+- uid: JoaLauncher.Api.Injectables
+  commentId: N:JoaLauncher.Api.Injectables
+  name: JoaLauncher.Api.Injectables
+  nameWithType: JoaLauncher.Api.Injectables
+  fullName: JoaLauncher.Api.Injectables
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables
+- uid: JoaLauncher.Api.Injectables.IIconHelper.GetIconsDirectory*
+  commentId: Overload:JoaLauncher.Api.Injectables.IIconHelper.GetIconsDirectory
+  name: GetIconsDirectory
+  nameWithType: IIconHelper.GetIconsDirectory
+  fullName: JoaLauncher.Api.Injectables.IIconHelper.GetIconsDirectory
+- uid: System.Type
+  commentId: T:System.Type
+  parent: System
+  isExternal: true
+  name: Type
+  nameWithType: Type
+  fullName: System.Type
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: JoaLauncher.Api.Injectables.IIconHelper.CreateIconFromFileIfNotExists*
+  commentId: Overload:JoaLauncher.Api.Injectables.IIconHelper.CreateIconFromFileIfNotExists
+  name: CreateIconFromFileIfNotExists
+  nameWithType: IIconHelper.CreateIconFromFileIfNotExists
+  fullName: JoaLauncher.Api.Injectables.IIconHelper.CreateIconFromFileIfNotExists

@@ -1,0 +1,52 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Plugin
+  commentId: N:JoaLauncher.Api.Plugin
+  id: JoaLauncher.Api.Plugin
+  children:
+  - JoaLauncher.Api.Plugin.IPlugin
+  - JoaLauncher.Api.Plugin.IUiPlugin
+  langs:
+  - csharp
+  - vb
+  name: JoaLauncher.Api.Plugin
+  nameWithType: JoaLauncher.Api.Plugin
+  fullName: JoaLauncher.Api.Plugin
+  type: Namespace
+  assemblies:
+  - JoaLauncher.Api
+references:
+- uid: JoaLauncher.Api.Plugin.IPlugin
+  commentId: T:JoaLauncher.Api.Plugin.IPlugin
+  parent: JoaLauncher.Api.Plugin
+  name: IPlugin
+  nameWithType: IPlugin
+  fullName: JoaLauncher.Api.Plugin.IPlugin
+- uid: JoaLauncher.Api.Plugin.IUiPlugin
+  commentId: T:JoaLauncher.Api.Plugin.IUiPlugin
+  name: IUiPlugin
+  nameWithType: IUiPlugin
+  fullName: JoaLauncher.Api.Plugin.IUiPlugin
+- uid: JoaLauncher.Api.Plugin
+  commentId: N:JoaLauncher.Api.Plugin
+  name: JoaLauncher.Api.Plugin
+  nameWithType: JoaLauncher.Api.Plugin
+  fullName: JoaLauncher.Api.Plugin
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Plugin
+    name: Plugin
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Plugin
+    name: Plugin

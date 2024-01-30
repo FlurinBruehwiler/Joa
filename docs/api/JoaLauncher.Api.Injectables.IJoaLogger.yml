@@ -1,0 +1,341 @@
+### YamlMime:ManagedReference
+items:
+- uid: JoaLauncher.Api.Injectables.IJoaLogger
+  commentId: T:JoaLauncher.Api.Injectables.IJoaLogger
+  id: IJoaLogger
+  parent: JoaLauncher.Api.Injectables
+  children:
+  - JoaLauncher.Api.Injectables.IJoaLogger.Error(System.String)
+  - JoaLauncher.Api.Injectables.IJoaLogger.Info(System.String)
+  - JoaLauncher.Api.Injectables.IJoaLogger.Log(System.String,JoaLauncher.Api.Injectables.LogLevel)
+  - JoaLauncher.Api.Injectables.IJoaLogger.LogException(System.Exception,System.String)
+  - JoaLauncher.Api.Injectables.IJoaLogger.TimedOperation(System.String)
+  - JoaLauncher.Api.Injectables.IJoaLogger.Warning(System.String)
+  langs:
+  - csharp
+  - vb
+  name: IJoaLogger
+  nameWithType: IJoaLogger
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger
+  type: Interface
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: IJoaLogger
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 5
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nCan be used to log to the joalog.log file\n"
+  example: []
+  syntax:
+    content: public interface IJoaLogger
+    content.vb: Public Interface IJoaLogger
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.Log(System.String,JoaLauncher.Api.Injectables.LogLevel)
+  commentId: M:JoaLauncher.Api.Injectables.IJoaLogger.Log(System.String,JoaLauncher.Api.Injectables.LogLevel)
+  id: Log(System.String,JoaLauncher.Api.Injectables.LogLevel)
+  parent: JoaLauncher.Api.Injectables.IJoaLogger
+  langs:
+  - csharp
+  - vb
+  name: Log(string, LogLevel)
+  nameWithType: IJoaLogger.Log(string, LogLevel)
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.Log(string, JoaLauncher.Api.Injectables.LogLevel)
+  type: Method
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Log
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 12
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nLogs the message with the provided LogLevel\n"
+  example: []
+  syntax:
+    content: void Log(string message, LogLevel logLevel)
+    parameters:
+    - id: message
+      type: System.String
+      description: The message to be logged
+    - id: logLevel
+      type: JoaLauncher.Api.Injectables.LogLevel
+      description: The LogLevel that should be used
+    content.vb: Sub Log(message As String, logLevel As LogLevel)
+  overload: JoaLauncher.Api.Injectables.IJoaLogger.Log*
+  nameWithType.vb: IJoaLogger.Log(String, LogLevel)
+  fullName.vb: JoaLauncher.Api.Injectables.IJoaLogger.Log(String, JoaLauncher.Api.Injectables.LogLevel)
+  name.vb: Log(String, LogLevel)
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.Info(System.String)
+  commentId: M:JoaLauncher.Api.Injectables.IJoaLogger.Info(System.String)
+  id: Info(System.String)
+  parent: JoaLauncher.Api.Injectables.IJoaLogger
+  langs:
+  - csharp
+  - vb
+  name: Info(string)
+  nameWithType: IJoaLogger.Info(string)
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.Info(string)
+  type: Method
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Info
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 18
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nLogs a message with LogLevel.Info\n"
+  example: []
+  syntax:
+    content: void Info(string message)
+    parameters:
+    - id: message
+      type: System.String
+      description: The message to be logged
+    content.vb: Sub Info(message As String)
+  overload: JoaLauncher.Api.Injectables.IJoaLogger.Info*
+  nameWithType.vb: IJoaLogger.Info(String)
+  fullName.vb: JoaLauncher.Api.Injectables.IJoaLogger.Info(String)
+  name.vb: Info(String)
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.Warning(System.String)
+  commentId: M:JoaLauncher.Api.Injectables.IJoaLogger.Warning(System.String)
+  id: Warning(System.String)
+  parent: JoaLauncher.Api.Injectables.IJoaLogger
+  langs:
+  - csharp
+  - vb
+  name: Warning(string)
+  nameWithType: IJoaLogger.Warning(string)
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.Warning(string)
+  type: Method
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Warning
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 24
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nLogs a message with LogLevel.Warning\n"
+  example: []
+  syntax:
+    content: void Warning(string message)
+    parameters:
+    - id: message
+      type: System.String
+      description: The message to be logged
+    content.vb: Sub Warning(message As String)
+  overload: JoaLauncher.Api.Injectables.IJoaLogger.Warning*
+  nameWithType.vb: IJoaLogger.Warning(String)
+  fullName.vb: JoaLauncher.Api.Injectables.IJoaLogger.Warning(String)
+  name.vb: Warning(String)
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.Error(System.String)
+  commentId: M:JoaLauncher.Api.Injectables.IJoaLogger.Error(System.String)
+  id: Error(System.String)
+  parent: JoaLauncher.Api.Injectables.IJoaLogger
+  langs:
+  - csharp
+  - vb
+  name: Error(string)
+  nameWithType: IJoaLogger.Error(string)
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.Error(string)
+  type: Method
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: Error
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 30
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nLogs a message with LogLevel.Error\n"
+  example: []
+  syntax:
+    content: void Error(string message)
+    parameters:
+    - id: message
+      type: System.String
+      description: The message to be logged
+    content.vb: Sub [Error](message As String)
+  overload: JoaLauncher.Api.Injectables.IJoaLogger.Error*
+  nameWithType.vb: IJoaLogger.Error(String)
+  fullName.vb: JoaLauncher.Api.Injectables.IJoaLogger.Error(String)
+  name.vb: Error(String)
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.TimedOperation(System.String)
+  commentId: M:JoaLauncher.Api.Injectables.IJoaLogger.TimedOperation(System.String)
+  id: TimedOperation(System.String)
+  parent: JoaLauncher.Api.Injectables.IJoaLogger
+  langs:
+  - csharp
+  - vb
+  name: TimedOperation(string)
+  nameWithType: IJoaLogger.TimedOperation(string)
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.TimedOperation(string)
+  type: Method
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: TimedOperation
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 41
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  summary: "\nCan be used to time an operatio\nThe messurement will be stoped and logged if the returned IDisposable gets disposed\n<example>\nusing var _ = _log.TimedOperation(nameof(SomeMethod));\n</example>\n"
+  example: []
+  syntax:
+    content: IDisposable TimedOperation(string nameOfMethod)
+    parameters:
+    - id: nameOfMethod
+      type: System.String
+      description: The name of the operation to be logged
+    return:
+      type: System.IDisposable
+      description: An IDisposable which will trigger the logging if disposed
+    content.vb: Function TimedOperation(nameOfMethod As String) As IDisposable
+  overload: JoaLauncher.Api.Injectables.IJoaLogger.TimedOperation*
+  nameWithType.vb: IJoaLogger.TimedOperation(String)
+  fullName.vb: JoaLauncher.Api.Injectables.IJoaLogger.TimedOperation(String)
+  name.vb: TimedOperation(String)
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.LogException(System.Exception,System.String)
+  commentId: M:JoaLauncher.Api.Injectables.IJoaLogger.LogException(System.Exception,System.String)
+  id: LogException(System.Exception,System.String)
+  parent: JoaLauncher.Api.Injectables.IJoaLogger
+  langs:
+  - csharp
+  - vb
+  name: LogException(Exception, string)
+  nameWithType: IJoaLogger.LogException(Exception, string)
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.LogException(System.Exception, string)
+  type: Method
+  source:
+    remote:
+      path: src/Injectables/IJoaLogger.cs
+      branch: develop
+      repo: https://github.com/Joa-Launcher/Plugin-Api.git
+    id: LogException
+    path: ../../../Plugin-Api/src/Injectables/IJoaLogger.cs
+    startLine: 43
+  assemblies:
+  - JoaLauncher.Api
+  namespace: JoaLauncher.Api.Injectables
+  syntax:
+    content: void LogException(Exception e, string logName = "")
+    parameters:
+    - id: e
+      type: System.Exception
+    - id: logName
+      type: System.String
+    content.vb: Sub LogException(e As Exception, logName As String = "")
+  overload: JoaLauncher.Api.Injectables.IJoaLogger.LogException*
+  nameWithType.vb: IJoaLogger.LogException(Exception, String)
+  fullName.vb: JoaLauncher.Api.Injectables.IJoaLogger.LogException(System.Exception, String)
+  name.vb: LogException(Exception, String)
+references:
+- uid: JoaLauncher.Api.Injectables
+  commentId: N:JoaLauncher.Api.Injectables
+  name: JoaLauncher.Api.Injectables
+  nameWithType: JoaLauncher.Api.Injectables
+  fullName: JoaLauncher.Api.Injectables
+  spec.csharp:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables
+  spec.vb:
+  - uid: JoaLauncher
+    name: JoaLauncher
+  - name: .
+  - uid: JoaLauncher.Api
+    name: Api
+  - name: .
+  - uid: JoaLauncher.Api.Injectables
+    name: Injectables
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.Log*
+  commentId: Overload:JoaLauncher.Api.Injectables.IJoaLogger.Log
+  name: Log
+  nameWithType: IJoaLogger.Log
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.Log
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: JoaLauncher.Api.Injectables.LogLevel
+  commentId: T:JoaLauncher.Api.Injectables.LogLevel
+  parent: JoaLauncher.Api.Injectables
+  name: LogLevel
+  nameWithType: LogLevel
+  fullName: JoaLauncher.Api.Injectables.LogLevel
+- uid: System
+  commentId: N:System
+  isExternal: true
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.Info*
+  commentId: Overload:JoaLauncher.Api.Injectables.IJoaLogger.Info
+  name: Info
+  nameWithType: IJoaLogger.Info
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.Info
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.Warning*
+  commentId: Overload:JoaLauncher.Api.Injectables.IJoaLogger.Warning
+  name: Warning
+  nameWithType: IJoaLogger.Warning
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.Warning
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.Error*
+  commentId: Overload:JoaLauncher.Api.Injectables.IJoaLogger.Error
+  name: Error
+  nameWithType: IJoaLogger.Error
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.Error
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.TimedOperation*
+  commentId: Overload:JoaLauncher.Api.Injectables.IJoaLogger.TimedOperation
+  name: TimedOperation
+  nameWithType: IJoaLogger.TimedOperation
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.TimedOperation
+- uid: System.IDisposable
+  commentId: T:System.IDisposable
+  parent: System
+  isExternal: true
+  name: IDisposable
+  nameWithType: IDisposable
+  fullName: System.IDisposable
+- uid: JoaLauncher.Api.Injectables.IJoaLogger.LogException*
+  commentId: Overload:JoaLauncher.Api.Injectables.IJoaLogger.LogException
+  name: LogException
+  nameWithType: IJoaLogger.LogException
+  fullName: JoaLauncher.Api.Injectables.IJoaLogger.LogException
+- uid: System.Exception
+  commentId: T:System.Exception
+  parent: System
+  isExternal: true
+  name: Exception
+  nameWithType: Exception
+  fullName: System.Exception
