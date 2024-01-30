@@ -42,7 +42,7 @@ Joa offers a bunch of default plugins which cover the most common use cases. But
 | Joa           | Yes            | Yes                   | Yes             | Yes         | Yes             | Yes                   |
 
 ### Tech
-We use a custom UI Framework that uses the [Skia](https://skia.org/) rendering engine. For windowing, the framwork uses [Modern.WindowKit](https://github.com/modern-forms/Modern.WindowKit) which intern is based upon the windowing system from [Avalonia](https://avaloniaui.net/)
+We use a custom UI Framework ([flamui](https://github.com/FlurinBruehwiler/flamui)).
 
 ### Development
 Joa relies on the NuGet package JoaLauncher.Api, which is hosted on two different platforms:
