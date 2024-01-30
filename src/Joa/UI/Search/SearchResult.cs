@@ -1,34 +1,31 @@
-﻿using Joa.PluginCore;
-using TolggeUI;
+﻿using Flamui;
+using Flamui.UiElements;
+using Joa.PluginCore;
 
 namespace Joa.UI.Search;
 
-public class SearchResult : Component
+public class SearchResult : FlamuiComponent
 {
-    [Parameter] public PluginSearchResult Sr { get; set; } = default!;
+    [Parameter]
+    public PluginSearchResult Sr { get; set; } = default!;
 
-    [Parameter] public bool IsSelected { get; set; } = default!;
+    [Parameter]
+    public bool IsSelected { get; set; } = default!;
 
-    public override RenderObject Build()
+    public override void Build()
     {
         var color = IsSelected ? new ColorDefinition(60, 60, 60) : new ColorDefinition(40, 40, 40);
 
-        return new Div
-            {
-                new Div
-                    {
-                        Sr.SearchResult.Icon is not null ? new Img(Sr.SearchResult.Icon) : new Div()
-                    }
-                    .Color(color)
-                    .Width(60).MAlign(MAlign.Center).XAlign(XAlign.Center),
-                new Div
-                    {
-                        new Txt(Sr.SearchResult.Title)
-                            .VAlign(TextAlign.Center)
-                            .Size(15)
-                    }.MAlign(MAlign.Center)
-                    .Color(color)
-            }
-            .Dir(Dir.Horizontal);
+        DivStart().Dir(Dir.Horizontal);
+
+            DivStart().Color(color).Width(60).MAlign(MAlign.Center).XAlign(XAlign.Center);
+                Image(Sr.SearchResult.Icon);
+            DivEnd();
+
+            DivStart().MAlign(MAlign.Center).Color(color);
+                Text(Sr.SearchResult.Title).VAlign(TextAlign.Center).Size(15);
+            DivEnd();
+
+        DivEnd();
     }
 }

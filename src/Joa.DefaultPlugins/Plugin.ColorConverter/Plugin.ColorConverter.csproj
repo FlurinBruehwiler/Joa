@@ -8,8 +8,4 @@
         <RootNamespace>ColorConverter</RootNamespace>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\Joa.Api\Joa.Api.csproj" />
-    </ItemGroup>
-
 </Project>

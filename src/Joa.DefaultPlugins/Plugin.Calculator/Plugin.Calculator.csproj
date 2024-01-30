@@ -12,9 +12,4 @@
       <PackageReference Include="org.matheval" Version="1.0.0.3" />
     </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\..\Joa.Api\Joa.Api.csproj" />
-    </ItemGroup>
-
-
 </Project>

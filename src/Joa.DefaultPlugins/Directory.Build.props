@@ -1,0 +1,13 @@
+<Project>
+     <PropertyGroup>
+       <OutputPath>..\PluginBuilds\$(MSBuildProjectName)</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>flase</AppendRuntimeIdentifierToOutputPath>
+     </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Joa.Api\Joa.Api.csproj" >
+            <Private>false</Private>
+            <ExcludeAssets>runtime</ExcludeAssets>
+        </ProjectReference>
+    </ItemGroup>
+</Project>

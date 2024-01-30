@@ -1,12 +1,11 @@
-﻿using Joa.PluginCore;
+﻿using System.Drawing;
+using Flamui;
+using Joa.PluginCore;
 using Joa.UI.Settings;
 using JoaLauncher.Api;
 using JoaLauncher.Api.Providers;
 using Microsoft.Extensions.DependencyInjection;
-using Modern.WindowKit;
-using Modern.WindowKit.Threading;
 using SkiaSharp;
-using TolggeUI;
 
 namespace Joa.BuiltInPlugin;
 
@@ -25,15 +24,16 @@ public class BuiltInProvider : IProvider
                 Icon = string.Empty,
                 ExecutionAction = _ =>
                 {
-                    Dispatcher.UIThread.Post(() =>
+                    Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        serviceProvider.GetRequiredService<TolggeApp>().CreateWindow<SettingsWindow>(
-                            window =>
-                            {
-                                window.Resize(new Size(800, 600));
-                                window.SetTitle("Joa Settings");
-                                window.SetIcon(SKBitmap.Decode("Assets/icon.png"));
-                            });
+                        //Todo
+                        // serviceProvider.GetRequiredService<TolggeApp>().CreateWindow<SettingsWindow>(
+                        //     window =>
+                        //     {
+                        //         window.Resize(new Size(800, 600));
+                        //         window.SetTitle("Joa Settings");
+                        //         window.SetIcon(SKBitmap.Decode("Assets/icon.png"));
+                        //     });
 
                     });
                 }

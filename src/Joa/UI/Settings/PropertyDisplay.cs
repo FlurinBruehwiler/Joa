@@ -1,11 +1,11 @@
-﻿using Joa.PluginCore;
+﻿using Flamui;
+using Flamui.UiElements;
+using Joa.PluginCore;
 using Joa.Settings;
-using TolggeUI;
-using TolggeUI.Components;
 
 namespace Joa.UI.Settings;
 
-public class PropertyDisplay : Component
+public class PropertyDisplay : FlamuiComponent
 {
     private readonly SettingsManager _settingsManager;
 
@@ -20,45 +20,30 @@ public class PropertyDisplay : Component
         _settingsManager = settingsManager;
     }
 
-    public override RenderObject Build()
+    public override void Build()
     {
         var type = Property.PropertyDescription.PropertyInfo.PropertyType;
 
         if (type == typeof(int) || type == typeof(float) || type == typeof(string))
         {
-            return new Div
-                {
-                    new Txt(Property.PropertyDescription.PropertyInfo.Name)
-                        .VAlign(TextAlign.Center)
-                        .Size(17),
-                    new TextBoxComponent()
-                }
-                .Height(50)
-                .Color(36, 36, 36)
-                .XAlign(XAlign.Center)
-                .Dir(Dir.Horizontal)
-                .Padding(8)
-                .MAlign(MAlign.SpaceBetween)
-                .Radius(7);
+            DivStart().Height(50).Color(36, 36, 36).XAlign(XAlign.Center).Dir(Dir.Horizontal).Padding(8).MAlign(MAlign.SpaceBetween).Rounded(7);
+
+                Text(Property.PropertyDescription.PropertyInfo.Name).VAlign(TextAlign.Center).Size(17);
+                var x = "";
+                StyledInput(ref x);
+            DivEnd();
         }
 
         if (type == typeof(bool))
         {
-            return new Div
-            {
-                new Txt(Property.PropertyDescription.PropertyInfo.Name)
-                    .VAlign(TextAlign.Center)
-                    .Size(17),
-                new CheckboxComponent()
-            }.Height(50)
-                .Color(36, 36, 36)
-                .Padding(8)
-                .Radius(7)
-                .XAlign(XAlign.Center)
-                .Dir(Dir.Horizontal);
-        }
+            DivStart().Height(50).Color(36, 36, 36).Padding(8).Rounded(7).XAlign(XAlign.Center).Dir(Dir.Horizontal);
+                Text(Property.PropertyDescription.PropertyInfo.Name).VAlign(TextAlign.Center).Size(17);
 
-        return new Div().Height(0);
+                var x = true;
+                Checkbox(ref x);
+
+            DivEnd();
+        }
     }
 
     private async Task PropertyChanged(string arg)

@@ -1,20 +1,20 @@
-﻿using System.Runtime.InteropServices;
+﻿global using static Flamui.Ui;
+global using static Flamui.Components.Ui;
+using System.Runtime.InteropServices;
+using Flamui;
 using Joa.Hotkey;
 using Joa.PluginCore;
 using Joa.Steps;
 using JoaLauncher.Api;
-using Modern.WindowKit;
-using Modern.WindowKit.Input;
-using Modern.WindowKit.Platform;
-using TolggeUI;
-using TolggeUI.Components;
-using Key = Modern.WindowKit.Input.Key;
+using Flamui.UiElements;
+using SDL2;
+
+
 
 namespace Joa.UI.Search;
 
-public class SearchBar : Component
+public class SearchBar : FlamuiComponent
 {
-    private readonly IWindowImpl _window;
     private string _input = string.Empty;
     private List<PluginSearchResult> _searchResults = new();
     private int _selectedResult;
@@ -25,12 +25,11 @@ public class SearchBar : Component
     private const int SearchResultHeight = 60;
     public const int Width = 600;
 
-    public SearchBar(IWindowImpl window, GlobalHotKey globalHotKey, Joa.Search search, PluginManager pluginManager)
+    public SearchBar(GlobalHotKey globalHotKey, Joa.Search search, PluginManager pluginManager)
     {
-        _window = window;
         _search = search;
 
-        window.LostFocus = HideWindow;
+        // window.LostFocus = HideWindow;
 
         SearchResultsHaveChanged();
 
@@ -43,82 +42,74 @@ public class SearchBar : Component
 
         globalHotKey.InitialHotKeyRegistration(() =>
         {
-            _window.Show(true, false);
+            // _window.Show(true, false);
 
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) return;
-            External.SetFocus(_window.Handle.Handle);
-            External.SetForegroundWindow(_window.Handle.Handle);
+            // External.SetFocus(_window.Handle.Handle);
+            // External.SetForegroundWindow(_window.Handle.Handle);
         });
     }
 
-    public override RenderObject Build()
+    public override void Build()
     {
-        return new Div
-        {
-            new Div
+        DivStart();
+
+            DivStart().Color(40, 40, 40).XAlign(XAlign.Center).Padding(10).Gap(10).Height(SearchBoxHeight).Dir(Dir.Horizontal);
+
+                DivStart();
+                    SvgImage("./battery.svg");
+                    Input(ref _input, hasFocus:true);
+                DivEnd();
+
+            DivEnd();
+
+            DivStart().Dir(Dir.Horizontal).Padding(4).Gap(8).Height(StepsHeight).Color(40, 40, 40);
+
+                foreach (var step in _steps.Reverse())
                 {
-                    new Div
-                    {
-                        new TolggeUI.Svg("./battery.svg")
-                    }.Width(40),
-                    new InputComponent()
-                        .OnKeyDownAsync(OnKeyDownAsync)
-                        .Value(_input)
-                        .AutoFocus(true)
-                        .OnChange(s =>
-                        {
-                            _input = s;
-                            TextChanged();
-                        })
-                }.Color(40, 40, 40)
-                .XAlign(XAlign.Center)
-                .Padding(10)
-                .Gap(10)
-                .Height(SearchBoxHeight)
-                .Dir(Dir.Horizontal),
-            new Div()
-                .Items(_steps.Reverse().Select(x =>
-                    new Div
-                        {
-                            new Txt(x.Name).VAlign(TextAlign.Center).HAlign(TextAlign.Center)
-                        }.Width(100)
-                        .MAlign(MAlign.Center)
-                        .Color(60, 60, 60)
-                        .Radius(5)
-                )).Dir(Dir.Horizontal)
-                .Padding(4)
-                .Gap(8)
-                .Height(StepsHeight)
-                .Color(40, 40, 40),
-            new Div()
-                .Items(_searchResults.Select((x, i) =>
-                    new SearchResultComponent(x, _selectedResult == i)
-                        .Key(x.SearchResult.Title)
-                ))
-        };
+                    DivStart();
+
+                        Text(step.Name).VAlign(TextAlign.Center).HAlign(TextAlign.Center);
+
+                    DivEnd();
+                }
+
+            DivEnd();
+
+            DivStart();
+
+                for (var i = 0; i < _searchResults.Count; i++)
+                {
+                    var searchResult = _searchResults[i];
+                    //searchresultkey
+                }
+
+            DivEnd();
+
+        DivEnd();
     }
 
-    private async Task OnKeyDownAsync(Key key, RawInputModifiers modifiers)
+    private async Task OnKeyDownAsync(SDL.SDL_Scancode key)
     {
-        if (key == Key.Escape)
+        if (key == SDL.SDL_Scancode.SDL_SCANCODE_ESCAPE)
         {
             HideWindow();
         }
-        if (key == Key.Down)
+        if (key == SDL.SDL_Scancode.SDL_SCANCODE_DOWN)
         {
             if (_selectedResult < _searchResults.Count - 1)
             {
                 _selectedResult++;
             }
         }
-        if (key == Key.Up)
+        if (key == SDL.SDL_Scancode.SDL_SCANCODE_UP)
         {
             if (_selectedResult > 0)
             {
                 _selectedResult--;
             }
         }
-        if (key == Key.Enter)
+        if (key == SDL.SDL_Scancode.SDL_SCANCODE_RETURN)
         {
             if (_searchResults.Count != 0)
             {
@@ -156,18 +147,18 @@ public class SearchBar : Component
     private void SearchResultsHaveChanged()
     {
         _selectedResult = 0;
-        _window.Resize(new Size(_window.ClientSize.Width,
-            SearchBoxHeight + StepsHeight + _searchResults.Count * SearchResultHeight));
+        // _window.Resize(new Size(_window.ClientSize.Width,
+        //     SearchBoxHeight + StepsHeight + _searchResults.Count * SearchResultHeight));
     }
 
     private void HideWindow()
     {
-        _window.Hide();
+        // _window.Hide();
         ClearSteps();
         _input = string.Empty;
         _searchResults.Clear();
         SearchResultsHaveChanged();
-        StateHasChanged();
+        // StateHasChanged();
     }
 
     private void ClearSteps()
