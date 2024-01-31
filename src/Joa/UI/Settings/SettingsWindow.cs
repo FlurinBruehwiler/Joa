@@ -4,7 +4,7 @@ using Joa.PluginCore;
 
 namespace Joa.UI.Settings;
 
-public class SettingsWindow : FlamuiComponent
+public partial class SettingsWindow : FlamuiComponent
 {
     private readonly PluginManager _pluginManager;
     private PluginDefinition? _selectedPlugin;
@@ -58,7 +58,7 @@ public class SettingsWindow : FlamuiComponent
                             DivEnd();
 
                             DivStart();
-                                Text(_selectedPlugin.Manifest.Description ?? string.Empty):
+                            Text(_selectedPlugin.Manifest.Description ?? string.Empty);
                             DivEnd();
                         DivEnd();
 

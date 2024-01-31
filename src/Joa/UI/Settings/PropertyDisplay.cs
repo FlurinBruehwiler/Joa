@@ -5,7 +5,7 @@ using Joa.Settings;
 
 namespace Joa.UI.Settings;
 
-public class PropertyDisplay : FlamuiComponent
+public partial class PropertyDisplay : FlamuiComponent
 {
     private readonly SettingsManager _settingsManager;
 

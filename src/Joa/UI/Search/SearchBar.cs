@@ -9,11 +9,9 @@ using JoaLauncher.Api;
 using Flamui.UiElements;
 using SDL2;
 
-
-
 namespace Joa.UI.Search;
 
-public class SearchBar : FlamuiComponent
+public partial class SearchBar : FlamuiComponent
 {
     private string _input = string.Empty;
     private List<PluginSearchResult> _searchResults = new();

@@ -4,7 +4,7 @@ using Joa.PluginCore;
 
 namespace Joa.UI.Search;
 
-public class SearchResult : FlamuiComponent
+public partial class SearchResult : FlamuiComponent
 {
     [Parameter]
     public PluginSearchResult Sr { get; set; } = default!;

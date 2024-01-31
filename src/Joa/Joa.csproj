@@ -43,8 +43,9 @@
     
     <ItemGroup>
       <ProjectReference Include="..\..\..\flamui\Flamui.Components\Flamui.Components.csproj" />
-      <ProjectReference Include="..\..\..\flamui\Flamui.SourceGenerators\Flamui.SourceGenerators.csproj" PrivateAssets="all"
-                        ExcludeAssets="compile;runtime" />
+      <ProjectReference Include="..\..\..\flamui\Flamui.SourceGenerators\Flamui.SourceGenerators.csproj"
+                        OutputItemType="Analyzer"
+                        ReferenceOutputAssembly="false"/>
       <ProjectReference Include="..\Joa.Api\Joa.Api.csproj" />
     </ItemGroup>
     
